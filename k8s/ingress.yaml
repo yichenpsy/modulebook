@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-springboot-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "yizh8704-modulebook.project.ris.bht-berlin.de"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-springboot-service
+                port:
+                  number: 80
