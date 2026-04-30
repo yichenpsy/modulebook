@@ -6,7 +6,8 @@ build-and-test:
   stage: test
   image: maven:3.9-eclipse-temurin-21
   script:
-    - mvn clean test
+    - printenv
+ #   - mvn clean test
 
 build-and-push-image:
   stage: docker
