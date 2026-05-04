@@ -1,13 +1,16 @@
 stages:
   - test
   - docker
+  - deploy
+
+variables:
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE/hello-springboot"
 
 build-and-test:
   stage: test
   image: maven:3.9-eclipse-temurin-21
   script:
-    - printenv
- #   - mvn clean test
+    - mvn clean test
 
 build-and-push-image:
   stage: docker
@@ -17,5 +20,38 @@ build-and-push-image:
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
-    - docker login registry.bht-berlin.de -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker buildx build --platform linux/amd64 -t registry.bht-berlin.de/ris/modulebook/hello-springboot:latest --push .
+    - docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - docker buildx build --platform linux/amd64 -t "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" -t "$IMAGE_NAME:latest" --push .
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+
+test-kube-config:
+  stage: test
+  image:
+    name: bitnami/kubectl:1.30
+    entrypoint: [""]
+  script:
+    - mkdir -p ~/.kube
+    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+    - kubectl config current-context
+    - kubectl get pods
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+
+deploy-to-kubernetes:
+  stage: deploy
+  image:
+    name: bitnami/kubectl:1.30
+    entrypoint: [""]
+  needs:
+    - build-and-push-image
+  script:
+    - mkdir -p ~/.kube
+    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+    - kubectl apply -f k8s/
+    - kubectl set image deployment/hello-springboot hello-springboot="$IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
+    - kubectl rollout status deployment/hello-springboot
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
