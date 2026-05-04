@@ -30,11 +30,11 @@ build-and-push-image:
 test-kube-config:
   stage: test-deploy
   image:
-    name: bitnami/kubectl:latest
+    name: alpine/kubectl:latest
     entrypoint: [""]
   script:
     - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" | xargs base64 -d > ~/.kube/config
+    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
     - kubectl config current-context
     - kubectl get pods
   rules:
@@ -44,7 +44,7 @@ test-kube-config:
 deploy-to-kubernetes:
   stage: deploy
   image:
-    name: bitnami/kubectl:1.30
+    name: alpine/kubectl:1.30
     entrypoint: [""]
   needs:
     - build-and-push-image
