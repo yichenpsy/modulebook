@@ -1,6 +1,7 @@
 stages:
   - test
   - docker
+  - test-deploy
   - deploy
 
 variables:
@@ -27,7 +28,7 @@ build-and-push-image:
 
 
 test-kube-config:
-  stage: test
+  stage: test-deploy
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
