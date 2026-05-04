@@ -29,7 +29,7 @@ build-and-push-image:
 test-kube-config:
   stage: test
   image:
-    name: bitnami/kubectl:1.30
+    name: bitnami/kubectl:latest
     entrypoint: [""]
   script:
     - mkdir -p ~/.kube
