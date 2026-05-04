@@ -34,7 +34,7 @@ test-kube-config:
     entrypoint: [""]
   script:
     - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
+    - echo "$KUBE_CONFIG" | xargs base64 -d > ~/.kube/config
     - kubectl config current-context
     - kubectl get pods
   rules:
