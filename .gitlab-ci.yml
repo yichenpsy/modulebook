@@ -9,17 +9,21 @@ variables:
 
 build-and-test:
   stage: test
+  tags:
+    - modulebook
   image: maven:3.9-eclipse-temurin-21
   script:
     - mvn clean test
 
 build-and-push-image:
   stage: docker
-  image: docker:26
-  services:
-    - docker:26-dind
+  tags:
+    - modulebook
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   variables:
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_CONFIG: /kaniko/.docker/
   script:
     - docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     - docker buildx build --platform linux/amd64 -t "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" -t "$IMAGE_NAME:latest" --push .
@@ -30,7 +34,7 @@ build-and-push-image:
 test-kubernetes-runner:
   stage: test-deploy
   tags:
-    - gitlab-rislab-runner-polls
+    - modulebook
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
@@ -44,6 +48,8 @@ test-kubernetes-runner:
 
 deploy-to-kubernetes:
   stage: deploy
+  tags:
+    - modulebook
   image:
     name: alpine/kubectl:latest
     entrypoint: [""]
