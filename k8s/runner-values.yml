@@ -1,0 +1,41 @@
+gitlabUrl: https://gitlab.bht-berlin.de/
+
+runnerToken: "glrt-QNaLja-lmcD8niDSCC2zm286MQpwOm5waQp0OjMKdTo0bncT.01.1c165eeqk"
+
+runners:
+  tags: "modulebook"
+  privileged: false
+
+  config: |
+    [[runners]]
+      name = "modulebook-runner"
+      url = "https://gitlab.bht-berlin.de/"
+      executor = "kubernetes"
+
+      [runners.kubernetes]
+        namespace = "yizh8704"
+        service_account = "default"
+        image = "maven:3.9.12-eclipse-temurin-21"
+        privileged = false
+
+        cpu_limit = "2000m"
+        memory_limit = "4Gi"
+        service_cpu_limit = "1000m"
+        service_memory_limit = "2Gi"
+        helper_cpu_limit = "500m"
+        helper_memory_limit = "512Mi"
+
+rbac:
+  create: false
+
+serviceAccount:
+  create: false
+  name: "default"
+
+resources:
+  limits:
+    memory: 512Mi
+    cpu: 500m
+  requests:
+    memory: 256Mi
+    cpu: 250m
