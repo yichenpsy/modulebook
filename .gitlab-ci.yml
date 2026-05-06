@@ -29,6 +29,8 @@ build-and-push-image:
 
 test-kube-config:
   stage: test-deploy
+  tags:
+    - gitlab-rislab-runner-polls
   image:
     name: alpine/kubectl:latest
     entrypoint: [""]
@@ -36,7 +38,7 @@ test-kube-config:
     - mkdir -p ~/.kube
     - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
     - kubectl config current-context
-    - kubectl get pods
+    - kubectl get pods -n yizh8704
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
@@ -44,7 +46,7 @@ test-kube-config:
 deploy-to-kubernetes:
   stage: deploy
   image:
-    name: alpine/kubectl:1.30
+    name: alpine/kubectl:latest
     entrypoint: [""]
   needs:
     - build-and-push-image
