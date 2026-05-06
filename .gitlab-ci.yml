@@ -27,16 +27,14 @@ build-and-push-image:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 
-test-kube-config:
+test-kubernetes-runner:
   stage: test-deploy
   tags:
     - gitlab-rislab-runner-polls
   image:
-    name: alpine/kubectl:latest
+    name: bitnami/kubectl:latest
     entrypoint: [""]
   script:
-    - mkdir -p ~/.kube
-    - echo "$KUBE_CONFIG" | base64 -d > ~/.kube/config
     - kubectl config current-context
     - kubectl get pods -n yizh8704
   rules:
