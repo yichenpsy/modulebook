@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-springboot
+  name: modulebook-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-springboot
+      app: modulebook-app
   template:
     metadata:
       labels:
-        app: hello-springboot
+        app: modulebook-app
     spec:
       containers:
-        - name: hello-springboot
-          image: registry.bht-berlin.de/ris/modulebook/hello-springboot:latest
+        - name: modulebook-container
+          image: registry.bht-berlin.de/ris/modulebook/modulebook-app:latest
           ports:
             - containerPort: 8081
