@@ -3,6 +3,7 @@ stages:
   - docker
   - deploy
 
+# image repository path
 variables:
   IMAGE_NAME: "$CI_REGISTRY_IMAGE/modulebook"
 

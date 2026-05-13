@@ -8,7 +8,7 @@ class ModulebookApplicationTests {
 
 	@Test
 	void contextLoads() {
-		System.out.println("Test OK! Zbigniew");
+		System.out.println("Test OK!");
 	}
 
 }
