@@ -5,7 +5,7 @@ stages:
 
 # image repository path
 variables:
-  IMAGE_NAME: "$CI_REGISTRY_IMAGE/modulebook"
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE/modulebook-image"
 
 build-and-test:
   stage: test
