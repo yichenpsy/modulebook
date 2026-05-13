@@ -4,7 +4,7 @@ stages:
   - deploy
 
 variables:
-  IMAGE_NAME: "$CI_REGISTRY_IMAGE/hello-springboot"
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE/modulebook"
 
 build-and-test:
   stage: test

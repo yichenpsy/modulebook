@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: modulebook-container
-          image: registry.bht-berlin.de/ris/modulebook/modulebook-app:latest
+          image: registry.bht-berlin.de/ris/modulebook/modulebook-app:latest # a default image, .gitlab-ci.yml replaces it during CI deploy
           ports:
             - containerPort: 8081
