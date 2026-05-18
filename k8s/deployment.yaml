@@ -1,19 +1,23 @@
-apiVersion: apps/v1
+# a deployment: a K8s object, a manager.
+# this file: desired state of a K8s deployment. 
+# How should this application run? image, pods, container, ports?
+
+apiVersion: apps/v1 # the API Version of K8s
 kind: Deployment
 metadata:
-  name: modulebook-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: modulebook-app
-  template:
-    metadata:
+  name: modulebook-deployment 
+spec: # what this manager should do
+  replicas: 1 # keep one pod running
+  selector: # which pods belong to my team? with the label app = modulebook-app
+    matchLabels: 
+      app: modulebook-app 
+  template: # If I need a new pod, use this blueprint. Why need template: Pods can disappear and be recreated.  
+    metadata: # Every pod will have the label app = modulebook-app
       labels:
-        app: modulebook-app
-    spec:
+        app: modulebook-app 
+    spec: # desired configuration of this deployment
       containers:
         - name: modulebook-container
           image: registry.bht-berlin.de/ris/modulebook/modulebook-image:latest # a default image, .gitlab-ci.yml replaces it during CI deploy
           ports:
-            - containerPort: 8081
+            - containerPort: 8081 # The app inside the container is expected to listen on port 8081.

@@ -1,16 +1,19 @@
+# Ingress = routing rule, what should happen
+# Ingress Controller = component that actually implements the routing, what makes it happen
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: modulebook-ingress
 spec:
-  ingressClassName: nginx
+  ingressClassName: nginx #Use the NGINX Ingress Controller to handle this Ingress.
   rules:
-    - host: "modulebook.project.ris.bht-berlin.de"
-      http:
+    - host: "modulebook.project.ris.bht-berlin.de" # This rule applies when someone visits this hostname
+      http: #This rule is for HTTP traffic.
         paths:
           - path: /
             pathType: Prefix
-            backend:
+            backend: #Send matching traffic to the Service named modulebook-service on port 80.
               service:
                 name: modulebook-service
                 port:
