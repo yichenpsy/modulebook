@@ -211,6 +211,7 @@ The command
 kubectl apply -f k8s/deployment.yaml
 ```
 Meaning:
+> Tells Kubernetes how this app should run, how many app copies to run and which container image to use.
 
 
 The command
@@ -218,13 +219,15 @@ The command
 kubectl apply -f k8s/service.yaml
 ```
 Meaning:
-
+> Gives a stable internal network address to the pod so other parts of the cluster can reach the app.
 
 The command
 ```yml
 kubectl apply -f k8s/ingress.yaml
 ```
 Meaning:
+> Sets up external web traffic routing so users outside the cluster can reach the app.
+
 
 The command
 ```yml
