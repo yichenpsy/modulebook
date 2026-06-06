@@ -14,14 +14,7 @@
   "exam_type": "Die Prüfungsform wird nach §19(2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt, gilt folgende Prüfungsform: 100% Klausur (90 Minuten).",
   "grade_calculation": "Siehe Studienplan",
   "recognized_modules": "Module vergleichbaren Inhalts",
-  "contents": [
-    "I Diskrete Mathematik",
-    "1. Aussagenlogik",
-    "2. Prädikatenlogik",
-    "3. Grundbegriffe der Mengenlehre",
-    "4. Kombinatorik",
-    "5. Relationen und Abbildungen"
-  ],
+  "contents": "I Diskrete Mathematik\n\n1. Aussagenlogik\n• Aussagen und ihre Verknüpfungen, Syntax und Semantik von Ausdrücken, Tautologien, semantische Äquivalenz und Implikation, disjunktive und konjunktive Normalformen.\n\n2. Prädikatenlogik\n• Prädikate und Quantoren, freie und gebundene Variablen, Syntax und Semantik von prädikatenlogischen Ausdrücken, Tautologien\n• Beweisverfahren in der Mathematik\n\n3. Grundbegriffe der Mengenlehre\n• Cantorscher Mengenbegriff, Gleichheit, Teilmengen, Potenzmengen\n• Mengenoperationen und ihre Gesetze\n• Mächtigkeit, endliche, unendliche Mengen; IN, IZ, IQ und IR\n\n4. Kombinatorik\n• Zählprinzipien: Modulgleichung, Summen- und Produktregel\n• Bijektionen endlicher Mengen, Permutationen, Potenzmenge\n• Fakultät und Binomialkoeffizienten, Binomischer Satz\n\n5. Relationen und Abbildungen\n• Darstellung von Relationen auf endlichen Mengen durch Matrizen und Graphen, Inversion und Verkettung\n• Eigenschaften von Relationen auf einer Menge: reflexiv, irreflexiv, symmetrisch, antisymmetrisch, transitiv, linear; Hüllenbildung\n• Äquivalenz- und Ordnungsrelationen, Hasse-Diagramme\n• Funktionen: Eigenschaften (linkstotal/rechtseindeutig, injektiv, surjektiv, bijektiv)",
   "literature": [
     "G. + S. Teschl: Mathematik für Informatiker Band 1, Springer+Vieweg Verlag",
     "P. Hartmann: Mathematik für Informatiker, Vieweg+Teubner Verlag",
