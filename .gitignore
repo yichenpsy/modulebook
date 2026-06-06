@@ -74,3 +74,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# PDF to DB
+.venv/
+tools/pdf_import/output/
