@@ -1,0 +1,14 @@
+imports:
+  - import_id: "medieninformatik_2024"
+    study_program: "Medieninformatik B.A."
+    study_program_code: "MI-BA"
+    source_file: "tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf"
+    version_date: "2024-11-25"
+    expected_module_count: 54
+
+  - import_id: "architektur_2021"
+    study_program: "Architektur B.A."
+    study_program_code: "ARCH-BA"
+    source_file: "tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf"
+    version_date: "2021-05-01"
+    expected_module_count: 39

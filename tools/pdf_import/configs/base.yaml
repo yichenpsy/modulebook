@@ -1,0 +1,47 @@
+module_start_patterns:
+  - "^\\s*Modulnummer\\s+((?:B\\d{2}[a-z]?|WP\\d{2}))\\b"
+  - "^\\s*Module\\s+ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2}))\\b"
+  - "^\\s*Modul\\s*ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2}))\\b"
+
+required_fields:
+  - module_number
+  - title_de
+  - credits
+  - status
+  - contents
+  - literature
+  - source_file
+  - source_pages
+
+allowed_status:
+  - Pflichtmodul
+  - Wahlpflichtmodul
+
+field_aliases:
+  credits:
+    - Leistungspunkte
+    - Credits
+    - LP
+    - Cr
+
+  teaching_form:
+    - Lehrform
+    - Lernform
+    - Lehr- und Lernform
+
+  learning_objectives:
+    - Lernziele / Kompetenzen
+    - Qualifikationsziele / Kompetenzen
+
+  contents:
+    - Inhalte
+
+  literature:
+    - Literatur
+
+quality_checks:
+  min_block_chars: 500
+  required_raw_text_markers:
+    - Titel
+    - Status
+
