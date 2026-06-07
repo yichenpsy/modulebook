@@ -1,0 +1,9 @@
+{
+  "total_fields": 19,
+  "passed_fields": 19,
+  "field_accuracy": 1.0,
+  "critical_fields": 6,
+  "passed_critical_fields": 6,
+  "critical_field_accuracy": 1.0,
+  "failed_fields": []
+}

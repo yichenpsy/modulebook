@@ -1,0 +1,33 @@
+{
+  "module_number": "B01",
+  "title_de": "Mathematik I",
+  "title_en": "Mathematics 1",
+  "credits": 5.0,
+  "workload": "102 Stunden Präsenz (4 SWS SU + 2 SWS Ü), 48 Stunden Selbststudium",
+  "learning_area": "Mathematisch-naturwissenschaftliche Grundlagen",
+  "learning_objectives": "Kenntnisse in den mathematischen Grundlagen der Informatik,\nSicherheit im abstrakten und strukturellen Denken.",
+  "prerequisites": "Empfehlung: die Belegung des Mathematik-Brückenkurses vor Studienbeginn",
+  "semester_level": "1. Studienplansemester",
+  "teaching_format": "Seminaristischer Unterricht, Übung",
+  "status": "Pflichtmodul",
+  "frequency": "jedes Semester",
+  "exam_type": "Die Prüfungsform wird nach §19(2) RSPO durch die Lehrkraft festgelegt. Sofern die\nLehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der\nFrist nach §19 (2) RSPO festlegt, gilt folgende Prüfungsform: 100% Klausur (90 Minuten).",
+  "grade_calculation": "Siehe Studienplan",
+  "recognized_modules": "Module vergleichbaren Inhalts",
+  "contents": [
+    "I Diskrete Mathematik",
+    "1. Aussagenlogik\n• Aussagen und ihre Verknüpfungen, Syntax und Semantik von Ausdrücken,\nTautologien, semantische Äquivalenz und Implikation, disjunktive und konjunktive\nNormalformen.",
+    "2. Prädikatenlogik\n• Prädikate und Quantoren, freie und gebundene Variablen, Syntax und Semantik\nvon prädikatenlogischen Ausdrücken, Tautologien\n• Beweisverfahren in der Mathematik",
+    "3. Grundbegriffe der Mengenlehre\n• Cantorscher Mengenbegriff, Gleichheit, Teilmengen, Potenzmengen\n• Mengenoperationen und ihre Gesetze\n• Mächtigkeit, endliche, unendliche Mengen; IN, IZ, IQ und IR",
+    "4. Kombinatorik\n• Zählprinzipien: Modulgleichung, Summen- und Produktregel\n• Bijektionen endlicher Mengen, Permutationen, Potenzmenge\n• Fakultät und Binomialkoeffizienten, Binomischer Satz",
+    "5. Relationen und Abbildungen\n• Darstellung von Relationen auf endlichen Mengen durch Matrizen und Graphen,\nInversion und Verkettung\n• Eigenschaften von Relationen auf einer Menge: reflexiv, irreflexiv, symmetrisch,\nantisymmetrisch, transitiv, linear; Hüllenbildung\n• Äquivalenz- und Ordnungsrelationen, Hasse-Diagramme\n• Funktionen: Eigenschaften (linkstotal/rechtseindeutig, injektiv, surjektiv, bijektiv)"
+  ],
+  "literature": [
+    "G. + S. Teschl: Mathematik für Informatiker Band 1, Springer+Vieweg Verlag",
+    "P. Hartmann: Mathematik für Informatiker, Vieweg+Teubner Verlag",
+    "L. Görke: Mengen, Relationen, Funktionen, Harri Deutsch Verlag"
+  ],
+  "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
+  "source_file": "BA_Medieninformatik_2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf",
+  "source_page": 6
+}
