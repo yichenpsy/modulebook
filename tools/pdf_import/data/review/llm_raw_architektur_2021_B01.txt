@@ -1,0 +1,59 @@
+{
+"module_number": "B01",
+"title_de": "Gebäudeentwurf 1",
+"title_en": "Building Design 1",
+"credits": 5,
+"workload": "68 Stunden Präsenz (2 SWS SU + 2 SWS Ü), 82 Stunden Selbststudium",
+"learning_area": "Fachspezifische Grundlagen",
+"learning_objectives": "Die Studierenden erlernen:\n- Verständnis der Zusammenhänge von Raum, Körper und Konstruktion einfacher Gebäude\n- Analyse des Entwurfs\n- einfachen Modellbau\n- Fähigkeit zur Erarbeitung einfacher Kompositionen und dreidimensionaler Objekte\n- die wichtigsten Methoden der Architekturdarstellung und Entwicklung des räumlichen Vorstellungsvermögens\n- präsentations- und praxisgerechte Darstellung des eigenen Entwurfs\n- einfache Kooperations- und Sprachkompetenzen",
+"prerequisites": "keine",
+"level": "1. Studienplansemester",
+"teaching_form": "Seminaristischer Unterricht mit Übung",
+"status": "Pflichtmodul",
+"frequency": "jedes Semester",
+"exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt, gilt folgende Prüfungsform:\n80 % Entwurf, 20 % Klausur",
+"module_grade": "100 % SU; Ü: m.E. / o.E.",
+"recognized_modules": null,
+"contents": [
+"Allgemeine Entwurfsgrundlagen:",
+"einfache Ordnungsprinzipien der Gestaltung",
+"einfache entwurfsrelevante Zusammenhänge",
+"einfache Formen der Grundrissorganisation",
+"Maße für Gebäude, Räume und Einrichtungen",
+"Proportionslehre",
+"Grundlagen der Gebäudelehre und Typologien einfacher Bauten",
+"Kompositorische Übungen in Skizze und Modell",
+"Grundlagen der Präsentation:",
+"Darstellungsmethoden",
+"Plangrafik",
+"verbale Präsentation (Sprachkompetenz)",
+"3-Tafel Projektion",
+"Grundlagen der Teamarbeit:",
+"Interagieren in Gruppen",
+"Zeitmanagement",
+"Fächerübergreifende Zusammenarbeit mit Modul B02 in Form von entwurflicher Beratung hinsichtlich konstruktiver Aspekte"
+],
+"literature": [
+"GRÜTTER, Jörg Kurt: Grundlagen der Architekturwahrnehmung, Wiesbaden: Springer Vieweg",
+"VON MEISS, Pierre: Vom Objekt zum Raum zum Ort. Dimensionen der Architektur, Basel: Birkhäuser",
+"BIELEFELD, Bert: Basics. Entwurf, Basel: Birkhäuser",
+"BIELEFELD, Bert; SKIBA, Isabella: Basics. Technisches Zeichnen, Basel: Birkhäuser",
+"WILKENS, Michael: Architektur als Komposition. Zehn Lektionen zum Entwerfen, Basel: Birkhäuser",
+"WÜSTENROT Stiftung (Hg.): Raumpilot. Grundlagen, Arbeiten, Lernen, Wohnen, 4 Bd., Stuttgart: Karl Krämer Verlag (kostenloser Download als pdf-Datei)",
+"DEPLAZES, Andrea: Architektur konstruieren. Vom Rohmaterial zum Bauwerk, Basel: Birkhäuser",
+"NAREDI-RAINER, Paul von: Architektur und Harmonie. Zahl, Maß und Proportion in der abendländischen Baukunst, Köln: DuMont",
+"KLOTZ, Heinrich: Kunst im 20. Jahrhundert. Moderne-Postmoderne-Zweite Moderne, München: C.H. Beck Verlag",
+"CHING, Francis D.K.: Kunst der Architekturgestaltung als Zusammenklang von Form, Raum und Ordnung, Augsburg: Augustus"
+],
+"additional_notes": "Dieses Modul wird auf Deutsch angeboten.\nFür die Klausur ist ein 2. Prüfungszeitraum vorgesehen.",
+"room_requirements": "SU-Sem; Ü-Sem",
+"additional_fields": {
+"Verwendbarkeit": "eigener Studiengang"
+},
+"source_file": "tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf",
+"source_pages": [
+7,
+8,
+9
+]
+}

@@ -1,0 +1,35 @@
+{
+  "module_number": "B01",
+  "title_de": "Mathematik I",
+  "title_en": "Mathematics 1",
+  "credits": 5,
+  "workload": "102 Stunden Präsenz (4 SWS SU + 2 SWS Ü), 48 Stunden Selbststudium",
+  "learning_area": "Mathematisch-naturwissenschaftliche Grundlagen",
+  "learning_objectives": "Kenntnisse in den mathematischen Grundlagen der Informatik, Sicherheit im abstrakten und strukturellen Denken.",
+  "prerequisites": "Empfehlung: die Belegung des Mathematik-Brückenkurses vor Studienbeginn",
+  "level": "1. Studienplansemester",
+  "teaching_form": "Seminaristischer Unterricht, Übung",
+  "status": "Pflichtmodul",
+  "frequency": "jedes Semester",
+  "exam_form": "100% Klausur (90 Minuten)",
+  "module_grade": "Siehe Studienplan",
+  "recognized_modules": "Module vergleichbaren Inhalts",
+  "contents": [
+    "Diskrete Mathematik",
+    "Aussagenlogik",
+    "Prädikatenlogik",
+    "Grundbegriffe der Mengenlehre",
+    "Kombinatorik",
+    "Relationen und Abbildungen"
+  ],
+  "literature": [
+    "G. + S. Teschl: Mathematik für Informatiker Band 1, Springer+Vieweg Verlag",
+    "P. Hartmann: Mathematik für Informatiker, Vieweg+Teubner Verlag",
+    "L. Görke: Mengen, Relationen, Funktionen, Harri Deutsch Verlag"
+  ],
+  "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
+  "room_requirements": null,
+  "additional_fields": {},
+  "source_file": "tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf",
+  "source_pages": [6]
+}

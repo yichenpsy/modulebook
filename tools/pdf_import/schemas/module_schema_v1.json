@@ -1,0 +1,92 @@
+{
+  "type": "object",
+  "required": [
+    "module_number",
+    "title_de",
+    "credits",
+    "status",
+    "contents",
+    "literature",
+    "source_file",
+    "source_pages"
+  ],
+  "properties": {
+    "module_number": {
+      "type": "string"
+    },
+    "title_de": {
+      "type": "string"
+    },
+    "title_en": {
+      "type": ["string", "null"]
+    },
+    "credits": {
+      "type": "number"
+    },
+    "workload": {
+      "type": ["string", "null"]
+    },
+    "learning_area": {
+      "type": ["string", "null"]
+    },
+    "learning_objectives": {
+      "type": ["string", "null"]
+    },
+    "prerequisites": {
+      "type": ["string", "null"]
+    },
+    "level": {
+      "type": ["string", "null"]
+    },
+    "teaching_form": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Pflichtmodul", "Wahlpflichtmodul"]
+    },
+    "frequency": {
+      "type": ["string", "null"]
+    },
+    "exam_form": {
+      "type": ["string", "null"]
+    },
+    "module_grade": {
+      "type": ["string", "null"]
+    },
+    "recognized_modules": {
+      "type": ["string", "null"]
+    },
+    "contents": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "literature": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "additional_notes": {
+      "type": ["string", "null"]
+    },
+    "room_requirements": {
+      "type": ["string", "null"]
+    },
+    "additional_fields": {
+      "type": "object"
+    },
+    "source_file": {
+      "type": "string"
+    },
+    "source_pages": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "additionalProperties": false
+}

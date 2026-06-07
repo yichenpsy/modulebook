@@ -1,0 +1,192 @@
+You are an information extraction system.
+
+Task:
+Extract structured JSON from the given German module handbook text.
+
+Rules:
+1. Return JSON only.
+2. Do not use Markdown.
+3. Do not add explanations.
+4. Do not invent missing information.
+5. Use null if a value is missing.
+6. Keep German source text as close as possible.
+7. Extract known fields into the defined JSON fields.
+8. If the module contains additional fields that are not part of the defined schema, put them into additional_fields.
+9. additional_fields must be an object where:
+   - key = original German field label
+   - value = extracted text value
+10. Convert credits like "5 LP", "5 Cr", "2,5 LP" to a number.
+11. Split bilingual titles:
+   - "Mathematik I / Mathematics 1"
+   - title_de = "Mathematik I"
+   - title_en = "Mathematics 1"
+12. contents must be a list of strings.
+13. literature must be a list of strings.
+14. status must be exactly one of:
+   - "Pflichtmodul"
+   - "Wahlpflichtmodul"
+15. Include source_file and source_pages from the metadata.
+
+Expected JSON structure:
+{
+  "module_number": "string",
+  "title_de": "string",
+  "title_en": "string or null",
+  "credits": number,
+  "workload": "string or null",
+  "learning_area": "string or null",
+  "learning_objectives": "string or null",
+  "prerequisites": "string or null",
+  "level": "string or null",
+  "teaching_form": "string or null",
+  "status": "Pflichtmodul or Wahlpflichtmodul",
+  "frequency": "string or null",
+  "exam_form": "string or null",
+  "module_grade": "string or null",
+  "recognized_modules": "string or null",
+  "contents": ["string"],
+  "literature": ["string"],
+  "additional_notes": "string or null",
+  "room_requirements": "string or null",
+  "additional_fields": {},
+  "source_file": "string",
+  "source_pages": [number]
+}
+
+Module text:
+Modulnummer
+B01
+Titel
+Gebäudeentwurf 1 / Building Design 1
+Leistungspunkte
+5 Cr
+Workload
+68 Stunden Präsenz (2 SWS SU + 2 SWS Ü),
+82 Stunden Selbststudium
+Verwendbarkeit
+eigener Studiengang
+Lerngebiet
+Fachspezifische Grundlagen
+Lernziele / Kompetenzen
+Die Studierenden erlernen:
+-
+Verständnis der Zusammenhänge von Raum, Körper und Konstruktion
+einfacher Gebäude
+-
+Analyse des Entwurfs
+-
+einfachen Modellbau
+-
+Fähigkeit zur Erarbeitung einfacher Kompositionen und dreidimensionaler
+Objekte
+-
+die wichtigsten Methoden der Architekturdarstellung und Entwicklung des
+räumlichen Vorstellungsvermögens
+-
+präsentations- und praxisgerechte Darstellung des eigenen Entwurfs
+-
+einfache Kooperations- und Sprachkompetenzen
+Voraussetzungen
+keine
+Niveaustufe
+1. Studienplansemester
+Lernform
+Seminaristischer Unterricht mit Übung
+Status
+Pflichtmodul
+Häufigkeit des Angebotes
+jedes Semester
+Prüfungsform
+Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt.
+Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am
+Semesteranfang in der Frist nach §19 (2) RSPO festlegt, gilt folgende
+Prüfungsform:
+80 % Entwurf, 20 % Klausur
+Ermittlung der Modulnote
+100 % SU; Ü: m.E. / o.E.
+Inhalte
+-
+Allgemeine Entwurfsgrundlagen:
+-
+einfache Ordnungsprinzipien der Gestaltung
+-
+einfache entwurfsrelevante Zusammenhänge
+-
+einfache Formen der Grundrissorganisation
+-
+Maße für Gebäude, Räume und Einrichtungen
+-
+Proportionslehre
+-
+Grundlagen der Gebäudelehre und Typologien einfacher Bauten
+-
+Kompositorische Übungen in Skizze und Modell
+-
+Grundlagen der Präsentation:
+-
+Darstellungsmethoden
+-
+Plangrafik
+-
+verbale Präsentation (Sprachkompetenz)
+-
+3-Tafel Projektion
+-
+Grundlagen der Teamarbeit:
+-
+Interagieren in Gruppen
+-
+Zeitmanagement
+-
+Fächerübergreifende Zusammenarbeit mit Modul B02 in Form von
+entwurflicher Beratung hinsichtlich konstruktiver Aspekte
+Literatur
+-
+GRÜTTER, Jörg Kurt: Grundlagen der Architekturwahrnehmung,
+Wiesbaden: Springer Vieweg
+-
+VON MEISS, Pierre: Vom Objekt zum Raum zum Ort. Dimensionen der
+Architektur, Basel: Birkhäuser
+-
+BIELEFELD, Bert: Basics. Entwurf, Basel: Birkhäuser
+Studienordnung Bachelor-Studiengang Architektur
+
+Anlage 3 | Seite 8
+
+-
+BIELEFELD, Bert; SKIBA, Isabella: Basics. Technisches Zeichnen, Basel:
+Birkhäuser
+-
+WILKENS, Michael: Architektur als Komposition. Zehn Lektionen zum
+Entwerfen, Basel: Birkhäuser
+-
+WÜSTENROT Stiftung (Hg.): Raumpilot. Grundlagen, Arbeiten, Lernen,
+Wohnen, 4 Bd., Stuttgart: Karl Krämer Verlag
+(kostenloser Download als pdf-Datei)
+-
+DEPLAZES, Andrea: Architektur konstruieren. Vom Rohmaterial zum
+Bauwerk, Basel: Birkhäuser
+-
+NAREDI-RAINER, Paul von: Architektur und Harmonie. Zahl, Maß und
+Proportion in der abendländischen Baukunst, Köln: DuMont
+-
+KLOTZ, Heinrich: Kunst im 20. Jahrhundert. Moderne-Postmoderne-Zweite
+Moderne, München: C.H. Beck Verlag
+-
+CHING, Francis D.K.: Kunst der Architekturgestaltung als Zusammenklang
+von Form, Raum und Ordnung, Augsburg: Augustus
+Weitere Hinweise
+Dieses Modul wird auf Deutsch angeboten.
+Für die Klausur ist ein 2. Prüfungszeitraum vorgesehen.
+Raumbedarf
+SU-Sem; Ü-Sem
+Studienordnung Bachelor-Studiengang Architektur
+
+Anlage 3 | Seite 9
+
+Datenfeld
+Erklärung
+
+Metadata:
+source_file: tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf
+source_pages: [7, 8, 9]

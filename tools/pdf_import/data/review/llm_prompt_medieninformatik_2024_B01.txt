@@ -1,0 +1,124 @@
+You are an information extraction system.
+
+Task:
+Extract structured JSON from the given German module handbook text.
+
+Rules:
+1. Return JSON only.
+2. Do not use Markdown.
+3. Do not add explanations.
+4. Do not invent missing information.
+5. Use null if a value is missing.
+6. Keep German source text as close as possible.
+7. Extract known fields into the defined JSON fields.
+8. If the module contains additional fields that are not part of the defined schema, put them into additional_fields.
+9. additional_fields must be an object where:
+   - key = original German field label
+   - value = extracted text value
+10. Convert credits like "5 LP", "5 Cr", "2,5 LP" to a number.
+11. Split bilingual titles:
+   - "Mathematik I / Mathematics 1"
+   - title_de = "Mathematik I"
+   - title_en = "Mathematics 1"
+12. contents must be a list of strings.
+13. literature must be a list of strings.
+14. status must be exactly one of:
+   - "Pflichtmodul"
+   - "Wahlpflichtmodul"
+15. Include source_file and source_pages from the metadata.
+
+Expected JSON structure:
+{
+  "module_number": "string",
+  "title_de": "string",
+  "title_en": "string or null",
+  "credits": number,
+  "workload": "string or null",
+  "learning_area": "string or null",
+  "learning_objectives": "string or null",
+  "prerequisites": "string or null",
+  "level": "string or null",
+  "teaching_form": "string or null",
+  "status": "Pflichtmodul or Wahlpflichtmodul",
+  "frequency": "string or null",
+  "exam_form": "string or null",
+  "module_grade": "string or null",
+  "recognized_modules": "string or null",
+  "contents": ["string"],
+  "literature": ["string"],
+  "additional_notes": "string or null",
+  "room_requirements": "string or null",
+  "additional_fields": {},
+  "source_file": "string",
+  "source_pages": [number]
+}
+
+Module text:
+Modulnummer
+B01
+Titel
+Mathematik I / Mathematics 1
+Leistungspunkte
+5 LP
+Workload
+102 Stunden Präsenz (4 SWS SU + 2 SWS Ü), 48 Stunden Selbststudium
+Lerngebiet
+Mathematisch-naturwissenschaftliche Grundlagen
+Lernziele / Kompetenzen
+Kenntnisse in den mathematischen Grundlagen der Informatik,
+Sicherheit im abstrakten und strukturellen Denken.
+Voraussetzungen
+Empfehlung: die Belegung des Mathematik-Brückenkurses vor Studienbeginn
+Niveaustufe
+1. Studienplansemester
+Lehrform
+Seminaristischer Unterricht, Übung
+Status
+Pflichtmodul
+Häufigkeit des Angebotes
+jedes Semester
+Prüfungsform
+Die Prüfungsform wird nach §19(2) RSPO durch die Lehrkraft festgelegt. Sofern die
+Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der
+Frist nach §19 (2) RSPO festlegt, gilt folgende Prüfungsform: 100% Klausur (90 Minuten).
+Ermittlung der Modulnote
+Siehe Studienplan
+Anerkannte Module
+Module vergleichbaren Inhalts
+Inhalte
+I Diskrete Mathematik
+1. Aussagenlogik
+• Aussagen und ihre Verknüpfungen, Syntax und Semantik von Ausdrücken,
+Tautologien, semantische Äquivalenz und Implikation, disjunktive und konjunktive
+Normalformen.
+2. Prädikatenlogik
+• Prädikate und Quantoren, freie und gebundene Variablen, Syntax und Semantik
+von prädikatenlogischen Ausdrücken, Tautologien
+• Beweisverfahren in der Mathematik
+3. Grundbegriffe der Mengenlehre
+• Cantorscher Mengenbegriff, Gleichheit, Teilmengen, Potenzmengen
+• Mengenoperationen und ihre Gesetze
+• Mächtigkeit, endliche, unendliche Mengen; IN, IZ, IQ und IR
+4.  Kombinatorik
+• Zählprinzipien: Modulgleichung, Summen- und Produktregel
+• Bijektionen endlicher Mengen, Permutationen, Potenzmenge
+• Fakultät und Binomialkoeffizienten, Binomischer Satz
+5. Relationen und Abbildungen
+• Darstellung von Relationen auf endlichen Mengen durch Matrizen und Graphen,
+Inversion und Verkettung
+• Eigenschaften von Relationen auf einer Menge: reflexiv, irreflexiv, symmetrisch,
+antisymmetrisch, transitiv, linear; Hüllenbildung
+• Äquivalenz- und Ordnungsrelationen, Hasse-Diagramme
+• Funktionen: Eigenschaften (linkstotal/rechtseindeutig, injektiv, surjektiv, bijektiv)
+Literatur
+G. + S. Teschl: Mathematik für Informatiker Band 1, Springer+Vieweg Verlag
+P. Hartmann: Mathematik für Informatiker, Vieweg+Teubner Verlag
+L. Görke: Mengen, Relationen, Funktionen, Harri Deutsch Verlag
+Weitere Hinweise
+Dieses Modul wird auf Deutsch angeboten.
+Modulhandbuch für den Bachelor-Studiengang Medieninformatik
+         7
+
+Metadata:
+source_file: tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf
+source_pages: [6, 7]
