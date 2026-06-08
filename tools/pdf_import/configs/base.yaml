@@ -45,3 +45,98 @@ quality_checks:
     - Titel
     - Status
 
+field_labels:
+  - Modulnummer
+  - Module ID
+  - Modul ID
+  - Titel
+  - Title
+  - Leistungspunkte
+  - Credits
+  - Workload
+  - Präsenzzeit
+  - Verwendbarkeit
+  - Lerngebiet
+  - Lernziele / Kompetenzen
+  - Qualifikationsziele / Kompetenzen
+  - Voraussetzungen
+  - Niveaustufe
+  - Lehrform
+  - Lernform
+  - Lehr- und Lernform
+  - Status
+  - Häufigkeit des Angebotes
+  - Turnus
+  - Prüfungsform
+  - Ermittlung der Modulnote
+  - Anerkannte Module
+  - Inhalte
+  - Literatur
+  - Weitere Hinweise
+  - Raumbedarf
+  
+
+
+normalized_field_map:
+  module_number:
+    - Modulnummer
+    - Module ID
+    - Modul ID
+
+  title:
+    - Titel
+    - Title
+
+  credits:
+    - Leistungspunkte
+    - Credits
+
+  workload:
+    - Workload
+    - Präsenzzeit
+
+  learning_area:
+    - Lerngebiet
+
+  learning_objectives:
+    - Lernziele / Kompetenzen
+    - Qualifikationsziele / Kompetenzen
+
+  prerequisites:
+    - Voraussetzungen
+
+  level:
+    - Niveaustufe
+
+  teaching_form:
+    - Lehrform
+    - Lernform
+    - Lehr- und Lernform
+
+  status:
+    - Status
+
+  frequency:
+    - Häufigkeit des Angebotes
+    - Turnus
+
+  exam_form:
+    - Prüfungsform
+
+  module_grade:
+    - Ermittlung der Modulnote
+
+  recognized_modules:
+    - Anerkannte Module
+
+  contents:
+    - Inhalte
+
+  literature:
+    - Literatur
+
+  additional_notes:
+    - Weitere Hinweise
+
+  room_requirements:
+    - Raumbedarf
