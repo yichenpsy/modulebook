@@ -14,10 +14,16 @@ def load_module_schema() -> dict:
 
 def clean_llm_json_text(text: str) -> str:
     """
-    Remove common Markdown wrappers if the LLM accidentally returns them.
+    Remove common wrappers or reasoning blocks from LLM output.
+    Then extract the JSON object.
     """
     text = text.strip()
 
+    # Remove <think>...</think> blocks if the model outputs reasoning
+    if "</think>" in text:
+        text = text.split("</think>", 1)[1].strip()
+
+    # Remove Markdown wrappers
     if text.startswith("```json"):
         text = text.removeprefix("```json").strip()
 
@@ -27,7 +33,14 @@ def clean_llm_json_text(text: str) -> str:
     if text.endswith("```"):
         text = text.removesuffix("```").strip()
 
-    return text
+    # Extract JSON object if there is extra text before or after it
+    first_brace = text.find("{")
+    last_brace = text.rfind("}")
+
+    if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+        text = text[first_brace:last_brace + 1]
+
+    return text.strip()
 
 
 def parse_llm_json(raw_output: str) -> tuple[dict | None, str | None]:

@@ -77,4 +77,6 @@ Thumbs.db
 
 # PDF to DB
 .venv/
+.env
+tools/pdf_import/.env
 tools/pdf_import/output/
