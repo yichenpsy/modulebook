@@ -1,1 +1,0 @@
-{"import_id": "architektur_2021", "module_number": "B01", "source_file": "tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf", "source_pages": [7, 8, 9], "raw_output": null, "validation_errors": ["LLM/API error: HTTPSConnectionPool(host='llmapi-key.ris.bht-berlin.de', port=443): Read timed out. (read timeout=180)"]}

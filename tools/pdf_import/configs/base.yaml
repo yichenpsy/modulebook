@@ -140,3 +140,8 @@ normalized_field_map:
 
   room_requirements:
     - Raumbedarf
+
+  # applicability:
+   # - Verwendbarkeit
+
+    
