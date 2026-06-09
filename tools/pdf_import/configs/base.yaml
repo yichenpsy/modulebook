@@ -76,7 +76,7 @@ field_labels:
   - Raumbedarf
   
 
-
+# from PDF labels to db unified field names
 normalized_field_map:
   module_number:
     - Modulnummer
@@ -141,7 +141,18 @@ normalized_field_map:
   room_requirements:
     - Raumbedarf
 
+# new field
   # applicability:
    # - Verwendbarkeit
 
-    
+# For DB, need to change/add some labels from normalized fields
+staging_field_overrides:
+  title:
+    - title_de
+    - title_en
+
+staging_extra_fields:
+  - source_file
+  - source_pages
+  - study_program
+  - study_program_code

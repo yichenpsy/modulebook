@@ -27,11 +27,63 @@ This MVP import run processed 2 BHT module handbook PDFs:
 | Modules extracted | 93 |
 | Valid modules | 93 |
 | Need review | 0 |
-| Additional fields | 0 |
+| Modules with additional fields | 43 |
+| Additional field values | 43 |
 
-## Field update
+## Additional fields
 
-The field `Verwendbarkeit` was upgraded from an additional field to an official optional normalized field:
+The current normalized output still captures `Verwendbarkeit` as an additional field.
+
+| Additional field | Modules |
+|---|---:|
+| Verwendbarkeit | 43 |
+
+To promote it to an official normalized field, add it to `normalized_field_map`, rerun normalization, and then rebuild the staging database.
+
+## Staging database
+
+The SQLite staging database was rebuilt at:
 
 ```text
-Verwendbarkeit → applicability
+tools/pdf_import/data/output/module_import_staging.sqlite
+```
+
+The staging table is:
+
+```text
+module_import_staging
+```
+
+The table now uses language-specific title columns from the normalized JSONL output:
+
+```text
+title_de
+title_en
+```
+
+It no longer has the old derived `title` column.
+
+## Staging result
+
+| Metric | Count |
+|---|---:|
+| Rows inserted | 93 |
+| Non-null `title_de` values | 93 |
+| Non-null `title_en` values | 92 |
+
+## Staging field config
+
+The staging columns are generated from `normalized_field_map` plus staging-specific extras and overrides:
+
+```yaml
+staging_extra_fields:
+  - source_file
+  - source_pages
+  - study_program
+  - study_program_code
+
+staging_field_overrides:
+  title:
+    - title_de
+    - title_en
+```
