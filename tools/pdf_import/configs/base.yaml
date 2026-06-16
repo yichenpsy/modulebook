@@ -1,15 +1,23 @@
 module_start_patterns:
-  - "^\\s*Modulnummer\\s+((?:B\\d{2}[a-z]?|WP\\d{2}))\\b"
-  - "^\\s*Module\\s+ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2}))\\b"
-  - "^\\s*Modul\\s*ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2}))\\b"
+  - "^\\s*Modulnummer\\s+((?:B\\d{2}[a-z]?|WP\\d{2})(?:\\.\\d+)?)\\b"
+  - "^\\s*Module\\s+ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2})(?:\\.\\d+)?)\\b"
+  - "^\\s*Module\\s+ID\\s*\\n\\s*Modulkürzel\\s*\\n\\s*([A-Z]{2,3}\\d?|ES\\d|EX\\d)\\b"
+  - "^\\s*Modul\\s*ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2})(?:\\.\\d+)?)\\b"
 
 required_fields:
   - module_number
   - title_de
   - credits
+  - workload
+  - learning_area
+  - learning_objectives
+  - prerequisites
+  - level
+  - teaching_form
   - status
+  - frequency
+  - exam_form
   - contents
-  - literature
   - source_file
   - source_pages
 

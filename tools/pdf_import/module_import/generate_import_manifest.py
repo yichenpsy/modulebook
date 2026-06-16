@@ -1,4 +1,6 @@
+import argparse
 import re
+import time
 from pathlib import Path
 
 import yaml
@@ -41,22 +43,42 @@ def guess_study_program_name(filename):
     return Path(filename).stem
 
 
-def build_manifest():
+def load_existing_manifest() -> dict:
+    if not MANIFEST_PATH.exists():
+        return {"imports": {}}
+
+    with MANIFEST_PATH.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f) or {"imports": {}}
+
+
+def build_manifest(existing_manifest: dict | None = None):
     pdf_files = sorted(INPUT_DIR.glob("*.pdf"))
 
     if not pdf_files:
         raise FileNotFoundError(f"No PDF files found in {INPUT_DIR}")
+
+    existing_imports = {}
+    if existing_manifest is not None:
+        existing_imports = existing_manifest.get("imports", {})
 
     imports = {}
 
     for pdf_path in pdf_files:
         import_id = slugify_filename(pdf_path.name)
 
-        imports[import_id] = {
+        default_item = {
             "source_file": str(pdf_path),
             "study_program_code": import_id,
             "study_program": guess_study_program_name(pdf_path.name),
             "expected_module_count": None,
+        }
+
+        # Preserve manually edited fields, especially expected_module_count.
+        existing_item = existing_imports.get(import_id, {})
+        imports[import_id] = {
+            **default_item,
+            **existing_item,
+            "source_file": str(pdf_path),
         }
 
     return {
@@ -64,9 +86,7 @@ def build_manifest():
     }
 
 
-def main():
-    manifest = build_manifest()
-
+def write_manifest(manifest: dict) -> None:
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     with MANIFEST_PATH.open("w", encoding="utf-8") as f:
@@ -77,11 +97,70 @@ def main():
             sort_keys=False,
         )
 
+
+def sync_manifest() -> dict:
+    existing_manifest = load_existing_manifest()
+    manifest = build_manifest(existing_manifest=existing_manifest)
+    write_manifest(manifest)
+    return manifest
+
+
+def get_input_snapshot() -> tuple[tuple[str, int, int], ...]:
+    return tuple(
+        sorted(
+            (str(path), path.stat().st_mtime_ns, path.stat().st_size)
+            for path in INPUT_DIR.glob("*.pdf")
+        )
+    )
+
+
+def print_manifest_summary(manifest: dict) -> None:
     print(f"Manifest written: {MANIFEST_PATH}")
     print(f"PDFs found: {len(manifest['imports'])}")
 
     for import_id, item in manifest["imports"].items():
         print(f"- {import_id}: {item['source_file']}")
+
+
+def watch_manifest(interval_seconds: float) -> None:
+    last_snapshot = None
+
+    while True:
+        current_snapshot = get_input_snapshot()
+
+        if current_snapshot != last_snapshot:
+            manifest = sync_manifest()
+            print_manifest_summary(manifest)
+            last_snapshot = current_snapshot
+
+        time.sleep(interval_seconds)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--watch",
+        action="store_true",
+        help="Keep watching data/input and update import_manifest.yaml when PDFs change.",
+    )
+    parser.add_argument(
+        "--interval",
+        type=float,
+        default=2.0,
+        help="Polling interval in seconds for --watch mode.",
+    )
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    if args.watch:
+        watch_manifest(interval_seconds=args.interval)
+        return
+
+    manifest = sync_manifest()
+    print_manifest_summary(manifest)
 
 
 if __name__ == "__main__":

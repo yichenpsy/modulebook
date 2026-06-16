@@ -1,44 +1,437 @@
 _import_id,module_number,source_file,source_pages,field_label,field_value
-medieninformatik_2024,WP21,tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf,"[56, 57]",Verwendbarkeit,
-medieninformatik_2024,WP22,tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf,"[57, 58]",Verwendbarkeit,
-medieninformatik_2024,WP23,tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf,"[58, 59, 60]",Verwendbarkeit,Eigener Studiengang
-medieninformatik_2024,WP24,tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf,"[60, 61]",Verwendbarkeit,Eigener Studiengang
-medieninformatik_2024,WP28,tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf,"[61, 62, 63]",Verwendbarkeit,Eigener Studiengang
-medieninformatik_2024,WP29,tools/pdf_import/data/input/2024_11_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2017.pdf,"[63, 64]",Verwendbarkeit,Eigener Studiengang
-architektur_2021,B01,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[7, 8, 9]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B02,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[9, 10, 11]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B03,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[11, 12]",Verwendbarkeit,Eigener Studiengang
-architektur_2021,B04,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[12, 13]",Verwendbarkeit,Eigener Studiengang
-architektur_2021,B05,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[13, 14]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B06,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[14, 15]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B08,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[16, 17, 18]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B09,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[18, 19, 20]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B10,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[20, 21, 22]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B11,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[22, 23, 24]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B12,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[24, 25]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B13,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[25, 26]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B14,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[26, 27, 28]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B15,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[28, 29, 30]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B16,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[30, 31, 32]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B17,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[32, 33]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B18,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[33, 34]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B19,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[34, 35]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B20,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[35, 36, 37]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B21,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[37, 38]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B22,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[38, 39]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B23,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[39, 40]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B24,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[40, 41]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B25,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[41, 42]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B26a,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[42, 43, 44]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B26b,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[44, 45]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B27a,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[45, 46]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B27b,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[46, 47]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B28a,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[47, 48]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B28b,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[48, 49]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B29,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[49, 50]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B30,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[50, 51]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B31,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[51, 52]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B32a,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[52, 53, 54]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B32b,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[54, 55]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B33,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[55, 56]",Verwendbarkeit,eigener Studiengang
-architektur_2021,B34,tools/pdf_import/data/input/2021_Modulhandbuch_zur_Studien-_und_Pruefungsordnung_2012.pdf,"[56, 57, 58]",Verwendbarkeit,eigener Studiengang
+bauingenieurwesen_2024,B01,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[8, 9]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und -
+prüfungsordnung"
+bauingenieurwesen_2024,B02,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[9, 10]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B03,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[10, 11, 12]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B04,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[12, 13]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und -
+prüfungsordnung"
+bauingenieurwesen_2024,B05,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[13, 14]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B06,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[14, 15, 16]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B07,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[16, 17]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B08,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[17, 18]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B09,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[18, 19]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B10,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[19, 20]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B11,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[20, 21]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B12,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[21, 22]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B13,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[22, 23]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B14,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[23, 24]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B15,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[24, 25]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B16,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[25, 26]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B17,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[26, 27]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B18,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[27, 28]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B19,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[28, 29]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B20,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[29, 30]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B21,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[30, 31]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B22,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[31, 32]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B23,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[32, 33, 34]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B24,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[34, 35]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B25,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[35, 36, 37]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B26.1,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[37, 38]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B26.2,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[38, 39]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B27,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[39, 40]",Verwendbarkeit,"Eigener Studiengang, z.T. können praktische Vorbildungen anerkannt werden.
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,B28,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[40, 41]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,SP2-09,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP01,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[71, 72]",Verwendbarkeit,"Eigener Studiengang und im Bachelorstudiengang Umweltingenieurwesen-Bau
+(B-UB),
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP02,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[72, 73]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP03,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[73, 74]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP04,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[74, 75]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP05,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[75, 76]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP06,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[76, 77]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP07,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[77, 78]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+bauingenieurwesen_2024,WP2-08,tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf,"[78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß Rahmenstudien- und
+-prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B01,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[4, 5, 6]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B02,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[6, 7, 8]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B03,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[8, 9, 10]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B04,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[10, 11, 12]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B05,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[12, 13, 14]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B06,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[14, 15, 16]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B07,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[16, 17, 18]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B08,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[18, 19, 20]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B09,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[20, 21, 22]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B10,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[22, 23, 24]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B11,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[24, 25, 26]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B12,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[26, 27, 28]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B13,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[28, 29, 30]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B14,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[30, 31, 32]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B15,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[32, 33, 34]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B 17,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[34, 35, 36, 37, 38]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B18,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[38, 39, 40]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B19,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[40, 41, 42]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B20,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[42, 43, 44, 45]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B21,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[45, 46, 47]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B22,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[47, 48, 49]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B23,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[49, 50]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B24,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[50, 51, 52]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B25,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[52, 53, 54, 55]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B26,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[55, 56, 57, 58]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B27,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[58, 59, 60]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B28,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[60, 61, 62, 63]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B29,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[63, 64]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B30,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[64, 65, 66]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B31,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[66, 67, 68]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B32,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[68, 69, 70, 71]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B33,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[71, 72, 73]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B34,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[73, 74]",Verwendbarkeit,Alle Studiengänge
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B35,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[74, 75]",Verwendbarkeit,Alle Studiengänge
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B36,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[75, 76]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B37,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[76, 77, 78]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B38,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[78, 79]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,B39,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[79, 80, 81]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,WP01,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[81, 82, 83]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,WP02,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[83, 84, 85]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,WP03,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[85, 86, 87]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,WP04,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[87, 88, 89, 90]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,WP05,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[90, 91, 92]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+betriebswirtschaftslehre_digitale_wirtschaft_2022,WP06,tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf,"[92, 93]",Verwendbarkeit,"Eigener Studiengang
+Anerkennung für andere Studiengänge gemäß
+Rahmenstudien- und -prüfungsordnung"
+data_engineering_2025,"Modulkürzel
+CSI",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[22, 23, 24]",Verwendbarkeit,"Own Study Programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+PR1",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[24, 25, 26]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+PR2",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[26, 27, 28]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+PR3",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[28, 29, 30]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+PR4",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[30, 31, 32]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DB1",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[32, 33, 34]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DB2",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[34, 35, 36]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DB3",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[36, 37, 38]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DS1",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[38, 39, 40, 41]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DS2",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[41, 42, 43, 44]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+MLC",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[44, 45, 46]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+MLO",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[46, 47, 48]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DTP",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[48, 49, 50]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+MLA",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[50, 51, 52]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DMA",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[52, 53, 54]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+CT1",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[54, 55, 56]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+CT2",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[56, 57, 58]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+MAP",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[58, 59, 60, 61]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+ID1",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[61, 62, 63]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+ID2",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[63, 64, 65, 66]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+PRD",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[66, 67, 68]",Verwendbarkeit,"Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+INT",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[68, 69, 70]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+BTC",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[70, 71, 72]",Verwendbarkeit,"Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+BTX",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[72, 73, 74, 75]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+ES1, ES2, ES3, ES4, ES5",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[75, 76, 77, 78]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+SG",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[78, 79, 80]",Verwendbarkeit,"All study programs
+alle Studiengänge
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DEP",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[80, 81, 82]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+LLM",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[82, 83, 84]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+EMB",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[84, 85, 86]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+ROB",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[86, 87, 88]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+VIS",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[88, 89, 90]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+GEO",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[90, 91, 92]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+BEN",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[92, 93, 94]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+BIO",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[94, 95, 96]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+DEL",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[96, 97, 98]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+SBI",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[98, 99, 100]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+EDE",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[100, 101, 102]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+data_engineering_2025,"Modulkürzel
+EX1 / EX2",tools/pdf_import/data/input/Data-Engineering_2025.pdf,"[102, 103, 104, 105, 106, 107]",Verwendbarkeit,"Own study programme
+Eigener Studiengang
+Learning Area"
+architektur_2021,B01,tools/pdf_import/data/input/architektur_2021.pdf,"[7, 8, 9]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B02,tools/pdf_import/data/input/architektur_2021.pdf,"[9, 10, 11]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B03,tools/pdf_import/data/input/architektur_2021.pdf,"[11, 12]",Verwendbarkeit,Eigener Studiengang
+architektur_2021,B04,tools/pdf_import/data/input/architektur_2021.pdf,"[12, 13]",Verwendbarkeit,Eigener Studiengang
+architektur_2021,B05,tools/pdf_import/data/input/architektur_2021.pdf,"[13, 14]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B06,tools/pdf_import/data/input/architektur_2021.pdf,"[14, 15]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B08,tools/pdf_import/data/input/architektur_2021.pdf,"[16, 17, 18]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B09,tools/pdf_import/data/input/architektur_2021.pdf,"[18, 19, 20]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B10,tools/pdf_import/data/input/architektur_2021.pdf,"[20, 21, 22]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B11,tools/pdf_import/data/input/architektur_2021.pdf,"[22, 23, 24]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B12,tools/pdf_import/data/input/architektur_2021.pdf,"[24, 25]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B13,tools/pdf_import/data/input/architektur_2021.pdf,"[25, 26]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B14,tools/pdf_import/data/input/architektur_2021.pdf,"[26, 27, 28]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B15,tools/pdf_import/data/input/architektur_2021.pdf,"[28, 29, 30]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B16,tools/pdf_import/data/input/architektur_2021.pdf,"[30, 31, 32]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B17,tools/pdf_import/data/input/architektur_2021.pdf,"[32, 33]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B18,tools/pdf_import/data/input/architektur_2021.pdf,"[33, 34]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B19,tools/pdf_import/data/input/architektur_2021.pdf,"[34, 35]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B20,tools/pdf_import/data/input/architektur_2021.pdf,"[35, 36, 37]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B21,tools/pdf_import/data/input/architektur_2021.pdf,"[37, 38]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B22,tools/pdf_import/data/input/architektur_2021.pdf,"[38, 39]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B23,tools/pdf_import/data/input/architektur_2021.pdf,"[39, 40]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B24,tools/pdf_import/data/input/architektur_2021.pdf,"[40, 41]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B25,tools/pdf_import/data/input/architektur_2021.pdf,"[41, 42]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B26a,tools/pdf_import/data/input/architektur_2021.pdf,"[42, 43, 44]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B26b,tools/pdf_import/data/input/architektur_2021.pdf,"[44, 45]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B27a,tools/pdf_import/data/input/architektur_2021.pdf,"[45, 46]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B27b,tools/pdf_import/data/input/architektur_2021.pdf,"[46, 47]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B28a,tools/pdf_import/data/input/architektur_2021.pdf,"[47, 48]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B28b,tools/pdf_import/data/input/architektur_2021.pdf,"[48, 49]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B29,tools/pdf_import/data/input/architektur_2021.pdf,"[49, 50]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B30,tools/pdf_import/data/input/architektur_2021.pdf,"[50, 51]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B31,tools/pdf_import/data/input/architektur_2021.pdf,"[51, 52]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B32a,tools/pdf_import/data/input/architektur_2021.pdf,"[52, 53, 54]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B32b,tools/pdf_import/data/input/architektur_2021.pdf,"[54, 55]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B33,tools/pdf_import/data/input/architektur_2021.pdf,"[55, 56]",Verwendbarkeit,eigener Studiengang
+architektur_2021,B34,tools/pdf_import/data/input/architektur_2021.pdf,"[56, 57, 58]",Verwendbarkeit,eigener Studiengang
+medieninformatik_2024,WP21,tools/pdf_import/data/input/medieninformatik_2024.pdf,"[56, 57]",Verwendbarkeit,
+medieninformatik_2024,WP22,tools/pdf_import/data/input/medieninformatik_2024.pdf,"[57, 58]",Verwendbarkeit,
+medieninformatik_2024,WP23,tools/pdf_import/data/input/medieninformatik_2024.pdf,"[58, 59, 60]",Verwendbarkeit,Eigener Studiengang
+medieninformatik_2024,WP24,tools/pdf_import/data/input/medieninformatik_2024.pdf,"[60, 61]",Verwendbarkeit,Eigener Studiengang
+medieninformatik_2024,WP28,tools/pdf_import/data/input/medieninformatik_2024.pdf,"[61, 62, 63]",Verwendbarkeit,Eigener Studiengang
+medieninformatik_2024,WP29,tools/pdf_import/data/input/medieninformatik_2024.pdf,"[63, 64]",Verwendbarkeit,Eigener Studiengang

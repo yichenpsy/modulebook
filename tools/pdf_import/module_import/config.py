@@ -23,4 +23,15 @@ def load_import_manifest() -> dict:
 
 def get_imports() -> list[dict]:
     manifest = load_import_manifest()
-    return manifest["imports"]
+    imports = manifest["imports"]
+
+    if isinstance(imports, dict):
+        return [
+            {
+                "import_id": import_id,
+                **import_item,
+            }
+            for import_id, import_item in imports.items()
+        ]
+
+    return imports

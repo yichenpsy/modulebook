@@ -1,16 +1,41 @@
 imports:
+  augenoptik_2023:
+    source_file: tools/pdf_import/data/input/Augenoptik_2023.pdf
+    study_program_code: augenoptik_2023
+    study_program: Augenoptik_2023
+    expected_module_count: 51
+  bauingenieurwesen_2024:
+    source_file: tools/pdf_import/data/input/Bauingenieurwesen_2024.pdf
+    study_program_code: bauingenieurwesen_2024
+    study_program: Bauingenieurwesen_2024
+    expected_module_count: null
+  betriebswirtschaftslehre_dual_2023:
+    source_file: tools/pdf_import/data/input/Betriebswirtschaftslehre (Dual)_2023.pdf
+    study_program_code: betriebswirtschaftslehre_dual_2023
+    study_program: Betriebswirtschaftslehre (Dual)_2023
+    expected_module_count: 53
+  betriebswirtschaftslehre_online_2023:
+    source_file: tools/pdf_import/data/input/Betriebswirtschaftslehre Online_2023.pdf
+    study_program_code: betriebswirtschaftslehre_online_2023
+    study_program: Betriebswirtschaftslehre Online_2023
+    expected_module_count: 37
+  betriebswirtschaftslehre_digitale_wirtschaft_2022:
+    source_file: tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf
+    study_program_code: betriebswirtschaftslehre_digitale_wirtschaft_2022
+    study_program: Betriebswirtschaftslehre – Digitale Wirtschaft_2022
+    expected_module_count: 37
   data_engineering_2025:
     source_file: tools/pdf_import/data/input/Data-Engineering_2025.pdf
     study_program_code: data_engineering_2025
-    study_program: Data-Engineering B.A.
-    expected_module_count: null
+    study_program: Data-Engineering_2025
+    expected_module_count: 43
   architektur_2021:
     source_file: tools/pdf_import/data/input/architektur_2021.pdf
     study_program_code: architektur_2021
-    study_program: Architektur B.A.
-    expected_module_count: null
+    study_program: architektur_2021
+    expected_module_count: 35
   medieninformatik_2024:
     source_file: tools/pdf_import/data/input/medieninformatik_2024.pdf
     study_program_code: medieninformatik_2024
-    study_program: Medieninformatik B.A.
-    expected_module_count: null
+    study_program: medieninformatik_2024
+    expected_module_count: 53
