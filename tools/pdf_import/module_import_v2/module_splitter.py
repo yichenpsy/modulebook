@@ -6,10 +6,10 @@ import yaml
 pdf_name = "Data-Engineering_2025"
 
 WORK_DIR = Path("tools/pdf_import/data/work") / pdf_name
-PAGES_JSON = WORK_DIR / "pages_markdown.json"
+PAGES_JSON = WORK_DIR / "pages_md.json"
 BASE_YAML = Path("tools/pdf_import/configs/base.yaml")
 
-MODULE_BLOCKS_JSON = WORK_DIR / "module_blocks.json"
+MODULE_BLOCKS_JSON = WORK_DIR / "module_blocks_md.json"
 
 
 # Set these from the previous boundary detection result.
@@ -160,6 +160,16 @@ def split_modules_from_pages(
         markdown_text = get_page_markdown(page)
 
         for line in markdown_text.splitlines():
+            # Ignore all non-table lines.
+            if not is_markdown_table_row(line):
+                continue
+            
+            cells = split_markdown_table_row(line)
+
+            # Ignore Markdown separator rows.
+            if is_separator_row(cells):
+                continue
+            
             module_number = detect_module_start_from_line(
                 line,
                 module_number_labels,

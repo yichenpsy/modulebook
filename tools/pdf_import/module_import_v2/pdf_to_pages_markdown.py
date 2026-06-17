@@ -5,7 +5,7 @@ import fitz
 
 import pymupdf4llm
 
-pdf_name = "architektur_2021"
+pdf_name = "Data-Engineering_2025"
 
 INPUT_PDF= Path(
     f"/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/input/{pdf_name}.pdf"
@@ -13,7 +13,7 @@ INPUT_PDF= Path(
 
 
 OUTPUT_JSON = Path(
-    f"tools/pdf_import/data/work/{pdf_name}/pages_markdown.json"
+    f"tools/pdf_import/data/work/{pdf_name}/pages_md.json"
 )
 
 
