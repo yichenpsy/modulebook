@@ -5,7 +5,7 @@ import fitz
 
 import pymupdf4llm
 
-pdf_name = "Data-Engineering_2025"
+pdf_name = "architektur_2021"
 
 INPUT_PDF= Path(
     f"/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/input/{pdf_name}.pdf"
