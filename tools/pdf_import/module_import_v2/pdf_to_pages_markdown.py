@@ -5,17 +5,17 @@ import fitz
 
 import pymupdf4llm
 
+pdf_name = "Data-Engineering_2025"
+
 INPUT_PDF= Path(
-    "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/input/medieninformatik_2024.pdf"
+    f"/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/input/{pdf_name}.pdf"
 )
 
-# INPUT_PDF_2 = Path(
-#     "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/input/Betriebswirtschaftslehre Online_2023.pdf"
-# )
 
 OUTPUT_JSON = Path(
-    "tools/pdf_import/data/work/medieninformatik_2024/pages_markdown.json"
+    f"tools/pdf_import/data/work/{pdf_name}/pages_markdown.json"
 )
+
 
 def main():
     print(INPUT_PDF)
