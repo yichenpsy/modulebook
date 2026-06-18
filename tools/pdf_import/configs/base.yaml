@@ -6,7 +6,7 @@ module_start_patterns:
 
 required_fields:
   - module_number
-  - title_de
+  - title
   - credits
   - workload
   - learning_area
@@ -98,6 +98,7 @@ normalized_field_map:
   credits:
     - Leistungspunkte
     - Credits
+    - Credit Points
 
   workload:
     - Workload
@@ -105,21 +106,27 @@ normalized_field_map:
 
   learning_area:
     - Lerngebiet
+    - Learning Area
+    - Applicability
 
   learning_objectives:
     - Lernziele / Kompetenzen
     - Qualifikationsziele / Kompetenzen
+    - Learning objectives and competencies
 
   prerequisites:
     - Voraussetzungen
+    - Pre-conditions
 
   level:
     - Niveaustufe
+    - Level
 
   teaching_form:
     - Lehrform
     - Lernform
     - Lehr- und Lernform
+    - Teaching and learning forms
 
   status:
     - Status
@@ -127,6 +134,7 @@ normalized_field_map:
   frequency:
     - Häufigkeit des Angebotes
     - Turnus
+    - Frequency of module offer
 
   exam_form:
     - Prüfungsform
@@ -149,9 +157,8 @@ normalized_field_map:
   room_requirements:
     - Raumbedarf
 
-# new field
-  # applicability:
-   # - Verwendbarkeit
+  applicability:
+    - Verwendbarkeit
 
 # For DB, need to change/add some labels from normalized fields
 staging_field_overrides:

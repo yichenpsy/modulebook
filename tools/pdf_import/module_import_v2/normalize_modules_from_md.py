@@ -5,10 +5,15 @@ from collections import Counter
 
 import yaml
 
+pdf_name = "medieninformatik_2024"
+WORK_DIR = Path("tools/pdf_import/data/work") / pdf_name
 
 BASE_PATH = Path("tools/pdf_import/configs/base.yaml")
-INPUT_PATH = Path("tools/pdf_import/data/work/module_blocks_md.json")
-OUTPUT_PATH = Path("tools/pdf_import/data/output/normalized_modules.json")
+
+
+
+INPUT_PATH = WORK_DIR / "module_blocks_md.json"
+OUTPUT_PATH = WORK_DIR / "normalized_modules.json"
 
 
 def load_json(path):
@@ -45,6 +50,8 @@ def normalize_label(text):
 
 
 def parse_markdown_rows(markdown):
+    """Parse pipe-delimited Markdown table rows into (label, value) pairs."""
+
     rows = []
 
     for line in markdown.splitlines():
@@ -53,7 +60,9 @@ def parse_markdown_rows(markdown):
         if not line.startswith("|"):
             continue
 
-        cells = [clean_cell(c) for c in line.strip("|").split("|")]
+        # Clean cells early to handle <br>, **, whitespace
+        raw_cells = [c.strip() for c in line.strip("|").split("|")]
+        cells = [clean_cell(c) for c in raw_cells]
 
         if len(cells) < 2:
             continue
@@ -79,7 +88,7 @@ def get_module_markdown(module_block):
     """
     parts = []
 
-    for key in ["markdown", "module_markdown", "table_markdown", "raw_text"]:
+    for key in ["markdown", "module_markdown", "table_markdown", "raw_text", "raw_markdown"]:
         value = module_block.get(key)
         if isinstance(value, str):
             parts.append(value)
@@ -96,6 +105,10 @@ def get_module_markdown(module_block):
 
     return "\n\n".join(parts)
 
+"""
+English Version hier change!
+
+"""
 
 def find_matching_fields(label_cell, field_map):
     label_norm = normalize_label(label_cell)

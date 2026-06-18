@@ -3,7 +3,7 @@ import json
 import yaml
 import csv
 
-pdf_name = "Data-Engineering_2025"
+pdf_name = "medieninformatik_2024"
 
 PAGES_JSON = Path("tools/pdf_import/data/work") / pdf_name / "pages_markdown.json"
 BASE_YAML = Path("tools/pdf_import/configs/base.yaml")

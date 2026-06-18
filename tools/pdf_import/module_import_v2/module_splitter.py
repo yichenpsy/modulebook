@@ -3,7 +3,7 @@ import json
 import yaml
 
 
-pdf_name = "Data-Engineering_2025"
+pdf_name = "medieninformatik_2024"
 
 WORK_DIR = Path("tools/pdf_import/data/work") / pdf_name
 PAGES_JSON = WORK_DIR / "pages_md.json"
@@ -15,7 +15,7 @@ MODULE_BLOCKS_JSON = WORK_DIR / "module_blocks_md.json"
 # Set these from the previous boundary detection result.
 # If you want to use all pages, set them to None.
 FIRST_MODULE_PAGE_NUMBER = 6
-LAST_MODULE_PAGE_NUMBER = 103
+LAST_MODULE_PAGE_NUMBER = 64
 
 
 def load_pages(path: Path):
