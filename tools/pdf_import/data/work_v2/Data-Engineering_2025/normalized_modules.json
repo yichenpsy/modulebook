@@ -4,7 +4,7 @@
     "title": "Computer Systems Introduction Einführungin Rechnersysteme",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own Study Programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students develop an understanding of the fundamental components of modern computer systems and their interaction within the Linux operating system. They learn to work confidently with the Linux command line, including the creation of regular expressions and script programs to efficiently automate common tasks. They understand the basic principles of file systems and network protocols and are able to apply this knowledge in practical scenarios. Additionally, they acquire knowledge of managing installed software and system resources, as well as configuring networks in a Linux environment. -- Die Studierenden entwickeln ein fundiertes Verständnis für die grundlegenden Komponenten moderner Computersysteme und deren Zusammenspiel im Betriebssystem Linux. Sie erlernen den sicheren Umgang mit der Linux- Kommandozeile, einschließlich der Erstellung von regulären Ausdrücken und Skript-Programmen, um typische Aufgaben effizient zu automatisieren. Sie verstehen die grundlegenden Prinzipien von Dateisystemen und Netzwerkprotokollen und sind in der Lage, dieses Wissen in praxisnahen Szenarien zu nutzen. Zusätzlich erwerben sie Kenntnisse über die Verwaltung von installierter Software und Systemressourcen sowie über die Konfiguration von Netzwerken in einer Linux-Umgebung.",
     "prerequisites": "None keine\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Exercises with consultation (4 exercises, 2 pages each, 15 mins. per exercise)",
     "level": "1st semester 1.Studienplansemester",
@@ -18,11 +18,11 @@
     "literature": "Linux for Beginners: A Practical and Comprehensive Guide to Learn Linux Operating System and Master Linux Command Line, Ethem Mining, 2024. The Linux Command Line, 2nd Edition: A Complete Introduction, William Shotts, 2019. How Linux Works, 3rd Edition: What Every Superuser Should Know, Brian Ward,2021.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own Study Programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own Study Programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       22,
       23
@@ -33,7 +33,7 @@
     "title": "Programming 1 Programmierung1",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students can create robust software in Python. They can write Python programs according to the principles of object-oriented programming. They can apply modern software engineering principles (test driven development, unit testing, integration testing) in their software development efforts. Students learn how to program in teams and use source control tools such as git. -- Die Studierenden können Software in Python entwickeln und dabei die Prinzipien der objektorientierten Programmierung anwenden. Sie sind in der Lage, moderne Softwareentwicklungsmethoden wie testgetriebene Entwicklung, Unit-Tests und Integrationstests anzuwenden. Sie verstehen, wie man in Teams programmiert und gängige Versionskontrollsysteme wie Git effizient nutzt. Zudem erlernen sie den Umgang mit gängigen Entwicklungswerkzeugen und -umgebungen, die die Effizienz und Qualität der Softwareentwicklungsteigern.",
     "prerequisites": "keine\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2) Mündliche Prüfung (30 Min.)",
     "level": "1st semester 1.Studienplansemester",
@@ -47,11 +47,11 @@
     "literature": "Head First Python, Paul Barry, 2016 Whirlwind Tour of Python, Jake Vanderplas, 2016 Python Cookbook, David Beazley, Brian K. Jones, 2013 Python Tricks: A Buffet of Awesome Python Features, Dan Bader, 2017 Automate the Boring Stuff with Python, 2nd Edition: Practical Programming for Total Beginners,Albert Sweigart,2019",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       24,
       25
@@ -62,7 +62,7 @@
     "title": "Programming 2 Programmierung2",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students understand various data structures (list, tree, stack, queue) and the relevant algorithms to manipulate these data structures and search for the data within them. They understand more aspects of programming beyond common Python programs; specifically, (a) they can understand programs written via functional programming as well as reactive programming; and can solve simple problems by writing programs in these paradigms; and (b) they are able to write simple programs in Kotlin, another programming language. -- Die Studierenden verstehen verschiedene Datenstrukturen wie Listen, Bäume, Stacks und Queues sowie die Algorithmen, um diese Strukturen zu manipulieren und darin nach Daten zu suchen. Sie erwerben Kenntnisse in fortgeschrittenen Programmieransätzen, die über typische Python-Programme hinausgehen. Insbesondere können sie Programme im funktionalen und reaktiven Paradigma verstehen und einfache Probleme in diesen Paradigmen lösen. Sie sind in der Lage, einfache Programme in Kotlin zu schreiben und die grundlegenden Konzepte dieser Programmiersprache anzuwenden.",
     "prerequisites": "Recommendation: PR1 Empfehlung: PR1\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) (1) Klausur (90 Min.) oder (2) Mündliche Prüfung (30 Min.)",
     "level": "1st semester 1.Studienplansemester",
@@ -76,11 +76,11 @@
     "literature": "Introduction to Algorithms (Fourth Edition), Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein, 2022 Head First Kotlin, Dawn Griffiths, 2019 Kotlin in Action,DmitryJemerov,Svetlana Isakova,2017",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       26,
       27
@@ -91,7 +91,7 @@
     "title": "Programming 3 Programmierung3",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students learn how to use advanced data structures and can implement as well as apply algorithms in handling data in these structures. Students understand the programming concepts for parallel and concurrent data processing. Students learn and follow the concepts of continuous integration and continuous deployment in the context of staging and production environments. -- Die Studierenden erlernen den Umgang mit fortgeschrittenen Datenstrukturen und sind in der Lage, die Algorithmen zur Verarbeitung von Daten in diesen Strukturen zu implementieren. Sie verstehen die grundlegenden Konzepte der parallelen und nebenläufigen Datenverarbeitung und können dies in ihren Programmen einsetzen. Darüber hinaus erwerben sie Kenntnisse in den Prinzipien von Continuous Integration (CI) und Continuous Deployment (CD) und wenden diese in Test-,Staging- und Produktionsumgebungen an.",
     "prerequisites": "Recommendation: PR2 Empfehlung: PR2\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "2nd semester 2.Studienplansemester",
@@ -105,11 +105,11 @@
     "literature": "Introduction to Algorithms (Fourth Edition), Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein, 2022 Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation, Jez Humble, David Farley, 2010 Continuous Delivery with Docker and Jenkins - Third Edition: Create secure applications bybuildingcomplete CI/CDpipelines,Rafal Leszko,2022",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       28,
       29
@@ -120,7 +120,7 @@
     "title": "Programming 4 Programmierung4",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students can create parallel (multi-threading) software in modern programming languages such as Python and Kotlin. Students learn how to leverage modern hardware for parallelism (CPUs and GPUs). -- Die Studierenden sind in der Lage, Software für paralleles Rechnen mithilfe moderner Programmieransätze zu entwickeln. Sie beherrschen die grundlegenden Konzepte der Nebenläufigkeit und können deren Anwendung auf Multithreading-Umgebungen übertragen. Sie lernen, die parallele Rechenleistung moderner Hardware wie CPUs und GPUs effizient zu nutzen und geeignete Programmierwerkzeuge einzusetzen, um hochleistungsfähige Anwendungen zu erstellen.",
     "prerequisites": "Recommendation: PR3 Empfehlung: PR3\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "2nd semester 2.Studienplansemester",
@@ -134,11 +134,11 @@
     "literature": "Python Concurrency (a collection of eBooks - Super Fast Python: https://superfastpython.com/python-concurrency-books/) Marcin Moskała. Kotlin Coroutines - Deep Dive. Third Edition. (http://leanpub.com/coroutines)",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       30,
       31
@@ -149,7 +149,7 @@
     "title": "Relational Databases Relationale Datenbanken",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "The students know the basics of relational database systems. They master advanced techniques in SQL. They can take on simple engineering tasks in the design, implementation and optimization of databases and are familiar with quality characteristics such as data consistency. -- Die Studierenden beherrschen die Grundlagen relationaler Datenbanksysteme. Sie können fortgeschrittene Techniken in SQL anwenden und einfache Aufgaben in den Bereichen Entwurf, Implementierung und Optimierung von Datenbanken übernehmen. Sie verstehen wichtige Qualitätsmerkmale wie Konsistenz und sind mit grundlegenden Werkzeugen und Methoden des Datenbank-Engineerings vertraut.",
     "prerequisites": "Recommendations: PR2, CSI, MAP Empfehlung: PR2, CSI, MAP\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2)Mündliche Prüfung (30 Min.)",
     "level": "2nd semester 2. Studienplansemester",
@@ -163,10 +163,9 @@
     "literature": "Learning SQL, By Alan Beaulieu SQL and Relational Theory: How to Write Accurate SQL Code, By C.J. Date Fundamentals of Database Systems, By Ramez Elmasri et al Database System Concepts, ByAvi Silberschatz et al",
     "additional_notes": "The module will be held in English. Das Modul wird auf Englisch angeboten.",
     "room_requirements": null,
-    "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Own study programme Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       32,
       33
@@ -177,7 +176,7 @@
     "title": "Applied Databases Datenbankanwendungen",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students acquire advanced knowledge in the practical use and operation of database systems. They develop skills in implementing procedural logic within databases, automating tasks, and ensuring data quality. Students understand transaction systems, including the ACID principles and concurrency control, and are familiar with advanced analytical methods such as data warehousing, schema design, ETL processes, and BI tools. They can work with diverse and complex data types (e.g., GIS, JSON, XML) and apply these skills within modern IT infrastructures. -- Die Studierenden erwerben fortgeschrittene Kenntnisse in der praktischen Anwendung und dem Betrieb von Datenbanksystemen. Sie entwickeln Fähigkeiten zur Implementierung von prozeduraler Logik innerhalb von Datenbanken, zur Automatisierung von Aufgaben und zur Sicherstellung der Datenqualität. Die Studierenden verstehen Transaktionssysteme, einschließlich der ACID-Prinzipien und der Steuerung von Nebenläufigkeit, und sind mit fortgeschrittenen analytischen Methoden vertraut, darunter Data Warehousing, Schema-Design, ETL-Prozesse und BI-Tools. Sie sind in der Lage, mit verschiedenen und komplexen Datentypen (z. B. GIS, JSON, XML) zu arbeiten und diese Fähigkeiten in modernen IT-Infrastrukturen anzuwenden.",
     "prerequisites": "Recommendations: DB1, PR4 Empfehlung: DB1,PR4\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1)Klausur(60Min.)",
     "level": "3rd semester 3.Studienplansemester",
@@ -191,11 +190,11 @@
     "literature": "Fundamentals of Database Systems, By Ramez Elmasri et al Database System Concepts, By Avi Silberschatz et al The Data Warehouse Toolkit, The Definitive Guide to Dimensional Modeling, ByR. Kimball",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       34,
       35
@@ -206,7 +205,7 @@
     "title": "Cloud Databases Cloud-Datenbanken",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (4 contact hours per week seminar lessons) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS SU)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students acquire fundamental knowledge of database systems as distributed systems and understand principles such as sharding, replication, and consistency. They gain hands-on experience with various NoSQL database types, including document stores, key-value stores, graph databases, and vector databases for information retrieval. In addition, students develop the skills needed to evaluate, deploy, and operate database systems in cloud environments. They are introduced to advanced cloud-native concepts such as data lakes, data lakehouses, and data streams, and gain practical experience with transactional and analytical workloads in distributed cloud environments. -- Die Studierenden erwerben grundlegende Kenntnisse über Datenbanksysteme als verteilte Systeme und verstehen Prinzipien wie Sharding, Replikation und Konsistenz. Sie sammeln praktische Erfahrungen mit NoSQL-Datenbanktypen, darunter Dokumentenspeicher, Key-Value-Stores, Graphdatenbanken und Vektordatenbanken für die Informationssuche. Darüber hinaus entwickeln die Studierenden Kompetenzen, um Datenbanksysteme in Cloud-Umgebungen zu bewerten, einzusetzen und zu betreiben. Sie werden in fortgeschrittene Cloud Native Konzepte eingeführt, wie Data Lakes, Data Lakehouses und Datenströme, und sammeln praktische Erfahrungen mit transaktionalen und analytischen Arbeitslasten in verteilten Cloud-Umgebungen.",
     "prerequisites": "Empfehlung: DS2, DB2\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Exercises with consultation (4 exercises, 1 page and 15 mins. per exercise) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen:",
     "level": "4th semester 4.Studienplansemester",
@@ -220,11 +219,11 @@
     "literature": "Fundamentals of Database Systems, By Ramez Elmasri et al Database System Concepts, By Avi Silberschatz et al Principles of Distributed Database Systems, By M. Tamer Özsu et al Cloud Native Database, Principle and Practice, By F. Li et al NoSQL,EinstiegindieWeltnichtrelationaler Web2.0Datenbanken, S. Edlich",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       36,
       37
@@ -235,7 +234,7 @@
     "title": "Distributed Systems 1 Verteilte Systeme1",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students learn why distributed systems are necessary to build large scale data- driven applications. Students learn how to build scalable distributed applications (word count, count of URL access frequency, distributed sort) that process terabytes of data on clusters of commodity PCs leveraging knowledge from PR1 and PR2. Students learn the basic distributed programming paradigms, such as MapReduce. Students learn the difference between data at rest and data in motion and learn how to process real-time data using distributed stream processing. Students learn to anticipate main problems that can occur in such distributed applications – focusing on different types of failures in different system models. -- Die Studierenden verstehen die Notwendigkeit verteilter Systeme zur Entwicklung skalierbarer datengetriebener Anwendungen. Sie erwerben die Fähigkeit, skalierbare verteilte Anwendungen zu entwerfen, die große Datenmengen, wie z. B. Wortzählung oder verteiltes Sortieren, auf Clustern von Standardhardware verarbeiten. Mithilfe von Programmierparadigmen wie MapReduce lernen sie, zwischen Stapel- und Streaming-Datenverarbeitung zu unterscheiden und Lösungen für beide Szenarien zu implementieren. Darüber hinaus entwickeln sie ein Verständnis für Systemfehler, Netzwerkprobleme und Strategien zum Aufbau zuverlässiger Systeme trotz solcher Herausforderungen. Die Studierenden erhalten Einblicke in die Verwaltung verteilter Daten, Replikation, Partitionierung und Lastverteilung und bereiten sich auf vielfältige reale Szenarien in verteilten Systemen vor.",
     "prerequisites": "Empfehlung: PR2, CSI\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.)",
     "level": "2nd semester 2.Studienplansemester",
@@ -249,11 +248,11 @@
     "literature": "Jeffrey Dean and Sanjay Ghemawat. 2008. MapReduce: simplified data processing on large clusters. Commun. ACM 51, 1 (January 2008), 107–113. https://doi.org/10.1145/1327452.1327492 M. van Steen and A.S. Tanenbaum. 2017. Distributed Systems. 3rd ed., distributed-systems.net Michael J. Fischer, Nancy A. Lynch, and Michael S. Paterson. 1985. Impossibility of distributed consensus with one faulty process. J. ACM 32, 2 (April 1985), 374–382. https://doi.org/10.1145/3149.214121 Neha Narkhede, Gwen Shapira, Todd Palino. 2017. Kafka: The Definitive Guide. O'Reilly Media, Inc. ISBN: 978-1491936160 Fabian Hueske, Vasiliki Kalavri. 2019. Stream Processing with Apache Flink: Fundamentals, Implementation, and Operation of Streaming Applications. O'Reilly Media, Inc. ISBN: 978-1491974292 Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems. 2017. Martin Kleppmann. O'Reilly Media, Inc. ISBN: 978-1449373320 K. Shvachko, H. Kuang, S. Radia and R. Chansler, \"The Hadoop Distributed File System,\" 2010 IEEE 26th Symposium on Mass Storage Systems and Technologies (MSST), Incline Village, NV, USA, 2010, pp. 1-10 Sanjay Ghemawat, Howard Gobioff, and Shun-Tak Leung. 2003. The Google file system. In Proceedings of the nineteenth ACM symposium on Operating systems principles (SOSP '03). Association for Computing Machinery, New York, NY, USA, 29–43. M. Armbrust et al., “Above the Clouds: A Berkeley View of Cloud Computing,” UC BerkeleyReliable Adaptive Distributed Systems Laboratory,Feb. 2009.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       38,
       39,
@@ -265,7 +264,7 @@
     "title": "Distributed Systems 2 Verteilte Systeme2",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (4 contact hours per week seminar lessons) 68 Stunden Präsenz, 82 Stunden Selbststudium(4 SWS SU)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Building on top of the practical knowledge in DS1 students get an in-depth understanding of the types of failures that are possible in distributed systems. Students learn how to design and build mechanisms that allow for dealing with such failures for both systems processing data at rest and data in motion. Students learn how these mechanisms (e.g. atomic broadcast, leader election) are leveraged by modern coordination systems (e.g.: Zookeeper, etcd). Finally, students learn how the modern distributed and dependable applications and systems, such as Spanner, Kubernetes, CockroachDB, or Kafka are designed and built. -- Die Studierenden entwickeln ein tiefgehendes Verständnis von Fehler- und Ausfallmodellen in verteilten Systemen, einschließlich Absturz-, Auslassungs- und byzantinischer Fehler sowie deren Erkennung. Sie lernen, Konsensalgorithmen (z. B. Two-Phase Commit, Raft) und Mechanismen zur \"Leader Election\" zu entwerfen und umzusetzen, um reale Herausforderungen in verteilten Systemen zu bewältigen. Die Studierenden gewinnen Einblicke in modernste Systeme wie Spanner, Kafka und Kubernetes und lernen, wie solche zuverlässigen und skalierbaren Anwendungen entworfen und gebaut werden. Darüber hinaus erweitern sie ihr Wissen über fehlertolerante Datenstromverarbeitung und andere fortschrittliche Zuverlässigkeitsmechanismen.",
     "prerequisites": "Recommendations: DS1, DB2, PR4 Empfehlung: DS1,DB2,PR4\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written Exam (60 min.) or (2) Oral exam (30 min.)",
     "level": "3rd semester 3.Studienplansemester",
@@ -279,11 +278,11 @@
     "literature": "Patrick Th. Eugster, Pascal A. Felber, Rachid Guerraoui, and Anne-Marie Kermarrec. 2003. The many faces of publish/subscribe. ACM Comput. Surv. 35, 2 (June 2003), 114–131. https://doi.org/10.1145/857076.857078 Barbara Liskov and Rivka Ladin. 1986. Highly available distributed services and fault-tolerant distributed garbage collection. In Proceedings of the fifth annual ACM symposium on Principles of distributed computing (PODC '86). Association for Computing Machinery, New York, NY, USA, 29–39. https://doi.org/10.1145/10590.10593",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in Englsih. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       41,
       42,
@@ -295,7 +294,7 @@
     "title": "Machine Learning Concepts Konzepte desMaschinellen Lernens",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (4 contact hours per week seminar lessons) 68 Stunden Präsenz, 82 Stunden Selbststudium(4 SWS SU)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students are able to define the concept of machine learning and distinguish it from human learning. They become familiar with a range of different machine learning methods and apply them to example problems presented in lectures and exercises. They can explain the constraints of machine learning and assess which methods are best suited for specific problems. In this context, the algorithmic concept of learning is explored, both theoretically and practically. -- Die Studierenden können den Begriff des maschinellen Lernens konkretisieren und von dem des menschlichen Lernens abgrenzen. Sie lernen eine Reihe unterschiedlicher Verfahren des maschinellen Lernens kennen und erproben diese an Beispielen in Unterricht und Übung. Sie können die Randbedingungen des maschinellen Lernens erläutern und beurteilen, welche Verfahren am besten für bestimmte Probleme geeignet sind. Dabei wird der algorithmische Begriff des Lernens in Theorie und Praxis vertieft.",
     "prerequisites": "Recommendations: ID1, CT2 Empfehlung: ID1, CT2\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (60 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "3rd semester 3.Studienplansemester",
@@ -309,11 +308,11 @@
     "literature": "Will be indicated in the respective course descriptions. Wirdindenjeweiligen Beschreibungender Lehrveranstaltungenangegeben.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       44,
       45
@@ -324,7 +323,7 @@
     "title": "Machine Learning Operations Betriebmaschineller Lernsysteme",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students are able to operate a scalable, distributed infrastructure for machine learning. They are capable of using various tools and technologies for orchestration. In addition, they can efficiently deploy language models that can be used both in real time and in batch mode. They are able to apply common standards for model versioning, data management, and information security in the context of model deployment. Students are familiar with the principles of continuous integration and deployment (CI/CD) for machine learning and can implement them in a production environment. -- Die Studierenden können eine skalierbare, verteilte Infrastruktur für maschinelles Lernen betreiben. Sie sind dabei in der Lage, verschiedene Tools und Technologien für die Orchestrierung zu nutzen. Zudem können sie Sprachmodelle effizient bereitstellen, die sowohl in Echtzeit als auch im Batch- Modus genutzt werden. Sie sind in der Lage, gängige Standards für Modellversionierung, Datenmanagement und Informationssicherheit in der Modellbereitstellung zu berücksichtigen und umzusetzen. Die Studierenden sind mit den Prinzipien der kontinuierlichen Integration und Bereitstellung (CI/CD) für maschinelles Lernen vertraut und können dies in einer produktiven Umgebungumsetzen.",
     "prerequisites": "Recommendations: PR4, DS2 Empfehlung: PR4,DS2\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen:",
     "level": "3rd semester 3.Studienplansemester",
@@ -338,11 +337,11 @@
     "literature": "\"Site Reliability Engineering: How Google Runs Production Systems\" by Niall Richard Murphy, Betsy Beyer, et al. \"Kubernetes Up & Running: Dive into the Future of Infrastructure\" by Kelsey Hightower, Brendan Burns, and Joe Beda \"DesigningMachineLearning Systems\"by ChipHuyen",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       46,
       47
@@ -353,7 +352,7 @@
     "title": "Data Protection and Bias Informationssicherheit",
     "credits": 5.0,
     "workload": "34 hrs. Presence, 116 hrs. Self-study (2 contact hours per week seminar lessons) 34 Stunden Präsenz, 116 Stunden Selbststudium(2 SWS SU)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students gain a comprehensive understanding of national and international data protection laws, data privacy principles, and ethical considerations in this field. They learn to apply strategies for mitigating bias in data processing and machine learning systems to ensure fairness and transparency. In addition, students develop a critical understanding of common data protection regulations and their practical implications for handling and processing data. -- Die Studierenden erlangen ein umfassendes Verständnis der nationalen und internationalen Datenschutzgesetze, der Datenschutzprinzipien und von ethischen Überlegungen in diesem Bereich. Sie lernen, Strategien zur Minderung von Verzerrungen in der Datenverarbeitung und in maschinellen Lernsystemen anzuwenden, um Fairness und Transparenz zu gewährleisten. Die Studierenden entwickeln außerdem ein kritisches Verständnis für die gängigen Datenschutzgesetze und deren praktische Auswirkungen auf die Handhabungund Verarbeitungvon Daten.",
     "prerequisites": "none keine\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Group presentation (45 minutes); non-graded assessment or (2) Oral exam (30 min.); non-graded assessment Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Gruppenpräsentation (45 Minuten); Unbenotete Prüfung oder (2)MündlichePrüfung (30Min.); UnbenotetePrüfung",
     "level": "3rd semester 3.Studienplansemester",
@@ -367,11 +366,11 @@
     "literature": "\"Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy\" by Cathy O'Neil \"Fairness Definitions Explained\" by Verma and Rubin (2018) “Algorithm Watch” (https://www.algorithmwatch.org) “Data and Goliath: The Hidden Battles to Collect Your Data and Control Your World” by Bruce Schneier “BSI-Standard 200-2 IT-Grundschutz Methodology“ by Bundesamt für Sicherheitinder Informationstechnik",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       48,
       49
@@ -382,7 +381,7 @@
     "title": "Machine Learning Applications Anwendungen des Maschinellen Lernens",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students learn the fundamentals and methods of model development in machine learning using relevant application scenarios as examples. They develop a deep understanding of the different types of models and their use in real-world contexts, with a focus on the challenges and techniques required for the successful deployment of models. -- Die Studierenden lernen die Grundlagen und Methoden der Modellentwicklung im maschinellen Lernen am Beispiel relevanter Anwendungsszenarien. Sie entwickeln ein tiefes Verständnis für die verschiedenen Modelltypen und deren Anwendung in realen Kontexten, mit einem Fokus auf die Herausforderungen und Techniken, die für den erfolgreichen Einsatz von Modellen erforderlich sind.",
     "prerequisites": "Recommendations: MLC Empfehlung: MLC\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (60 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "4th semester 4.Studienplansemester",
@@ -396,11 +395,11 @@
     "literature": "Will be indicated in the respective course descriptions. Wirdindenjeweiligen Beschreibungender Lehrveranstaltungenangegeben.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       50,
       51
@@ -411,7 +410,7 @@
     "title": "Data Mining Applications AnwendungendesDataMining",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students learn to work with machine learning and data mining methods in practical applications. They gain a solid understanding of how data mining techniques are used for data processing and analysis across various application areas—ranging from data collection and model building to error detection and correction. -- Die Studierenden lernen den Umgang mit Methoden des maschinellen Lernens und Data Mining in praktischen Anwendungen. Sie erhalten einen fundierten Einblick in den Einsatz von Data Mining-Techniken zur Datenverarbeitung und -analyse in verschiedenen Anwendungsbereichen, von der Datensammlung über die Modellbildungbis hin zur Fehlererkennungund -bereinigung.",
     "prerequisites": "Recommendations: MLC, ID2 Empfehlung: MLC,ID2\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (60 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "4th semester 4.Studienplansemester",
@@ -425,11 +424,11 @@
     "literature": "Will be indicated in the respective course descriptions. Wirdindenjeweiligen Beschreibungender Lehrveranstaltungenangegeben.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       52,
       53
@@ -440,7 +439,7 @@
     "title": "Computational Tools in Engineering 1 ComputergestützteWerkzeugeim Ingenieurwesen 1",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "The students know elementary mathematical functions and their properties as well as basic concepts of two- and three-dimensional vector spaces. The students can apply their knowledge on the computer, carry out calculations and visualize important aspects. Students can use technical terms from mathematical fundamentals of engineering disciplines to communicate with application areas. -- Die Studierenden kennen elementare mathematische Funktionen und deren Eigenschaften sowie grundlegende Konzepte zweidimensionaler und dreidimensionaler Vektorräume. Sie sind in der Lage, dieses Wissen am Computer anzuwenden, Berechnungen durchzuführen und wichtige Aspekte zu visualisieren. Zudem können sie technische Begriffe aus den mathematischen Grundlagen der Ingenieurdisziplinen nutzen, um mit den Anwendungsbereichen zu kommunizieren. Studierende lernen, wie sie numerische Methoden und Visualisierungstools einsetzen, um komplexe mathematische Probleme zu bearbeiten und Ergebnisse zu interpretieren.",
     "prerequisites": "none keine\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) written exam (90 min.) or (2) oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2) Mündliche Prüfung (30 Min.)",
     "level": "1st semester 1.Studienplansemester",
@@ -454,11 +453,11 @@
     "literature": "Mathematics for Machine Learning, By Marc Deisenroth et. al.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       54,
       55
@@ -469,7 +468,7 @@
     "title": "Computational Tools in Engineering 2 ComputergestützteWerkzeugeim Ingenieurwesen 2",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Mathematical and Scientific Foundations Mathematisch-naturwissenschaftliche Grundlagen",
+    "learning_area": "Own study programme EigenerStudiengang\nMathematical and Scientific Foundations Mathematisch-naturwissenschaftliche Grundlagen",
     "learning_objectives": "Students are able to transfer fundamental concepts from the first part of the course to higher dimensions and perform computations using a computer. They understand how to apply derivatives of real-valued functions. Using linear regression, students learn to interpret functions as models for data. They can use technical terminology from the mathematical foundations of engineering disciplines to communicate within application domains. Students are capable of understanding and applying complex mathematical models, particularly in the fields of data analysis and modeling. -- Die Studierenden können grundlegende Konzepte aus dem ersten Teil auf höhere Dimensionen übertragen und Berechnungen am Computer durchführen. Sie wissen, wie man Ableitungen von realen Funktionen verwendet. Anhand der linearen Regression lernen die Studierenden Funktionen als Modelle für Daten kennen. Sie können technische Begriffe aus den mathematischen Grundlagen der Ingenieurdisziplinen nutzen, um mit den Anwendungsbereichen zu kommunizieren. Studierende sind in der Lage, komplexe mathematische Modelle zu verstehen und anzuwenden, insbesondere in den Bereichen der Datenanalyse und Modellierung.",
     "prerequisites": "Recommendation: CT1, MAP Empfehlung:CT1,MAP\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) written exam (90 min.) or (2) oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "2nd semester 2.Studienplansemester",
@@ -483,11 +482,11 @@
     "literature": "Mathematics for Machine Learning, By Marc Deisenroth et. al.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme EigenerStudiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme EigenerStudiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       56,
       57
@@ -498,7 +497,7 @@
     "title": "Math for Programmers Mathematik für Programmierung",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(2SWS SU +2SWS Ü)",
-    "learning_area": "Mathematical and Scientific Foundations Mathematisch-naturwissenschaftliche Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nMathematical and Scientific Foundations Mathematisch-naturwissenschaftliche Grundlagen",
     "learning_objectives": "Students are familiar with the fundamental concepts of logic and can formally describe simple scenarios. They are acquainted with the notation and have studied important elementary structures of sets. Students learn about the connections to programming and are able to implement practical examples in which they apply logic and set theory to basic data structures on a computer, thereby preparing them for database courses. They understand how logical and set-based concepts can be integrated into programming environments such as Python and Pandas to develop efficient data structures and algorithms. -- Die Studierenden kennen die grundlegenden Konzepte der Logik und können einfache Sachverhalte formal beschreiben. Sie sind mit der Notation vertraut und haben sich mit wichtigen, elementaren Strukturen von Mengen beschäftigt. Die Studierenden lernen die Beziehungen zur Programmierung kennen, können praktische Beispiele umsetzen, bei denen sie Logik und Mengentheorie auf grundlegende Datenstrukturen am Computer anwenden, und sind somit auf die Datenbankkurse vorbereitet. Sie verstehen, wie logische und mengenbasierte Konzepte in Programmierumgebungen wie Python und Pandas integriert werden können, um effiziente Datenstrukturen und Algorithmen zu entwickeln.",
     "prerequisites": "none keine\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) _The grade for this module is not included in the overall grade._",
     "level": "1st semester 1.Studienplansemester",
@@ -512,11 +511,11 @@
     "literature": "Discrete Mathematics and Its Applications, By Kenneth Rosen Discrete Mathematics with Applications, By Susanna Epp MathematicsforComputerScience,ByEricLehmanet.al.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       58,
       59,
@@ -528,7 +527,7 @@
     "title": "Information from Data 1 InformationenausDaten 1",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students systematically learn how to extract, analyze, and summarize information from data. This involves the application of descriptive statistics, visualization, and data validation. Knowledge of data properties, appropriate statistical measures, and visualizations provides the foundation for aggregating and communicating information. Based on the concepts taught (with programming exercises in Python), students are able to assess data quality in order to carry out quality assurance during data processing. -- Die Studierenden lernen systematisch, wie sie Informationen aus Daten extrahieren, analysieren und zusammenfassen können. Dabei werden deskriptive Statistik, Visualisierung und Datenvalidierung angewandt. Das Wissen über die Eigenschaften von Daten, geeignete statistische Maßzahlen und Visualisierungen bildet die Grundlage, um Informationen zu aggregieren und zu kommunizieren. Basierend auf den vermittelten Konzepten (mit Programmierübungen in Python) können Studierende die Qualität von Daten bewerten, um Qualitätssicherung bei der Verarbeitung von Daten durchzuführen.",
     "prerequisites": "Recommendation: MAP Empfehlung: MAP\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (90 min.) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (90 Min.) oder (2)MündlichePrüfung (30Min.)",
     "level": "2nd semester 2.Studienplansemester",
@@ -542,11 +541,11 @@
     "literature": "Practical Statistics for Data Scientists, 2nd Edition by Peter Bruce, Andrew Bruce, Peter Gedeck, May 2020, O'Reilly Media, Inc. https://www.oreilly.com/library/view/practical-statistics-for/9781492072935/ Think Stats, 2nd Edition by Allen B. Downey, October 2014, O'Reilly Media, Inc. https://www.oreilly.com/library/view/think-stats-2nd/9781491907344/ Python for Data Analysis, 3rd Edition by Wes McKinney, August 2022, O'Reilly Media,https://www.oreilly.com/library/view/python-for-data/9781098104023/",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       61,
       62
@@ -557,7 +556,7 @@
     "title": "Information from Data 2 InformationenausDaten 2",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise) 68 Stunden Präsenz, 82 Stunden Selbststudium(2 SWS SU + 2 SWS Ü)",
-    "learning_area": "Subject-specific basics Fachspezifische Grundlagen",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific basics Fachspezifische Grundlagen",
     "learning_objectives": "Students gain knowledge in the areas of sampling theory, inferential statistics, and data modeling. The causes and mechanisms that can lead to biased or erroneous data are discussed. Key concepts for identifying and avoiding such sources of error are introduced. To identify, separate, and interpret random and systematic relationships within data, inferential statistical concepts for statistical data modeling are examined. Based on the acquired knowledge, data engineers will be able to successfully collaborate with other stakeholders such as data scientists, statisticians, or business analysts in practice. -- Studierende erlangen Kenntnisse zu den Themen Stichprobentheorie, Inferenzstatistik und Modellierung von Daten. Es werden Ursachen und Mechanismen diskutiert, die zu verzerrten und fehlerhaften Daten führen können. Wichtige Konzepte zur Identifikation und Vermeidung solcher Fehlerquellen werden eingeführt. Um zufällige und systematische Zusammenhänge zwischen Daten identifizieren, separieren und interpretieren zu können, werden inferenz-statistische Konzepte zur statistischen Modellierung von Daten erörtert. Basierend auf dem erlangten Wissen können Dateningenieure eine erfolgreiche Zusammenarbeit mit anderen Stakeholdern wie Data Scientists, Statistikern oder Business-Analysten in der Praxis umsetzen.",
     "prerequisites": "Recommendation: ID1 Empfehlung: ID1\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 min.) or (2) Oral exam (30 min.)",
     "level": "3rd semester 3.Studienplansemester",
@@ -571,11 +570,11 @@
     "literature": "Practical Statistics for Data Scientists, 2nd Edition by Peter Bruce, Andrew Bruce, Peter Gedeck, May 2020, O'Reilly Media, Inc. https://www.oreilly.com/library/view/practical-statistics-for/9781492072935/ Think Stats, 2nd Edition by Allen B. Downey, October 2014, O'Reilly Media, Inc. https://www.oreilly.com/library/view/think-stats-2nd/9781491907344/ Python for Data Analysis, 3rd Edition by Wes McKinney, August 2022, O'Reilly Media,https://www.oreilly.com/library/view/python-for-data/9781098104023/",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       63,
       64,
@@ -587,7 +586,7 @@
     "title": "Paper Reading Seminar WissenschaftlicheVeröffentlichungen",
     "credits": 5.0,
     "workload": "34 hrs. Presence, 116 hrs. Self-study (2 contact hours per week seminar lessons) 34Stunden Präsenz,116 StundenSelbststudium(2SWS SU)",
-    "learning_area": "Subject-specific specialization FachspezifischeVertiefung",
+    "learning_area": "Eigener Studiengang\nSubject-specific specialization FachspezifischeVertiefung",
     "learning_objectives": "Students are able to critically analyze, evaluate, and discuss scientific publications in the field of data processing. They can independently deepen their understanding of distributed data processing, data architectures, and the latest developments in machine learning and artificial intelligence by engaging with scientific and engineering literature. In addition, students are enabled to combine language proficiency with technical content and to foster the synthesis of subject-specific knowledge and social skills through discussions and presentations. -- Studierende können wissenschaftliche Arbeiten im Bereich der Datenverarbeitung kritisch analysieren, bewerten und diskutieren. Sie können ihr Verständnis für verteilte Datenverarbeitung, Datenarchitekturen sowie neueste Entwicklungen in den Bereichen maschinelles Lernen und Künstliche Intelligenz selbständig anhand von wissenschaftlichen und ingenieurstechnischen Publikationen vertiefen. Darüber hinaus werden die Studierenden in die Lage versetzt, ihre Sprachkompetenz mit technischen Inhalten zu verbinden und die Synthese von Fachwissen und Sozialkompetenzen durch Diskussionen und Präsentationen zu fördern.",
     "prerequisites": "Recommendations: DB3, MLA, DMA Empfohlen: DB3,MLA,DMA\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) group presentation (45 minutes); non-graded assessment or (2) Oral exam (30 min.); non-graded assessment Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Gruppenpräsentation(45Minuten); UnbenotetePrüfung",
     "level": "6th semester 6.Studienplansemester",
@@ -601,11 +600,11 @@
     "literature": "Subject-specific, depending on the project Fachspezifisch, projektabhängig",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       66,
       67
@@ -616,7 +615,7 @@
     "title": "Internship Praxisprojekt",
     "credits": 30.0,
     "workload": "864 hrs. working at the company (24 weeks á 36 hrs. per week), 36 hrs. self- study 864 Std. Präsenz im Betrieb (24 Wochen 36 Std. pro Woche), 36 Std. Selbststudium",
-    "learning_area": "Subject-specific specialisation FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-specific specialisation FachspezifischeVertiefung",
     "learning_objectives": "Application and deepening of the knowledge and skills acquired from the 1st until 4th semesters in a practical project within a company. This includes both professional competencies as well as social, communicative, and personal skills. -- Anwendung und Vertiefung der im 1. bis 4. Fachsemester erworbenen Kenntnisse und Fähigkeiten in einem Praxisprojekt in einem Betrieb/ einer Firma. Dazu zählen sowohl fachliche Kompetenzen als auch soziale, kommunikative undpersönlichen Kompetenzen.",
     "prerequisites": "see current university regulations for internships siehe jeweils gültige OrdnungfürdiePraxisphase\nCertificate from the internship hosting organization and colloquium (60 min.) Zeugnis der Praktikumsstelle und Kolloquium (60 Min.)",
     "level": "5th semester 5.Studienplansemester",
@@ -630,11 +629,11 @@
     "literature": "Depends on the area of internship Fachspezifisch, projektabhängig",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       68,
       69
@@ -645,7 +644,7 @@
     "title": "Bachelor‘s Thesis Colloqium Kolloquium zur Bachelorarbeit",
     "credits": 3.0,
     "workload": "17 hrs. Presence, 73 hrs. Self-study (1 contact hour per week exercise) 17Stunden Präsenz,73 StundenSelbststudium(1SWS Ü)",
-    "learning_area": "Subject-specific specialization FachspezifischeVertiefung",
+    "learning_area": "Eigener Studiengang\nSubject-specific specialization FachspezifischeVertiefung",
     "learning_objectives": "Upon successful completion of the module, students can: - present and defend their own work in a structured and professional manner before a peer audience; - critically evaluate their own work as well as the work of other students based on defined academic criteria; - reflect analytically on their work in the context of comparable projects and disciplinary standards; - derive constructive insights from peer feedback and integrate these systematically into their own work and development process. -- Nach erfolgreichem Abschluss des Moduls sind die Studierenden in der Lage: - ihre eigene Arbeit strukturiert und fachlich angemessen vor einem Fachpublikum zu präsentieren und zu verteidigen; - die eigene Arbeit sowie die Arbeiten anderer Studierender anhand definierter fachlicher Kriterien kritisch zu bewerten; - die eigene Arbeit im Kontext vergleichbarer Projekte und fachlicher Standards analytisch zu reflektieren; - konstruktive Erkenntnisse aus dem Peer-Feedback abzuleiten und systematisch in den eigenen Arbeits- und Entwicklungsprozess zu integrieren.",
     "prerequisites": "This module is automatically assigned to all students upon commencement of their Bachelor’s thesis Dieses Modul wird allen Studierenden mit Beginn der Bachelorarbeit verbindlich zugeordnet\nDie Vergabe der Leistungspunkte erfolgt nach erfolgreicher Durchführung der drei vorgesehenen Präsentationen.",
     "level": "6th semester 6.Studienplansemester",
@@ -659,11 +658,11 @@
     "literature": "Subject-specific, depending on the project Fachspezifisch, projektabhängig",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Eigener Studiengang",
       "Further notes WeitereHinweise": "The module will be held in English. DasModul wird auf Englischangeboten."
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       70,
       71
@@ -674,7 +673,7 @@
     "title": "Bachelor’s Thesis and Final Exam Bachelorarbeit undAbschlussprüfung",
     "credits": 12.0,
     "workload": "360 hours (300 h bachelor’s thesis and 60 h preparation for the oral exam) 360 Stunden (300 h Abschlussarbeit und 60 h Vorbereitung und Durchführung der mündlichen Abschlussprüfung)",
-    "learning_area": "Study specific specialisation FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nStudy specific specialisation FachspezifischeVertiefung",
     "learning_objectives": "Bachelor Thesis: Independent completion of engineering project under the supervision of a faculty member. The graduate possesses solid knowledge in the subject areas to which the thesis topic belongs and can address a topic from these areas within a given deadline using engineering methods, preparing a written report, and presenting and justifying the results orally and independently. Final Oral Exam: The examination aims to determine whether the student has solid knowledge in the relevant subject areas and is able to independently justify the respective results. -- Bachelorarbeit: Selbstständige Bearbeitung eines ingenieurwissenschaftlichen Projekts unter Betreuung einer Lehrkraft. Der*Die Absolvent*in besitzt gesichertes Wissen in den Fachgebieten, denen die Abschlussarbeit thematisch zugeordnet ist und ist in der Lage, innerhalb einer vorgegebenen Frist ein Thema aus diesen Fachgebieten nach ingenieurswissenschaftlichen Methoden zu bearbeiten, schriftlich aufzubereiten sowie die Ergebnisse der Abschlussarbeit mündlich zu präsentieren und selbstständig zu begründen. Mündliche Abschlussprüfung: Durch die Abschlussprüfung soll festgestellt werden, ob der/die Studierende gesichertes Wissen in den Fachgebieten, denen die Abschlussarbeit thematisch zugeordnet ist, besitzt und fähig ist, die jeweiligen Ergebnisse selbstständigzu begründen.",
     "prerequisites": "Admission in accordance with the applicable General Study and Examination Regulations and §7(2) of the Study and Examination Regulations for the Bachelor's degree program in Data Engineering. -- Zulassung gemäß geltender Rahmenstudien- und -prüfungsordnung und §7(2) der Studien- und Prüfungsordnung für den Bachelorstudiengang Data Engineering.\nBachelor’s Thesis: Maximum of 14,000 words or approximately 18 pages in ACM format. The developed source code is part of the bachelor’s thesis but is not included in the word or page count. Duration: see Study and Examination Regulations (StPrO). Final Oral Exam: Presentation (approx. 15–30 minutes) and oral examination (approx. 15–30 minutes). -- Bachelorarbeit: Maximal 14.000 Wörter oder ca. 18 Seiten im ACM-Format. Entwickelter Quelltext ist Bestandteil der Bachelorarbeit, zählt jedoch nicht zur Seiten- oder Wörterzahl hinzu. Dauer: s. StPrO. Mündliche Abschlussprüfung: Präsentation(ca. 15-30min) undmündlichePrüfung (ca. 15-30min)",
     "level": "6th semester 6.Studienplansemester",
@@ -688,10 +687,9 @@
     "literature": "Subject specific Fachspezifisch",
     "additional_notes": "Bachelor’s Thesis: The module is offered in English. Upon agreement between the candidate and the examination committee, the bachelor’s thesis may also be written in German. Final Oral Exam: The module is offered in English. Upon agreement between the candidate and the examination committee, the final examination may also be conducted in German. -- Bachelorarbeit: Das Modul wird auf Englisch angeboten. Nach Vereinbarung zwischen zu prüfender Person und Prüfungskommission kann die Bachelorarbeit auch auf Deutsch erfolgen. Abschlussprüfung:",
     "room_requirements": null,
-    "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Own study programme Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       72,
       73
@@ -702,7 +700,7 @@
     "title": "Elective Subject 1, Elective Subject 2, Elective Subject 3, Elective Subject 4, Elective Subject 5 Wahlpflichtmodul 1, Wahlpflichtmodul 2, Wahlpflichtmodul 3, Wahlpflichtmodul 4,Wahlpflichtmodul5",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. self-study 68 Stunden Präsenz, 82 Stunden Selbststudium",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "The goal of Elective Subjects 1 through 3, which are offered in the fourth study semester, is primarily to provide students with the opportunity to learn how theoretical concepts and knowledge can be applied to solve real, data-driven problems rooted in various vertical domains, such as life sciences or smart building infrastructure. It is recommended that students select elective modules (see list of elective modules below) that are designed for the fourth semester for ES1 through ES3. Elective Subjects 4 and 5 are offered in the sixth study semester and aim to give students the opportunity to deepen their knowledge in program- and subject-specific areas such as Deep Learning or Large Language Models. These electives also serve as a bridge to the Master's program for students who wish to pursue an academic path. It is recommended that students select elective modules targeting the sixth semester for ES4 and ES5 (see list of elective modules below). -- Das Ziel der Wahlpflichtmodule 1 bis 3, die im vierten Fachsemester angeboten werden, besteht in erster Linie darin, den Studierenden die Möglichkeit zu geben, zu lernen, wie sich theoretische Konzepte und Kenntnisse auf reale, datengetriebene Problemstellungen in verschiedenen Anwendungsdomänen – etwa den Lebenswissenschaften oder der intelligenten Gebäudetechnik – anwenden lassen. Es wird empfohlen, für ES1 bis ES3 Wahlpflichtmodule zu wählen (siehe untenstehende Liste), die speziell für das vierte Semester vorgesehen sind. Die Wahlpflichtmodule 4 und 5 werden im sechsten Fachsemester angeboten und sollen den Studierenden die Gelegenheit geben, ihr Wissen in programmspezifischen Bereichen wie Deep Learning oder Large Language Models zu vertiefen. Gleichzeitig bieten sie eine Möglichkeit, den Übergang in ein Masterstudium vorzubereiten, für Studierende, die eine akademische Laufbahn anstreben. Es wird empfohlen, für ES4 und ES5 Wahlpflichtmodule zu wählen (siehe untenstehende Liste), die auf das sechste Semester ausgerichtet sind.",
     "prerequisites": "Recommended: PR4, DB2, DS2, MLO, MLC, ID2 Empfehlung: PR4,DB2,DS2,MLO,MLC,ID2\nsee description of the respective module siehe Beschreibung der jeweiligen Lehrveranstaltung",
     "level": "4th and 6th semester 4./6.Studienplansemester",
@@ -716,10 +714,9 @@
     "literature": "Will be indicated in the respective course descriptions. Wirdindenjeweiligen Beschreibungender Lehrveranstaltungenangegeben.",
     "additional_notes": "The module will be held in English. Das Modul wird auf Englisch angeboten. By decision of the Faculty Council of Department VI, further modules other than those specified in the module handbook may be provided as compulsory elective modules. Auf Beschluss des Fachbereichsrats des FB VI können weitere als die im Modulhandbuch angegebenen Module als Wahlpflichtmodule vorgesehen werden.",
     "room_requirements": null,
-    "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Own study programme Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       75,
       76,
@@ -731,7 +728,7 @@
     "title": "General Studies StudiumGenerale",
     "credits": 5.0,
     "workload": "68 hrs. Presence, 82 hrs. Self-study (2 contact hours per week seminar lessons + 2 contact hours per week exercise).Two courses (each worth 2.5 ECTS credits) must be selected from the Studium Generale program offered by BHT. 68 Stunden Präsenz, 82 Stunden Selbststudium (2 SWS SU + 2 SWS Ü). Es sind zwei Lehrveranstaltungen (je 2,5 LP) aus dem Studium Generale-Angebot der BHT zu wählen.",
-    "learning_area": "General Academic Foundations AllgemeinwissenschaftlicheErgänzungen",
+    "learning_area": "All study programs alle Studiengänge\nGeneral Academic Foundations AllgemeinwissenschaftlicheErgänzungen",
     "learning_objectives": "The students have broadened their subject-specific studies to include interdisciplinary aspects and are able to recognize interrelationships between society and its subsystems. Die Studierenden haben ihr Fachstudium um interdisziplinäre Aspekte erweitert und erkennen Zusammenhänge zwischen Gesellschaft und ihren Teilsystemen.",
     "prerequisites": "none (exceptions may be made for foreign languages) keine (Ausnahmen können fürdieFremdsprachen festgelegtwerden)\nsee the description of the respective course, non-graded assessment siehe Beschreibung der jeweiligen Lehrveranstaltung; unbenotete Prüfung",
     "level": "1st semester 1.Studienplansemester",
@@ -745,10 +742,9 @@
     "literature": "Is specified in the respective course descriptions Wirdindenjeweiligen Beschreibungender Lehrveranstaltungenangegeben",
     "additional_notes": "The exclusion of students from certain degree programs can be specified in the module descriptions of courses in the Studium Generale. In den Modulbeschreibungen von Lehrveranstaltungen im Studium generale kann der Ausschluss Studierender bestimmter Studiengänge festgelegt werden.",
     "room_requirements": "see the description of the respective course sieheBeschreibung derjeweiligen Lehrveranstaltung",
-    "additional_fields": {
-      "Applicability Verwendbarkeit": "All study programs alle Studiengänge"
-    },
-    "source_file": null,
+    "applicability": "All study programs alle Studiengänge",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       78,
       79
@@ -759,7 +755,7 @@
     "title": "Dependable Systems Verlässliche Systeme",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students are familiar with the theoretical foundations and practical implementations of reliable distributed systems. They understand common aspects of reliability and availability, including reliability analysis, fault tolerance, typical fault models, and failure prediction. Students learn how to measure and evaluate system reliability and how to implement appropriate measures for fault remediation and failure forecasting. Studierende sind mit den theoretischen Grundlagen und den praktischen Implementierungen verlässlicher verteilter Systeme vertraut. Sie kennen gängige Aspekte der Zuverlässigkeit und Verfügbarkeit, einschließlich der Verlässlichkeitsanalyse, Fehlertoleranz, typischer Fehlermodelle und der Fehlerprognose. Studierende lernen, wie man die Verlässlichkeit von Systemen misst und bewertet, und wie man geeignete Maßnahmen zur Fehlerbehebung undVorhersagevon Ausfällen implementiert.",
     "prerequisites": "Recommendation: MLO, DS2, DB3 Empfehlung: MLO,DS2,DB3\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) group presentation (60 minutes) or (2) Oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Gruppenpräsentation (60 Minuten) oder (2)MündlichePrüfung (30Min.)",
     "level": "6th semester 6.Studienplansemester",
@@ -773,11 +769,11 @@
     "literature": "\"Reliability and Availability Engineering: Modeling, Analysis, and Applications\" by Kishor S. Trivedi \"System Reliability Theory: Models, Statistical Methods, and Applications\" by Marvin Rausand \"Dependable Computing: From Concepts to Design\" by Ivan C. J. L. Jansen andRainer H. Reussner",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       80,
       81
@@ -788,7 +784,7 @@
     "title": "Large Language Models Große Sprachmodelle",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "The students understand the methodologies and language models that led to the development of large language models (LLMs). They learn about the underlying architectures of LLMs as well as common scenarios (e.g., pretrained models with or without fine-tuning) for using LLMs. The students become familiar with current LLMs, can apply them to specific text-oriented tasks, and evaluate the results using relevant metrics. Die Studierenden verstehen die Methodologien und Sprachmodelle, die zur Entstehung großer Sprachmodelle (LLMs) führten. Sie lernen die zugrunde liegenden Architekturen von LLMs sowie gängige Szenarien (z. B. vortrainierte Modelle mit/ohne Feinabstimmung) zur Nutzung von LLMs kennen. Die Studierenden werden mit aktuellen LLMs vertraut, können diese in spezifischen textorientierten Aufgaben anwenden und die Ergebnisse mithilfe der relevanten Metrikenevaluieren.",
     "prerequisites": "Recommendation: MLC, MLA Empfehlung: MLC,MLA\nProjects in small groups using computers, with consultation (4 projects, approx. 15 minutes per in-person session); _exercise assignments can only be completed during the lecture period, i.e., in_ _the first examination period._ Projekten in Kleingruppen mit Rechnereinsatz und Rücksprache (4 Projekte, ca. 15 min pro Präsenztermin);_Übungsleistungen können nur während der_ _Vorlesungszeit, d. h. im 1. Prüfungszeitraum erbracht werden._",
     "level": "6th semester 6.Studienplansemester",
@@ -802,11 +798,11 @@
     "literature": "Quick Start Guide to Large Language Models: Strategies and Best Practices for ChatGPT, Embeddings, Fine-Tuning, and Multimodal AI, Sinan Ozdemir, 2024 Build a Large Language Model (From Scratch), Sebastian Raschka, 2024 LLM Engineer's Handbook: Master the art of engineering large language modelsfromconcept to production,Paul Iusztin,2024",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       82,
       83
@@ -817,7 +813,7 @@
     "title": "Embedded Artificial Intelligence EingebetteteKünstlicheIntelligenz",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students learn about AI and ML models in the context of embedded and real- time systems, and how to train them using collected data. They understand hardware requirements for training and running these models on small devices, with a focus on embedded hardware accelerators. They gain expertise in implementing and executing trained models on embedded systems, using appropriate development environments and frameworks. Studierende lernen über KI- und ML-Modelle im Kontext eingebetteter und Echtzeitsysteme sowie deren Training mithilfe gesammelter Daten. Sie verstehen die Hardwareanforderungen für das Training und die Ausführung dieser Modelle auf kleinen Geräten, wobei ein besonderer Schwerpunkt auf eingebetteten Hardwarebeschleunigern liegt. Zudem erwerben sie Fachwissen zur Implementierung und Ausführung trainierter Modelle auf eingebetteten Systemen unter Einsatz passender Entwicklungsumgebungen und Frameworks.",
     "prerequisites": "Recommendation: MLA, MLO, PR4 Empfehlung: MLA,MLO,PR4\nProjects in small groups using computers, with consultation (4 projects, approx. 15 minutes per in-person session); _exercise assignments can only be completed during the lecture period, i.e., in_ _the first examination period._ Projekten in Kleingruppen mit Rechnereinsatz und Rücksprache (4 Projekte, ca. 15 min pro Präsenztermin);_Übungsleistungen können nur während der_ _Vorlesungszeit, d. h. im 1. Prüfungszeitraum erbracht werden._",
     "level": "4th semester 4.Studienplansemester",
@@ -831,11 +827,11 @@
     "literature": "Gian Marco Iodice: \"TinyML Cookbook, Combine Artificial Intelligence and Ultra-low-power Embedded Devices to Make the World Smarter\"; Packt Publishing; Björn Debaillie, Mario Diaz Nava, Ovidiu Vermesan: \"Embedded Artificial Intelligence, Devices, Embedded Systems, and Industrial Applications\"; River Publishers; Bin Li: \" Embedded Artificial Intelligence, Principles, Platforms and Practices\"; Springer;",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       84,
       85
@@ -846,7 +842,7 @@
     "title": "Robotics Robotik",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "In the field of Robotics, changes in the environment are captured by sensors that constantly produce data in a wide range of data types, frequencies, and precisions. For a robotic system to complete its task while reacting appropriately to the constantly changing environment, this vast amount of data must be processed and translated into an action plan in a timely manner. In this course, students will be introduced to typical datasets in Robotics as well as the current methodologies of processing and analyzing them. On completion of this course, the students: - understand the operating principles of electromechanics and sensorimotor technology, - understand the different types of data in robotic systems and their underlying physical principles, - can access, process, and analyze real and/or generated datasets of a robot system, - can apply standard methods to make robot systems react to data according to a specific task, - can think in an inter-disciplinary manner and collaborate efficiently in groups to achieve a goal. -- Im Bereich der Robotik werden Veränderungen in der Umgebung durch Sensoren erfasst, die ständig Daten in einer Vielzahl von Datentypen, Frequenzen und Genauigkeiten erzeugen. Damit Robotersysteme Aufgaben erfüllen und angemessen auf sich ändernde Umgebungsbedingungen reagieren können, müssen viele Sensordaten gleichzeitig und zeitnah verarbeitet und in Aktivitäten umgesetzt werden. In diesem Modul werden die Studierenden mit typischen Datensätzen in der Robotik sowie aktuellen Methoden der Verarbeitung und Analyse vertraut gemacht. Die Studierenden: - kennen die Wirkprinzipien der Elektromechanik und Sensormotorik, - kennen die verschiedenen Arten von Daten in Robotersystemen und die dahinterstehenden physikalischen Prinzipien, - kennen auf echte und/oder generierte Datensätze eines Robotersystems zugreifen, diese verarbeiten und analysieren, - kennen Standardmethoden anwenden, um Robotersysteme entsprechend einer bestimmten Aufgabe, auf Daten reagieren zu lassen, - kennen fachübergreifend denken und effizient in Gruppen zur Erreichung einesZieleszusammenarbeiten.",
     "prerequisites": "Recommendation: PR4, DB1, DB2 Empfehlung: PR4,DB1,DB2\nProjects in small groups using computers, with consultation (4 projects, approx. 15 minutes per in-person session); _exercise assignments can only be completed during the lecture period, i.e., in_ _the first examination period._ Projekten in Kleingruppen mit Rechnereinsatz, Rücksprache (4 Projekte, ca. 15 min pro Präsenztermin);_Übungsleistungen können nur während der_ _Vorlesungszeit, d. h. im 1. Prüfungszeitraum erbracht werden._",
     "level": "4th semester 4. Studienplansemester",
@@ -860,11 +856,11 @@
     "literature": "Laube: Sensomotorisches System. Thieme. Albu-Schäffer: Soft Robotics: Transferring Theory to Application, Springer Verlag. Kassat, G.: Biomechanik für Nicht-Biomechaniker: Alltägliche Biomechanik derSportpraxis,FCV-Verlag.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       86,
       87
@@ -875,7 +871,7 @@
     "title": "Computer Vision Rechnergestützte Bildverarbeitung",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students acquire a fundamental understanding of processing, analyzing, and interpreting image and video data, including the application of algorithms such as feature extraction and dimensionality reduction on images. They learn to use modern tools and frameworks, such as OpenCV in Python, to efficiently process image data and eventually apply deep learning models in practice. Furthermore, students develop the ability to solve image processing problems. -- Die Studierenden erwerben ein grundlegendes Verständnis für die Verarbeitung, Analyse und Interpretation von Bild- und Videodaten, einschließlich der Anwendung von Algorithmen wie Merkmalsextraktion und Dimensionsreduktion auf Bilder. Sie lernen, moderne Tools und Frameworks wie OpenCV in Python effizient einzusetzen, um Bilddaten zu verarbeiten und schließlich Deep-Learning-Modelle in der Praxis anzuwenden. Darüber hinaus entwickeln sie die Fähigkeit, Probleme in der Bildverarbeitung eigenständig zu lösen.",
     "prerequisites": "Recommendation: PR4, CT1 Empfehlung: PR4, CT1\nExercises (8 exercises, 1 page each) Übungsaufgaben (8 Aufgaben, 1 Seite pro Aufgabe)",
     "level": "4th semester 4.Studienplansemester",
@@ -889,11 +885,11 @@
     "literature": "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html Computer Vision: Algorithms and Applications, Richard Szeliski, 2010 Pattern RecognitionandMachineLearning, Christopher Bishop,2007",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       88,
       89
@@ -904,7 +900,7 @@
     "title": "Geoinformatics Geoinformatik",
     "credits": 5.0,
     "workload": "51 hrs. presence, 99 hrs. self-study (4 contact hours per week exercise) 51Stunden Präsenz, 99 StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students understand the basics of technologies and systems in Geoinformatics and can apply and evaluate them independently. They can independently plan, design, and apply procedures in the areas of geodata acquisition, geoinformation management, and geodetic measurement and evaluation technology. In addition to applications of geoinformation systems, students understand the basics of geodatabases and can create and manage such technologies. For this purpose, programming basics are employed independently. This enables the students to collect, process, analyze, visualize and interpret geodata. -- Die Studierenden kennen die Grundlagen von Geoinformationstechnologien und -systemen und können diese selbstständig anwenden und bewerten. Sie können Verfahren in den Bereichen Geodatenerfassung, Geoinformationmanagement und geodätischer Mess- und Auswertetechnik selbstständig planen, konzipieren und anwenden. Neben Applikationen von Geoinformationssystemen kennen Studierende die Grundlagen von Geodatenbanken und können solche Technologien angelegt und verwaltet. Dazu werden Programmiergrundlagen selbstständig eingesetzt. Somit können sie Geodaten erfassen, verarbeiten, analysieren, visualisieren und interpretieren werden.",
     "prerequisites": "Recommendation: PR4 Empfehlung: PR4\nThe form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination: (1) Written exam (60 minutes) or (2) oral exam (30 minutes) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Klausur (60 Minuten) oder (2)MündlichePrüfung (30Min.)",
     "level": "4th semester 4.Studienplansemester",
@@ -918,11 +914,11 @@
     "literature": "MONK, S.: 30 Arduino Selbstbau-Projekte plus Arduino-UNO-Platine im Bundle. – Franzis Verlag GmbH. Kemper, A. und Eickler A: Datenbanksysteme, Eine Einführung, DeGruyter- Verlag.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is held in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       90,
       91
@@ -933,7 +929,7 @@
     "title": "Systems Benchmarking Systemleistungsvergleich",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "The goal of this course is to equip data engineers with the knowledge and tools to benchmark and evaluate systems effectively. Students will learn how to design meaningful benchmarks, interpret performance metrics, and make data- driven decisions to improve system architectures. By the end of this module, students will understand how to leverage benchmarking data to fine-tune systems for their specific use cases and achieving better performance. -- Die Studierenden sind mit gezielt ausgewählten Werkzeugen und Wissen in der Lage, Systeme effektiv zu benchmarken und zu evaluieren. Die Studierenden lernen, wie man sinnvolle Benchmarks entwirft, Leistungskennzahlen interpretiert und datenbasierte Entscheidungen trifft, um Systemarchitekturen zu optimieren. Am Ende des Moduls verstehen die Studierenden, wie Benchmark-Daten genutzt werden können, um Systeme für spezifische Anwendungsfälle zu optimieren und bessere Leistungen zu erzielen.",
     "prerequisites": "Recommendation: DB2, ID2 Empfehlung: DB2,ID2\nGroup presentation (60 minutes) Gruppenpräsentation (60 Minuten)",
     "level": "6th semester 6.Studienplansemester",
@@ -947,11 +943,11 @@
     "literature": "Systems Benchmarking for Scientists and Engineers, By Samuel Kounev et al. SystemsPerformance, byBrendanGregg",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is held in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       92,
       93
@@ -962,7 +958,7 @@
     "title": "Systems Biology Systembiologie",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Biological Sciences are being transformed by a range of high-throughput technologies that generate vast amounts of data. These technologies include high-throughput genomic sequencing, imaging, screening, and proteomics. This course will train students in a generic set of skills that can be adapted to solve problems in a flexible way across different types of biological data sets. On completion of this course, the students will be able to: - Demonstrate an understanding of the emerging technologies and how they can be applied to address biological questions. - Understand the different design strategies used for biological databases. - Design experiments, interpret & analyze data generated from key technologies. - Generate different hypotheses on the function of a biological system. -- Die Biowissenschaften erleben durch Hochdurchsatztechnologien, die enormen Datenmengen erzeugen, einen grundlegenden Wandel. Zu diesen Technologien gehören Hochdurchsatz-Sequenzierung, Bildgebung, Screening und Proteomik. Dieses Modul vermittelt den Studierenden generische Fähigkeiten, die flexibel auf unterschiedliche biologische Datensätze anwendbar sind. Nach Abschluss des Moduls können die Studierenden: - Ein Verständnis für aufkommende Technologien demonstrieren und deren Anwendung auf biologische Fragestellungen erklären. - Die unterschiedlichen Strategien beim Design biologischer Datenbanken verstehen. - Experimente entwerfen sowie die aus zentralen Technologien generierten Daten interpretieren und analysieren. - Hypothesen zur FunktionbiologischerSysteme entwickeln.",
     "prerequisites": "Recommendation: basic knowledge of chemistry at the level of the general higher education entrance qualification; no further in-depth knowledge is required. Empfehlung: grundlegende Kenntnisse der Chemie auf dem Niveau der Allgemeinen Hochschulreife; es werden keine darüber hinausgehenden vertieften Kenntnissevorausgesetzt.\nProjects in small groups using computers, with consultation (4 projects, approx. 15 minutes per in-person session); _exercise assignments can only be completed during the lecture period, i.e., in_ _the first examination period._ Projekten in Kleingruppen mit Rechnereinsatz, Rücksprache (4 Projekte, ca. 15 min pro Präsenztermin);_Übungsleistungen können nur während der_ _Vorlesungszeit, d. h. im 1. Prüfungszeitraum erbracht werden._",
     "level": "4th semester 4.Studienplansemester",
@@ -976,11 +972,11 @@
     "literature": "Phillips, R., Kondev, J., Theriot, J., & Garcia, H. (2012). Physical biology of the cell. Garland Science. Sharma, Parva Kumar, and Inderjit Singh Yadav. \"Biological databases and theirapplication.\" Bioinformatics. AcademicPress,2022. 17-31.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       94,
       95
@@ -991,7 +987,7 @@
     "title": "Deep Learning DeepLearning",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students learn to create Deep Learning (DL) applications using real data. Upon completion of the module, students can: • Understand the mathematical concepts behind Deep Learning (DL) • Explain the principles behind existing DL applications • Assess problem-specific requirements for the application of DL • Analyze and preprocess real, raw data • Evaluate and use different DL frameworks with regard to their suitability for a given problem • Develop new DL applications using different frameworks • Apply DL to a dataset or a given problem and assess the results • Analyze DL algorithms from current publications -- Die Studierenden lernen Deep Learning (DL) Anwendungen zu erstellen und auf Daten anzuwenden. Nach Abschluss des Moduls sind die Studierenden in der Lage: • Mathematische Konzepte von Deep Learning (DL) nachzuvollziehen • Die Funktionsweise bestehender DL-Anwendungen zu erläutern • Problemspezifischen Voraussetzungen zur Anwendung von DL einzuschätzen • Rohdaten zu analysieren und vorzuverarbeiten • DL-Frameworks zu bewerten und zu nutzen • DL-Anwendungen auf der Basis geeigneter Frameworks zuerstellen • DL auf einen Datensatz oder ein gegebenes Problem anzuwenden und die Ergebnisse zu bewerten • DL-Methoden und -Systeme im Hinblick auf ihre Tauglichkeit für ein gegebenes Problem zu evaluieren • DL- Algorithmenaus aktuellen Veröffentlichungen zu analysieren",
     "prerequisites": "Recommendation: MLA, DMA Empfehlung: MLA,DMA\n(1) Exercises with consultation (4 exercises, 2 pages and 15 mins. per exercise) or (2) oral exam (30 min.) Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Die Lehrkraft wählt zwischen folgenden Prüfungsformen: (1) Übungsaufgaben mit Rücksprachen (4 Aufgaben, 2 Seiten pro Aufgabe, ca. 15 min pro Präsenztermin) oder (2)MündlichePrüfung (30Min.)",
     "level": "6th semester 6.Studienplansemester",
@@ -1005,12 +1001,11 @@
     "literature": "Deep Learning with Python, Francois Chollet, Manning. Deep Learning (Adaptive Computation and Machine Learning, Ian Goodfellow, Yoshua Bengio, Aaron Courville, MIT Press. Python Deep Learning, Valentino Zocca, Gianmario Spacagna, Daniel Slater, Peter Roelants, Packt Publishing. Fundamentals of Deep Learning: Designing Next-Generation Machine IntelligenceAlgorithms,Nikhil Buduma, O'Reilly.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
-      "Examination form/ conditions to grant credit points": "The form of examination is determined by the teacher in accordance with §19 (2) RSPO. The teacher chooses between the following forms of examination:",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       96,
       97
@@ -1021,7 +1016,7 @@
     "title": "Smart Building Infrastructure Intelligente Gebäudeinfrastruktur",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students learn about building services and the associated building automation and control systems (BACS) and building management systems. They gain insight into the thinking of those responsible for building design and operation. They learn about the current communication technology of BACS and how to interact with them. -- Die Studierenden erhalten einen Überblick über die Gebäudeautomation und die damit verbundenen Gebäudeautomations- und Steuerungssysteme (BACS) sowie Gebäude-Management-Systeme. Sie gewinnen Einblicke in die Denkweise der Verantwortlichen für Gebäudeplanung und -betrieb. Zudem lernen sie die aktuelle Kommunikationstechnologie der BACS kennen und wie man mit diesen interagiert.",
     "prerequisites": "none keine\nGroup presentation (60 minutes) Gruppenpräsentation (60 Minuten)",
     "level": "4th semester 4.Studienplansemester",
@@ -1035,11 +1030,11 @@
     "literature": "Karl-Josef Albers et al. (Herausgeber): Taschenbuch für Heizung- und Klimatechnik, Innotech Medien, Kleinaitingen, 81 Auflage 2022 André Borrmann et al. (Herausgeber): Building Information Modeling - Building Information Modeling, Springer Vieweg, Wiesbaden, 2. Auflage 2021 VDI 3814: Gebäudeautomation, Blatt 1 Grundlagen und weitere, Beuth Verlag, Berlin, 2019 VDI 6041:2017-07 Facility-Management - Technisches Monitoring von Gebäudenund gebäudetechnischen Anlagen,Beuth Verlag,Berlin,2017",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is held in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       98,
       99
@@ -1050,7 +1045,7 @@
     "title": "Ethics in Data Engineering Ethik in der Data Engineering",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "Students are familiar with approaches and concepts of ethics in both theory and practice, as well as the central concept of responsibility. They are capable of evaluating issues from their field of study from the perspective of Data Engineering within the tension between technical possibilities and ethical or societal demands, and of developing responsible courses of action. Their ethical and moral reasoning skills in the context of a datafied society— particularly in the critical interpretation of data and its assumptions—are sharpened. Students are trained to identify and structure complex causal and justificatory relationships. They are able to critically and normatively assess digital phenomena with ethical relevance and express themselves in a well- founded manner. -- Die Studierenden kennen Ansätze und Konzepte der Ethik in Theorie und Praxis sowie den zentralen Begriff der Verantwortung. Sie sind befähigt, unter dem Blickwinkel des Data Engineering Sachverhalte aus ihrem Studienbereich im Spannungsfeld von technischen Möglichkeiten und ethischen sowie gesellschaftlichen Anforderungen zu beurteilen und verantwortliche Handlungsoptionen zu entwickeln. Ihre ethisch-moralische Reflexionskompetenz im Kontext der datafizierten Gesellschaft, insbesondere im Bereich der kritischen Interpretation von Daten und ihrer Prämissen ist geschärft; Die Kompetenz der Studierende, komplexe Begründungs- und Wirkzusammenzusammenhänge zu erkennen und zu strukturieren ist eingeübt. Die Studierenden sind zu einer normativ-kritischen Einordnung von digitalen Sachverhalten mit ethischer Relevanz befähigt und können sich entsprechendfundiert artikulieren.",
     "prerequisites": "none keine\nPreparatory summaries (approx. 1 page) of the learning content including students’ own questions, plus a term paper (3–4 pages): total workload of approx. 10–12 pages at 2,000 characters per page. Regelmäßige vorbereitende Zusammenfassungen (ca 1 Seite) der Lerninhalte mit eigenen Fragefeldern plus Hausarbeit (3-4 Seiten): Gesamtumgang von ca10-12Seitená2.000Zeichen.",
     "level": "6th semester 6.Studienplansemester",
@@ -1064,11 +1059,11 @@
     "literature": "Hall, P. et al: (2023): Machine Learning for High-Risk Applications. Approaches to Responsible AI. Grimm, P. et al. (2019): Digitale Ethik. Leben in vernetzen Welten Kolany-Raiser, B. (2019): Big Data. Gesellschaftliche und Herausforderungen und rechtliche Lösungen. Schmidt, M.: (2023): Ethik in der IT-Sicherheit. Eine Einführung. Zweite, erweitere Auflage. Wiegerling, K. et al (2020): Datafizierung und Big Data. Ethische, anthropologische und wissenschaftstheoretische Perspektiven.",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Further notes WeitereHinweise": "The module is offered in English. DasModul wird auf Englischangeboten"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       100,
       101
@@ -1079,7 +1074,7 @@
     "title": "External Course 1 / External Course 2 Externer Kurs 1 / Externer Kurs 2",
     "credits": 5.0,
     "workload": "68 hrs. presence, 82 hrs. self-study (4 contact hours per week exercise) 68 Stunden Präsenz, 82StundenSelbststudium(4SWS Ü)",
-    "learning_area": "Subject-Specific Specialization FachspezifischeVertiefung",
+    "learning_area": "Own study programme Eigener Studiengang\nSubject-Specific Specialization FachspezifischeVertiefung",
     "learning_objectives": "These courses are placeholders that allow for recognition of successfully completed external courses that do not have an exact match in the list of courses currently in the study program. The decision about the recognition is with the study program leadership team. -- Diese Module dienen als Platzhalter zur Anerkennung erfolgreich absolvierter externer Lehrveranstaltungen, für die es im aktuellen Studiengangsangebot kein exaktes Äquivalent gibt. Die Entscheidung über die Anerkennung liegt beimStudiengangsleitung.",
     "prerequisites": "none keine\nDepends on the external course Hängt von der externen Lehrveranstaltung ab",
     "level": "4th semester / 6th Semester 4.Studienplansemester/ 6.Studienplansemester",
@@ -1093,8 +1088,8 @@
     "literature": "Depends on the external course Hängtvonderexternen Lehrveranstaltung ab",
     "additional_notes": null,
     "room_requirements": null,
+    "applicability": "Own study programme Eigener Studiengang",
     "additional_fields": {
-      "Applicability Verwendbarkeit": "Own study programme Eigener Studiengang",
       "Anlage Studienplan": "Anlage Studienplan",
       "Bachelorstudiengang Data Engineering": "|  | LV-Typ |  | Unit |  | Modul",
       "Modul- kürzel": "Modultitel | Studien- plan- semester | SU SWS | Ü SWS | Beur- teilung D/U/I | Ge- wicht | LP | Ge- wicht | P/WP | Durchführende Lehreinheit (FB / Cluster)",
@@ -1120,7 +1115,7 @@
       "PR3.2": "Programmierung3 Übg. |  |  | 2 | I",
       "PR4": "Programmierung4 | 2 |  |  |  |  | 5 | 5 | P | Eigener Studiengang"
     },
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       102,
       103

@@ -1,0 +1,1346 @@
+[
+  {
+    "module_number": "B01",
+    "title": "Grundlagen der Betriebswirtschaftslehre / Principles of Business Management",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden haben einen Gesamtüberblick über die Themengebiete der Betriebswirtschaftslehre und können diese in die Wissenschaftsdisziplinen einordnen. Sie beherrschen grundlegende betriebswirtschaftliche Begrifflichkeiten und sind dadurch befähigt, die im Studium zu vertiefenden Teilaspekte in einen größeren Zusammenhang zu stellen. Sie können ihre Selbstlernkompetenz einschätzen und finden Wege, diese zu verbessern.",
+    "prerequisites": "Keine",
+    "level": "1. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht und Selbststudium, ggf. als Ringvorlesung mit wechselnden Lehrkräften",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 70 % Multiple Choice (30 min) 30 % Mündliche Prüfung (15 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen • Gegenstand der Betriebswirtschaftslehre • Geschichte und Ziele des Wirtschaftens • Ziele von Betrieben • Einordnen der BWL in die Wissenschaften • St. Gallener Managementmodell Entscheidungstheorie • Methodenwissen: Bewertungsmatrix, Entscheidungsmatrix Konstitutive betriebliche Entscheidungen • Überblick • Vertiefung: Kooperationen und Partnerschaften: Ziele, Restriktionen, Formen • Sonderformen der Zusammenarbeit in der Digitalen Wirtschaft Unternehmensverfassung • Formen in Abhängigkeit der Rechtsform • Besonderheit Risikokapitalgeber in der digitalen Wirtschaft Organisation • Formen der Aufbau- und Ablauforganisation • Gestaltung organisatorischer Veränderungen Personalmanagement • Personalauswahl • Modelle der Personalführung und der Führungsstile Rechnungs- und Finanzwesen • Bedeutung des externen Rechnungswesens für die Steuerlegung und des internen Rechnungswesens für die Preisfindung • Varianten der Unternehmensfinanzierung Leistungserstellung • Aufgabe und grundlegende Begriffe der Beschaffung und Logistik",
+    "literature": "Vahs, D.; Schäfer-Kunz, J.: Einführung in die Betriebswirtschaftslehre. Schaeffer-Poeschel.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      4,
+      5,
+      6
+    ]
+  },
+  {
+    "module_number": "B02",
+    "title": "Mathematische Grundlagen der Betriebswirtschaft / Mathematical Principles for Business Management",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Mathematisch-naturwissenschaftliche Grundlagen",
+    "learning_objectives": "Die Studierenden beherrschen grundlegende mathematische Berechnungstechniken und Methoden, die zur Analyse betriebswirtschaftlicher Probleme notwendig sind. Sie sind in der Lage, elementare mathematische Aufgaben mit wirtschaftlichem Bezug adäquat zu lösen.",
+    "prerequisites": "Keine",
+    "level": "1. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis 100 % Klausur (90–120 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen der Mathematik • mathematische Symbolik und Rechenregeln • Mengenlehre und Aussagenlogik Elemente der Analysis • Funktionen und ihre grafische Darstellung • spezielle Funktionen, insbesondere Potenz-, Logarithmus und Exponentialfunktion • Folgen und Reihen, Prozent-, Zins- und Zinseszinsrechnung • Anwendung bei finanzmathematischen Berechnungen Grundbegriffe der Linearen Algebra • Einführung von Begriffen: Vektoren, Matrizen • grundlegende Rechenregeln für Vektoren und Matrizen • Lineare Funktionen und Abbildungen, Lineare Gleichungssysteme, Lösungsverfahren (Gaußscher Algorithmus)",
+    "literature": "Schwarze, J.: Mathematik für Wirtschaftswissenschaftler, Bände 1 und 3. NWB Verlag. Schwarze, J.: Aufgabensammlung zur Mathematik für Wirtschaftswissenschaftler. NWB Verlag.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "module_number": "B03",
+    "title": "Grundlagen der digitalen Medien / Principles of Digital Media",
+    "credits": 5.0,
+    "workload": "2 SWS SU 2 SWS SU (Online) 34 Stunden Präsenz / 34 Stunden Online-Konferenzteilnahme 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die informations-, kommunikations- und sozialtheoretischen Grundlagen digitaler Medien, haben einen Gesamtüberblick über die relevanten Themenfelder (u.a. Entstehungsgeschichte, Typen und Merkmale digitaler Medien, digitale Wertschöpfung, Technikfolgenabschätzung) und können diese in die Wissenschaftsdisziplinen einordnen (u.a. Medienwissenschaften, Mediensoziologie, Medienökonomie). Die Studierenden sind in der Lage, den Medienwandel und die Konsequenzen der Digitalisierung zu verstehen und einzuordnen, sowie die digitale Medienlandschaft in Bezug auf gesellschaftliche und wirtschaftliche Fragestellungen zu analysieren und zu bewerten. Zudem können sie die erworbenen Kompetenzen in analytische Aufgaben umsetzen, insbesondere um eigene Lösungsansätze mit digitalen Medien unter Berücksichtigung sozialer, rechtlicher und ethischer Aspekte zu entwickeln.",
+    "prerequisites": "Keine",
+    "level": "1. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweis: 30 % Referat (Gruppenarbeit) Abschließender Leistungsnachweis 70 % E-Portfolio (ca. 10.000 Zeichen inkl. Leerzeichen) mit Rücksprache",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen digitaler Medien: • Entstehungsgeschichte und Einordnung digitaler Medien in das Mediensystem • Medien-, informations- und kommunikationstheoretische Grundlagen digitaler Medien • Typen und Merkmale digitaler Medien Digitale Medienlandschaft und Wertschöpfung: • Sozio-technische Entwicklungen im Bereich digitaler Medien (u.a. Social Media, Mobile, Wearable) • Digitale Wertschöpfung (u. a. Crowdsourcing, Open Innovation, Social Forecasting) • Aktuelle Anwendungen und Anwendungsbeispiele aus der Wirtschaft und Gesellschaft Medienwandel, Digitalisierung und Technikfolgenabschätzung: • Gesellschaftliche Wirkungen digitaler Medien • Positive und negative Folgen der Digitalisierung • Soziale, rechtliche und ethische Aspekte digitaler Medien",
+    "literature": "Reichert, R.: Die Macht der Vielen: Über den neuen Kult der digitalen Vernetzung. Transcript Verlag. Reichert, R.: Big Data: Analysen zum digitalen Wandel von Wissen, Macht und Ökonomie. Transcript Verlag.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      8,
+      9,
+      10
+    ]
+  },
+  {
+    "module_number": "B04",
+    "title": "Einführung in Softwaretechnologien / Introduction to Software Technologies",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die wichtigsten Konzepte, die für das Verständnis von Softwaretechnologien in der digitalen Wirtschaft von Bedeutung sind. Die Studierenden können fachliche Anforderungen mittels User Stories oder Use Cases sowie einfacher Datenmodelle beschreiben und geeignete Softwaretechnologien zur Umsetzung identifizieren. Die Studierenden können im Rahmen einer bestehenden Webanwendung in Gruppenarbeit einfache Änderungen mit HTML, CSS und JavaScript umsetzen. Die Studierenden erhalten Einblicke in die aktuelle Entwicklung der Softwaretechnologien wie Blockchain, Kryptowährungen. Es erfolgt eine Einordnung der aktuellen Gefahren im Netz sowie Praxisbeispiele der größten Falschentwicklungen bei mobilen Applikationen und Einordnung der notwendigen Einhaltung von DSGVO, Sicherheitsarchitekturen und der Umgang mit Authentifizierungsmethoden. Die Studierenden erwerben im Übungsprogramm durch Gruppenarbeiten Teamfähigkeit.",
+    "prerequisites": "keine",
+    "level": "1. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Laborübung in Gruppenarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt.",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen • Software und Hardware • Betriebssysteme und Netzwerke • Client-Server Kommunikation • WWW und HTTP • Sicherheit in verteilten Systemen • Datenbanken • Algorithmen und Programmierung Funktionen und Schichten • Schichtenarchitekturen • Fachliche Funktionalität vs. User Interface von Anwendungen • Datenhaltung und Datenzugriff • Schnittstellen in verteilten Systemen • Server-Technologien und Middleware • Cloud Services Modellierung von Softwareanwendungen • User Stories und Use Cases • Datenmodellierung • Beschreibung von Verhalten User Interfaces und Nutzungsszenarien • Ausdrucksmittel und Einsatzgebiete von Webtechnologien • HTML, CSS, JavaScript • Web Development vs. Web Design • Web 2.0 • Webanwendungen vs. native Anwendungen • Native Applikationen und Web-Applikationen im mobilen Einsatz • Content und Metadaten • Suchtechnologien und Web Analytics • Content Management Systeme",
+    "literature": "Rautenstrauch, C.: Informatik für Wirtschaftswissenschaftler und Wirtschaftsinformatiker. Springer. Kleuker, S.: Grundkurs Software-Engineering mit UML. Springer. Freeman, E.; und Robson, E.: HTML5-Programmierung von Kopf bis Fuß. O'Reilly.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "module_number": "B05",
+    "title": "Zeit- und Selbstmanagement / Präsentationstechniken / Time and Self Management plus Presentation Techniques",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachübergreifende Grundlagen",
+    "learning_objectives": "Die Studierenden wissen um die Bedeutung der Selbstorganisation für erfolgreiche Tätigkeiten in der digitalen Wirtschaft. Sie können Methoden am Beispiel ihres eigenen Studien-, Berufs- und Privatleben auswählen, einsetzen und ihre Nützlichkeit für sie persönlich abschätzen. Die Studierenden wissen um den Unterschied zwischen Selbst- und Fremdbild und wissen, wie sie Feedback geben, selbst anfragen und reflektiert nutzen können. Die Studierenden beherrschen gängige Präsentations- techniken für die zielgruppenorientierte Vermittlung von Sachinformationen.",
+    "prerequisites": "Keine",
+    "level": "1. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Hausarbeit (5 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Selbstmanagement • Definition • Selbstbild-/Fremdbild (Johari-Fenster) • Feedback nehmen, Feedback geben Vertiefung Selbstmanagement: Lernmethoden • Lernmethoden - Literatur finden und auf Relevanz prüfen; Fachtexte effektiver lesen • Methodenkompetenz: Mind Mapping, Lernkartei u.a.m. • Bedeutung von Lerngruppen Vertiefung Selbstmanagement: Zeitmanagement • Ziele formulieren - Projekte versus Visionen • Zeitfresser identifizieren, Tages-/Wochenplanungen • Arbeits- und Büroorganisation, u. a.: `o` durchgängige Ordnerstrukturen `o` analoge und digitale Hilfsmittel • Zeitmanagement- und Zeiterfassungstools Methodenkompetenzen • Umgang mit Office-Programmen, insb. Word, PowerPoint und Excel • Grundregeln der Kommunikation (Schulz von Thun) • Zuhören und Interviewtechniken `o` Beobachten, Zuhören und Fragen als Recherchemethode • Präsentationstechnik `o` Grundaufbau einer Fachpräsentation `o` Zielgerichteter Einsatz von Methoden: Beamer, Flipchart, Whiteboard `o` Körpersprache Arbeit in Gruppen • Vor- und Nachteile von Gruppenarbeit • Bedeutung von Gruppenarbeit im Arbeitsleben und an der Hochschule • Strukturhinweise zur Gruppenarbeit • Feedback in Gruppen",
+    "literature": "Kurz, J.: Für immer aufgeräumt - auch digital: So meistern Sie E-Mail-Flut und Datenchaos. Gabal Will, H.: Minihandbuch Präsentation. Beltz Verlag",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "| Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      12,
+      13,
+      14
+    ]
+  },
+  {
+    "module_number": "| B06",
+    "title": "| English for the Digital Economy / Englisch für die digitale Wirtschaft",
+    "credits": 5.0,
+    "workload": "| 4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "| Fachspezifische Grundlagen",
+    "learning_objectives": "| Fachsprachliche Kompetenzen Die Studierenden können • sich über Themen wie z.B. Internethandel, Firmenstrukturen, eigene Arbeitserfahrungen, das Unternehmen im Wettbewerb oder Marketing verständigen • einen englischsprachigen Fachtext (z.B. Blog oder Website) kommentieren, diskutieren und zusammenfassen • einen fachrelevanten Text selber erstellen • ausgewählte grammatische Regeln weitgehend fehlerfrei anwenden • das Fachvokabular zur Beschreibung von Zusammenhängen in der Digitalen Wirtschaft anwenden • englischsprachige Hörübungen mit muttersprachlichen Varianten und non-nativen Akzenten bearbeiten • Telefonate führen und Korrespondenzaufgaben (E-Mails und Briefe) erledigen sowie die Grundlagen der Verhandlungssprache anwenden • Graphen, Diagramme und Tabellen beschreiben • sprachliche Aufgaben mit Online-Hilfsmitteln bewältigen Fachübergreifende Kompetenzen Die Studierenden sind in der Lage, • gestellte Aufgaben/Projekte mit Partnern oder in Arbeitsgruppen zu lösen und die Lösungen zu präsentieren. („Kooperationsfähigkeit“) • neuere Forschungen bzw. Trends aus dem Bereich der Digitalen Wirtschaft kritisch zu reflektieren, zu diskutieren und eigene Positionen mit Hinblick auf das Arbeitsgebiet zu beziehen sowie (mit angebotenen Hilfsmitteln) sprachliche Aufgaben zunehmend eigenständig zu bewältigen.",
+    "prerequisites": "Empfohlen: B1 Englischkenntnisse gemäß Gemeinsamen Europäischem Referenzrahmen (GER)",
+    "level": "1. Studienplansemester",
+    "teaching_form": "Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Klausur (90 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Themen aus dem Bereich der Digitalen Wirtschaft und der Informatik anhand konkreter fachbezogener Inhalte wie z.B.: • Globalisierung, die sich ändernde Rolle des Internets • Wettbewerb, Entrepreneurship, Fusionen & Übernahmen, Internet of Things (IoT) • Sales & Marketing, Unternehmenskommunikation Relevante berufsbezogene Fertigkeiten wie Korrespondenz verfassen, Telefonieren, Verhandeln",
+    "literature": "wird zu Beginn der Lehrveranstaltung bekannt gegeben",
+    "additional_notes": "Modulsprache: Das Modul wird auf Englisch angeboten",
+    "room_requirements": null,
+    "applicability": "| Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      14,
+      15,
+      16
+    ]
+  },
+  {
+    "module_number": "B07",
+    "title": "Mikroökonomik der digitalen Wirtschaft / Microeconomics of the Digital Economy",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden beherrschen mikroökonomische Grundbegriffe und Zusammenhänge (Knappheit, Güter, Funktionsweise von Märkten) und sind in der Lage, die jeweiligen Besonderheiten bezüglich der digitalen Wirtschaft zu beschreiben. Dabei geht es insbesondere um die Bedeutung von Marktzutrittsschranken, Netzwerkeffekten und Eigentumsrechten. Sie kennen Ziele und Instrumente der Wirtschaftspolitik, die für die digitale Wirtschaft von besonderer Relevanz sind (Wettbewerbspolitik, Innovationsförderung, Verbraucherschutz). Ferner können sie die zunehmende gesamtwirtschaftliche Bedeutung der digitalen Wirtschaft einschätzen sowie Branchenstruktur und Strukturwandel innerhalb der Branche analysieren. Sie können aktuelle Probleme der digitalen Wirtschaft unter Bezug auf die jeweils relevanten ökonomischen Theorien oder Konzepte kontrovers diskutieren. Die Zusammenhänge zu betriebswirtschaftlichen und anderen Modulen des Studiengangs sind erkannt.",
+    "prerequisites": "Empfehlung: Mathematische Grundlagen der Betriebswirtschaft",
+    "level": "2. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Klausur (90 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen: Knappheit, Güter, Arbeitsteilung Märkte und Preise: • Haushaltstheorie (Nachfrage) • Unternehmenstheorie (Angebot) • nachfrageseitige und angebotsseitige Größenvorteile • Zusammenspiel von Angebot und Nachfrage auf traditionellen Märkten sowie auf digitalen Märkten • Marktformen und Preisbildung Zur Rolle des Staates auf (digitalen Märkten): • Marktversagen und Staatsversagen • Wettbewerb • Wettbewerbsbeschränkungen und Wettbewerbspolitik • Innovationsförderung • Verbraucherschutz Akteure der digitalen Wirtschaft • Unternehmen • Verbände • Politik Branchenstruktur (inkl. Datenquellen)",
+    "literature": "Mankiw, N. G.: Grundzüge der Volkswirtschaftslehre. Schaeffer Poeschel. Peters, R.: Internet-Ökonomie. Springer. Suntum, U. van: Die unsichtbare Hand: Ökonomisches Denken gestern und heute. Springer. Varian, H.R. et. al.: The Economics of Information Technology. Cambridge.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      16,
+      17,
+      18
+    ]
+  },
+  {
+    "module_number": "B08",
+    "title": "Angewandtes Rechnungswesen / Financial Management and Accounting",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Externes Rechnungswesen: Die Studierenden sind in der Lage, ein Kleinstunternehmen buchhalterisch abzubilden und die notwendigen Informationen für das Finanzamt bzw. (bei Bilanzpflicht) für den Steuerberater bereit zu stellen. Den Nutzwert von spezieller Buchhaltungssoftware kennen sie und sie haben beispielhaft ein Buchhaltungssystem bedient. Sie können Buchhaltungsauswertungen lesen und verstehen. Die Aufgabe von Wirtschaftsprüfern ist ihnen bekannt. Sie wissen welche Steuerarten für Unternehmer relevant sind. Internes Rechnungswesen: Die Studierenden wissen, wie das interne Rechnungswesen aufgebaut ist, welche Verknüpfun- gen zum externen Rechnungswesen bestehen und welche Bedeutung es für eine erfolgreiche Unternehmensführung hat.",
+    "prerequisites": "Empfehlung: Grundlagen der Betriebswirtschaftslehre Empfehlung: Mathematische Grundlagen der Betriebswirtschaft",
+    "level": "2. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: 100 % Klausur (90 min–180 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "System des betrieblichen Rechnungswesens • Grundbegriffe und Grundzüge ordnungsgemäßer Buchführung • Internes und externes Rechnungswesen • Organisation des betrieblichen Rechnungswesens Finanzbuchhaltung • Inventur, Grundlagen Bilanzierung • Umsatzsteuer, Umsatzsteuervoranmeldung, Umsatzsteuererklärung • Einkommenssteuer, Einkommenssteuererklärung, Einnahme-Überschussrechnung, Bilanz und GuV • Abschreibungen • Kontenpläne • Buchhaltungssoftware Internes Rechnungswesen • Funktion und Abgrenzung",
+    "literature": "Nickenig, K.; Wesselmann, C.: Angewandtes Rechnungswesen. Eine Einführung in die manuelle und EDV- gestützte Buchführung. Springer.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      18,
+      19,
+      20
+    ]
+  },
+  {
+    "module_number": "B09",
+    "title": "Statistik für die digitale Wirtschaft Statistics for the Digital Economy",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Mathematisch-naturwissenschaftliche Grundlagen",
+    "learning_objectives": "Die Studierenden kennen grundlegende Begriffe und Methoden zur statistischen Datenanalyse. Sie können einfache statistische Analysen selbst durchführen und die Ergebnisse präsentieren. Sie sind mit der Zielstellung der induktiven Statistik vertraut und können Begriffe wie Signifikanz richtig interpretieren.",
+    "prerequisites": "Empfehlung: Mathematische Grundlagen der Betriebswirtschaft",
+    "level": "2. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis 100 % Klausur (90 min–120 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Deskriptive Statistik • Datenerhebung und Datenaufbereitung, Merkmalstypen • Deskription einzelner Merkmale: absolute und relative Häufigkeitsverteilung, grafische Darstellungen (Balkendiagramm, Kreisdiagramm, Boxplot, Histogramm), Kennzahlen (Lage- und Streuungsmaße wie Mittelwert, Median, Modus, Varianz, Interquartilsabstand, Spannweite) • Zusammenhang zweier oder mehrerer Merkmale: Kontingenztafeln und geeignete Kennzahlen, Korrelationskoeffizienten (Bravais-Pearson, Spearman), einfache lineare Regression, grafische Darstellungen (mehrdimensionale und gestapelte Balkendiagramme, Streudiagramme) • Konzentrationsmaße (Lorenzkurve und Ginikoeffizient), Indexzahlen (Preis-, Mengen- und Umsatzindizes) Konzepte der induktiven Statistik • elementare Einführung in die Wahrscheinlichkeitsrechnung • Zufallsvariable als theoretisches Modell für empirische Merkmale, Konzept der Parameter- und Intervallschät- zung sowie der statistischen Hypothesentests • Hypothesentests an konkreten Beispielen: Interpretation der Ergebnisse von Unabhängigkeitstests in Kontingenztafeln, Mittelwertvergleiche, Signifikanz der Parameter im linearen Regressionsmodell Die Inhalte der Lehrveranstaltung werden nach Möglichkeit anhand von Anwendungsbeispielen in einer Tabellenkalkula- tion (MS Excel) illustriert.",
+    "literature": "Fahrmeir, L.; Künstler, R.: Pigeot, I.; Tutz, G.: Statistik - Der Weg zur Datenanalyse. Springer. Zucchini, W.; Schlegel, A.; Nenadic, O., Sperlich, S.: Statistik für Bachelor-und Masterstudenten. Springer.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      20,
+      21,
+      22
+    ]
+  },
+  {
+    "module_number": "B10",
+    "title": "Dienstleistungsmarketing / Service Marketing",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Grundlagen des Dienstleistungsmarketings und die Besonderheiten bei der Vermarktung von Dienstleistungen als eigenständige Marktleistung. Sie verstehen den Marketingmix und die möglichen Strategien für die erfolgreiche Marktbearbeitung. Die Studierenden können einen Marketingplan für eine Dienstleistung formulieren. Ausgewählte Modelle des Service Designs sollen die Studierenden operationalisieren und auf konkrete Beispiele übertragen können. Die Arbeit in Kleingruppen stärkt die sozialen Kompetenzen.",
+    "prerequisites": "Empfehlung: Grundlagen der Betriebswirtschaftslehre",
+    "level": "2. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweis: 40 % Multiple Choice (30 min) Abschließender Leistungsnachweis 60 % Projektbericht (Gruppenarbeit, 10 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Definitorische Grundlagen des Marketings Begriff der Dienstleistung und des Dienstleistungsmarketings Produktion von Dienstleistungen Kaufverhalten und Marktforschung Strategisches Dienstleistungsmarketing Qualitätsmanagement Operatives Dienstleistungsmarketing Ausgewählte Instrumente des Service Designs (z.B. Business Blueprinting, Persona)",
+    "literature": "Meffert, H.; Bruhn, M.: Dienstleistungsmarketing. Gabler. Bruhn, M.; Hadwich, K. [Hrsg.]: Dienstleistungsmanagement und Social Media: Potenziale, Strategien und Instrumente. Springer Gabler. Mager, B.; Gais, M.: Service Design. UTB. Pruitt, J.; Adlin, T.: The Persona Lifecycle: Keeping People in Mind throughout Product Design. Elsevier. Stickdorn, M.; Schneider, J.: This is Service Design Thinking. BIS Publishers.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      22,
+      23,
+      24
+    ]
+  },
+  {
+    "module_number": "B11",
+    "title": "Modellierung von Geschäftsprozessen und Diensten / Modeling of Business Processes and Services",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen den Begriff des Geschäftsprozesses und sind in der Lage, Geschäftsprozesse zu identifizieren. Abläufe von geschäftlichen Aktivitäten und Interaktionen zwischen Akteuren können mit dafür geeigneten Notationsformen für Geschäftsprozesse, z. B. der BPMN, beschrieben werden. Diese können im Hinblick auf Defizite analysiert und Optimierungsvarianten vorgeschlagen werden. Das Konzept des \"Dienstes\"/\"Services\" ist bekannt und die für die Umsetzung von Geschäftsprozessen erforderlichen Dienste können identifiziert werden. Die zu verwendenden bzw. zu empfangenden Daten können identifiziert und modelliert werden. Die Studierenden kennen Softwarelösungen für die Reali- sierung von Diensten und können für eine gegebene Aufgabenstellung geeignete Softwarekomponenten identifizieren und aus einer Ausführungsumgebung für Geschäftsprozesse aufrufen. Geschäftsprozessmodelle können unter Verwendung existierender Softwarelösungen ausgeführt werden. Einsatzmöglichkeiten von Geschäftsregeln in Prozessen und Softwarelösungen zur Modellierung und Auswertung von Geschäftsregeln sind bekannt und können angewendet werden.",
+    "prerequisites": "Empfehlung: Einführung in Softwaretechnologien",
+    "level": "2. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Laborübung in Gruppenarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Übungen, ggf. in Gruppen, mit Rücksprachen Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Geschäftsprozesse und Workflows • Geschäftsprozessanalyse • Geschäftsprozessmodellierung mit BPMN und/oder anderen Beschreibungssprachen • Geschäftsprozessmanagement und -optimierung Geschäftsprozesse und Dienste • Softwarearchitekturkonzepte für Dienste • Modellierung von Diensten und Datenmodellierung für Dienste • \"Human Tasks\" für nicht automatisierbare Aktivitäten Ausführung von Geschäftsprozessen • Softwarelösungen zur Ausführung von Geschäftsprozessen • Zugriff auf Dienste aus Geschäftsprozessen • Modellierung und Ausführung von Geschäftsregeln",
+    "literature": "Rosenkranz, F.: Geschäftsprozesse: Modell- und computer- gestützte Planung. Springer. Gadatsch, A.: Grundkurs Geschäftsprozessmanagement. Vieweg. Freund, J.; Rücker, B.: Praxishandbuch BPMN 2.0. Hanser. Krafzig, D. et al.: Enterprise SOA - Best Practices für Serviceorientierte Architekturen - Einführung, Umsetzung, Praxis. Mitp.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      24,
+      25,
+      26
+    ]
+  },
+  {
+    "module_number": "B12",
+    "title": "Empirische Forschungsmethoden / Empirical Research Methods",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachübergreifende Grundlagen",
+    "learning_objectives": "Studierende besitzen einen Überblick über Methoden und Vorgehensweisen in der empirischen Sozialforschung. Sie sind in der Lage, • Fragestellungen zu konkretisieren, • eine empirische Erhebung systematisch zu planen, • geeignete Datenerhebungsmethoden (vor allem Interviews, Fragebögen, systematische Beobachtun- gen) auszuwählen bzw. sie selbständig zu entwickeln, • eine Erhebung durchzuführen, • die Ergebnisse in angemessener Form aufzubereiten, auszuwerten, darzustellen und zu interpretieren.",
+    "prerequisites": "Empfehlung: Statistik für die digitale Wirtschaft",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 40 % Präsentationen Gruppenarbeiten Abschließender Leistungsnachweis: 60 % Klausur (60 min–120 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Planung empirischer Untersuchungen Stichprobenauswahl Datenerhebungsmethoden (vor allem Interviews, Fragebögen, systematische Beobachtungen) Mögliche Fehlerquellen bei empirischen Untersuchungen sowie ihre Vermeidung bzw. Reduzierung Datenaufbereitung,-auswertung und-interpretation",
+    "literature": "Beller, S.: Empirisch forschen lernen – Konzepte, Methoden, Fallbeispiele, Tipps. Huber. Diekmann, A.: Empirische Sozialforschung – Grundlagen, Methoden, Anwendungen. Rowohlt. Atteslander, P.: Methoden der empirischen Sozialforschung. Erich Schmidt Verlag.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      26,
+      27,
+      28
+    ]
+  },
+  {
+    "module_number": "B13",
+    "title": "Unternehmensführung und Geschäftsmodellentwicklung Management and Business Modeling",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden begreifen Grundbegriffe, wesentliche Herausforderungen und Ziele der Unternehmensführung. Dabei werden sie in die Lage versetzt, sich kritisch mit dem Beruf des Managers und der spezifischen Verantwortung des Managements auseinanderzusetzen. Die Studierenden verstehen grundlegend die funktionsübergreifenden sach- und personenbezogenen Steuerungsprozesse der Unternehmung. Sie können relevante strategische Management- und Organisationskonzepte modellhaft entwickeln und an praktischen Fallbeispielen diskutieren. Die Studierenden kennen die wesentlichen Elemente eines Geschäftsmodells und können Unternehmen verschiedener Branchen und verschiedener Größen hinsichtlich ihres Geschäftsmodells beschreiben. Sie können einzelne Geschäftsmodelle vertieft analysieren und dabei über ein konkretes Beispiel hinaus Grundregeln erfolgreicher Geschäftsmodelle ableiten.",
+    "prerequisites": "Empfehlung: Grundlagen der Betriebswirtschaftslehre Empfehlung: Mikroökonomik der Digitalen Wirtschaft",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt, gilt folgende Prüfungsform: Teilleistungsnachweis 75 % Projektbericht (Gruppenarbeit, 30 Seiten) Abschließender Leistungsnachweis 25 % Hausarbeit (5 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Integratives Management als Querschnittsfunktion Aktuelle und historische Entwicklung der Unternehmensführung Management als Beruf und Managementverantwortung Strategisches Management und Grundmodelle der Aufbauorganisation Grundlegende Formen und Muster von Geschäftsmodellen Strukturierte Darstellung und beispielhafte Entwicklung neuer Geschäftsmodelle - Kreativitätstechniken Erfolgsfaktoren bei der Entwicklung und Implementierung innovativer Geschäftsmodelle",
+    "literature": "Hungenberg/Wulf: Grundlagen der Unternehmensführung, Springer-E-Book Gassmann, O., Frankenberger, K., & Csik, M.: Geschäftsmodelle entwickeln. München: Carl Hanser Verlag. Malik, F.: Führen - Leisten - Leben. Wirksames Management für eine neue Zeit. Schallmo, D.: Geschäftsmodelle erfolgreich entwickeln und implementieren. Mit Aufgaben und Kontrollfragen.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      28,
+      29,
+      30
+    ]
+  },
+  {
+    "module_number": "B14",
+    "title": "Agile Project Management / Agiles Projektmanagement",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die theoretisch-methodischen Grundlagen des agilen Projektmanagements und können agiles Projektmanagement als einen methodischen Ansatz einordnen und mit anderen Projektmanagementansätzen vergleichen. Die Studierenden haben einen Gesamtüberblick über die zentralen Frameworks, Methoden, Instrumente und Anwendungsgebiete vom agilen Projektmanagement in der betriebswirtschaftlichen Praxis. Sie können die Methoden, Instrumente und Entscheidungs- hilfen des agilen Projektmanagements in der Praxis unter Berücksichtigung agiler Werte und Prinzipien anwenden. Die Studierenden sind in der Lage, Projekte nach dem agilen Ansatz zu planen, durchzuführen, die Ergebnisse auszuwerten und zu präsentieren.",
+    "prerequisites": "Empfehlung: B1 Englischkenntnisse nach CEFR",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht mit integrierter Projektarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis (Gruppenarbeit): 50 % Präsentation (15 min) 50 % Projektbericht (10 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Projektmanagement im Wandel: • Ziele, Aufgaben und Methoden des Projektmanagements • Merkmale und Arten von Projekten mit Blick auf die digitale Wirtschaft • Projektleitung im digitalen Zeitalter IT-Projektmanagement • Lasten- und Pflichtenheft an einem Beispiel Agiles Projektmanagement: • Entstehungsgeschichte und Hintergründe • Agile Werte, Denkweise und Prinzipien • Projektorganisation und Projektphasen im Vergleich (klassisch vs. agil) • Scrum und Kanban als Projektmanagement- Frameworks • Requirements Engineering als Projektmanagementaufgabe • Agile Raum- und Arbeitskonzepte, z.B. Open Space • Durchführung und Erfolgsmessung von agilen Projekten • Erfolgsfaktoren und Risikomanagement bei agilen Projekten Verteilte Teams: • Neue Zusammenarbeitsformen in der digitalen Wirtschaft • Besonderheiten der Kooperation in verteilten Teams • Kulturelle, technische und organisatorische Herausforderungen verteilter Teams",
+    "literature": "Wysocki, R. K.: Effective Project Management: Traditional, Agile, Extreme. Wiley. Pichler, R.: Agile Product Management with Scrum: Creating Products That Customers Love. Addison Wesley. Cohn, M.: Agile Estimating and Planning. Pearson.",
+    "additional_notes": "Das Modul wird auf Englisch angeboten. In Ausnahmefällen kann der Fachbereichsrat beschließen, das Modul auf Deutsch anzubieten.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      30,
+      31,
+      32
+    ]
+  },
+  {
+    "module_number": "B15",
+    "title": "Controlling / Management Accounting",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden beherrschen die Ziele und ausgewählte Aufgabenstellungen des internen Rechnungswesens und des Controllings und erkennen dessen Stellenwert für eine erfolgs- und liquiditätsorientierte Unternehmensführung. Aufbauend auf diesem Grundlagenwissen verfügen die Studierenden über das Wissen vom anwendungsorientierten Umgang moderner Controlling-Instrumente anhand von praxistypischen Beispielen. Sie sind in der Lage, deren Aussagefähigkeit kritisch zu beurteilen. Zudem beherrschen sie z.B. Excel-Techniken als auch Fähigkeiten wie ganzheitliches und vernetztes Denken, Komplexitätsbewältigung und Teamgeist.",
+    "prerequisites": "Empfehlung: Grundlagen der Betriebswirtschaftslehre Empfehlung: Mathematische Grundlagen der Betriebswirtschaft Empfehlung: Angewandtes Rechnungswesen",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht und Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Fallbeispiel (Gruppenarbeit) mit Rücksprachen Abschließender Leistungsnachweis:",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Ziele und Aufgaben des Controllings Einführung in die Kosten- und Erlösrechnung (z.B. Kostenarten-, Kostenstellen-, Kostenträgerstück- und –zeit- rechnung). Ausgewählte strategische Controlling-Instrumente (z.B. Portfolio-Analyse, Kennzahlen-Bewertungen, SWOT-Analyse, Balance Score Card (z.B. mit Excel-Übungen)) Ausgewählte operative Controlling-Instrumente (z.B. Target Costing, spezielle Anwendungen der Deckungsbeitragsrechnung) Berichtswesen (z.B. Excel-Übungen) Marketing-und Vertriebscontrolling (z.B. Web-Controlling)",
+    "literature": "Becker, W., Holzmann, R.: Kosten-, Erlös- und Ergebnisrechnung. Einführung für Bachelor-Studierende, Springer. Horváth, P.: Controlling. Vahlen. Jekel, N.: Speed Reading für Controller und Manager. Wiley- Verlag. Lingau, V.; Schmitz, H.: Kosten- und Erlösrechnung. Springer. Reichmann, T.: Controlling mit Kennzahlen und Managementberichten. Vahlen. Taschner, A.: Management Reporting. Springer-Gabler. Weber, J.: Einführung in das Controlling, Gabler.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      32,
+      33,
+      34
+    ]
+  },
+  {
+    "module_number": "B16",
+    "title": "Human Computer Interaction / Human Computer Interaction",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Bedeutung des Faktors Mensch in der Mensch-Computer-Interaktion und können Interaktionen benutzerorientiert gestalten. Dazu kennen sie die relevanten kognitiven und Wahrnehmungsfähigkeiten des Menschen, können Gestaltungsgrundsätze und Interaktionsmodelle konstruktiv und analytisch einsetzen und beherrschen die Grundtechniken des zielgruppen- und endgerätespezifischen Usability Engineering. Sie wissen um den Stellenwert der Usability im Online- Business, kennen die wichtigsten Messgrößen für den Online- Erfolg und Methoden zur Ermittlung und Verbesserung der Usability Experience. Sie haben sich mit klassischen und neuen Interaktionspara- digmen auseinandergesetzt und kennen die wichtigsten Regelungen aus Gesetzen und Normen.",
+    "prerequisites": "Empfehlung: Einführung in Softwaretechnologien",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Laborübung, teilw. in Gruppenarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Übungen mit Rücksprachen Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Software-Ergonomie, Usability und User-Experience Physische Benutzerfähigkeiten und Barrieren Wahrnehmung, Gedächtnis und Kognition Benutzeranalyse, Benutzermodellierung und User-Centered- Design Gestaltungsgrundsätze für Benutzungsschnittstellen, UI- Patterns Modellierung von Interaktion und Semantik Klassische und innovative Interaktionsparadigmen Gesetze und Normen Usability-Evaluation und Usability-Engineering",
+    "literature": "Stapelkamp, T.: Interaction- und Interface-Design. Springer. Sharp, R.: Interaction Design. Wiley.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "| Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      34,
+      35,
+      36
+    ]
+  },
+  {
+    "module_number": "| B 17",
+    "title": "| English in an International Context / Englisch im internationalen Kontext",
+    "credits": 5.0,
+    "workload": "| 2 SWS SU (Online) 2 SWS Ü 34 Stunden Präsenz / 34 Stunden Online-Konferenzteilnahme 82 Stunden Selbststudium",
+    "learning_area": "| Fachspezifische Grundlagen",
+    "learning_objectives": "| Fachsprachliche Kompetenzen Die Studierenden • nehmen Englisch als Lingua Franca wahr und können diesen Begriff aus der Entwicklung der englischen Sprache herleiten • vertiefen das Fachvokabular zur Beschreibung von Zusammenhängen in der Digitalen Wirtschaft, z.B. zu den Themenbereichen „Internationale Kooperationen“, „Digitalisierung“, „E-Commerce“, „Recruiting“ • entwickeln ihre interkulturelle Kompetenz und können diese in internationalen Kontexten einsetzen Die Studierenden können zudem • englischsprachige Fachtexte (z.B. Blog oder Website) kommentieren, diskutieren und zusammenfassen • fachrelevante Texte (z.B. Berichte) und professionelle Bewerbungen selber erstellen • ausgewählte grammatische Regeln weitgehend fehlerfrei anwenden • englischsprachige Hör-/Videoübungen mit muttersprachlichen Varianten und non-nativen Akzenten bearbeiten • sprachliche Aufgaben mit digitalen Hilfsmitteln bewältigen Fachübergreifende Kompetenzen Die Studierenden sind in der Lage, • gestellte Aufgaben/Projekte mit Partnern oder in Arbeitsgruppen (auch online) zu lösen und die Lösungen zu präsentieren. („Kooperationsfähigkeit“) • neuere Forschungen bzw. Trends aus dem Bereich der Digitalen Wirtschaft kritisch zu reflektieren, zu diskutieren und eigene Positionen mit Hinblick auf das",
+    "prerequisites": "Empfohlen: B1 Englischkenntnisse gemäß Gemeinsamen Europäischem Referenzrahmen (GER)",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Einzelarbeit mit Einreichaufgaben und Online-Konferenzen Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Übung: 100% Klausur Voraussetzung für die Zulassung zur Prüfung bzw. für die Wirksamkeit der Modulnote: Abgabe von sechs Einreichaufgaben",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Themen aus dem Bereich der Digitalen Wirtschaft und der Informatik anhand konkreter fachbezogener Inhalte wie z.B.: • Globalisierung, die sich ändernde Rolle des Internets, internationale Wirtschaftsbeziehungen • E-Commerce • Internationale Kooperationen • Digitalisierung im internationalen Vergleich • Digitale Arbeitswelten • Relevante berufsbezogene Fertigkeiten wie international verhandeln, Ideen/Projekte präsentieren",
+    "literature": "wird zu Beginn der Lehrveranstaltung bekannt gegeben",
+    "additional_notes": "Modulsprache: Das Modul wird auf Englisch angeboten",
+    "room_requirements": null,
+    "applicability": "| Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      36,
+      37,
+      38
+    ]
+  },
+  {
+    "module_number": "B18",
+    "title": "Projektseminar Marketing / Project Seminar on Marketing",
+    "credits": 5.0,
+    "workload": "2 SWS Ü 34 Stunden Präsenz 116 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden können für ein ausgewähltes Fallbeispiel konkrete Analysen und Handlungsempfehlungen durchführen: Sie verstehen die Instrumente des Dienstleistungsmarketings zielorientiert zu gestalten, um eine selbst definierte Marketingstrategie umzusetzen. Dabei können die Studierenden Primärdaten gewinnen, Sekundärdaten kritisch prüfen, um schließlich auch Handlungsempfehlungen für ein umsetzungsstarkes Dienstleistungsmarketingkonzept zu formulieren. Da die Formulierung des Konzepts auf aktuellen Forschungsergebnissen beruhen soll, wird in diesem Modul auch das wissenschaftliche Arbeiten geübt. Durch die Arbeit in Teams vertiefen die Studierenden ihre sozialen Kompetenzen. Durch die Ausformulierung einer Marketingstrategie und Präsentation derselben werden wissenschaftliches Schreiben und Präsentationskompetenzen geschult.",
+    "prerequisites": "Empfehlung: Dienstleistungsmarketing",
+    "level": "3. Studienplansemester",
+    "teaching_form": "Projektseminar",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Präsentationen mit Rücksprachen (Gruppenarbeit) Abschließender Leistungsnachweis:",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Besonderheiten von Marketingprojekten: • Einholen und Konkretisieren eines Projektauftrags • Erstellen eines Projektplans mit relevanten Aktivitäten und realistischen Zeiten • Konfliktmanagement in Projekten Formulierung von Strategien im Dienstleistungsmarketing • Marktsegmentierung • Marktforschung • Strategieoptionen • Marketingmix Umsetzung und Controlling von Marketingstrategien",
+    "literature": "Meffert, H.; Bruhn, M: Dienstleistungsmarketing. Gabler. Bruhn, M.; Hadwich, K. [Hrsg.]: Dienstleistungsmanagement und Social Media. Springer-Gabler. Meffert, H.; Burmann, Ch.; Kirchgeorg, M.: Marketing - Grundlagen marktorientierter Unternehmensführung. Gabler. Kotler, Ph.; Armstrong, G.; Wong, V.; Saunders, J.: Grundlagen des Marketings. Pearson. Kuckartz, U.: Qualitative Inhaltsanalyse - Methoden, Praxis, Computerunterstützung. Beltz Juventa. Pattloch, A.:",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich. Das Modul wird als Projektseminar durchgeführt. Inhaltlicher Bezug sind die Module \"Dienstleistungsmarketing\" und „Empirische Forschungsmethoden“ im 2. Studienplan- semester.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      38,
+      39,
+      40
+    ]
+  },
+  {
+    "module_number": "B19",
+    "title": "Grundlagen des Wirtschaftsrechts / Introduction to Business Law",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Grundlagen des Bürgerlichen Rechts, des Handels- und des Gesellschaftsrechts. Sie haben die Schnittstellen zwischen der praktischen betriebswirtschaftlichen Tätigkeit und den genannten Rechtsgebieten erkannt. Sie haben einen Sinn dafür bekommen, wann es zweckmäßig ist, juristische Fachleute in den betriebswirtschaftlichen Entscheidungsprozess einzubeziehen.",
+    "prerequisites": "keine",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Klausur (90 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Recht des Kaufmanns, GmbH, Aktiengesellschaft, BGB- Gesellschaft, Offenen Handelsgesellschaft und Kommanditgesellschaft. Grundlagen des Schuldrechts, Sachenrechts, Handels- und Gesellschaftsrechts. Vertiefungen zu: • Einzelne Vertragstypen (Kauf-, Werk-, Darlehens- und Sicherungsverträge etc.), • Zustandekommen von Verträgen, • Werkvertragsrecht inkl. Mangelbegriff am Beispiel von Anforderungen im Lasten- oder Pflichtenheft; • Besonderheiten bei Vertrieb von Waren und Lizenzen im Netz, • Abtretung von Forderungen, • Erwerb des Eigentums an beweglichen und unbeweglichen Sachen, • Grundschuld und Hypothek. Arbeitsvertragsrecht • Zustandekommen und Inhalt des Arbeitsvertrages einschl. Antidiskriminierungsrichtlinie Das Familien- und Erbrecht des BGB wird nur insoweit herangezogen als es notwendig ist, um Rechtsfragen des Wirtschaftsrechts, insbesondere solche der Unternehmens- gründung, zu verstehen.",
+    "literature": "Führich, E.: Wirtschaftsprivatrecht. Vahlen. Brox, H.; Walker, W.-D.: Allgemeiner Teil des BGB. Vahlen. Klunzinger, E.: Grundzüge des Gesellschaftsrechts. Vahlen. Nörr, K.; Scheyhing, R.; Pöggeler, W. [Hrsg.]: Sukzessionen. Forderungszession, Vertragsübernahme, Schuldübernahme. Mohr-Siebeck.",
+    "additional_notes": "Das Modul wird auf Deutsch angeboten.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      40,
+      41,
+      42
+    ]
+  },
+  {
+    "module_number": "B20",
+    "title": "Entrepreneurship und Businessplan Entrepreneurship and Business Plan",
+    "credits": 5.0,
+    "workload": "2 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden kennen die Geisteshaltung und konkrete Beispiele von Persönlichkeiten, die als selbständige Unter- nehmerinnen und Unternehmer oder als Verantwortliche für Innovationen in Unternehmen neue, disruptive Produkte und Prozesse entwickelt haben. Sie wissen um die Bedeutung von Innovationen und kennen Umfeldbedingungen (Ressourcen, Räume, Methoden), die Entrepreneurship fördern oder bremsen. Sie wissen um die Bedeutung der Zusammensetzung eines Gründerteams und können sich selbst und Dritte hinsichtlich ihrer Stärken und Schwächen einschätzen. Sie erkennen Varianten und Verbesserungsmöglichkeiten im Geschäftsmodell und können erste grobe Ideen verfeinern. Sie wissen um Fördermöglichkeiten und können, angepasst auf die gewählte Fördergebervariante, notwendige Unterlagen (Businessplan), Gespräche und Präsentationen (Pitch) vorbereiten und durchführen.",
+    "prerequisites": "Empfehlung: Grundlagen der Betriebswirtschaftslehre Empfehlung: Agile Project Management",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: 20 % Pitchpräsentation 80 % Businessplan",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Innovation als Managementaufgabe im Digital Business • Begriff / Abgrenzung Investition • Technologie-, F+E- und Innovationsmanagement • Innovationsmanagement • Widerstände gegen Innovationen • Bedeutung von Promotoren und Entrepreneuren Grundlagen des Entrepreneurship • Bedeutung, Schlüsselelemente • Typische Beispiele Ausgewählte Vorgehensmodelle des Entrepreneurship, z.B. • Klassische vs. agile Managementmethoden • Business Model Canvas • Customer Development • Lean Startup Methoden zur Entwicklung einer Geschäftsidee • Partnersuche / Kontaktbörsen • Kreativitätsmethoden Persönliche Voraussetzungen Schutz Geschäftsideen: Methoden (Gebrauchsmuster, Patente, Verschwiegenheitserklärungen, LOIs) und kritische Reflektion Bedeutung des Pivotings Businessplanerstellung • Produkt- und Dienstleistung / Kundennutzen und Alleinstellungsmerkmale • Preismodelle und Monetarisierung • Unternehmerteam, Kompetenzen, Personal • Markt, Wettbewerb und Stakeholder • Marketing und Vertrieb • Unternehmensstruktur und Organisation • Realisierungsfahrplan • Chancen und Risiken • Finanzplan und Finanzierung Möglichkeiten der Unterstützung bei Existenzgründungen Ansätze zur Kommunikation mit verschiedenen Stakeholdern Präsentation vor Stakeholdern",
+    "literature": "Fuegliestaller, U. et al.: Entrepreneurship. Springer-Gabler. Vahs, D.; Brem, A.: Innovationsmanagement. Von der Idee zur erfolgreichen Vermarktung. Schäffer Poeschel. Kollmann, T.: E-Entrepreneurship: Grundlagen der Unternehmensgründung in der Net Economy Osterwalder, A./Pigneur, Y.: Business Model Generation. Campus. Ries, E.: Lean Startup. Redline. Nagl, A.: Der Businessplan. Geschäftspläne professionell erstellen. Springer.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      42,
+      43,
+      44,
+      45
+    ]
+  },
+  {
+    "module_number": "B21",
+    "title": "Supply Chain Management / Supply Chain Management",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden haben die Grundgedanken und die Ziele der Logistik und des Supply Chain Management verinnerlicht. Sie haben ein Verständnis für den Supply Chain Management Begriff entwickelt und sind in der Lage Zusammenhänge zu anderen Bereichen der Betriebswirtschaftslehre zu beurteilen. Die Studierenden haben Überblick über die wesentlichen Aspekte logistischer Vorgänge und Systeme. Insbesondere sind sie in der Lage reale Systeme und Prozesse der Supply Chain in den Bereichen Beschaffung, Produktion und Distribution zu verstehen, zu analysieren, zu beurteilen und ggf. zu verbessern. Die Studierenden haben ein Verständnis gewonnen für ganzheitliche Supply Chains. Sie kennen Konzepte und Methoden zur strategischen und taktischen Gestaltung einer Supply Chain und können diese anwenden.",
+    "prerequisites": "keine",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übung Projektarbeit in Gruppen",
+    "status": "Pflichtmodul",
+    "frequency": "jedes Semester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Übungen mit Rücksprachen Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen der Logistik Grundlagen des Supply Chain Management Supply Chain und Netzwerk Design Beschaffungs- und Distributionslogistik Methoden und Verfahren zur Disposition Lager und Kommissionierung Transportoptimierung und Tourenplanung Grundlagen und Trends der Handelslogistik Methoden und Verfahren zur Bewertung von Beständen",
+    "literature": "Schulte, C.: Logistik: Wege zur Optimierung der Supply Chain. Vahlen. Heiserich, O.; Helbig, K.; Ullmann, W.: Logistik: Eine Praxisorientierte Einführung. Gabler. Gudehus, T.: Logistik: Grundlagen - Strategien – Anwendungen. Springer. Ehrmann, H.: Logistik. NWBVerlag Werner, H.: Supply Chain Management: Grundlagen, Strategien, Instrumente und Controlling. Springer-Gabler. Chopra, S.: Supply Chain Management. Prentice Hall. Eßig, M.; Hofmann, E.; Stölzle, W.: Supply Chain Management. Vahlen.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      45,
+      46
+    ]
+  },
+  {
+    "module_number": "B22",
+    "title": "Business Intelligence / Business Intelligence",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Basis von Business-Intelligence- Anwendungen: Datenbanken und Data Warehouses. Die Vorgehensweise zur Erstellung und der konkreten Nutzung eines Datenbanksystems und der dabei zu beachtenden Regeln sind bekannt. Für die Nutzung im Rahmen von Business-Intelligence- Projekten kennen die Studierenden die grundsätzlichen Verfahren sowie die Möglichkeiten und Grenzen aus technischer Sicht. Erste Analysen können selbst entworfen und durchgeführt werden.",
+    "prerequisites": "Empfehlung: Mathematische Grundlagen der Betriebswirtschaft Empfehlung: Englisch für die Digitale Wirtschaft",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Übungen als Gruppenarbeiten Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundbegriffe und Aufgaben von Datenbankverwaltungssystemen • Grundlagen der Datennutzung, Datenpflege und Datenauswertung • Grundlagen Relationaler Datenbanken `o`Tabellarische Strukturierung von Informationen, Relationen `o`Grundlagen SQL, Aggregation, Verbund, Schlüsselkonzept `o`Technische Modellierung, Normalisierung, Integrität • Datenqualität Betriebswirtschaftliche Modellierung und Analyse mit Datenbanken • Geschäftsprozesse (OLTP) und operationale Transaktionssysteme • Geschäftsanalyse (OLAP) und analytische Informationssysteme • Data-Warehouse (DWH) und Data-Mart • Data Mining und Maschinelles Lernen • Reporting und Dashboards Schichten von Business Intelligence • Bereitstellung • Analyse • Präsentation Praktische Beispiele, etwa • E-Commerce und Online-Marketing • Kunden-, Produkt- und Warenkorbanalyse • Web Analytics Anwendungen z.B. in MySQL, Oracle Database, Tableau, MS Power BI",
+    "literature": "Schnider u.a., Data Warehouse Blueprints: Business Intelligence in der Praxis, Hanser. Kemper u.a., Business Intelligence - Grundlagen und praktische Anwendungen: Eine Einführung in die IT-basierte Managementunterstützung, Vieweg+Teubner Verlag. Wieken, Ernsthaft SQL verstehen: Den Standard SQL verstehen, verwenden und nachschlagen, ServiceValue Fachbücher Verlag.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      47,
+      48,
+      49
+    ]
+  },
+  {
+    "module_number": "B23",
+    "title": "Wahlpflichtmodul 1",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Im Wahlpflichtbereich vertiefen die Studierenden einzelne Aspekte des Studiums. Dies erfolgt entweder entlang einer studiengangsbezogenen Wahlpflichtliste oder anhand selbst gewählter Module in Absprache mit der Studiengangsleitung.",
+    "prerequisites": "Vgl. WP-Modulbeschreibungen",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Vgl. WP-Modulbeschreibungen",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Vgl. WP-Modulbeschreibungen",
+    "exam_form": "Vgl. WP-Modulbeschreibungen",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Vgl. WP-Modulbeschreibungen",
+    "literature": "Vgl. WP-Modulbeschreibungen",
+    "additional_notes": "Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Der/die Studierende hat ein Wahlpflichtmodul aus dem tatsächlichen Angebot zu wählen.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      49,
+      50
+    ]
+  },
+  {
+    "module_number": "B24",
+    "title": "Projektseminar Medien / Project Seminar on Digital Media",
+    "credits": 5.0,
+    "workload": "2 SWS Ü 34 Stunden Präsenz 116 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden können für ausgewählte Fallbeispiele aus der Praxis der digitalen Wirtschaft empirische Analysen durch- führen und Gestaltungskonzepte mit digitalen Medien ent- wickeln. Die Studierenden haben durch die Zusammenarbeit mit den Unternehmen der digitalen Wirtschaft praxisrelevante Erfahrungen gesammelt und neue Kontakte für die berufliche Zukunft geknüpft.",
+    "prerequisites": "Empfehlung: Grundlagen Medien Empfehlung: Agile Project Management Empfehlung: Empirische Forschungsmethoden Empfehlung: Human-Computer-Interaction",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Projektarbeit in Gruppen",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis (als Gruppenarbeit): 50 % Präsentation (15 min) 50 % Projektbericht (10 Seiten) Der Leistungsnachweis kann nur im ersten Prüfungszeitraum erbracht werden.",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Die Studierenden bearbeiten in kleinen Gruppen eine Problemstellung aus der Praxis der digitalen Wirtschaft. Sie durchlaufen dabei einen Forschungs- oder Entwicklungs- prozess mit dem Ziel, selbständig eine wissenschaftlich fundierte Lösung für die Praxis der digitalen Wirtschaft zu erarbeiten. Dabei agieren die Studierendenteams nach den Prinzipien des agilen Projektmanagements. Das Projekt beginnt mit der Entwicklung einer Forschungskonzeption und endet mit der Präsentation der Ergebnisse vor Experten aus der digitalen Wirtschaft. Ausgewählte Problemstellungen aus der Praxis der digitalen Wirtschaft, z.B.: • Digitale/Mobile Wertschöpfungs- und Distributionsketten • Digitale Wettbewerbs-, Produkt- und Preisstrategien • Digital Business Development und Online-/Mobile- Kampagnen • Digitale Aktivierungsstrategien und Incentivierungs- techniken Empirische Analysen: • Anforderungsanalysen und Anforderungsvalidierung (Requirements Engineering) • Benchmarking-Methoden, u.a. Prozess- und Produkt- Benchmarking • Wettbewerbsanalysen und Trendscouting in der digitalen Wirtschaft Gestaltungslösungen mit digitalen Medien: • Konzeption von Anwendungsszenarien • Analyse und Entwicklung von Design Patterns • Gestalten von Prototypen in Form von Mock-ups",
+    "literature": "Zerdick, A. et al.: Die Internet-Ökonomie: Strategien für die digitale Wirtschaft. Springer.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich. Das Modul wird als Projektseminar durchgeführt. Inhaltlicher Bezug ist das Modul \"Grundlagen der digitalen Medien\" im 1. Studienplansemester und \"Agile Project Management\" im 3. Studienplansemester.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      50,
+      51,
+      52
+    ]
+  },
+  {
+    "module_number": "B25",
+    "title": "Management Information Systems in Enterprises / Managementinformationssysteme in Unternehmen",
+    "credits": 5.0,
+    "workload": "2 SWS SU 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden kennen die Bedeutung und Merkmale unterschiedlicher Managementinformationssysteme im Unternehmen und können deren Rollen und Einsatzgebiete im Unternehmen nennen. Sie können systemspezifische wie auch wirtschaftliche Zusammenhänge und Auswirkungen aktueller technologischer Entwicklungen der digitalen Wirtschaft aufzeigen. Die Studierenden erlangen Fach- und Methodenkompetenzen in der Handhabung von Managementinformationssystemen. Die Studierenden sind in der Lage, transaktionale Geschäftsprozesse in einem System umzusetzen und analytische Auswertungen zu entwickeln, durchzuführen und zu bewerten. Sie gewinnen Kompetenzen, Probleme systematisch zu lösen. Die Studierenden erarbeiten Lösungen in Kooperation mit anderen Studierenden.",
+    "prerequisites": "Empfehlung: B1 Englischkenntnisse nach CEFR Empfehlung: Modellierung von Geschäftsprozessen und Diensten",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Einzelarbeit mit Einreichaufgaben und Online-Konferenzen Projektarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: 40 % Seminararbeit; 20 % Vortrag; 40 % Projektarbeit",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen von Managementinformationssystemen. Dazu gehören u. a. folgende Kategorien: • Transaktionales Geschäftsprozessmangement mit ERP-Systemen • Aggregierte Analysen mittels Business Intelligence Systemen • Zukunftsorientierte Analysen auf Basis von analytischen Informationssystemen Aktuelle technologische Entwicklungen und Schwerpunktthemen der digitalen Wirtschaft können diskutiert werden, wie z.B. • Durch die Digitalisierung sich verändernde / neue Geschäftsmodelle und -prozesse • Business Agilität und Geschwindigkeit der Reaktion auf Marktveränderungen • Innovationsmanagement in der IT und im digitalen Business Eine entsprechende Aktualisierung dieser Themen erfolgt jeweils durchden Dozenten.",
+    "literature": "Alpar, P., Alt, R., Bensberg, F., Grob, L., Weimann, P., Winter, R.: Anwendungsorientierte Wirtschaftsinformatik, Springer/ Vieweg Business & Information Systems Engineering (BISE), Springer Chamoni, P., Gluchowski, P.: Analytische Informations- systeme – Einordnung und Überblick, Springer Gabler Gluchowski, P., Chamoni, P.: Analytische Informationssysteme - Business Intelligence- Technologien und –Anwendungen, Springer Gabler Information Systems Research (ISR), informs PubsOnLine Inmon, B.: Data Lake Architecture: Designing the Data Lake and Avoiding the Garbage Dump, technics publications Journal of Management Information Systems (JMIS), Taylor & Francis Laudon, K., Laudon J.: Management Information",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      52,
+      53,
+      54,
+      55
+    ]
+  },
+  {
+    "module_number": "B26",
+    "title": "Online-Marketing / Online Marketing",
+    "credits": 5.0,
+    "workload": "2 SWS SU 2 SWS Ü (Online) 34 Stunden Präsenz / 34 Stunden Online-Konferenzteilnahme 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden haben einen Gesamtüberblick über digitale Kommunikationsinstrumente des Marketings. Sie können diese in den Vor-, Kauf- und Nachkaufprozess einordnen und ihre jeweiligen Stärken, Schwächen und Gefahren beurteilen. Die Besonderheit der messbaren Kundeninteraktion im Online-Marketing ist verstanden. Für beispielhafte Unternehmen kann ein Online-Marketing- Kommunikationsmix erstellt, begründet und mit einem Vorschlag zum Reporting präsentiert werden. Methoden zur eigenständigen Erarbeitung neuer Wissens- gebiete sind am Beispiel des Online-Marketings erprobt.",
+    "prerequisites": "Empfehlung: Statistik für die Digitale Wirtschaft Empfehlung: Dienstleistungsmarketing",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Einzelarbeit mit Einreichaufgaben und Online-Konferenzen Projektarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: SU: 100% Klausur",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Überblick Marketinginstrumente und Rolle des Online- Marketings unter Einbeziehung der jeweiligen Hilfsmittel/Tools Definition, Entwicklung und Formen, Begriffe Instrumente: • Corporate Website / Shop • Display-formate • Suchmaschinenmarketing (SEO und SEA) • E-Mail-Marketing • Affiliate-Marketing • Social-Media-Marketing • Content-Marketing • Mobile Marketing • Verknüpfung Print & Digital Strategien und Umsetzungen • Zielgruppenplanung: Klassisch, verhaltensbasiert, Targeting/Retargeting • Online-Markenführung: Branding/Image, Bekanntheit, Engagement, Brand Monitoring • Redaktionelles und journalistisches Schreiben inkl. Corporate Communication und Social Media Guidelines; Redaktionsplan • Kundengewinnung: Sales Funnels und Customer Journey Monitoring, Conversion Optimierung, Lead Generierung • Multichannel: Verzahnung Online und Offline, Tracking • Kundenbindung: Customer Lifetime Value, One2One- Marketing, Up- und Cross-Selling Marketing Automation: Tools und Techniken Marktforschung: A/B-Tests, SEA Reporting und Analyse • Kennzahlen • Erhebung • Analyse • Reporting Kompetenzen und Branchenstrukturen im Online-Marketing Make-or-Buy Entscheidung",
+    "literature": "Lammenett, E.: Praxiswissen Online-Marketing. Affiliate- und E-Mail-Marketing, Suchmaschinenmarketing, Online- Werbung, Social Media, Online-PR. Springer. Kreutzer, R. Praxisorientiertes Online-Marketing: Konzepte – Instrumente–Checklisten.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      55,
+      56,
+      57,
+      58
+    ]
+  },
+  {
+    "module_number": "B27",
+    "title": "Human Resource Management / Human Resource Management",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Grundfunktionen des Human Resource Managements (HRM) und können diese in betriebliche Gesamtzusammenhänge einordnen. Sie können personalwirtschaftliche Aufgaben in Unternehmen der digitalen Wirtschaft durch den bewussten Einsatz von Instrumenten des Personalmanagements wahrzunehmen. Sie kennen die Einsatzmöglichkeiten und Grenzen digitaler Instrumente im Human Resource Management. Sie kennen relevante Führungsaufgaben, die Einflussfaktoren auf Leistung und Motivation von Mitarbeitern und können Anreizsysteme und Führungsinstrumente auch in virtuellen Arbeitskontexten gezielt einsetzen. Sie können Instrumente des Human Resource Managements auf verschiedene Zielgruppen anwenden (Diversity- Management), Sie sind in der Lage ihre eigene Ressourcen zu gestalten und ein E-Portfolio zum Zwecke der eigenen Karriereplanung zu entwickeln.",
+    "prerequisites": "Empfehlung: Zeit- und Selbstmanagement / Präsentationstechniken",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht und Übung",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Referat (10 Seiten) Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "HRM aus Unternehmenssicht: • Einbettung und Rolle des HRM in Unternehmen der digitalen Wirtschaft • Aufgabenfelder und Instrumente des HRM in folgenden Bereichen `o` Personalplanung und -beschaffung `o` Personalauswahl `o` Personaleinführung und -einarbeitung `o` Personaleinsatz und -erhaltung: Anreizsysteme `o` Personalführung `o` Personalbeurteilung `o` Personalentwicklung `o` Personalfreisetzung In allen Aufgabenbereichen werden Spezifika digitaler Unter- nehmensstrukturen und virtueller Arbeitsformen sowie das Thema Diversity (Geschlecht, Alter und Kultur) berücksichtigt. HR aus Sicht des Individuums: • Individuelles Ressourcenmanagement • Individuelle Karriereplanung und -entwicklung • Aufbau und Pflege eines E-portfolios • Individuelles Projektmanagement • Digitale Kompetenz (Umgang mit Entgrenzung)",
+    "literature": "Holtbrügge: Personalmanagement. Berlin: Springer Schermuly, C.: New Work – gute Arbeit gestalten. Freiburg, München, Stuttgart: Haufe. Miller, D. & Volk, B. (Hrsg.): E-Portfolio an der Schnittstelle von Studium und Beruf. GMW Medien in der Wissenschaft. Waxmann",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      58,
+      59,
+      60
+    ]
+  },
+  {
+    "module_number": "B28",
+    "title": "E-Commerce / E-Commerce",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 2 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden vertiefen ihr Grundwissen über Geschäfts- modelle im Wirtschaftsbereich des Groß- und Einzelhandels und im Bereich des Direktverkaufs durch die Hersteller sowohl von haptischen als auch von digitalen Produkten und Dienst- leistungen. Internationale Wertschöpfungsketten sind an Fall- beispielen bekannt und ethische Herausforderungen reflektiert. Sie verstehen die Veränderungsdynamiken im Handel und kennen die Chancen der Verknüpfung von digitalen und stationären Beschaffungswegen. Sie wissen an Fallbeispielen um die Übergangsprobleme von stationären Konzepten zum Online-Handel und umgekehrt. Sie können die Chancen und Grenzen von Neugründungen bewerten und aktuelle Ent- wicklungen erkennen und einordnen. Sie kennen die verschiedenen Formen von IT-technischen Unterstützungssystemen zum Online-Verkauf und zur E- Logistik und können in Abhängigkeit des Unternehmens entscheiden, welche Plattform mit welchem Vernetzungsgrad geeignet ist. Eine marktübliche E-Commerce-Plattform kann bedient werden, und die verschiedenen inner- und überbetrieblichen Schnittstellen, wie z. B. zum Online- Marketing, zur Lagerverwaltung, zum E-Procurement und zur Buchhaltung, sind erkannt. Sie kennen die aktuellen Möglichkeiten, Chancen und Grenzen der Bezahlsysteme im Bereich des E-Payment.",
+    "prerequisites": "Empfehlung: Einführung in Softwaretechnologien Empfehlung: Geschäftsmodellanalyse und-entwicklung",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übungen",
+    "status": "Pflichtmodul",
+    "frequency": null,
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Präsentation, Projektbericht (Gruppenarbeit, 10 Seiten) Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Betriebswirtschaftliche Grundlagen des Handels • Handelsfunktionen • Strukturmerkmale und Betriebstypen • Handelsbetriebliche Leistungserstellung und überbetriebliche Wertschöpfungsketten • Vertriebslinien • Kennzahlensysteme und Handelscontrolling • Verhaltensabstimmung zwischen Groß- und Einzelhandelsstufe • Corporate Social Responsibility im Handel E-Commerce im Handel • Begriffliche Abgrenzungen: E-Business, E-Commerce, M-Commerce, E-Procurement, E-Shop, E-Marketplace • Geschichtliche Entwicklung, aktuelles Kaufverhalten und Trends • Formen des Online-Handels und Trend zum Cross- Channel-Handel IT- und medientechnische Grundlagen des Online-Handels • Technische Plattformen und Auswahlkriterien • Shop- und Backend-Funktionen cloudbasierter, mittlerer und komplexer E-Commerceplattformen und Integration in die betrieblichen Systeme • Medien zur Darstellung von Produkten und aktuelle Trends, wie z. B. Augmented Reality Marketing und Vertriebspolitik im Onlinehandel • Besonderheiten der Marktkommunikation im Handel • Vertiefung Produkt- und Sortimentspolitik • Vertiefung Preispolitik",
+    "literature": "Barth, K.; Hartmann, M.; Schröder, H.: Betriebswirtschaftslehre des Handels. Gabler. Heinemann, G.: Der neue Online-Handel. Geschäftsmodell und Kanalexzellenz im E-Commerce. Springer-Gabler. Heinemann, G.: No-Line-Handel. Höchste Evolutionsstufe im Multi-Channeling. Springer-Gabler. Lienbacher, E.: Corporate Social Responsibility im Handel. Springer. Heinemannn, G.: SoLoMo – Always-on im Handel. Die soziale, lokale und mobile Zukunft des Shopping. Springer- Gabler. Fost, M.: E-Commerce-Strategien für produzierende Unternehmen. Springer-Gabler.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      60,
+      61,
+      62,
+      63
+    ]
+  },
+  {
+    "module_number": "B29",
+    "title": "Wahlpflichtmodul 2",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Im Wahlpflichtbereich vertiefen die Studierenden einzelne Aspekte des Studiums entlang einer Studiengangs bezogenen Wahlpflichtliste.",
+    "prerequisites": "Vgl. WP-Modulbeschreibungen",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Vgl. WP-Modulbeschreibungen",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Vgl. WP-Modulbeschreibungen",
+    "exam_form": "Vgl. WP-Modulbeschreibungen",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Vgl. WP-Modulbeschreibungen",
+    "literature": "Vgl. WP-Modulbeschreibungen",
+    "additional_notes": "Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Der/die Studierende hat ein Wahlpflichtmodul aus dem tatsächlichen Angebot zu wählen.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      63,
+      64
+    ]
+  },
+  {
+    "module_number": "B30",
+    "title": "Digitale Wirtschaft zu Gast / Hosting the Digital Economy",
+    "credits": 5.0,
+    "workload": "2 SWS SU, 1 SWS Ü 51 Stunden Präsenz 99 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden können einzelne Geschäftsmodelle in der digitalen Wirtschaft vertieft beschreiben, die Unternehmens- geschichte recherchieren und die Unternehmensentwicklung anhand kritischer Erfolgsfaktoren analysieren. Die Analyse und Bewertung des Unternehmens kann mit den Fachbegriffen der Betriebswirtschaftslehre für eine spätere wissenschaftlich fundierte Veröffentlichung aufbereitet werden. Die Studierenden können Akteure der digitalen Wirtschaft identifizieren und mit diesen in Kontakt treten. Soziale Kompetenzen der Kontaktaufnahme sind vertieft und der Aufbau langfristiger Kooperationen erprobt. Die digitale Wirtschaft in Berlin ist hinsichtlich der wesentlichen Akteure bekannt und überregionale Kontaktchancen können genutzt werden.",
+    "prerequisites": "Empfehlung: Unternehmensführung und Geschäftsmodellentwicklung Empfehlung: Empirische Forschungsmethoden Empfehlung: Entrepreneurship und Businessplan",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Projektarbeit in Gruppen",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Anwesenheit bei allen Vorlesungen. Nur zwei Vorlesungstermine dürfen versäumt werden. Teilleistungsnachweis: 20 % Moderation einer Veranstaltung Abschließender Leistungsnachweis: 80 % Hausarbeit (Kleingruppenarbeit, 10 Seiten)",
+    "module_grade": "Siehe Studienplan.",
+    "recognized_modules": null,
+    "contents": "Bedeutung der digitalen Wirtschaft für Berlin Verbände und Organisationen der Berliner digitalen Wirtschaft Ausgewählte Unternehmen der digitalen Wirtschaft und ihre Geschäftsmodell: Die Vorlesungen werden durch wechselnde Gastreferenten der digitalen Wirtschaft, die von Studierenden angeworben und anmoderiert werden, durchgeführt. Online- Zuschaltungen sind möglich.",
+    "literature": "Gassmann, O.; Frankenberger, K.; Csik, M.: Geschäftsmodelle entwickeln: 55 innovative Konzepte mit dem St. Galler Business Model Navigator. Hanser München. Investitionsbank Berlin [Hrsg.]: Berlin aktuell. Digitale Wirtschaft – Standortanalyse im Städtevergleich IHK Berlin [Hrsg.]: Berliner IKT-Wirtschaft. Potenziale einer Zukunftsbranche. IHK Berlin [Hrsg.]: Newsletter Digitale Wirtschaft. Senatsverwaltung für Wirtschaft, Technologie und Forschung [Hrsg.]: Digitale Wirtschaft in Berlin. Gründen. Wachsen. Investieren. Internetauftritte ausgewählter Branchenverbände und Netzwerkorganisationen.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich. Das Modul wird als Projektseminar durchgeführt. Inhaltlicher Bezug ist das Modul „Entrepreneurship und Businessplan\" im 4. Studienplansemester.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      64,
+      65,
+      66
+    ]
+  },
+  {
+    "module_number": "B31",
+    "title": "Medienrecht / Media Law",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden lernen die Grundlagen des Medienrechts kennen. Sie erkennen die Schnittstellen zwischen der praktischen betriebswirtschaftlichen Tätigkeit in der digitalen Wirtschaft und den vielfältigen Aspekten des Medienrechts. Sie können typische Rechtsprobleme selbst einordnen und, in ausgewählten, praxisrelevanten Rechtsgebieten, Handlungs- optionen aus Unternehmenssicht ableiten.",
+    "prerequisites": "keine",
+    "level": "6. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Klausur (90 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Überblick relevanter rechtliche Regeln des • Medienrecht • Immaterialgüterrecht Vertiefungen rechtlicher Regeln des • Urheber- und Verlagsrecht • Lizenzmanagement • Gewerblicher Rechtsschutz (Marken, Patente) • Wettbewerbsrecht (UWG, GWB) • Strafbare und zivilrechtlich rechtswidrige Medienäußerungen und publizistische Sorgfaltspflichten • E-Commerce und Verbraucherschutzrecht • Datenschutz und Datensicherheit Materielle und prozessuale Fragen der Abmahnung.",
+    "literature": "Fechner, F.: Medienrecht. Lehrbuch des gesamten Medienrechts unter besonderer Berücksichtigung von Presse, Rundfunk und Multimedia. Mohr-Siebeck. Petersen, J.: Medienrecht. C. H. Beck. Hoeren, T.: Internet- und Kommunikationsrecht. Verlag Dr. Otto Schmidt. Zappe, Ch.: Medienrecht 2.0: Jura für Medienmacher. Christian Zappe. Paschke, M.; Berlit, W.; Meyer, C. [Hrsg.]: Hamburger Kommentar Gesamtes Medienrecht. Nomos Verlag.",
+    "additional_notes": "Das Modul wird auf Deutsch angeboten.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      66,
+      67,
+      68
+    ]
+  },
+  {
+    "module_number": "B32",
+    "title": "Learning Design / Learning Design",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz, teilweise als Online-Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Methoden der systematischen Planung, Entwicklung und Evaluation von digitalen Lernumgebungen und digitalen Lernangeboten unter Berücksichtigung der Anforderungen der digitalen Wirtschaft. Die Studierenden sind in der Lage, technologiegestützte Lernprozesse in Organisationen zu gestalten sowie zum technologiegestützten Lernen in Unternehmen der digitalen Wirtschaft zu beraten. Sie kennen verschiedene Formen von Digital Learning, u.a. E-Learning, Mobile Learning, Microlearning, und verschiedene Anwendungskontexte vom technologiegestützten Lernen, u.a. digitale Lernangebote für Kunden, Online-Lernumgebungen für verteilte Teams. Die Studierenden können eigenständig Konzepte und Gestal- tungslösungen für das Digital Learning Design entwickeln. Sie haben einen Gesamtüberblick zu Lerntheorien bezogen auf lernende Personen, lernende Gruppen und lernende Organisationen. Sie kennen die einschlägigen Methoden und Instrumente der Designentwicklung inklusive der Kreativitätstechniken und Methoden der Ideengenerierung, sowie Ansätze zur Entwicklung von innovativen Lösungen, u.a. Design Thinking.",
+    "prerequisites": "Empfehlung: Agiles Projektmanagement Empfehlung: Human-Computer-Interaction",
+    "level": "6. Studienplansemester",
+    "teaching_form": "Seminaristischer Online-Unterricht Projektarbeit in Online-Gruppen",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 40 % Übungen mit Rücksprachen Abschließender Leistungsnachweis: 60 % Hausarbeit (10 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Lernparadigmen und Lerntheorien Lernen von Personen, Gruppen, Organisationen Grundlagen von Learning Design • Learning Design als interdisziplinäres Forschungs- und Entwicklungsfeld • Instructional Design und Learning Design • Nutzerorientierte Gestaltung / User Centered Design • Digital Learning Experience und innovative Lernsysteme Entwicklung von Learning Designs • Digitale Lernmodelle, u.a. Microlearning, Blended Learning • Digitale Lernmedien, u.a. mobile Medien, soziale Medien • Design Thinking als Ansatz zur Entwicklung von innovativen Lösungen • Kreativität und Methoden der Ideengenerierung • Learning Design Patterns, Personas- und Szenario- Methoden • Ausgewählte Designansätze, u.a. Gamification, Communities of Practice Learning-Design-Management • Design-Leadership als Managementaufgabe • Planung, Implementierung und Evaluation von Projekten zum Learning Design • Qualitätsmanagement und Beratung im Learning Design",
+    "literature": "Kuhlmann, A.; Sauter, W.: Innovative Lernsysteme: Kompetenzentwicklung mit Blended Learning und Social Software. Springer. Arnold, P.; Kilian, L.; Thillosen, A.: Handbuch E-Learning: Lehren und Lernen mit digitalen Medien. W. Bertelsmann. Kerres, M.: Mediendidaktik: Konzeption und Entwicklung mediengestützter Lernangebote. Oldenbourg Wissenschaftsverlag",
+    "additional_notes": "Das Modul wird teilweise als Online-Seminar angeboten. Das Modul kann teilweise in geblockter Form durchgeführt werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich. Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      68,
+      69,
+      70,
+      71
+    ]
+  },
+  {
+    "module_number": "B33",
+    "title": "Innovationen in Technik und Wirtschaft / Innovations in Technology and Economy",
+    "credits": 5.0,
+    "workload": "4 SWS SU 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden kennen die Bedeutung technischer Entwicklungen für Veränderungen in Wirtschaft und Gesellschaft. Sie kennen Beispiele aus der Industriegeschichte. Sie können aktuelle Beispiele finden, die wesentlichen technologischen Treiber technisch beschreiben und erste Auswirkungen auf die sozialen, wirtschaftlichen und ökologischen Strukturen aus unterschiedlichen Rollen heraus (Unternehmen, Politik, Verbraucher, Bürger u.a.m.) diskutieren.",
+    "prerequisites": "Empfehlung: Unternehmensführung und Geschäftsmodellentwicklung",
+    "level": "6. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Referate",
+    "status": "Pflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Mündliches Referat: 30 % Schriftliche Ausarbeitung: 70 %",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "• Ausgewählte Beispiele von disruptiven technischen Entwicklungen in der Geschichte (von der Agrarwirtschaft zum Handwerk; vom Handwerk zur Industrie) • Ausgewählte aktuelle technische Beispiele, z.B. Blockchain, Cloud-Technologien, Internet of Things, Humanoide Robotik. • Ausgewählte Branchen mit starken Veränderungen, z.B. Agrarwirtschaft",
+    "literature": "Meckel, M.; Schmid, B. [Hrsg.]: Unternehmenskommunikation. Kommunikationsmanagement aus Sicht der Unternehmensführung. Gabler. Vahs, D.; Weiand, A.: Workbook Change Management. Schäffer Poeschel.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      71,
+      72,
+      73
+    ]
+  },
+  {
+    "module_number": "B34",
+    "title": "Studium Generale I / General Studies I",
+    "credits": 2.5,
+    "workload": "2 SWS SU oder 2 SWS Ü",
+    "learning_area": "Allgemeinwissenschaftliche Ergänzungen",
+    "learning_objectives": "Die fachübergreifenden Lehrinhalte dienen der interdisziplinä- ren Erweiterung des Fachstudiums und dem Erkennen von Zusammenhängen zwischen Gesellschaft und ihren Teil- systemen.",
+    "prerequisites": "Keine (Ausnahmen können für die Fremdsprachen festgelegt werden)",
+    "level": "Bachelor-und Masterstudiengänge",
+    "teaching_form": "Seminaristischer Unterricht, Übungen, Referate, Rollenspiele, Textarbeit, … je nach gewähltem Modul",
+    "status": "Wahlpflichtmodul",
+    "frequency": "jedes Semester",
+    "exam_form": "siehe Beschreibung der jeweiligen Lehrveranstaltung",
+    "module_grade": "siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Das Studium Generale umfasst ein umfangreiches Lehr- angebot, das semesterweise wechselt. Die Inhalte entstammen den Themengebieten Politik-, Wirtschafts-, Sozial-, Rechts- und Gesellschaftswissenschaften sowie Techniksoziologie, Methodenkompetenzen und Fremdsprachen. Sie können entsprechend der Rahmenstudienordnung in der jeweils geltenden Fassung frei gewählt werden.",
+    "literature": "Wird in den jeweiligen Beschreibungen der Lehrveranstaltungen angegeben.",
+    "additional_notes": "Die Auswahl der Lehrveranstaltungen dieses Moduls obliegt der Eigenverantwortung der Studierenden.",
+    "room_requirements": null,
+    "applicability": "Alle Studiengänge",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      73,
+      74
+    ]
+  },
+  {
+    "module_number": "B35",
+    "title": "Studium Generale II / General Studies II",
+    "credits": 2.5,
+    "workload": "2 SWS SU oder 2 SWS Ü",
+    "learning_area": "Allgemeinwissenschaftliche Ergänzungen",
+    "learning_objectives": "Die fachübergreifenden Lehrinhalte dienen der interdisziplinären Erweiterung des Fachstudiums und dem Erkennen von Zusammenhängen zwischen Gesellschaft und ihren Teilsystemen.",
+    "prerequisites": "Keine (Ausnahmen können für die Fremdsprachen festgelegt werden)",
+    "level": "Bachelor-und Masterstudiengänge",
+    "teaching_form": "Seminaristischer Unterricht, Übungen, Referate, Rollenspiele, Textarbeit, … je nach gewähltem Modul",
+    "status": "Wahlpflichtmodul",
+    "frequency": "jedes Semester",
+    "exam_form": "siehe Beschreibung der jeweiligen Lehrveranstaltung",
+    "module_grade": "siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Das Studium Generale umfasst ein umfangreiches Lehr- angebot, das semesterweise wechselt. Die Inhalte entstammen den Themengebieten Politik-, Wirtschafts-, Sozial-, Rechts- und Gesellschaftswissenschaften sowie Techniksoziologie, Methodenkompetenzen und Fremdsprachen. Sie können entsprechend der Rahmenstudienordnung in der jeweils geltenden Fassung frei gewählt werden.",
+    "literature": "Wird in den jeweiligen Beschreibungen der Lehrveranstaltungen angegeben.",
+    "additional_notes": "Die Auswahl der Lehrveranstaltungen dieses Moduls obliegt der Eigenverantwortung der Studierenden.",
+    "room_requirements": null,
+    "applicability": "Alle Studiengänge",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      74,
+      75
+    ]
+  },
+  {
+    "module_number": "B36",
+    "title": "Wahlpflichtmodul 3",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Im Wahlpflichtbereich vertiefen die Studierenden einzelne Aspekte des Studiums entlang einer studiengangsbezogenen Wahlpflichtliste.",
+    "prerequisites": "Vgl. WP-Modulbeschreibungen",
+    "level": "6. Studienplansemester",
+    "teaching_form": "Vgl. WP-Modulbeschreibungen",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Vgl. WP-Modulbeschreibungen",
+    "exam_form": "Vgl. WP-Modulbeschreibungen",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Vgl. WP-Modulbeschreibungen",
+    "literature": "Vgl. WP-Modulbeschreibungen",
+    "additional_notes": "Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Der/die Studierende hat ein Wahlpflichtmodul aus dem tatsächlichen Angebot zu wählen.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      75,
+      76
+    ]
+  },
+  {
+    "module_number": "B37",
+    "title": "E-Business-Projekt / E-Business Project",
+    "credits": 5.0,
+    "workload": "2 SWS Ü (Online) 34 Stunden Online 116 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden können ihre Kenntnisse über Geschäfts- modelle, E-Commerce und Online-Marketing in einem kleinen Team so einsetzen, dass sie dieses an einer konkreten selbst gestellten oder durch das Netzwerk des Studiengangs/der Lehrkraft vorgegebenen Aufgabenstellung technisch umsetzen können. Sie können den Aufwand für die Toolauswahl, die Einarbeitung und die Umsetzung zeitlich abschätzen. Sie können Make-or-Buy-Entscheidungen konkretisieren.",
+    "prerequisites": "Empfehlung: Geschäftsmodellanalyse und -entwicklung Empfehlung. Online-Marketing Empfehlung: E-Commerce",
+    "level": "6. Semester",
+    "teaching_form": "Projektarbeit",
+    "status": "Pflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Projektbericht (Gruppenarbeit, 30 Seiten) Der Leistungsnachweis kann nur im ersten Prüfungszeitraum erbracht werden.",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Auswahl eines Projektes (das Projekt kann auch Teil eines Gründungsprojektes sein, wenn es sich um die technische, ggf. prototypische Umsetzung handelt) Ist-Analyse und Soll-Konzept Technische Implementierung Online-Marketing Kennzahlenauswertung Kritische Reflektion",
+    "literature": "Aktuelle Veröffentlichungen im Themengebiet werden durch die Lehrkraft angeboten.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich. Das Modul wird als Projektseminar durchgeführt. Inhaltlicher Bezug sind die Module „Online-Marketing“ und „E-Commerce“ im 5. Studienplansemester. Auftakt-, Zwischen- und Abschlusstermine finden in Präsenz statt.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      76,
+      77,
+      78
+    ]
+  },
+  {
+    "module_number": "B38",
+    "title": "Praktikum",
+    "credits": 15.0,
+    "workload": "450 Stunden (üblich innerhalb von 12 Wochen in Vollzeit (37,5h pro Woche) oder Teilzeit mit entsprechender zeitlicher Verlängerung) in einem Wirtschaftsunternehmen oder einer Organisation/öffentlicher Sektor mit Aufgabenstellungen entlang des Studiengangziels.",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Praxisphase befähigt, eigenständig und im Team eine oder mehrere verantwortungsvolle Aufgaben in der Wirtschaft oder in Verbänden/öffentlichem Sektor zu übernehmen. Für die Lösung der Aufgabenstellung(en) können zahlreiche im Studium erlangte Kompetenzen erprobt, verbessert und reflektiert werden. Die eigene Rolle und die Bedeutung der Aufgabenstellung im gesamten Betrieb werden deutlich. Die Einschätzung der eigenen Interessen und Kompetenzen für eine zukünftige Berufstätigkeit im Umfeld der digitalen Wirtschaft wird verbessert und konkretisiert.",
+    "prerequisites": "Für den Beginn der Praxisphase müssen Studienleistungen in einem Umfang von 80 LP erbracht sein.",
+    "level": "5.-7. Studienplansemester",
+    "teaching_form": "Projektarbeit außerhalb einer Hochschule",
+    "status": "Pflichtmodul",
+    "frequency": "Jedes Semester",
+    "exam_form": "Praktikumsbericht (8 bis 20 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Übernahme betriebstypischer verantwortungsvoller Aufgaben aus einem oder mehreren Gebieten des Studiengangs. Erstellung eines Praktikumsberichts mit vom Studiengang vorgegebener Gliederung.",
+    "literature": null,
+    "additional_notes": "Das Praktikum kann im In- oder Ausland absolviert werden.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "| Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      78,
+      79
+    ]
+  },
+  {
+    "module_number": "| B39",
+    "title": "| Abschlussprüfung/ Final ExaminationModule B39.1 Bachelor-Arbeit / Bachelor‘s Thesis B39.2 Mündliche Abschlussprüfung / Oral Final Examination (Abschlussprüfung gemäß jeweils gültiger Rahmenstudien- und - prüfungsordnung)",
+    "credits": 15.0,
+    "workload": "| 450 Stunden",
+    "learning_area": "| Fachspezifische Vertiefung",
+    "learning_objectives": "| Bachelor-Arbeit Mit der Bachelor-Arbeit wird nachgewiesen, dass innerhalb einer vorgegebenen Zeit ein Problem mit wissenschaftlichen Methoden selbstständig bearbeitet werden kann und die Ergebnisse sachgerecht schriftlich dargestellt werden können. Mündliche Abschlussprüfung Die mündliche Abschlussprüfung orientiert sich schwerpunkt- mäßig an den Fachgebieten der Abschlussarbeit. Durch die Abschlussprüfung soll festgestellt werden, ob der/die Studie- rende gesichertes Wissen in den Fachgebieten, denen die Bachelor-Arbeit thematisch zugeordnet ist, besitzt und fähig ist, die Ergebnisse der Bachelor-Arbeit selbstständig zu begründen.",
+    "prerequisites": "| Zulassung gemäß jeweils gültiger Rahmenprüfungsordnung.",
+    "level": "| 7. Studienplansemester",
+    "teaching_form": "| Bachelor-Arbeit Betreute Arbeit; die Betreuung erfolgt gemäß § 29 (7) RSPO durch den/die Betreuer/in der Bachelor-Arbeit Mündliche Abschlussprüfung Präsentation und mündliche Prüfung",
+    "status": "| Pflichtmodul",
+    "frequency": "| Jedes Semester",
+    "exam_form": "| Bachelor-Arbeit(ungefähr 40 – 60 Seiten) Mündliche Abschlussprüfung: Präsentation (ca. 15 min) und mündliche Prüfung 30–45 Minuten",
+    "module_grade": "| Benotung der Abschlussprüfung durch die Prüfungskommission.",
+    "recognized_modules": null,
+    "contents": "| Bachelor-Arbeit Theoretische und/oder experimentelle Arbeit zur Lösung praxisnaher Problemstellungen Mündliche Abschlussprüfung Verteidigung der Bachelor-Arbeit und ihrer Ergebnisse in kritischer Diskussion; Präsentationstechniken",
+    "literature": "| Fachspezifisch",
+    "additional_notes": "| Bachelor-Arbeit Dauer der Bearbeitung: 3 Monate. Nach Vereinbarung zwischen Prüfling und Prüfungs- kommission kann die Bachelor-Arbeit auch auf Englisch erfolgen. Es wird empfohlen, die Themenstellung der Bachelorarbeit mit Themenstellungen aus dem Praktikumsbetrieb zu verbinden. Abschlussprüfung Nach Vereinbarung zwischen Prüfling und Prüfungskommis- sion kann die Abschlusspräsentation auch auf Englisch erfolgen.",
+    "room_requirements": null,
+    "applicability": "| Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      79,
+      80,
+      81
+    ]
+  },
+  {
+    "module_number": "WP01",
+    "title": "Grundlagen der Programmierung / Principals of Programming",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachübergreifende Grundlagen",
+    "learning_objectives": "Die Studierenden können geeignete Aufgabenstellungen in Programmen mit der Programmiersprache Python umsetzen und bestehende Programme ihrem Bedarf anpassen. Sie sind sich wesentlicher Maßnahmen zur Verbesserung der Codequalität (Kommentieren, Dokumentieren, Strukturierung durch Funktionen und Module, Verwendung von Styleguides, Code Review und Testen) bewusst. Sie wissen, wie sie sich helfen können (dir, help, interaktive Konsole, Internetrecherche).",
+    "prerequisites": "keine",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Seminaristischer Unterricht Übung",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmoda- litäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Klausur",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Entwicklungsumgebung (z.B. Spyder, Jupyter Notebook, IDLE), Datentypen (Zahlen, Wahrheitswerte, Strings, Listen, Tupel & Dictionaries), Operatoren, Variablen, Kontrollstrukturen (if/elif/else, for- und while-Schleifen), Funktionen, Module (eigene, Standardbibliotheken, weitere wie z. B. Numpy, Matplotlib).",
+    "literature": "Als Nachschlagewerk kann \"Einführung in Python 3\" von Bernd Klein genutzt werden, es gibt auch eine frei verfügbare Internetseite zum Buch: https://python-kurs.eu/index.php Kursbegleitende Materialien werden auf der Moodle-Seite bereitgestellt.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      81,
+      82,
+      83
+    ]
+  },
+  {
+    "module_number": "WP02",
+    "title": "Gesellschaftsrelevante Aspekte der Digitalisierung / Socially Relevant Aspects of the Digitalization",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden verstehen die Wechselwirkungen und Abhängigkeiten zwischen gesellschaftlich-wirtschaftlichen Veränderungsprozessen und dem Phänomen der Digitalisierung. Die Studierenden sind in der Lage, die Bedeutung und Wirksamkeit der Digitalisierung im Kontext gesellschaftlich- wirtschaftlicher Transformation kritisch zu hinterfragen und zu beurteilen. Die Studierenden vertiefen ihre ethischen Kenntnisse zur Entwicklung einer verantwortungsbewussten Unternehmensführung im Kontext der Digitalen Wirtschaft.",
+    "prerequisites": "Keine",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Übung im seminaristischen Unterrichtsstil Projektarbeit",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Klausur (90 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Grundlagen und Konzeptionen der Reflexivität zwischen Gesellschaft und Wirtschaft Gesellschaftliche und wirtschaftliche Transformationsprozesse Wirtschaftsphilosophische Grundbegriffe: z.B. Digitalisierung, Verantwortung, Macht, Ethik, Unternehmen, Medialisierung, Urteilskraft Rolle und Herausforderungen des Managements bzw. der Unternehmensführung in digitalen Welten Problematik der Ermöglichung und Entgrenzung globaler Ereignisse und unternehmerischer Wirksamkeiten durch die Digitalisierung Erörtern und Einüben des kritischen Hinterfragens von Wirkungen der Digitalisierung auf gesellschaftlich- wirtschaftliche Teilbereiche (z.B. Arbeit, Familie, Mobilität, Bildung, Nachhaltigkeit, etc.)",
+    "literature": "Beck, U.: Reflexive Modernisierung, Suhrkamp Giddens, A.: Die Konstitution der Gesellschaft, Campus Schmidt, M.: Kompendium Digitale Transformation, UVG Verlag. Wiegerling, K.: Medienethik, Metzler. Aktuelle Texte und Studien gibt die Lehrkraft zu Semester- beginn bekannt oder stellt sie den Studierenden bereit.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      83,
+      84,
+      85
+    ]
+  },
+  {
+    "module_number": "WP03",
+    "title": "Markenführung / Brand Management",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden verstehen \"Marke\" in der theoretischen Konzeption und praktischen Umsetzung: Die Definitionen des Markenbegriffs, die Besonderheiten von Marken in der digitalen Wirtschaft und ihre Erfassung in Modellen sollen verstanden und an konkreten Fallbeispielen diskutiert werden. Ziel ist es Marken analytisch zu erfassen und konzeptionell zu führen, die Positionierung einer Marke im Wettbewerb zu gestalten und diese auch nach innen in die Organisation durch internal Branding zu managen.",
+    "prerequisites": "Empfehlung: Dienstleistungsmarketing",
+    "level": "4. Studienplansemester",
+    "teaching_form": "Übung",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Präsentation Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Definitorische Grundlagen zu Marke • Markenbegriff • Markenidentität und Markenimage • Funktionaler Nutzen • Emotionaler Nutzen • Instrumente zur Erfassung und Führung von Marken Strategisches Markenmanagement • Gestaltung der Markenidentität • Erfolgreiche Markenpositionierung im Wettbewerb • Open Innovation durch Customer Centricity Operatives Markenmanagement in der digitalen Wirtschaft • Internes operatives Markenmanagement • Internal Branding • Employer Branding Externes operatives Markenmanagement • Integrierte Markenkommunikation in \"klassischen\" und digitalen Medien • Nutzergenerierte Markenkommunikation in sozialen Netzwerken",
+    "literature": "Burmann, Ch.; Halaszovich, T.; Hemmann, F.: Identitätsbasierte Markenführung: Grundlagen, Strategie, Umsetzung, Controlling. Springer-Gabler. Esch, F.R.: Strategie und Technik der Markenführung. Vahlen. Esch, F.R. et al.: Corporate Brand Management. Springer Gabler. Baetzgen, A. [Hrsg.]: Brand Planning. Schäffer-Poeschel. Spies, M.: Branded Interactions - Digitale Markenerlebnisse planen und gestalten. Schmidt Herrmann Verlag.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      85,
+      86,
+      87
+    ]
+  },
+  {
+    "module_number": "WP04",
+    "title": "Mobile Anwendungen / Mobile Applications",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden kennen • die wichtigsten technologischen und funktionalen Merkmale mobiler Endgeräte als Grundlage mobiler Anwendungen und können verschiedene Typen mobiler Endgeräte im Hinblick auf die Merkmale unterscheiden; • die wichtigsten Unterschiede zwischen nativen mobilen Anwendungen (iOS, Android, etc.) und mobilen Webanwendungen; • Merkmale von Plattformen für mobile Anwendungen und mögliche Alternativen und können sie hinsichtlich strukturiert vergleichen; • Merkmale mobiler Nutzungskontexte und können mögliche Mehrwerte mobiler Anwendungen in solchen Kontexten identifizieren; • Einsatzmöglichkeiten für mobile Anwendungen in verschiedenen E-Business-Szenarien, können deren Mehrwerte identifizieren und Anforderungen an mobile Anwendungen für konkrete Szenarien formulieren • Merkmale des durch mobile Anwendungen bewirkten gesellschaftlichen Wandels und können damit verbundene Konfliktpotentiale identifizieren und analysieren Geschäftsprozesse können im Hinblick auf ihr Optimierungs- potential bei Einsatz mobiler Anwendungen analysiert und sich daraus ergebende Anforderungen an die betreffenden Anwendungen formuliert werden. Ein Lasten- und Pflichtenheft kann an einem kleinen Beispiel voneinander unterschieden und erstellt werden. Die Studierenden können unter Verwendung existierender Anwendungskomponenten fachliche Anforderungen in einer mobilen Webanwendung umsetzen.",
+    "prerequisites": "Empfehlung: Einführung in Softwaretechnologien",
+    "level": "5. Studienplansemester",
+    "teaching_form": "Übung im seminaristischen Unterrichtsstil Laborübung in Gruppenarbeit",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Wintersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Teilleistungsnachweise: 50 % Übungen mit Rücksprachen Abschließender Leistungsnachweis: 50 % Klausur (60 min)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Mobile Devices • Drahtlose Datenübermittlung • Mobile Endgeräte • Mobile \"Plattformen\" • Modalitäten mobiler User Interfaces Mobile Context • Ortsbasierte Anwendungen • Konvergenz von Offline- und Online-Inhalten Mobile Business • Prozessoptimierung durch mobile Anwendungen • M-Commerce • Second Screen Anwendungen • Geschäftsmodelle für Anbieter mobiler Anwendungen Mobile Society • Mobile Anwendungen und soziale Netzwerke • Selftracking • Sharing Economy Mobile Software Development • native Anwendungen mit iOS, Android, etc. • mobile Webanwendungen mit HTML5, CSS und JavaScript • Hybride Anwendungen • mobiles Content Management",
+    "literature": "Zeppenfeld, K.; Bollmann, T.: Mobile Computing. W3L. Meinhardt, S.; Reich, S. [Hrsg.]: Mobile Computing. dpunkt- Verlag. Gardner, L.; Grigsby, J.: Mobiles Web von Kopf bis Fuß. O'Reilly. Heinemann, G.: Der neue Mobile-Commerce: Erfolgsfaktoren und Best Practices. Springer-Gabler. Heinemann, G.: No-Line-Handel: Höchste Evolutionsstufe im Multi-Channeling. Springer-Gabler.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      87,
+      88,
+      89,
+      90
+    ]
+  },
+  {
+    "module_number": "WP05",
+    "title": "Vernetzte Produktionskonzepte / Integrated Industrial Production",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Grundlagen",
+    "learning_objectives": "Die Studierenden haben erkannt, dass die digitale Wirtschaft nicht nur bei digitalen Produkten und Dienstleistungen ihre Innovationskraft entfaltet, sondern auch die industrielle Produktion verändert. Sie kennen ausgewählte industrielle Produktionskonzepte und können die Chancen der digitalen Vernetzung und die Möglichkeiten und Grenzen des Produktionsstandorts Deutschland einschätzen. Mögliche Aufgabenstellungen für Betriebswirte im Rahmen der Digitalisierung der gesamten Wertschöpfungskette sind ihnen bekannt und eigene Handlungsansätze werden entdeckt. Vertieft haben sie sich mit Konzepten des „Mass Customization“beschäftigt.",
+    "prerequisites": "Keine",
+    "level": "6. Studienplansemester",
+    "teaching_form": "Übung im seminaristischen Unterrichtsstil Übungen und kleine Projektarbeit in Gruppen",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt. Sofern die Lehrkraft die Prüfungsform und die Prüfungsmodalitäten nicht am Semesteranfang in der Frist nach §19 (2) RSPO festlegt gilt folgende Prüfungsform: Abschließender Leistungsnachweis: 100 % Projektbericht (20 Seiten)",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Geschichte der Industrialisierung Produktionsstandorte und weltweite Arbeitsteilung Produktionskonzepte • Handwerk • Fließbankfertigung • Gruppenarbeit • Kundenindividuelle Massenfertigung Technologien zur Vernetzung der Produktion • vertikale und horizontale Kooperationen und ihre Vernetzungsmöglichkeiten • Ausgewählte Technologien • Barcode, RFID, QR-Code • softwaretechnische Vernetzungen (ERP-Systeme, XML-Branchenstandards) Produktionskonzepte in ausgewählten Branchen am Beispiel ausgewählter Firmen, z. B. • Automobilindustrie • Maschinenbau • Druckindustrie • Lebensmittel- und Verpackungsindustrie Ausgewählte Mass Customization Geschäftsmodelle und ihre Geschichte • wird jeweils aktuell recherchiert Produktbegleitende Dienstleistungen • Bedeutung von vernetzten produktbegleitenden Dienstleistungen • Grundkonzepte des Service-Design und Service Engineering • Chancen von digitalen Prozessen für produktbegleitende Dienstleistungen",
+    "literature": "Aktuelle Texte und Studien gibt die Lehrkraft zu Semester- beginn bekannt oder stellt sie den Studierenden bereit.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich. Das Modul kann teilweise in geblockter Form (Exkursion) durchgeführt werden. Auf Vorschlag des Studierenden und in Abstimmung mit den beteiligten Lehrkräften kann alternativ die Teilnahme an einem ingenieurwissenschaftlichen Modul aller Studiengänge der Berliner Hochschule für Technik – unter Vorbehalt der dortigen Kapazität – besucht und von der Lehrkraft des Moduls „Vernetzte Produktionskonzepte“ als Projektbericht beurteilt werden.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {
+      "Datenfeld": "Erklärung"
+    },
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      90,
+      91,
+      92
+    ]
+  },
+  {
+    "module_number": "WP06",
+    "title": "Mediendesign / Media Design",
+    "credits": 5.0,
+    "workload": "4 SWS Ü 68 Stunden Präsenz 82 Stunden Selbststudium",
+    "learning_area": "Fachspezifische Vertiefung",
+    "learning_objectives": "Die Studierenden haben den Themenbereich Human- Computer-Interaction im Themengebiet des Designs interaktiver Anwendungen vertieft. Sie haben einen Überblick über Grundsätze zur Gestaltung aller digitaler Medien (insb. Text, Bild (Grafik, Illustration, Foto), Ton und Bewegbild (Animationen, Videos, Simulatio- nen)). Sie können einschätzen, welche Kompetenzen in Abhängigkeit vom Einsatzzweck notwendig sind und wie diese beschafft werden können. Sie kennen Grundkonzepte und IT-technische Hilfsmittel zur plattformübergreifenden Gestaltung interaktiver Anwendungen und haben am Beispiel ausgewählter Medien und ausgewählter Anwendungssoftware erste Praxiserfahrung bei der gestaltungsorientierten Erstellung digitaler Medien. Im Design interaktiver Anwendungen sind die elementaren Faktoren medialer Gestaltung – Objekt, Raum, Zeit und Interaktion – verstanden und grundlegende Kompetenzen zu den Themen Informationsarchitektur, Funktionalität, Inter- aktivität und Navigation vorhanden.",
+    "prerequisites": "Empfehlung: Einführung in Softwaretechnologien Empfehlung: Human-Computer-Interaction",
+    "level": "6. Studienplansemester",
+    "teaching_form": "Übung im seminaristischen Unterrichtsstil Laborübung in Gruppenarbeit",
+    "status": "Wahlpflichtmodul",
+    "frequency": "Sommersemester",
+    "exam_form": "Die Prüfungsform wird nach §19 (2) RSPO durch die Lehrkraft festgelegt.",
+    "module_grade": "Siehe Studienplan",
+    "recognized_modules": null,
+    "contents": "Einblick in die gängige Anwendungssoftware zur Erstellung digitaler Medien mit einfachen Übungen. Grundsätze zur Gestaltung aller digitaler Medien: • Text (Bildschirmtypografie) • Bild (Grafik, Illustration, Foto) • Ton • Bewegtbild (Animationen, Videos, Simulationen) • Interaction Design (Use Cases, Prototyping) Akteure der Medienbranche • Agenturen • Make or Buy Entscheidung an Beispielen Umsetzung eines designorientierten Medienprojekts an einem Beispiel • Sammlung, Gestaltung und Aufbereitung von digitalem Content (statische, dynamische und interaktive Inhalte) • digitaler Entwurf (grafische Grundbausteine, Bildkonzepte, Farbe digital, Abstraktion & Visualisierung) • Screen- und Interface-Designgrundlagen für unterschiedliche digitale Medienarten, interaktive Medienapplikationen und interaktive Mediensysteme; • Informationsarchitektur (Struktur, Navigation, Benutzerführung) • Layout / Komposition (Formate, Gestaltungsraster/ Wireframes, Kompositionsregeln, medienadäquate/ medienoptimale Gestaltung) • Animation und Bewegtbild (vor allem im Spannungsfeld von Raum, Zeit, Dynamik, Dramaturgie, Timing, usw.) • Interaktionsdesign (Methoden, linear vs. nonlinear, Orientierung, Ergonomie und Usability)",
+    "literature": "Stapelkamp, T.: Informationsvisualisierung. Springer.",
+    "additional_notes": "Das Modul kann auf Deutsch oder auf Englisch angeboten werden. Bitte beachten Sie die aktuellen Informationen aus dem zuständigen Fachbereich.",
+    "room_requirements": null,
+    "applicability": "Eigener Studiengang Anerkennung für andere Studiengänge gemäß Rahmenstudien-und-prüfungsordnung",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/Betriebswirtschaftslehre – Digitale Wirtschaft_2022.pdf",
+    "source_pages": [
+      92,
+      93
+    ]
+  }
+]

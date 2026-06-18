@@ -3,19 +3,7 @@ import json
 import yaml
 
 
-pdf_name = "medieninformatik_2024"
-
-WORK_DIR = Path("tools/pdf_import/data/work") / pdf_name
-PAGES_JSON = WORK_DIR / "pages_md.json"
 BASE_YAML = Path("tools/pdf_import/configs/base.yaml")
-
-MODULE_BLOCKS_JSON = WORK_DIR / "module_blocks_md.json"
-
-
-# Set these from the previous boundary detection result.
-# If you want to use all pages, set them to None.
-FIRST_MODULE_PAGE_NUMBER = 6
-LAST_MODULE_PAGE_NUMBER = 64
 
 
 def load_pages(path: Path):
@@ -144,6 +132,7 @@ def detect_module_start_from_line(
 def split_modules_from_pages(
     pages: list[dict],
     field_label_map: dict,
+    source_file: str | None = None,
 ):
     """
     Split module pages into module blocks.
@@ -181,6 +170,7 @@ def split_modules_from_pages(
 
                 current_module = {
                     "module_number": module_number,
+                    "source_file": source_file,
                     "source_pages": [page_number],
                     "raw_markdown": line,
                 }
@@ -198,27 +188,57 @@ def split_modules_from_pages(
     return modules
 
 
-def main():
-    pages = load_pages(PAGES_JSON)
-    field_label_map = load_field_label_map(BASE_YAML)
+def split_modules_to_json(
+    pages_json: Path,
+    output_json: Path,
+    base_yaml: Path = BASE_YAML,
+    first_page_number: int | None = None,
+    last_page_number: int | None = None,
+    source_file: str | None = None,
+) -> list[dict]:
+    pages = load_pages(pages_json)
+    field_label_map = load_field_label_map(base_yaml)
 
     module_pages = filter_module_pages(
         pages,
-        FIRST_MODULE_PAGE_NUMBER,
-        LAST_MODULE_PAGE_NUMBER,
+        first_page_number,
+        last_page_number,
     )
 
     modules = split_modules_from_pages(
         module_pages,
         field_label_map,
+        source_file=source_file,
     )
 
     write_json(
-        MODULE_BLOCKS_JSON,
+        output_json,
         modules,
     )
 
-    print(f"Written to: {MODULE_BLOCKS_JSON}")
+    return modules
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("pages_json", type=Path)
+    parser.add_argument("output_json", type=Path)
+    parser.add_argument("--first-page", type=int, default=None)
+    parser.add_argument("--last-page", type=int, default=None)
+    parser.add_argument("--source-file", default=None)
+    args = parser.parse_args()
+
+    modules = split_modules_to_json(
+        pages_json=args.pages_json,
+        output_json=args.output_json,
+        first_page_number=args.first_page,
+        last_page_number=args.last_page,
+        source_file=args.source_file,
+    )
+
+    print(f"Written to: {args.output_json}")
     print(f"Found modules: {len(modules)}")
 
 

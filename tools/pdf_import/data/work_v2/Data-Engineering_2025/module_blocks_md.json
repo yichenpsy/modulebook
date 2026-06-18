@@ -1,6 +1,7 @@
 [
   {
     "module_number": "CSI",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       22,
       23
@@ -9,6 +10,7 @@
   },
   {
     "module_number": "PR1",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       24,
       25
@@ -17,6 +19,7 @@
   },
   {
     "module_number": "PR2",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       26,
       27
@@ -25,6 +28,7 @@
   },
   {
     "module_number": "PR3",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       28,
       29
@@ -33,6 +37,7 @@
   },
   {
     "module_number": "PR4",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       30,
       31
@@ -41,6 +46,7 @@
   },
   {
     "module_number": "DB1",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       32,
       33
@@ -49,6 +55,7 @@
   },
   {
     "module_number": "DB2",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       34,
       35
@@ -57,6 +64,7 @@
   },
   {
     "module_number": "DB3",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       36,
       37
@@ -65,6 +73,7 @@
   },
   {
     "module_number": "DS1",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       38,
       39,
@@ -74,6 +83,7 @@
   },
   {
     "module_number": "DS2",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       41,
       42,
@@ -83,6 +93,7 @@
   },
   {
     "module_number": "MLC",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       44,
       45
@@ -91,6 +102,7 @@
   },
   {
     "module_number": "MLO",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       46,
       47
@@ -99,6 +111,7 @@
   },
   {
     "module_number": "DTP",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       48,
       49
@@ -107,6 +120,7 @@
   },
   {
     "module_number": "MLA",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       50,
       51
@@ -115,6 +129,7 @@
   },
   {
     "module_number": "DMA",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       52,
       53
@@ -123,6 +138,7 @@
   },
   {
     "module_number": "CT1",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       54,
       55
@@ -131,6 +147,7 @@
   },
   {
     "module_number": "CT2",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       56,
       57
@@ -139,6 +156,7 @@
   },
   {
     "module_number": "MAP",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       58,
       59,
@@ -148,6 +166,7 @@
   },
   {
     "module_number": "ID1",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       61,
       62
@@ -156,6 +175,7 @@
   },
   {
     "module_number": "ID2",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       63,
       64,
@@ -165,6 +185,7 @@
   },
   {
     "module_number": "PRD",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       66,
       67
@@ -173,6 +194,7 @@
   },
   {
     "module_number": "INT",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       68,
       69
@@ -181,6 +203,7 @@
   },
   {
     "module_number": "BTC",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       70,
       71
@@ -189,6 +212,7 @@
   },
   {
     "module_number": "BTX",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       72,
       73
@@ -197,6 +221,7 @@
   },
   {
     "module_number": "ES1, ES2, ES3, ES4, ES5",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       75,
       76,
@@ -206,6 +231,7 @@
   },
   {
     "module_number": "SG",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       78,
       79
@@ -214,6 +240,7 @@
   },
   {
     "module_number": "DEP",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       80,
       81
@@ -222,6 +249,7 @@
   },
   {
     "module_number": "LLM",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       82,
       83
@@ -230,6 +258,7 @@
   },
   {
     "module_number": "EMB",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       84,
       85
@@ -238,6 +267,7 @@
   },
   {
     "module_number": "ROB",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       86,
       87
@@ -246,6 +276,7 @@
   },
   {
     "module_number": "VIS",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       88,
       89
@@ -254,6 +285,7 @@
   },
   {
     "module_number": "GEO",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       90,
       91
@@ -262,6 +294,7 @@
   },
   {
     "module_number": "BEN",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       92,
       93
@@ -270,6 +303,7 @@
   },
   {
     "module_number": "BIO",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       94,
       95
@@ -278,6 +312,7 @@
   },
   {
     "module_number": "DEL",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       96,
       97
@@ -286,6 +321,7 @@
   },
   {
     "module_number": "SBI",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       98,
       99
@@ -294,6 +330,7 @@
   },
   {
     "module_number": "EDE",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       100,
       101
@@ -302,6 +339,7 @@
   },
   {
     "module_number": "EX1 / EX2",
+    "source_file": "tools/pdf_import/data/input/Data-Engineering_2025.pdf",
     "source_pages": [
       102,
       103

@@ -18,8 +18,9 @@
     "literature": "G. + S. Teschl:_Mathematik für Informatiker Band 1_, Springer+Vieweg Verlag P. Hartmann:_Mathematik für Informatiker_, Vieweg+Teubner Verlag L. Görke:_Mengen, Relationen, Funktionen_, Harri Deutsch Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       6
     ]
@@ -43,8 +44,9 @@
     "literature": "J. E. Hopcroft, R. Motwani, J. D. Ullman:_Introduction to Automata Theory, Languages and_ _Computation_, Addison-Wesley Publishing Company U. Hedtstück:_Einführung in die Theoretische Informatik – Formale Sprachen und_ _Automatentheorie_, Oldenbourg Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       7
     ]
@@ -68,8 +70,9 @@
     "literature": "T. Stapelkamp:_Screen- und Interfacedesign. Gestaltung und Usability für Hard- und_ _Software_, Springer Verlag C. Moser:_User Experience Design: Mit erlebniszentrierter Softwareentwicklung zu_ _Produkten, die begeistern_, Springer Verlag; X.media.press M. Spies:_Branded Interactions: Digitale Markenerlebnisse planen und gestalten_, Schmidt Hermann Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       8
     ]
@@ -93,8 +96,9 @@
     "literature": "W. Oberschelp, G. Vossen:_Rechneraufbau und Rechnerstrukturen_, Oldenbourg",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       9
     ]
@@ -118,8 +122,9 @@
     "literature": "D. J. Barnes, M. Kölling:_Java lernen mit BlueJ : Eine Einführung in die objektorientierte_ _Programmierung_, Pearson Studium K. Sierra, B. Bates:_Java von Kopf bis Fuß_, O’Reilley H.-P. Habelitz:_Programmieren Lernen mit Java_, Rheinwerk Computing H. Mössenböck:_Sprechen Sie Java?,_dpunkt.verlag P. Pepper:_Programmieren mit Java_, Springer Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       10
     ]
@@ -143,8 +148,9 @@
     "literature": "G. + S. Teschl:_Mathematik für Informatiker Band 1_, Springer+Vieweg Verlag P. Hartmann:_Mathematik für Informatiker_, Vieweg+Teubner Verlag H. Anton:_Lineare Algebra_, Spektrum Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       11
     ]
@@ -168,8 +174,9 @@
     "literature": "T. H. Cormen u.a.:_Algorithmen – Eine Einführung_, Oldenbourg T. Ottmann, P. Widmayer:_Algorithmen und Datenstrukturen_, Spektrum Akademischer Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       12
     ]
@@ -193,8 +200,9 @@
     "literature": "G. Saake, K. Sattler, A. Heuer:_Datenbanken: Konzepte und Sprachen_, MITP-Verlag Kemper, Eickler:_Datenbanksysteme_, Oldenbourg T. Kudraß (Hrsg.):_Taschenbuch Datenbanken_, Hanser-Verlag G. Vossen:_Datenmodelle, Datenbanksprachen und Datenbankmanagementsysteme_, Oldenbourg",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       13
     ]
@@ -218,8 +226,9 @@
     "literature": "K. Sierra, B. Bates:_Java von Kopf bis Fuß_, O’Reilley C. Ullenboom:_Java ist auch eine Insel_, Galileo Computing – online verfügbar C. S. Horstmann, G. Cornell:_Core Java, Band 1 – Grundlagen_, Addison-Wesley H.-P. Habelitz:_Programmieren Lernen mit Java_, Rheinwerk Computing H. Mössenböck:_Sprechen Sie Java?,_dpunkt.verlag P. Pepper:_Programmieren mit Java_, Springer Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       14
     ]
@@ -243,8 +252,9 @@
     "literature": "A. Tanenbaum:_Moderne Betriebssysteme_, Pearson Studium",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       15
     ]
@@ -268,8 +278,9 @@
     "literature": "Wird in den jeweiligen Beschreibungen der Lehrveranstaltungen angegeben",
     "additional_notes": "Die Auswahl der Lehrveranstaltungen dieses Moduls obliegt der Eigenverantwortung der Studierenden. Die Auswahl der Lehrveranstaltungen müssen die Studierenden aus den für ihren Studiengang zugelassenen Bereichen treffen (siehe Inhalt)",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       16
     ]
@@ -293,8 +304,9 @@
     "literature": "Wird in den jeweiligen Beschreibungen der Lehrveranstaltungen angegeben",
     "additional_notes": "Die Auswahl der Lehrveranstaltungen dieses Moduls obliegt der Eigenverantwortung der Studierenden. Die Auswahl der Lehrveranstaltungen müssen die Studierenden aus den für ihren Studiengang zugelassenen Bereichen treffen (siehe Inhalt)",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       17
     ]
@@ -318,8 +330,9 @@
     "literature": "M. Winter:_Methodische objektorientierte Softwareentwicklung_, dpunkt.verlag M. Hitz, G. Kappel:_UML@work_, dpunkt.verlag H. Balzert:_Lehrbuch der Objektmodellierung – Analyse und Entwurf mit der UML2_, Spektrum Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       18
     ]
@@ -343,8 +356,9 @@
     "literature": "M. Pharr, G. Humphreys._Physically Based Rendering, Second Edition: From Theory To_ _Implementation_. Morgan Kaufmann. K. Suffern._Ray Tracing from the Ground Up_. A K Peters",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       19
     ]
@@ -368,8 +382,9 @@
     "literature": "U. Schmidt:_Professionelle Videotechnik_, Springer Berlin Heidelberg T. Strutz:_Bilddatenkompression. Grundlagen, Codierung, JPEG, MPEG, H264_, Vieweg- Verlag T. Petrasch, J. Zinke:_Videofilmproduktion_, Carl Hanser Verlag M. Dickreiter:_Handbuch der Tonstudiotechnik_, De Gruyter SAUR-Verlag H. Henle:_Das Tonstudio Handbuch_, GC Carstensen Verlag D. Stotz:_Computergestützte Audio- und Videotechnik; Multimediatechnik in der_ _Anwendung_, Springer Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       20
     ]
@@ -393,8 +408,9 @@
     "literature": "W. R. Stevens:_TCP/IP_, Hüthig Telekommunikation Online-Dokumentationen und Standards, z.B. aufwww.ietf.orgundwww.iana.org",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       21
     ]
@@ -418,8 +434,9 @@
     "literature": "Die Literatur sowie die zu empfehlenden Internet-Ressourcen werden semesteraktuell von der Lehrkraft mitgeteilt.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten. Teile der Literatur, Dokumentation und der zu verwendenden Quellen sind nur in Englisch verfügbar.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       22
     ]
@@ -443,8 +460,9 @@
     "literature": "G. Starke:_Effektive Softwarearchitekturen: Ein praktischer Leitfaden_, Carl Hanser Verlag E. Freeman, K. Sierra, B. Bates:_Entwurfsmuster von Kopf bis Fuß_, O'Reilly H. Balzert:_Objektorientierte Programmierung mit Java 5_, Spektrum Akademischer Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       23
     ]
@@ -468,8 +486,9 @@
     "literature": "Die Literatur sowie die zu empfehlenden Internet-Ressourcen werden semesteraktuell durch die Lehrkraft festgelegt.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten. Teile der Literatur, Dokumentation und zu verwendenden Quellen sind nur in Englisch verfügbar.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       24
     ]
@@ -493,8 +512,9 @@
     "literature": "H. Sharp, Y. Rogers, J. Preece:_Interaction Design: Beyond human-computer interaction_, Wiley M. Herczeg:_Software-Ergonomie: Theorien, Modelle und Kriterien für gebrauchstaugliche interaktive_ _Computersysteme_, Oldenbourg Verlag J. Nielsen:_Designing Web Usability : The Practice of Simplicity_, New Riders Publishing J.Nielsen, R. Budiu,_Mobile Usability_, New Riders Publishing J. E. Helbusch, K. Probiersch:_Barrierefreiheit verstehen und umsetzen_, dpunkt.verlag P. J. Lynch, S. Horton:_Web Style Guide: Basic Design Principles for Creating Web Sites_, Yale University Press – online verfügbar",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       25
     ]
@@ -518,8 +538,9 @@
     "literature": "Siehe Beschreibung der Wahlpflichtmodule",
     "additional_notes": "Auf Beschluss des Fachbereichsrates des Fachbereichs VI können weitere Module als Wahlpflichtmodule vorgesehen werden. Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Die/der Studierende kann auf Antrag auch ein Modul aus einem anderen Bachelor- Studiengang als Wahlpflichtmodul im 4. Studienplansemester wählen. Über den Antrag entscheidet der/die Anerkennungsbeauftragte des Fachbereichs. Bei einem zeitweiligen Studium im Ausland können die dort in Modulen erworbenen Leistungspunkte als Wahlpflichtmodule in vollem Umfang anerkannt werden, wenn die Inhalte der Module nicht mit denen der Pflichtmodule dieses Studienplans vergleichbar sind. Über die Anerkennung entscheidet der/die Anerkennungsbeauftragte des Fachbereichs.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       26
     ]
@@ -543,8 +564,9 @@
     "literature": "Siehe Beschreibung der Wahlpflichtmodule",
     "additional_notes": "Auf Beschluss des Fachbereichsrates des Fachbereichs VI können weitere Module als Wahlpflichtmodule vorgesehen werden. Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Die/der Studierende kann auf Antrag auch ein Modul aus einem anderen Bachelor- Studiengang als Wahlpflichtmodul im 4. Studienplansemester wählen. Über den Antrag entscheidet der/die Anerkennungsbeauftragte des Fachbereichs. Bei einem zeitweiligen Studium im Ausland können die dort in Modulen erworbenen Leistungspunkte als Wahlpflichtmodule in vollem Umfang anerkannt werden, wenn die Inhalte der Module nicht mit denen der Pflichtmodule dieses Studienplans vergleichbar sind. Über die Anerkennung entscheidet der/die Anerkennungsbeauftragte des Fachbereichs.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       27
     ]
@@ -568,8 +590,9 @@
     "literature": "Literatur wird in der Lehrveranstaltung empfohlen.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       28
     ]
@@ -593,8 +616,9 @@
     "literature": "H. Balzert, C. Schäfer, M. Schröder, U. Kern:_Wissenschaftliches Arbeiten_, W3L Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       29
     ]
@@ -618,8 +642,9 @@
     "literature": "Siehe Beschreibung der Wahlpflichtmodule",
     "additional_notes": "Auf Beschluss des Fachbereichsrates des Fachbereichs VI können weitere Module als Wahlpflichtmodule vorgesehen werden. Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Die/der Studierende kann auf Antrag auch ein Modul aus einem anderen Bachelor- Studiengang als Wahlpflichtmodul im 5. Studienplansemester wählen. Über den Antrag entscheidet der/die Anerkennungsbeauftragte des Fachbereichs. Bei einem zeitweiligen Studium im Ausland können die dort in Modulen erworbenen Leistungspunkte als Wahlpflichtmodule in vollem Umfang anerkannt werden, wenn die Inhalte der Module nicht mit denen der Pflichtmodule dieses Studienplans vergleichbar sind. Über die Anerkennung entscheidet der/die Anerkennungsbeauftragte des Fachbereichs.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       30
     ]
@@ -643,8 +668,9 @@
     "literature": "Siehe Beschreibung der Wahlpflichtmodule",
     "additional_notes": "Auf Beschluss des Fachbereichsrates des Fachbereichs VI können weitere Module als Wahlpflichtmodule vorgesehen werden. Über das Angebot an weiteren Wahlpflichtmodulen entscheidet der Fachbereichsrat jeweils vor Beginn des Semesters. Die/der Studierende kann auf Antrag auch ein Modul aus einem anderen Bachelor- Studiengang als Wahlpflichtmodul im 5. Studienplansemester wählen. Über den Antrag entscheidet der/die Anerkennungsbeauftragte des Fachbereichs. Bei einem zeitweiligen Studium im Ausland können die dort in Modulen erworbenen Leistungspunkte als Wahlpflichtmodule in vollem Umfang anerkannt werden, wenn die Inhalte der Module nicht mit denen der Pflichtmodule dieses Studienplans vergleichbar sind. Über die Anerkennung entscheidet der/die Anerkennungsbeauftragte des Fachbereichs.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       31
     ]
@@ -668,8 +694,9 @@
     "literature": "Fachspezifisch, projektabhängig",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       32
     ]
@@ -693,8 +720,9 @@
     "literature": "| fachspezifisch",
     "additional_notes": "| Bachelor-Arbeit Dauer der Bearbeitung: 3 Monate gemäß § 29 (8) RSPO Abschlussprüfung Nach Vereinbarung zwischen Prüfling und Prüfungskommission kann die Abschlussprüfung auch auf Englisch erfolgen.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       33
     ]
@@ -718,8 +746,9 @@
     "literature": "C. Moser:_User Experience Design: Mit erlebniszentrierter Softwareentwicklung zu_ _Produkten, die begeistern_, Springer Verlag; X.media.press Sendpoints:_G.U.I Design: Graphical User Interface Design_, Gingko Press Gmbh S. Preuss, T. Leonhardt:_THE DIGITAL INNOVATION MODEL - Software planen, die_ _Nutzer lieben_, HANDSPIEL Verlag GmbH",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       34,
       35
@@ -744,8 +773,9 @@
     "literature": "G. Starke:_Effektive Softwarearchitekturen: Ein praktischer Leitfaden_, Carl Hanser Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       36
     ]
@@ -769,8 +799,9 @@
     "literature": "K. Matsuda, R. Lea: WebGL Programming Guide: Interactive 3D Graphics Programming with WebGL (OpenGL), Addison Wesley Weitere aktuelle Literatur wird in der Vorlesung angegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       37
     ]
@@ -794,8 +825,9 @@
     "literature": "K. Schneider:_Abenteuer Softwarequalität_, dpunkt.verlag J. Link: Softwaretests mit JUnit, dpunkt.verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       38
     ]
@@ -819,8 +851,9 @@
     "literature": "D. Vahs, J. Schäfer-Kunz:_Einführung in die Betriebswirtschaftslehre: Lehrbuch mit_ _Beispielen und Kontrollfragen_, Schäffer-Poeschel",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       39
     ]
@@ -844,8 +877,9 @@
     "literature": "U. Schmidt:_Professionelle Videotechnik_, Springer Berlin Heidelberg T. Petrasch, J. Zinke:_Videofilmproduktion_, Carl Hanser Verlag M. Dickreiter:_Handbuch der Tonstudiotechnik_, De Gruyter SAUR-Verlag H. Henle:_Das Tonstudio Handbuch_, GC Carstensen Verlag D. Stotz:_Computergestützte Audio- und Videotechnik; Multimediatechnik in der_ _Anwendung_, Springer Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       40
     ]
@@ -869,8 +903,9 @@
     "literature": "B. Stroustrup:_The C++ Programming Language_, Addison-Wesley. Weitere aktuelle Literatur wird in der Vorlesung vorgestellt.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten, Englischkenntnisse sind von Vorteil.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       41
     ]
@@ -894,8 +929,9 @@
     "literature": "A. Clausing:_Programmiersprachen; Konzepte, Strukturen und Implementierung in Java_, Spektrum Akademischer Verlag B. A. Tate:_Seven Languages in Seven Weeks: A Pragmatic Guide to Learning Programming_ _Languages_, The Pragmatic Progammers",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       42
     ]
@@ -919,8 +955,9 @@
     "literature": "_The Swift Programming Language, Swift 2.2 Edition_, Apple Inc., Cupertino, CA K. M. Rodewig , Clemens Wagner:_Apps programmieren für iPhone und iPad: Inkl. Xcode,_ _Debugging, Versionierung, zahlreiche Praxisbeispiele. Aktuell zu iOS 8 und inkl._ _Einführung in Swift_, Galileo Computing",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       43
     ]
@@ -944,8 +981,9 @@
     "literature": "Android Entwickler-Website._http://developer.android.com/develop/index.html_ J. Annuzi, L. Darcey, S. Conder_: Introduction to Android Application Development: Android_ _Essentials (Developer's Library)_. Addison Wesley T. Bollmann, K. Zeppenfeld:_Mobile Computing – Hardware, Software, Kommunikation,_ _Sicherheit, Programmierung_. W3L Verlag P. Gaston:_The Modern Web – Multi-Device Web Development with HTML5, CSS3, and_ _JavaScript._O’Reilly Mozilla Developer Network._https://developer.mozilla.org_ R. Oechsle:_Java Komponenten – Grundlagen, prototypische Realisierung und Beispiele_ _für Komponentensysteme_. Hanser O. Zeigermann:_JavaScript für Java-Entwickler. entwickler.press_",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       44,
       45
@@ -970,8 +1008,9 @@
     "literature": "Literatur wird während der Veranstaltung bekannt gegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       46
     ]
@@ -995,8 +1034,9 @@
     "literature": "D. H. Eberly,_3D Game Engine Architecture_, Morgan Kaufmann. I. Millington,_Game Physics Engine Development_, Morgan Kaufmann. R. Madeira, D. Gorny,_Cinder Creative Coding Cookbook_, Packt Publishing. J. Gibson,_Introduction to Game Design, Prototyping, and Development: From Concept to_ _Playable Game with Unity and C#,_Addison Wesley.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       47
     ]
@@ -1020,8 +1060,9 @@
     "literature": "U._Schmidt: Professionelle Videotechnik_, Springer Berlin Heidelberg T. Strutz:_Bilddatenkompression. Grundlagen, Codierung, JPEG, MPEG, H264,_Vieweg- Verlag S. Pfeiffer:_The Definitive Guide to HTML5 for Video (and Audio)_, Apress Verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       48
     ]
@@ -1045,8 +1086,9 @@
     "literature": "P.-N. Tan, M. Steinbach, V. Kumar:_Introduction to Data Mining_ T. M. Mitchell:_Machine Learning,_McGraw-Hill Science/Engineering/Math S. Marsland:_Machine Learning: An Algorithmic Perspective,_Crc Pr Inc",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       49
     ]
@@ -1070,8 +1112,9 @@
     "literature": "Die Literatur sowie die zu empfehlenden Internet-Ressourcen werden semesteraktuell durch die Lehrkraft festgelegt.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       50
     ]
@@ -1095,8 +1138,9 @@
     "literature": "Wird in der Lehrveranstaltung bekannt gegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       51
     ]
@@ -1120,8 +1164,9 @@
     "literature": "Literatur wird während der Veranstaltung bekannt gegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       52
     ]
@@ -1145,8 +1190,9 @@
     "literature": "B. Wolff:_Microservices - Grundlagen flexibler Softwarearchitekturen_, dpunkt.verlag Bredan Burns:_Verteilte Systeme mit Kubernetes entwerfen_, O'Reilly - Dpunkt.verlag",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       53
     ]
@@ -1170,8 +1216,9 @@
     "literature": "Die aktuelle Literatur wird zu Beginn des Semesters von der Lehrkraft angegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       54
     ]
@@ -1195,8 +1242,9 @@
     "literature": "Paul Barry:_Python von Kopf bis Fuß_. O‘Reilly. Nigel George:_Build Your First Website with Django 2.1._GNW Independent Publishing. Nigel George:_Mastering Django 2: Core._(In Bearbeitung.) GNW Independent Publishing. David Beazley, Brian K. Jones:_Python Cookbook_. O‘Reilly.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       55
     ]
@@ -1220,8 +1268,9 @@
     "literature": "K. Matsuda, R. Lea: WebGL Programming Guide: Interactive 3D Graphics Programming with WebGL (OpenGL), Addison Wesley Weitere aktuelle Literatur wird in der Vorlesung angegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       56
     ]
@@ -1245,8 +1294,9 @@
     "literature": "Weitere aktuelle Literatur wird in der Vorlesung angegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
+    "applicability": null,
     "additional_fields": {},
-    "source_file": null,
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       57
     ]
@@ -1270,10 +1320,9 @@
     "literature": "Paul Barry:_Python von Kopf bis Fuß_. O‘Reilly 2017. David Beazley, Brian K. Jones:_Python Cookbook_. O‘Reilly 2013. Ethan Williams:_Python for Data Science: The Ultimate Beginners’ Guide to Learning_ _Python Data Science Step by Step_. Vom Autor ohne Verlag veröffentlicht 2019. Albert Sweigart:_Automate the Boring Stuff with Python, 2nd Edition: Practical_ _Programming for Total Beginners_. No Scratch Press 2019. Joel Grus:_Data Science from Scratch: First Principles with Python_. O‘Reilly 2019. Jake VanderPlas:_Python Data Science Handbook: Essential Tools for working with_ _Data_. O‘Reilly 2016.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
-    "additional_fields": {
-      "Verwendbarkeit": "Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       58,
       59
@@ -1298,10 +1347,9 @@
     "literature": "Literatur wird während der Veranstaltung bekannt gegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
-    "additional_fields": {
-      "Verwendbarkeit": "Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       60
     ]
@@ -1325,10 +1373,9 @@
     "literature": "T. Akenine-Möller, E. Haines, N. Hoffman:_Real-Time Rendering_, A K Peters M. Kitagawa, B. Windsor:_MoCap for Artists: Workflow and Techniques for Motion_ _Capture_, Taylor & Francis Ltd. R. Mukundan:_3D Mesh Processing and Character Animation_, Springer International Publishing Weitere aktuelle Literatur wird in der Vorlesung angegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
-    "additional_fields": {
-      "Verwendbarkeit": "Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       61,
       62
@@ -1353,10 +1400,9 @@
     "literature": "_DIN EN 301549_– Deutsche Version, Zugang mit Begründung beantragen: https://www.bfit-bund.de/Login/Login/login_node.html Matuzovic, Manuel:_Web Accessibility Cookbook: Creating Inclusive Experiences_, Taschenbuch Oreilly & Associates Inc (Juli 2024) Pickering, Heydon:_Inclusive Components_, Smashing Magazine (December 2019) Zohner, Agnes Barbara:_Kundenbindung durch barrierefreie Online-_ _Kommunikation: Potenziale und Mehrwert der erweiterten_ _Marktorientierungstrategie (BestMasters)_, Springer Gabler; 1. Aufl. 2020 Edition (16. Dezember 2019) Holmes, Kat: Mismatch:_How Inclusion Shapes Design (Simplicity: Design,_ _Technology, Business, Life)_, The MIT Press; Reprint Edition (1. September 2020) Greenwood, Tom:_Nachhaltiges Webdesign_, conopolist Verlag; 1. Auflage 2021 (12. August 2021) Osmani, Addy:_Image Optimization_, Smashing Books, 2021 Eine weitere Auswahl an Literatur wird jeweils zu Beginn der Lehrveranstaltung bekannt gegeben.",
     "additional_notes": "Dieses Modul wird auf Deutsch angeboten.",
     "room_requirements": null,
-    "additional_fields": {
-      "Verwendbarkeit": "Eigener Studiengang"
-    },
-    "source_file": null,
+    "applicability": "Eigener Studiengang",
+    "additional_fields": {},
+    "source_file": "tools/pdf_import/data/input/medieninformatik_2024.pdf",
     "source_pages": [
       63,
       64

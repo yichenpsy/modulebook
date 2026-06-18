@@ -5,15 +5,7 @@ from collections import Counter
 
 import yaml
 
-pdf_name = "medieninformatik_2024"
-WORK_DIR = Path("tools/pdf_import/data/work") / pdf_name
-
 BASE_PATH = Path("tools/pdf_import/configs/base.yaml")
-
-
-
-INPUT_PATH = WORK_DIR / "module_blocks_md.json"
-OUTPUT_PATH = WORK_DIR / "normalized_modules.json"
 
 
 def load_json(path):
@@ -26,6 +18,13 @@ def write_json(path, data):
         json.dumps(data, ensure_ascii=False, indent=2),
         encoding="utf-8"
     )
+
+
+def write_jsonl(path, records):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as file:
+        for record in records:
+            file.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
 def load_field_map(base_path):
@@ -181,37 +180,88 @@ def normalize_one_module(module_block, field_map):
     if "credits" in normalized:
         normalized["credits"] = normalize_credits(normalized["credits"])
 
-    return normalized, matched_count, unmatched_labels
+    matched_labels = []
+
+    for label, _value in rows:
+        matched_fields = find_matching_fields(label, field_map)
+
+        if matched_fields:
+            matched_labels.append(label)
+
+    return normalized, matched_count, unmatched_labels, matched_labels
 
 
-def main():
-    field_map = load_field_map(BASE_PATH)
-    module_blocks = load_json(INPUT_PATH)
-
+def normalize_modules(
+    module_blocks: list[dict],
+    field_map: dict,
+) -> tuple[list[dict], dict]:
     normalized_modules = []
     total_matched = 0
     all_unmatched_labels = []
+    all_matched_labels = []
 
     for module_block in module_blocks:
-        normalized, matched_count, unmatched_labels = normalize_one_module(
+        normalized, matched_count, unmatched_labels, matched_labels = normalize_one_module(
             module_block,
-            field_map
+            field_map,
         )
 
         normalized_modules.append(normalized)
         total_matched += matched_count
         all_unmatched_labels.extend(unmatched_labels)
+        all_matched_labels.extend(matched_labels)
 
-    write_json(OUTPUT_PATH, normalized_modules)
+    stats = {
+        "matched_row_count": total_matched,
+        "unmatched_labels": all_unmatched_labels,
+        "matched_labels": all_matched_labels,
+    }
 
-    print(f"Written: {OUTPUT_PATH}")
+    return normalized_modules, stats
+
+
+def normalize_modules_file(
+    input_path: Path,
+    output_path: Path,
+    base_path: Path = BASE_PATH,
+    jsonl_output_path: Path | None = None,
+) -> tuple[list[dict], dict]:
+    field_map = load_field_map(base_path)
+    module_blocks = load_json(input_path)
+
+    normalized_modules, stats = normalize_modules(module_blocks, field_map)
+
+    write_json(output_path, normalized_modules)
+
+    if jsonl_output_path is not None:
+        write_jsonl(jsonl_output_path, normalized_modules)
+
+    return normalized_modules, stats
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input", type=Path)
+    parser.add_argument("output", type=Path)
+    parser.add_argument("--jsonl-output", type=Path, default=None)
+    args = parser.parse_args()
+
+    normalized_modules, stats = normalize_modules_file(
+        input_path=args.input,
+        output_path=args.output,
+        jsonl_output_path=args.jsonl_output,
+    )
+
+    print(f"Written: {args.output}")
     print(f"Modules: {len(normalized_modules)}")
-    print(f"Matched rows: {total_matched}")
-    print(f"Unmatched rows: {len(all_unmatched_labels)}")
+    print(f"Matched rows: {stats['matched_row_count']}")
+    print(f"Unmatched rows: {len(stats['unmatched_labels'])}")
 
-    if all_unmatched_labels:
+    if stats["unmatched_labels"]:
         print("\nUnmatched labels:")
-        for label, count in Counter(all_unmatched_labels).most_common():
+        for label, count in Counter(stats["unmatched_labels"]).most_common():
             print(f"- {label}: {count}")
 
 
