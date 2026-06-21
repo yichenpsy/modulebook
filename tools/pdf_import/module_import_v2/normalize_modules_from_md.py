@@ -32,6 +32,11 @@ def load_field_map(base_path):
     return base["normalized_field_map"]
 
 
+def load_ignored_labels(base_path):
+    base = yaml.safe_load(base_path.read_text(encoding="utf-8"))
+    return base.get("ignored_labels", [])
+
+
 def clean_cell(text):
     text = str(text)
     text = text.replace("<br>", "\n").replace("<br/>", "\n")
@@ -71,7 +76,8 @@ def parse_markdown_rows(markdown):
             continue
 
         label = cells[0]
-        value = " | ".join(cells[1:]).strip()
+        value_cells = [cell for cell in cells[1:] if cell]
+        value = " | ".join(value_cells).strip()
 
         if not label or not value:
             continue
@@ -148,6 +154,18 @@ def normalize_credits(value):
 
 
 def normalize_one_module(module_block, field_map):
+    return normalize_one_module_with_ignored_labels(
+        module_block,
+        field_map,
+        ignored_labels=[],
+    )
+
+
+def normalize_one_module_with_ignored_labels(
+    module_block,
+    field_map,
+    ignored_labels,
+):
     normalized = {field_name: None for field_name in field_map.keys()}
     normalized["additional_fields"] = {}
 
@@ -163,8 +181,15 @@ def normalize_one_module(module_block, field_map):
 
     matched_count = 0
     unmatched_labels = []
+    ignored_label_norms = {
+        normalize_label(label)
+        for label in ignored_labels
+    }
 
     for label, value in rows:
+        if normalize_label(label) in ignored_label_norms:
+            continue
+
         matched_fields = find_matching_fields(label, field_map)
 
         if not matched_fields:
@@ -183,6 +208,9 @@ def normalize_one_module(module_block, field_map):
     matched_labels = []
 
     for label, _value in rows:
+        if normalize_label(label) in ignored_label_norms:
+            continue
+
         matched_fields = find_matching_fields(label, field_map)
 
         if matched_fields:
@@ -194,16 +222,19 @@ def normalize_one_module(module_block, field_map):
 def normalize_modules(
     module_blocks: list[dict],
     field_map: dict,
+    ignored_labels: list[str] | None = None,
 ) -> tuple[list[dict], dict]:
     normalized_modules = []
     total_matched = 0
     all_unmatched_labels = []
     all_matched_labels = []
+    ignored_labels = ignored_labels or []
 
     for module_block in module_blocks:
-        normalized, matched_count, unmatched_labels, matched_labels = normalize_one_module(
+        normalized, matched_count, unmatched_labels, matched_labels = normalize_one_module_with_ignored_labels(
             module_block,
             field_map,
+            ignored_labels,
         )
 
         normalized_modules.append(normalized)
@@ -227,9 +258,14 @@ def normalize_modules_file(
     jsonl_output_path: Path | None = None,
 ) -> tuple[list[dict], dict]:
     field_map = load_field_map(base_path)
+    ignored_labels = load_ignored_labels(base_path)
     module_blocks = load_json(input_path)
 
-    normalized_modules, stats = normalize_modules(module_blocks, field_map)
+    normalized_modules, stats = normalize_modules(
+        module_blocks,
+        field_map,
+        ignored_labels,
+    )
 
     write_json(output_path, normalized_modules)
 

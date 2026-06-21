@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "input_pdf": "tools/pdf_import/data/input/architektur_2021.pdf",
+  "page_count_all": 58,
+  "first_module_page": 7,
+  "last_module_page": 58,
+  "detected_module_count": 39,
+  "required_module_count": 35,
+  "has_all_required_fields": true,
+  "missing_required_fields": [],
+  "unmatched_labels": "{}",
+  "unmatched_label_count": 0,
+  "outputs": {
+    "pages": "tools/pdf_import/data/service_test/architektur_2021/pages_md.json",
+    "module_boundary_pages": "tools/pdf_import/data/service_test/architektur_2021/module_boundary_pages.csv",
+    "module_blocks": "tools/pdf_import/data/service_test/architektur_2021/module_blocks_md.json",
+    "normalized_modules": "tools/pdf_import/data/service_test/architektur_2021/normalized_modules.json",
+    "normalized_modules_jsonl": "tools/pdf_import/data/service_test/architektur_2021/normalized_modules.jsonl"
+  }
+}

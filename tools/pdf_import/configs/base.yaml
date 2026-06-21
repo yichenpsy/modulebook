@@ -53,6 +53,9 @@ quality_checks:
     - Titel
     - Status
 
+ignored_labels:
+  - Datenfeld
+
 field_labels:
   - Modulnummer
   - Module ID
@@ -103,6 +106,7 @@ normalized_field_map:
   workload:
     - Workload
     - Präsenzzeit
+    - Präsenszeit
 
   learning_area:
     - Lerngebiet
