@@ -1,8 +1,8 @@
 module_start_patterns:
-  - "^\\s*Modulnummer\\s+((?:B\\d{2}[a-z]?|WP\\d{2})(?:\\.\\d+)?)\\b"
-  - "^\\s*Module\\s+ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2})(?:\\.\\d+)?)\\b"
-  - "^\\s*Module\\s+ID\\s*\\n\\s*Modulkürzel\\s*\\n\\s*([A-Z]{2,3}\\d?|ES\\d|EX\\d)\\b"
-  - "^\\s*Modul\\s*ID\\s+((?:B\\d{2}[a-z]?|WP\\d{2})(?:\\.\\d+)?)\\b"
+  - "^\\s*Modulnummer\\s+([A-Z]{1,4}\\d{1,2}(?:[.-]\\d{1,2})?[a-z]?|[A-Z]{2,4})\\b"
+  - "^\\s*Module\\s+ID(?:\\s+Modulkürzel)?\\s+([A-Z]{1,4}\\d{1,2}(?:[.-]\\d{1,2})?[a-z]?|[A-Z]{2,4})\\b"
+  - "^\\s*Module\\s+ID\\s*\\n\\s*Modulkürzel\\s*\\n\\s*([A-Z]{1,4}\\d{1,2}(?:[.-]\\d{1,2})?[a-z]?|[A-Z]{2,4})\\b"
+  - "^\\s*Modul\\s*ID\\s+([A-Z]{1,4}\\d{1,2}(?:[.-]\\d{1,2})?[a-z]?|[A-Z]{2,4})\\b"
 
 required_fields:
   - module_number

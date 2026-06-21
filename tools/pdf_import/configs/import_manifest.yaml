@@ -39,3 +39,8 @@ imports:
     study_program_code: medieninformatik_2024
     study_program: medieninformatik_2024
     expected_module_count: 53
+  maschinenbau:
+    source_file: tools/pdf_import/data/input/Maschinenbau.pdf
+    study_program_code: maschinenbau
+    study_program: Maschinenbau
+    expected_module_count: null

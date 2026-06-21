@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import re
 import yaml
 
 
@@ -12,12 +13,10 @@ def load_pages(path: Path):
         return json.load(file)
 
 
-def load_field_label_map(path: Path):
-    """Load normalized field labels from base.yaml."""
+def load_base_config(path: Path):
+    """Load the full base YAML config."""
     with path.open("r", encoding="utf-8") as file:
-        config = yaml.safe_load(file)
-
-    return config["normalized_field_map"]
+        return yaml.safe_load(file)
 
 
 def write_json(path: Path, data):
@@ -84,6 +83,75 @@ def clean_cell_text(cell: str):
     )
 
 
+def normalize_label_text(text: str):
+    """Normalize a label cell for conservative module-start matching."""
+    text = clean_cell_text(text).lower()
+    text = re.sub(r"[^a-zäöüß0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def cell_starts_with_module_number_label(cell: str, module_number_labels: list[str]):
+    """
+    Check whether a cell is a real module-number label.
+
+    Some PDFs produce a duplicated first table row containing the whole module
+    text. That row contains "Modulnummer" somewhere in the cell, but it is not
+    a label cell and must not start a new module.
+    """
+    cell_norm = normalize_label_text(cell)
+
+    for label in module_number_labels:
+        label_norm = normalize_label_text(label)
+
+        if cell_norm == label_norm or cell_norm.startswith(label_norm + " "):
+            return True
+
+    return False
+
+
+def matches_module_start_pattern(
+    label_cell: str,
+    value_cell: str,
+    module_start_patterns: list[str],
+):
+    """Validate a label/value pair with base.yaml module_start_patterns."""
+    label = clean_cell_text(label_cell).strip("| ")
+    value = clean_cell_text(value_cell).strip("| ")
+
+    if not value or len(value) > 40:
+        return None
+
+    text = re.sub(r"\s+", " ", f"{label} {value}").strip()
+
+    for pattern in module_start_patterns:
+        match = re.search(pattern, text)
+
+        if match:
+            return match.group(1)
+
+    return None
+
+
+def is_duplicated_page_wide_row(cells: list[str]):
+    """
+    Detect a PyMuPDF4LLM artifact where the whole module table is duplicated
+    into a first two-column row before the real table rows.
+    """
+    if len(cells) != 2:
+        return False
+
+    left = clean_cell_text(cells[0])
+    right = clean_cell_text(cells[1])
+
+    if left != right:
+        return False
+
+    if len(left) < 200:
+        return False
+
+    return "Modulnummer" in left or "Module ID" in left
+
+
 def find_first_non_empty_cell_after(cells: list[str], start_index: int):
     """Find the first non-empty cell after a given cell index."""
     for cell in cells[start_index + 1:]:
@@ -98,6 +166,7 @@ def find_first_non_empty_cell_after(cells: list[str], start_index: int):
 def detect_module_start_from_line(
     line: str,
     module_number_labels: list[str],
+    module_start_patterns: list[str],
 ):
     """
     Detect whether a line starts a new module.
@@ -117,14 +186,21 @@ def detect_module_start_from_line(
         return None
 
     for index, cell in enumerate(cells):
-        cleaned_cell = clean_cell_text(cell)
+        if not cell_starts_with_module_number_label(cell, module_number_labels):
+            continue
 
-        for label in module_number_labels:
-            if label in cleaned_cell:
-                module_number = find_first_non_empty_cell_after(cells, index)
+        module_number = find_first_non_empty_cell_after(cells, index)
+        if module_number is None:
+            continue
 
-                if module_number:
-                    return module_number
+        matched_module_number = matches_module_start_pattern(
+            cell,
+            module_number,
+            module_start_patterns,
+        )
+
+        if matched_module_number:
+            return matched_module_number
 
     return None
 
@@ -132,6 +208,7 @@ def detect_module_start_from_line(
 def split_modules_from_pages(
     pages: list[dict],
     field_label_map: dict,
+    module_start_patterns: list[str],
     source_file: str | None = None,
 ):
     """
@@ -158,10 +235,14 @@ def split_modules_from_pages(
             # Ignore Markdown separator rows.
             if is_separator_row(cells):
                 continue
+
+            if is_duplicated_page_wide_row(cells):
+                continue
             
             module_number = detect_module_start_from_line(
                 line,
                 module_number_labels,
+                module_start_patterns,
             )
 
             if module_number:
@@ -197,7 +278,9 @@ def split_modules_to_json(
     source_file: str | None = None,
 ) -> list[dict]:
     pages = load_pages(pages_json)
-    field_label_map = load_field_label_map(base_yaml)
+    base_config = load_base_config(base_yaml)
+    field_label_map = base_config["normalized_field_map"]
+    module_start_patterns = base_config["module_start_patterns"]
 
     module_pages = filter_module_pages(
         pages,
@@ -208,6 +291,7 @@ def split_modules_to_json(
     modules = split_modules_from_pages(
         module_pages,
         field_label_map,
+        module_start_patterns,
         source_file=source_file,
     )
 
