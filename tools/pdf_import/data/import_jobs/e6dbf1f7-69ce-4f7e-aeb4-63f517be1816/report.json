@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "input_pdf": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/e6dbf1f7-69ce-4f7e-aeb4-63f517be1816/input.pdf",
+  "page_count_all": 58,
+  "first_module_page": 7,
+  "last_module_page": 58,
+  "detected_module_count": 39,
+  "required_module_count": null,
+  "has_all_required_fields": true,
+  "missing_required_fields": [],
+  "unmatched_labels": "{}",
+  "unmatched_label_count": 0,
+  "outputs": {
+    "pages": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/e6dbf1f7-69ce-4f7e-aeb4-63f517be1816/pages_md.json",
+    "module_boundary_pages": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/e6dbf1f7-69ce-4f7e-aeb4-63f517be1816/module_boundary_pages.csv",
+    "module_blocks": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/e6dbf1f7-69ce-4f7e-aeb4-63f517be1816/module_blocks_md.json",
+    "normalized_modules": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/e6dbf1f7-69ce-4f7e-aeb4-63f517be1816/normalized_modules.json",
+    "normalized_modules_jsonl": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/e6dbf1f7-69ce-4f7e-aeb4-63f517be1816/normalized_modules.jsonl"
+  }
+}
