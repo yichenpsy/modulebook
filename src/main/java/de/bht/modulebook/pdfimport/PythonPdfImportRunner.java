@@ -56,6 +56,7 @@ public class PythonPdfImportRunner {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.directory(Path.of(properties.getRepoRoot()).toFile());
 
+        // start pipeline_single.py 
         Process process = processBuilder.start();
 
         boolean finished = process.waitFor(
