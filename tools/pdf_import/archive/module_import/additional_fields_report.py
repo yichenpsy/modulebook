@@ -2,8 +2,8 @@ import csv
 import json
 from pathlib import Path
 
-from tools.pdf_import.module_import.config import PDF_IMPORT_ROOT
-from tools.pdf_import.module_import.json_validator import parse_llm_json
+from tools.pdf_import.archive.module_import.config import PDF_IMPORT_ROOT
+from tools.pdf_import.archive.module_import.json_validator import parse_llm_json
 
 
 def read_raw_llm_file(path: Path) -> dict | None:

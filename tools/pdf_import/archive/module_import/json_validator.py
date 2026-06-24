@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from jsonschema import Draft202012Validator
 
-from tools.pdf_import.module_import.config import PDF_IMPORT_ROOT
+from tools.pdf_import.archive.module_import.config import PDF_IMPORT_ROOT
 
 
 def load_module_schema() -> dict:

@@ -1,0 +1,32 @@
+{
+  "status": "ok",
+  "input_pdf": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/83135c4b-64a5-4f1a-8cfe-762410df4bf4/input.pdf",
+  "page_count_all": 116,
+  "first_module_page": 5,
+  "last_module_page": 116,
+  "detected_module_count": 85,
+  "required_module_count": null,
+  "has_all_required_fields": false,
+  "missing_required_fields": [
+    {
+      "module_number": "SP4-05",
+      "source_pages": [
+        98,
+        100,
+        101
+      ],
+      "missing_fields": [
+        "contents"
+      ]
+    }
+  ],
+  "unmatched_labels": "{}",
+  "unmatched_label_count": 0,
+  "outputs": {
+    "pages": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/83135c4b-64a5-4f1a-8cfe-762410df4bf4/pages_md.json",
+    "module_boundary_pages": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/83135c4b-64a5-4f1a-8cfe-762410df4bf4/module_boundary_pages.csv",
+    "module_blocks": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/83135c4b-64a5-4f1a-8cfe-762410df4bf4/module_blocks_md.json",
+    "normalized_modules": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/83135c4b-64a5-4f1a-8cfe-762410df4bf4/normalized_modules.json",
+    "normalized_modules_jsonl": "/Users/yichenzhong/__repo/modulebook/tools/pdf_import/data/import_jobs/83135c4b-64a5-4f1a-8cfe-762410df4bf4/normalized_modules.jsonl"
+  }
+}

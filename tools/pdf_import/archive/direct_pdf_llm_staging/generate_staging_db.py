@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from tools.pdf_import.one_shot_llm_staging.generate_staging_db import (
+from tools.pdf_import.archive.one_shot_llm_staging.generate_staging_db import (
     DEFAULT_API_URL,
     DEFAULT_MANIFEST_PATH,
     DEFAULT_MODEL,

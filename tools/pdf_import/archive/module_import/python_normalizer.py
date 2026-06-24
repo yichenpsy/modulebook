@@ -2,12 +2,12 @@ import json
 import re
 from pathlib import Path
 
-from tools.pdf_import.module_import.config import (
+from tools.pdf_import.archive.module_import.config import (
     PDF_IMPORT_ROOT,
     get_imports,
     load_base_config,
 )
-from tools.pdf_import.module_import.json_validator import validate_extracted_module
+from tools.pdf_import.archive.module_import.json_validator import validate_extracted_module
 
 
 def load_jsonl(path: Path) -> list[dict]:

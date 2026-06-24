@@ -2,17 +2,17 @@ import csv
 import json
 from pathlib import Path
 
-from tools.pdf_import.module_import.config import (
+from tools.pdf_import.archive.module_import.config import (
     PROJECT_ROOT,
     PDF_IMPORT_ROOT,
     load_base_config,
     get_imports,
 )
-from tools.pdf_import.module_import.field_parser import run_field_parsing
-from tools.pdf_import.module_import.pdf_reader import extract_pages
-from tools.pdf_import.module_import.python_normalizer import run_python_normalization
-from tools.pdf_import.module_import.text_cleaner import clean_pages
-from tools.pdf_import.module_import.module_splitter import (
+from tools.pdf_import.archive.module_import.field_parser import run_field_parsing
+from tools.pdf_import.archive.module_import.pdf_reader import extract_pages
+from tools.pdf_import.archive.module_import.python_normalizer import run_python_normalization
+from tools.pdf_import.archive.module_import.text_cleaner import clean_pages
+from tools.pdf_import.archive.module_import.module_splitter import (
     split_module_blocks,
     create_split_summary,
 )

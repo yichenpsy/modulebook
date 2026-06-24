@@ -4,14 +4,14 @@ import json
 import time
 from pathlib import Path
 
-from tools.pdf_import.module_import.config import PDF_IMPORT_ROOT, get_imports
-from tools.pdf_import.module_import.llm_extractor import (
+from tools.pdf_import.archive.module_import.config import PDF_IMPORT_ROOT, get_imports
+from tools.pdf_import.archive.module_import.llm_extractor import (
     load_prompt_template,
     load_jsonl,
     render_prompt,
 )
-from tools.pdf_import.module_import.llm_client import call_llm
-from tools.pdf_import.module_import.json_validator import (
+from tools.pdf_import.archive.module_import.llm_client import call_llm
+from tools.pdf_import.archive.module_import.json_validator import (
     parse_llm_json,
     validate_extracted_module,
 )

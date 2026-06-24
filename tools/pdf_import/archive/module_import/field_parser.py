@@ -2,7 +2,7 @@ import json
 import re
 from pathlib import Path
 
-from tools.pdf_import.module_import.config import (
+from tools.pdf_import.archive.module_import.config import (
     PDF_IMPORT_ROOT,
     load_base_config,
     get_imports,

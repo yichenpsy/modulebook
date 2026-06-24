@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-from tools.pdf_import.module_import.config import PDF_IMPORT_ROOT
+from tools.pdf_import.archive.module_import.config import PDF_IMPORT_ROOT
 from tools.pdf_import.module_import_v2.extract_module_pages import (
     build_label_to_field_map,
     find_first_module_page,

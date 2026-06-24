@@ -3,7 +3,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from tools.pdf_import.module_import.config import PDF_IMPORT_ROOT
+from tools.pdf_import.archive.module_import.config import PDF_IMPORT_ROOT
 
 
 DEFAULT_INPUT_PATH = PDF_IMPORT_ROOT / "data" / "output" / "modules_valid_python.jsonl"
