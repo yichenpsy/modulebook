@@ -1,5 +1,7 @@
 package de.bht.modulebook.controller;
 
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,7 @@ public class PdfImportController {
     }
 
     @PostMapping("/api/pdf-import/normalize")
-    public JsonNode normalize(@RequestParam("file") MultipartFile file) throws Exception {
+    public Map<String, JsonNode> normalize(@RequestParam("file") MultipartFile file) throws Exception {
         return pdfImportService.importPdf(file);
     }
 

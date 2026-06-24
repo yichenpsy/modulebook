@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Import</title>
+</head>
+<body>
+    <h1>PDF Import</h1>
+
+    <input type="file" id="pdfFile" accept="application/pdf">
+    <button onclick="uploadPdf()">Upload</button>
+
+    <h2>Status</h2>
+    <pre id="status"></pre>
+
+    <h2>Report</h2>
+    <pre id="report"></pre>
+
+    <h2>Normalized Modules</h2>
+    <pre id="modules"></pre>
+
+    <script>
+        async function uploadPdf() {
+            const fileInput = document.getElementById("pdfFile");
+            const statusBox = document.getElementById("status");
+            const reportBox = document.getElementById("report");
+            const modulesBox = document.getElementById("modules");
+
+            if (fileInput.files.length === 0) {
+                statusBox.textContent = "Please choose a PDF file first.";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            statusBox.textContent = "Uploading and processing...";
+            reportBox.textContent = "";
+            modulesBox.textContent = "";
+
+            try {
+                const response = await fetch("/api/pdf-import/normalize", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const text = await response.text();
+
+                if (!response.ok) {
+                    statusBox.textContent = "Error";
+                    reportBox.textContent = text;
+                    return;
+                }
+
+                const json = JSON.parse(text);
+                statusBox.textContent = "Done";
+                reportBox.textContent = JSON.stringify(json.report, null, 2);
+                modulesBox.textContent = JSON.stringify(json.normalizedModules, null, 2);
+            } catch (error) {
+                statusBox.textContent = "Request failed:\n" + error;
+            }
+        }
+    </script>
+</body>
+</html>

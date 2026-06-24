@@ -2,6 +2,7 @@ package de.bht.modulebook.pdfimport;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class PdfImportService {
         this.objectMapper = objectMapper;
     }
 
-    public JsonNode importPdf(MultipartFile file) throws Exception {
+    public Map<String, JsonNode> importPdf(MultipartFile file) throws Exception {
         // check empty file
         if (file.isEmpty()){
             throw new IllegalArgumentException("PDF file is empty");
@@ -59,7 +60,13 @@ public class PdfImportService {
             throw new RuntimeException("PDF import failed: " + result.stderr());
         }
 
-        return objectMapper.readTree(outputJson.toFile());
+        JsonNode normalizedModules = objectMapper.readTree(outputJson.toFile());
+        JsonNode report = objectMapper.readTree(reportJson.toFile());
+
+        return Map.of(
+            "report", report,
+            "normalizedModules", normalizedModules
+        );
     }
 
     
