@@ -2,6 +2,8 @@ package de.bht.modulebook.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+// Annotation for configuration in file "application.properties"
+// pythonExecutable -> pdf-import.python-executable
 @ConfigurationProperties(prefix = "pdf-import")
 public class PdfImportProperties {
     private String pythonExecutable;
