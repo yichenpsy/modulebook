@@ -1,4 +1,4 @@
-package de.bht.modulebook.controller;
+package de.bht.modulebook.pdfimport;
 
 import java.util.Map;
 
@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import de.bht.modulebook.pdfimport.PdfImportService;
 import tools.jackson.databind.JsonNode;
 
 @RestController

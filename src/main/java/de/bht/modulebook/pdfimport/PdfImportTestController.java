@@ -1,7 +1,5 @@
-package de.bht.modulebook.controller;
+package de.bht.modulebook.pdfimport;
 
-import de.bht.modulebook.pdfimport.ImportRunResult;
-import de.bht.modulebook.pdfimport.PythonPdfImportRunner;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
