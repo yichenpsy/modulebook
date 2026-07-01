@@ -80,3 +80,4 @@ Thumbs.db
 .env
 tools/pdf_import/.env
 tools/pdf_import/output/
+tools/pdf_import/data/import_jobs/
