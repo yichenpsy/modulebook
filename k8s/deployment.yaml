@@ -21,3 +21,13 @@ spec: # what this manager should do
           image: registry.bht-berlin.de/ris/modulebook/modulebook-image:latest # a default image, .gitlab-ci.yml replaces it during CI deploy
           ports:
             - containerPort: 8081 # The app inside the container is expected to listen on port 8081.
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: modulebook
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT # tells OpenTelemetry, send data to where
+              value: http://hudson-otel-collector.ris-lab.svc.cluster.local:4317 
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL # tells OpenTelemetry, send data with which protocol
+            # kubectl -n ris-lab get configmap hudson-otel-collector-config -o yaml
+            # 4317 = OTLP gRPC
+            # 4318 = OTLP HTTP
+              value: grpc
