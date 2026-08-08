@@ -17,7 +17,8 @@ public class ModuleService {
     }
     
     public Module create(Module module) {
-        return moduleRepository.insert(module);
+        Module created = moduleRepository.insert(module);
+        return getById(created.getId());
     }
 
     public Module getById(Long id) {
