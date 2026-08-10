@@ -29,6 +29,7 @@ public class ModuleRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.insertModule = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("modules")
+                .usingColumns("code", "name", "credits", "description")
                 .usingGeneratedKeyColumns("id");
     }
 
