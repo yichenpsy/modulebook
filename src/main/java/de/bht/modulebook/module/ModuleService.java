@@ -30,6 +30,10 @@ public class ModuleService {
         return moduleRepository.findAll();
     }
 
+    public List<Module> getByStudyProgramId(Long studyProgramId) {
+        return moduleRepository.findByStudyProgramId(studyProgramId);
+    }
+
     public Module update(Long id, Module module) {
         boolean updated = moduleRepository.update(id, module);
 

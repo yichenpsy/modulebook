@@ -5,6 +5,7 @@ import java.time.Instant;
 
 public record ModuleResponse(
     Long id,
+    Long studyProgramId,
     String code,
     String name,
     BigDecimal credits,

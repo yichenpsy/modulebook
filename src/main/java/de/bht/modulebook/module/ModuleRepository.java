@@ -29,7 +29,8 @@ public class ModuleRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.insertModule = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("modules")
-                .usingColumns("code", "name", "credits", "description")
+                // study_program_id links this module to one row in study_programs.
+                .usingColumns("study_program_id", "code", "name", "credits", "description")
                 .usingGeneratedKeyColumns("id");
     }
 
@@ -38,6 +39,7 @@ public class ModuleRepository {
         Map<String, Object> values = new HashMap<>();
 
         // Map Java object fields to database column names.
+        values.put("study_program_id", module.getStudyProgramId());
         values.put("code", module.getCode());
         values.put("name", module.getName());
         values.put("credits", module.getCredits());
@@ -53,7 +55,7 @@ public class ModuleRepository {
     public Optional<Module> findById(Long id) {
         // The ? placeholder is safely replaced with the id argument by JdbcTemplate.
         List<Module> modules = jdbcTemplate.query(
-                "SELECT id, code, name, credits, description, created_at, updated_at FROM modules WHERE id = ?",
+                "SELECT id, study_program_id, code, name, credits, description, created_at, updated_at FROM modules WHERE id = ?",
                 moduleRowMapper,
                 id
         );
@@ -65,15 +67,26 @@ public class ModuleRepository {
     // Returns all modules in a stable order
     public List<Module> findAll() {
         return jdbcTemplate.query(
-                "SELECT id, code, name, credits, description, created_at, updated_at FROM modules ORDER BY code",
+                "SELECT id, study_program_id, code, name, credits, description, created_at, updated_at FROM modules ORDER BY code",
                 moduleRowMapper
+        );
+    }
+
+    public List<Module> findByStudyProgramId(Long studyProgramId) {
+        // The selected study program id comes from /api/study-programs/{id}/modules.
+        return jdbcTemplate.query(
+                "SELECT id, study_program_id, code, name, credits, description, created_at, updated_at FROM modules WHERE study_program_id = ? ORDER BY code",
+                moduleRowMapper,
+                studyProgramId
         );
     }
 
     // Updates editable fields and returns false when no row with this id exists.
     public boolean update(Long id, Module module) {
         int rowsUpdated = jdbcTemplate.update(
-                "UPDATE modules SET code = ?, name = ?, credits = ?, description = ?, updated_at = now() WHERE id = ?",
+                "UPDATE modules SET study_program_id = ?, code = ?, name = ?, credits = ?, description = ?, updated_at = now() WHERE id = ?",
+                // Keeping study_program_id here allows moving a module to another program if needed later.
+                module.getStudyProgramId(),
                 module.getCode(),
                 module.getName(),
                 module.getCredits(),
@@ -100,6 +113,7 @@ public class ModuleRepository {
         public Module mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Module(
                     rs.getLong("id"),
+                    rs.getLong("study_program_id"),
                     rs.getString("code"),
                     rs.getString("name"),
                     rs.getBigDecimal("credits"),

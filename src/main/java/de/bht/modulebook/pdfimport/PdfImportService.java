@@ -20,6 +20,8 @@ import de.bht.modulebook.module.dto.ModuleResponse;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModuleError;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
+import de.bht.modulebook.studyprogram.StudyProgram;
+import de.bht.modulebook.studyprogram.StudyProgramService;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -30,19 +32,22 @@ public class PdfImportService {
     private final ObjectMapper objectMapper;
     private final ModuleService moduleService;
     private final PdfImportedModuleMapper importedModuleMapper;
+    private final StudyProgramService studyProgramService;
 
     public PdfImportService(
         PythonPdfImportRunner runner,
         PdfImportProperties properties,
         ObjectMapper objectMapper,
         ModuleService moduleService,
-        PdfImportedModuleMapper importedModuleMapper
+        PdfImportedModuleMapper importedModuleMapper,
+        StudyProgramService studyProgramService
     ){
         this.runner = runner;
         this.properties = properties;
         this.objectMapper = objectMapper;
         this.moduleService = moduleService;
         this.importedModuleMapper = importedModuleMapper;
+        this.studyProgramService = studyProgramService;
     }
 
     public Map<String, JsonNode> importPdf(String studyProgram, Integer year, MultipartFile file) throws Exception {
@@ -95,6 +100,7 @@ public class PdfImportService {
 
         List<ModuleResponse> createdModules = new ArrayList<>();
         List<SaveImportedModuleError> errors = new ArrayList<>();
+        StudyProgram studyProgram = studyProgramService.findOrCreate(request.studyProgram(), request.year());
 
         for (int i = 0; i < request.modules().size(); i++) {
             JsonNode imported = request.modules().get(i);
@@ -102,6 +108,7 @@ public class PdfImportService {
 
             try {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
+                module.setStudyProgramId(studyProgram.getId());
                 Module created = moduleService.create(module);
                 createdModules.add(ModuleMapper.toResponse(created));
             } catch (Exception exception) {

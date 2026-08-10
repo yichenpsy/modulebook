@@ -16,12 +16,14 @@
         }
 
         input,
+        select,
         textarea,
         button {
             font: inherit;
         }
 
         input,
+        select,
         textarea {
             box-sizing: border-box;
             width: 100%;
@@ -67,6 +69,20 @@
             max-width: 720px;
         }
 
+        .row-actions {
+            white-space: nowrap;
+        }
+
+        .inline-input,
+        .inline-textarea {
+            max-width: none;
+            margin-top: 0;
+        }
+
+        .inline-textarea {
+            min-height: 72px;
+        }
+
         .module-card {
             border: 1px solid #ddd;
             padding: 12px;
@@ -99,7 +115,14 @@
         <h2>Upload</h2>
 
         <label>
-            Studiengang
+            Existing study program
+            <select id="studyProgramSelect" onchange="onStudyProgramSelected()">
+                <option value="">New study program</option>
+            </select>
+        </label>
+
+        <label>
+            Study program name
             <input id="studyProgram" value="Architektur">
         </label>
 
@@ -137,6 +160,8 @@
 
     <script>
         let importedModules = [];
+        let studyPrograms = [];
+        let savedModules = [];
 
         async function uploadPdf() {
             const studyProgram = document.getElementById("studyProgram").value.trim();
@@ -235,17 +260,70 @@
                     ).join("\n"));
                 }
 
+                await loadStudyPrograms();
+                selectStudyProgramByNameAndYear(request.studyProgram, request.year);
                 await loadSavedModules();
             } catch (error) {
                 setStatus("Save request failed: " + error);
             }
         }
 
+        async function loadStudyPrograms() {
+            try {
+                const response = await fetch("/api/study-programs");
+                const text = await response.text();
+
+                if (!response.ok) {
+                    setStatus("Could not load study programs: " + text);
+                    return;
+                }
+
+                studyPrograms = JSON.parse(text);
+                renderStudyProgramSelect();
+            } catch (error) {
+                setStatus("Study program request failed: " + error);
+            }
+        }
+
+        function renderStudyProgramSelect() {
+            const select = document.getElementById("studyProgramSelect");
+            const currentValue = select.value;
+
+            select.innerHTML = `
+                <option value="">New study program</option>
+                ${studyPrograms.map(program => `
+                    <option value="${escapeHtml(String(program.id))}">
+                        ${escapeHtml(program.name)} (${escapeHtml(String(program.year))})
+                    </option>
+                `).join("")}
+            `;
+
+            if (studyPrograms.some(program => String(program.id) === currentValue)) {
+                select.value = currentValue;
+            }
+        }
+
+        async function onStudyProgramSelected() {
+            const program = selectedStudyProgram();
+
+            if (!program) {
+                savedModules = [];
+                renderSavedModules(savedModules);
+                return;
+            }
+
+            document.getElementById("studyProgram").value = program.name;
+            document.getElementById("year").value = program.year;
+            await loadSavedModules();
+        }
+
         async function loadSavedModules() {
             setStatus("Loading saved modules...");
 
             try {
-                const response = await fetch("/api/modules");
+                const programId = document.getElementById("studyProgramSelect").value;
+                const url = programId ? `/api/study-programs/${programId}/modules` : "/api/modules";
+                const response = await fetch(url);
                 const text = await response.text();
 
                 if (!response.ok) {
@@ -253,9 +331,9 @@
                     return;
                 }
 
-                const modules = JSON.parse(text);
-                renderSavedModules(modules);
-                setStatus(`Loaded ${modules.length} saved modules.`);
+                savedModules = JSON.parse(text);
+                renderSavedModules(savedModules);
+                setStatus(`Loaded ${savedModules.length} saved modules.`);
             } catch (error) {
                 setStatus("Load request failed: " + error);
             }
@@ -333,20 +411,110 @@
                             <th>Code</th>
                             <th>Name</th>
                             <th>Credits</th>
+                            <th>Description</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${modules.map(module => `
-                            <tr>
+                        ${modules.map((module, index) => `
+                            <tr data-saved-index="${index}">
                                 <td>${escapeHtml(String(module.id))}</td>
-                                <td>${escapeHtml(module.code || "")}</td>
-                                <td>${escapeHtml(module.name || "")}</td>
-                                <td>${escapeHtml(String(module.credits ?? ""))}</td>
+                                <td>
+                                    <input class="inline-input" data-saved-field="code" value="${escapeHtml(module.code || "")}">
+                                </td>
+                                <td>
+                                    <input class="inline-input" data-saved-field="name" value="${escapeHtml(module.name || "")}">
+                                </td>
+                                <td>
+                                    <input class="inline-input" data-saved-field="credits" type="number" step="0.5" value="${escapeHtml(String(module.credits ?? ""))}">
+                                </td>
+                                <td>
+                                    <textarea class="inline-textarea" data-saved-field="description">${escapeHtml(module.description || "")}</textarea>
+                                </td>
+                                <td class="row-actions">
+                                    <button type="button" onclick="updateSavedModule(${index})">Save</button>
+                                    <button type="button" onclick="deleteSavedModule(${index})">Delete</button>
+                                </td>
                             </tr>
                         `).join("")}
                     </tbody>
                 </table>
             `;
+        }
+
+        async function updateSavedModule(index) {
+            const row = document.querySelector(`[data-saved-index="${index}"]`);
+            const original = savedModules[index];
+
+            if (!row || !original) {
+                setStatus("Could not find module row.");
+                return;
+            }
+
+            const request = {
+                studyProgramId: Number(original.studyProgramId),
+                code: valueFromRow(row, "code"),
+                name: valueFromRow(row, "name"),
+                credits: numberOrNull(valueFromRow(row, "credits")),
+                description: valueFromRow(row, "description")
+            };
+
+            setStatus(`Saving module ${original.id}...`);
+
+            try {
+                const response = await fetch(`/api/modules/${original.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(request)
+                });
+                const text = await response.text();
+
+                if (!response.ok) {
+                    setStatus("Module update failed: " + text);
+                    return;
+                }
+
+                savedModules[index] = JSON.parse(text);
+                renderSavedModules(savedModules);
+                setStatus(`Saved module ${original.id}.`);
+            } catch (error) {
+                setStatus("Module update request failed: " + error);
+            }
+        }
+
+        async function deleteSavedModule(index) {
+            const module = savedModules[index];
+
+            if (!module) {
+                setStatus("Could not find module row.");
+                return;
+            }
+
+            if (!confirm(`Delete module ${module.code || module.id}?`)) {
+                return;
+            }
+
+            setStatus(`Deleting module ${module.id}...`);
+
+            try {
+                const response = await fetch(`/api/modules/${module.id}`, {
+                    method: "DELETE"
+                });
+                const text = await response.text();
+
+                if (!response.ok) {
+                    setStatus("Module delete failed: " + text);
+                    return;
+                }
+
+                savedModules.splice(index, 1);
+                renderSavedModules(savedModules);
+                setStatus(`Deleted module ${module.id}.`);
+            } catch (error) {
+                setStatus("Module delete request failed: " + error);
+            }
         }
 
         function syncImportedModulesFromForm() {
@@ -368,6 +536,29 @@
             setStatus(`Removed module row ${index + 1}.`);
         }
 
+        function selectedStudyProgram() {
+            const selectedId = document.getElementById("studyProgramSelect").value;
+            return studyPrograms.find(program => String(program.id) === selectedId);
+        }
+
+        function selectStudyProgramByNameAndYear(name, year) {
+            const program = studyPrograms.find(item =>
+                item.name === name && Number(item.year) === Number(year)
+            );
+
+            if (program) {
+                document.getElementById("studyProgramSelect").value = String(program.id);
+            }
+        }
+
+        function valueFromRow(row, field) {
+            return row.querySelector(`[data-saved-field="${field}"]`).value.trim();
+        }
+
+        function numberOrNull(value) {
+            return value === "" ? null : Number(value);
+        }
+
         function setStatus(message) {
             document.getElementById("status").textContent = message;
         }
@@ -381,7 +572,7 @@
                 .replaceAll("'", "&#039;");
         }
 
-        loadSavedModules();
+        loadStudyPrograms().then(loadSavedModules);
     </script>
 </body>
 </html>

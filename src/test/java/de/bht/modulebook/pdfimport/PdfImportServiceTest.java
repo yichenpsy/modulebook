@@ -2,6 +2,7 @@ package de.bht.modulebook.pdfimport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -21,6 +22,8 @@ import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
+import de.bht.modulebook.studyprogram.StudyProgram;
+import de.bht.modulebook.studyprogram.StudyProgramService;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
@@ -46,6 +49,9 @@ class PdfImportServiceTest {
     @Mock
     private PdfImportedModuleMapper importedModuleMapper;
 
+    @Mock
+    private StudyProgramService studyProgramService;
+
     private PdfImportService service;
 
     @BeforeEach
@@ -56,7 +62,8 @@ class PdfImportServiceTest {
                 properties,
                 objectMapper,
                 moduleService,
-                importedModuleMapper
+                importedModuleMapper,
+                studyProgramService
         );
     }
 
@@ -81,6 +88,7 @@ class PdfImportServiceTest {
         // ModuleService returns the saved row, including database id and timestamps.
         Module created = new Module(
                 1L,
+                10L,
                 "B01",
                 "Test Module",
                 new BigDecimal("5.0"),
@@ -91,6 +99,13 @@ class PdfImportServiceTest {
 
         // Define how the mocked collaborators should behave for this example.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");
+        when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(new StudyProgram(
+                10L,
+                "Architektur",
+                2021,
+                Instant.parse("2026-01-01T00:00:00Z"),
+                Instant.parse("2026-01-01T00:00:00Z")
+        ));
         when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
         when(moduleService.create(mapped)).thenReturn(created);
 
@@ -110,8 +125,11 @@ class PdfImportServiceTest {
         assertThat(response.errorCount()).isZero();
         assertThat(response.createdModules()).hasSize(1);
         assertThat(response.createdModules().get(0).id()).isEqualTo(1L);
+        assertThat(response.createdModules().get(0).studyProgramId()).isEqualTo(10L);
         assertThat(response.createdModules().get(0).code()).isEqualTo("B01");
         assertThat(response.errors()).isEmpty();
+        verify(moduleService).create(mapped);
+        assertThat(mapped.getStudyProgramId()).isEqualTo(10L);
     }
 
     @Test
@@ -130,6 +148,13 @@ class PdfImportServiceTest {
 
         // Simulate a save failure, such as a duplicate module code from the database.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");
+        when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(new StudyProgram(
+                10L,
+                "Architektur",
+                2021,
+                Instant.parse("2026-01-01T00:00:00Z"),
+                Instant.parse("2026-01-01T00:00:00Z")
+        ));
         when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
         when(moduleService.create(mapped)).thenThrow(new IllegalArgumentException("Duplicate module code"));
 

@@ -5,6 +5,7 @@ import java.time.Instant;
 public class Module {
 
     private Long id;
+    private Long studyProgramId;
     private String code;
     private String name;
     private BigDecimal credits;
@@ -15,9 +16,10 @@ public class Module {
     public Module() {
     }
 
-    public Module(Long id, String code, String name, BigDecimal credits, String description,
+    public Module(Long id, Long studyProgramId, String code, String name, BigDecimal credits, String description,
             Instant createdAt, Instant updatedAt) {
         this.id = id;
+        this.studyProgramId = studyProgramId;
         this.code = code;
         this.name = name;
         this.credits = credits;
@@ -32,6 +34,14 @@ public class Module {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getStudyProgramId() {
+        return studyProgramId;
+    }
+
+    public void setStudyProgramId(Long studyProgramId) {
+        this.studyProgramId = studyProgramId;
     }
 
     public String getCode() {
