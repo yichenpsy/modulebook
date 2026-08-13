@@ -83,6 +83,22 @@ class StudyProgramControllerTest {
                 "Test Module",
                 new BigDecimal("5.0"),
                 "description",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
@@ -95,7 +111,7 @@ class StudyProgramControllerTest {
         assertThat(response).hasSize(1);
         assertThat(response.get(0).id()).isEqualTo(100L);
         assertThat(response.get(0).studyProgramId()).isEqualTo(10L);
-        assertThat(response.get(0).code()).isEqualTo("B01");
+        assertThat(response.get(0).moduleNumber()).isEqualTo("B01");
         verify(studyProgramService).getById(10L);
         verify(moduleService).getByStudyProgramId(10L);
     }

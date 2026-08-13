@@ -109,8 +109,18 @@ public class PdfImportService {
             try {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
                 module.setStudyProgramId(studyProgram.getId());
-                Module created = moduleService.create(module);
-                createdModules.add(ModuleMapper.toResponse(created));
+                Module saved;
+                Module existing = moduleService
+                    .findByStudyProgramIdAndModuleNumber(studyProgram.getId(),
+                    module.getModuleNumber()).orElse(null);
+                if(existing == null){
+                    saved = moduleService.create(module);
+                } else {
+                    saved = moduleService.update(existing.getId(), module);
+
+                }
+
+                createdModules.add(ModuleMapper.toResponse(saved));
             } catch (Exception exception) {
                 errors.add(new SaveImportedModuleError(
                     i,

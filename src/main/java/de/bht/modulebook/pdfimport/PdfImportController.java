@@ -20,6 +20,7 @@ public class PdfImportController {
         this.pdfImportService = pdfImportService;
     }
 
+    // upload a PDF and runs Python
     @PostMapping("/api/pdf-import/normalize")
     public Map<String, JsonNode> normalize(
         @RequestParam("studyProgram") String studyProgram,
@@ -29,6 +30,7 @@ public class PdfImportController {
         return pdfImportService.importPdf(studyProgram, year, file);
     }
 
+    // saves imported modules into a database
     @PostMapping("/api/pdf-import/modules")
     public SaveImportedModulesResponse saveImportedModules(@RequestBody SaveImportedModulesRequest request) {
         return pdfImportService.saveImportedModules(request);

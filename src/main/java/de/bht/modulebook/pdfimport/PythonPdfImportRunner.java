@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import de.bht.modulebook.config.PdfImportProperties;
 
+// builds and runs this command:
+// python -m tools.pdf_import.module_import_v2.pipeline_single ...
 @Service
 public class PythonPdfImportRunner {
 

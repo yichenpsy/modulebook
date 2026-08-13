@@ -80,7 +80,7 @@ class PdfImportServiceTest {
 
         // The mapper converts imported JSON into the existing Module model.
         Module mapped = new Module();
-        mapped.setCode("B01");
+        mapped.setModuleNumber("B01");
         mapped.setName("Test Module");
         mapped.setCredits(new BigDecimal("5.0"));
         mapped.setDescription("description");
@@ -93,6 +93,22 @@ class PdfImportServiceTest {
                 "Test Module",
                 new BigDecimal("5.0"),
                 "description",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
@@ -126,7 +142,7 @@ class PdfImportServiceTest {
         assertThat(response.createdModules()).hasSize(1);
         assertThat(response.createdModules().get(0).id()).isEqualTo(1L);
         assertThat(response.createdModules().get(0).studyProgramId()).isEqualTo(10L);
-        assertThat(response.createdModules().get(0).code()).isEqualTo("B01");
+        assertThat(response.createdModules().get(0).moduleNumber()).isEqualTo("B01");
         assertThat(response.errors()).isEmpty();
         verify(moduleService).create(mapped);
         assertThat(mapped.getStudyProgramId()).isEqualTo(10L);
@@ -144,7 +160,7 @@ class PdfImportServiceTest {
                 """);
 
         Module mapped = new Module();
-        mapped.setCode("B01");
+        mapped.setModuleNumber("B01");
 
         // Simulate a save failure, such as a duplicate module code from the database.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");

@@ -31,10 +31,22 @@ public class PdfImportedModuleMapper {
         }
 
         Module module = new Module();
-        module.setCode(moduleNumber);
+        module.setModuleNumber(moduleNumber);
         module.setName(title);
         module.setCredits(credits);
         module.setDescription(buildDescription(imported, studyProgram, year));
+        module.setTitleDe(text(imported, "title_de"));
+        module.setTitleEn(text(imported, "title_en"));
+        module.setApplicability(text(imported, "applicability"));
+        module.setLearningArea(text(imported, "learning_area"));
+        module.setLearningObjectives(text(imported, "learning_objectives"));
+        module.setPrerequisites(text(imported, "prerequisites"));
+        module.setLevel(text(imported, "level"));
+        module.setStatus(text(imported, "status"));
+        module.setFrequency(text(imported, "frequency"));
+        module.setContents(text(imported, "contents"));
+        module.setLiterature(text(imported, "literature"));
+        module.setAdditionalNotes(text(imported, "additional_notes"));
 
         return module;
     }

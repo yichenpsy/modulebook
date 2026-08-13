@@ -2,6 +2,8 @@ package de.bht.modulebook.studyprogram;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,9 +83,14 @@ public class StudyProgramRepository {
                     rs.getLong("id"),
                     rs.getString("name"),
                     rs.getInt("year"),
-                    rs.getTimestamp("created_at").toInstant(),
-                    rs.getTimestamp("updated_at").toInstant()
+                    toInstantOrNull(rs, "created_at"),
+                    toInstantOrNull(rs, "updated_at")
             );
+        }
+
+        private Instant toInstantOrNull(ResultSet rs, String columnName) throws SQLException {
+            Timestamp timestamp = rs.getTimestamp(columnName);
+            return timestamp == null ? null : timestamp.toInstant();
         }
     }
 }

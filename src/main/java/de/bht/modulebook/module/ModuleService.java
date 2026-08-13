@@ -1,11 +1,13 @@
 package de.bht.modulebook.module;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+// logic layer, checkes things like "module not found", calls repository
 @Service
 public class ModuleService {
 
@@ -15,7 +17,7 @@ public class ModuleService {
         // The service needs the repository to access the database.
         this.moduleRepository = moduleRepository;
     }
-    
+
     public Module create(Module module) {
         Module created = moduleRepository.insert(module);
         return getById(created.getId());
@@ -23,7 +25,11 @@ public class ModuleService {
 
     public Module getById(Long id) {
         return moduleRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+    }
+
+    public Optional<Module> findByStudyProgramIdAndModuleNumber(Long studyProgramId, String moduleNumber) {
+        return moduleRepository.findByStudyProgramIdAndModuleNumber(studyProgramId, moduleNumber);
     }
 
     public List<Module> getAll() {

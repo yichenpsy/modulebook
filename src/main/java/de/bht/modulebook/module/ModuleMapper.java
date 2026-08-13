@@ -3,15 +3,32 @@ package de.bht.modulebook.module;
 import de.bht.modulebook.module.dto.ModuleRequest;
 import de.bht.modulebook.module.dto.ModuleResponse;
 
+// converts between ModuleRequest, Module, ModuleResponse
 public class ModuleMapper {
     // takes JSON request data and builds a Module object the service can save
     public static Module toEntity(ModuleRequest request) {
         Module module = new Module();
         module.setStudyProgramId(request.studyProgramId());
-        module.setCode(request.code());
+        module.setModuleNumber(request.moduleNumber());
         module.setName(request.name());
         module.setCredits(request.credits());
         module.setDescription(request.description());
+        module.setModulebookId(request.modulebookId());
+        module.setModuleType(request.moduleType());
+        module.setTitleDe(request.titleDe());
+        module.setTitleEn(request.titleEn());
+        module.setCoordinator(request.coordinator());
+        module.setApplicability(request.applicability());
+        module.setLearningArea(request.learningArea());
+        module.setLearningObjectives(request.learningObjectives());
+        module.setPrerequisites(request.prerequisites());
+        module.setLevel(request.level());
+        module.setStatus(request.status());
+        module.setFrequency(request.frequency());
+        module.setContents(request.contents());
+        module.setLiterature(request.literature());
+        module.setAdditionalNotes(request.additionalNotes());
+        module.setModuleWeight(request.moduleWeight());
         return module;
     }
 
@@ -20,10 +37,26 @@ public class ModuleMapper {
         return new ModuleResponse(
             module.getId(),
             module.getStudyProgramId(),
-            module.getCode(),
+            module.getModuleNumber(),
             module.getName(),
             module.getCredits(),
             module.getDescription(),
+            module.getModulebookId(),
+            module.getModuleType(),
+            module.getTitleDe(),
+            module.getTitleEn(),
+            module.getCoordinator(),
+            module.getApplicability(),
+            module.getLearningArea(),
+            module.getLearningObjectives(),
+            module.getPrerequisites(),
+            module.getLevel(),
+            module.getStatus(),
+            module.getFrequency(),
+            module.getContents(),
+            module.getLiterature(),
+            module.getAdditionalNotes(),
+            module.getModuleWeight(),
             module.getCreatedAt(),
             module.getUpdatedAt()            
         );

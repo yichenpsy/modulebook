@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Programs</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <h1>Study Programs</h1>
+
+    <section>
+        <label>
+            Study program
+            <select id="studyProgramSelect" onchange="onStudyProgramSelected()">
+                <option value="">Loading...</option>
+            </select>
+        </label>
+
+        <div id="status" class="status">Loading study programs...</div>
+    </section>
+
+    <section>
+        <h2>Modules</h2>
+        <div id="modules">Select a study program.</div>
+    </section>
+
+    <script src="/api.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const initialStudyProgramId = params.get("studyProgramId");
+        let studyPrograms = [];
+        let modules = [];
+
+        async function init() {
+            try {
+                studyPrograms = await loadStudyPrograms();
+                renderStudyProgramSelect();
+                if (selectInitialStudyProgram()) {
+                    await onStudyProgramSelected();
+                } else {
+                    setStatus(`Loaded ${studyPrograms.length} study programs.`);
+                }
+            } catch (error) {
+                setStatus("Could not load study programs: " + error.message);
+            }
+        }
+
+        function renderStudyProgramSelect() {
+            const select = document.getElementById("studyProgramSelect");
+
+            select.innerHTML = `
+                <option value="">Choose a study program</option>
+                ${studyPrograms.map(program => `
+                    <option value="${escapeHtml(String(program.id))}">
+                        ${escapeHtml(program.name)} (${escapeHtml(String(program.year))})
+                    </option>
+                `).join("")}
+            `;
+        }
+
+        function selectInitialStudyProgram() {
+            if (!initialStudyProgramId) {
+                return false;
+            }
+
+            const exists = studyPrograms.some(program => String(program.id) === initialStudyProgramId);
+
+            if (exists) {
+                document.getElementById("studyProgramSelect").value = initialStudyProgramId;
+            }
+
+            return exists;
+        }
+
+        async function onStudyProgramSelected() {
+            const programId = document.getElementById("studyProgramSelect").value;
+
+            if (!programId) {
+                modules = [];
+                document.getElementById("modules").textContent = "Select a study program.";
+                return;
+            }
+
+            setStatus("Loading modules...");
+
+            try {
+                modules = await loadModulesForStudyProgram(programId);
+                renderModules();
+                setStatus(`Loaded ${modules.length} modules.`);
+            } catch (error) {
+                setStatus("Could not load modules: " + error.message);
+            }
+        }
+
+        function renderModules() {
+            const container = document.getElementById("modules");
+
+            if (modules.length === 0) {
+                container.textContent = "No modules saved for this study program.";
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Module number</th>
+                            <th>Name</th>
+                            <th>Credits</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${modules.map(module => `
+                            <tr>
+                                <td>${escapeHtml(module.moduleNumber || "")}</td>
+                                <td>${escapeHtml(module.name || "")}</td>
+                                <td>${escapeHtml(String(module.credits ?? ""))}</td>
+                                <td>
+                                    <a href="/module-edit.html?id=${escapeHtml(String(module.id))}">Edit</a>
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>

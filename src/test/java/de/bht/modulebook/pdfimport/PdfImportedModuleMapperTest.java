@@ -26,6 +26,7 @@ class PdfImportedModuleMapperTest {
                   "module_number": "B01",
                   "title": "Test Module",
                   "credits": 5.0,
+                  "status": "Pflichtmodul",
                   "contents": "Test contents",
                   "learning_objectives": "Test objectives",
                   "source_file": "test.pdf",
@@ -37,9 +38,12 @@ class PdfImportedModuleMapperTest {
         Module module = mapper.toModule(imported, "Architektur", 2021);
 
         // Assert: required fields are mapped to the database-facing Module fields.
-        assertThat(module.getCode()).isEqualTo("B01");
+        assertThat(module.getModuleNumber()).isEqualTo("B01");
         assertThat(module.getName()).isEqualTo("Test Module");
         assertThat(module.getCredits()).isEqualByComparingTo("5.0");
+        assertThat(module.getStatus()).isEqualTo("Pflichtmodul");
+        assertThat(module.getContents()).isEqualTo("Test contents");
+        assertThat(module.getLearningObjectives()).isEqualTo("Test objectives");
 
         // Assert: PDF-specific details are preserved inside the current description field.
         assertThat(module.getDescription()).contains("Architektur");

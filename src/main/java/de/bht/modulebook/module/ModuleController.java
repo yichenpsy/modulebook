@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import de.bht.modulebook.module.dto.ModuleRequest;
 import de.bht.modulebook.module.dto.ModuleResponse;
 
+// HTTP API layer, defines endpoints
 @RestController // this class handles web requests and returns data
 @RequestMapping("/api/modules")  // every endpoint in this controller starts with /api/modules
 public class ModuleController {
