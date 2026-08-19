@@ -101,8 +101,72 @@ th {
     margin-top: 16px;
 }
 
+.workload-editor,
+.module-teaching-forms {
+    max-width: 900px;
+    margin: 16px 0;
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.workload-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 120px auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 8px;
+}
+
+.workload-row label {
+    margin-bottom: 0;
+}
+
+.workload-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 12px;
+    max-width: 480px;
+    margin-top: 12px;
+}
+
+.workload-preview {
+    margin-top: 12px;
+    color: #333;
+}
+
+.field-hint {
+    display: block;
+    margin-top: 4px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    max-width: 900px;
+}
+
+.checkbox-list label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+}
+
+.checkbox-list input {
+    width: auto;
+    margin: 0;
+}
+
 @media (max-width: 720px) {
     .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .workload-row,
+    .workload-summary {
         grid-template-columns: 1fr;
     }
 }

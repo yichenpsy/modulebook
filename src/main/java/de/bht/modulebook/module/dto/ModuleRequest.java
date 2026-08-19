@@ -1,12 +1,23 @@
 package de.bht.modulebook.module.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import de.bht.modulebook.module.workload.dto.ModuleWorkloadRequest;
 
 // shape of JSON received from frontend when creating/updating a module.
 public record ModuleRequest(
     Long studyProgramId,
+
+    @NotBlank(message = "Module number is required")
+    @Size(max = 50, message = "Module number must be at most 50 characters")
     String moduleNumber,
+
+    
     String name,
+    @NotNull(message = "Credits are required")
     BigDecimal credits,
     String description,
     Long modulebookId,
@@ -24,6 +35,8 @@ public record ModuleRequest(
     String contents,
     String literature,
     String additionalNotes,
-    BigDecimal moduleWeight
+    BigDecimal moduleWeight,
+    List<Long> teachingFormIds,
+    ModuleWorkloadRequest workload
 ){
 }

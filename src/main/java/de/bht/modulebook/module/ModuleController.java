@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import de.bht.modulebook.module.dto.ModuleRequest;
 import de.bht.modulebook.module.dto.ModuleResponse;
+import jakarta.validation.Valid;
+
+import de.bht.modulebook.module.workload.ModuleWorkloadMapper;
 
 // HTTP API layer, defines endpoints
 @RestController // this class handles web requests and returns data
@@ -20,9 +23,17 @@ public class ModuleController {
 
     @PostMapping // handles POST /api/modules
     @ResponseStatus(HttpStatus.CREATED) //makes the API return HTTP 201 Created.
-    public ModuleResponse create(@RequestBody ModuleRequest request) {
-        Module created = moduleService.create(ModuleMapper.toEntity(request));
-        return ModuleMapper.toResponse(created);
+    public ModuleResponse create(@Valid @RequestBody ModuleRequest request) {
+        Module created = moduleService.create(
+            ModuleMapper.toEntity(request),
+            ModuleWorkloadMapper.toEntity(request.workload()),
+            request.teachingFormIds()
+        );
+        return ModuleMapper.toResponse(
+            created,
+            moduleService.getWorkloadByModuleId(created.getId()).orElse(null),
+            moduleService.getTeachingFormsByModuleId(created.getId())
+        );
     }
 
     @GetMapping //GET /api/modules
@@ -35,13 +46,27 @@ public class ModuleController {
 
     @GetMapping("/{id}") //GET /api/modules/1
     public ModuleResponse getById(@PathVariable Long id) {
-        return ModuleMapper.toResponse(moduleService.getById(id));
+        Module module = moduleService.getById(id);
+        return ModuleMapper.toResponse(
+            module,
+            moduleService.getWorkloadByModuleId(id).orElse(null),
+            moduleService.getTeachingFormsByModuleId(id)
+        );
     }
 
     @PutMapping("/{id}") //PUT /api/modules/1
-    public ModuleResponse update(@PathVariable Long id, @RequestBody ModuleRequest request) {
-        Module updated = moduleService.update(id, ModuleMapper.toEntity(request));
-        return ModuleMapper.toResponse(updated);
+    public ModuleResponse update(@PathVariable Long id, @Valid @RequestBody ModuleRequest request) {
+        Module updated = moduleService.update(
+            id, 
+            ModuleMapper.toEntity(request),
+            ModuleWorkloadMapper.toEntity(request.workload()),
+            request.teachingFormIds()
+        );
+        return ModuleMapper.toResponse(
+            updated,
+            moduleService.getWorkloadByModuleId(id).orElse(null),
+            moduleService.getTeachingFormsByModuleId(id)
+        );
     }
 
     @DeleteMapping("/{id}") // DELETE /api/modules/1

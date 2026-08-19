@@ -2,6 +2,9 @@ package de.bht.modulebook.module.dto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
+import de.bht.modulebook.module.workload.dto.ModuleWorkloadResponse;
+import de.bht.modulebook.teachingform.dto.TeachingFormResponse;
 
 // shape of JSON returned to frontend
 public record ModuleResponse(
@@ -28,6 +31,8 @@ public record ModuleResponse(
     String additionalNotes,
     BigDecimal moduleWeight,
     Instant createdAt,
-    Instant updatedAt
+    Instant updatedAt,
+    List<TeachingFormResponse> teachingForms,
+    ModuleWorkloadResponse workload
 ) {    
 }

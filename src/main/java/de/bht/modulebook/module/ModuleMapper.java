@@ -1,7 +1,14 @@
 package de.bht.modulebook.module;
 
+import java.util.List;
+
 import de.bht.modulebook.module.dto.ModuleRequest;
 import de.bht.modulebook.module.dto.ModuleResponse;
+
+import de.bht.modulebook.module.workload.ModuleWorkload;
+import de.bht.modulebook.module.workload.ModuleWorkloadMapper;
+import de.bht.modulebook.teachingform.TeachingForm;
+import de.bht.modulebook.teachingform.TeachingFormMapper;
 
 // converts between ModuleRequest, Module, ModuleResponse
 public class ModuleMapper {
@@ -32,8 +39,21 @@ public class ModuleMapper {
         return module;
     }
 
-    // takes the saved Module and builds the response object for the API.
+    //return module, but no workload.
     public static ModuleResponse toResponse(Module module) {
+    return toResponse(module, null, List.of());
+    }
+
+    // takes the saved Module and builds the response object for the API.
+    public static ModuleResponse toResponse(Module module, ModuleWorkload workload) {
+        return toResponse(module, workload, List.of());
+    }
+
+    public static ModuleResponse toResponse(
+        Module module,
+        ModuleWorkload workload,
+        List<TeachingForm> teachingForms
+    ) {
         return new ModuleResponse(
             module.getId(),
             module.getStudyProgramId(),
@@ -58,7 +78,11 @@ public class ModuleMapper {
             module.getAdditionalNotes(),
             module.getModuleWeight(),
             module.getCreatedAt(),
-            module.getUpdatedAt()            
+            module.getUpdatedAt(),
+            teachingForms.stream()
+                .map(TeachingFormMapper::toResponse)
+                .toList(),
+            ModuleWorkloadMapper.toResponse(workload)
         );
     }
 }

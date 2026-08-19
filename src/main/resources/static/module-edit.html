@@ -17,30 +17,61 @@
         <div id="status" class="status">Loading module...</div>
 
         <form id="moduleForm" onsubmit="saveModule(event)" hidden>
+            <div class="form-actions">
+                <button type="submit">Save</button>
+                <button type="button" onclick="deleteCurrentModule()">Delete</button>
+                <a id="backLink" href="/index.html">Back to study program</a>
+            </div>
+
             <label>
-                Study program id
+                Study program id (for debug, delete later)
                 <input id="studyProgramId" type="number">
             </label>
 
             <label>
                 Module number
-                <input id="moduleNumber">
+                 <input id="moduleNumber" required maxlength="50" placeholder="B01" oninput="updateModuleNumberWarning()">
+                 <span id="moduleNumberWarning" class="field-warning" hidden>
+                    Usually only uppercase letters and numbers, for example B01.
+                 </span>
             </label>
 
             <label>
-                Title DE
-                <input id="titleDe">
-            </label>
-
-            <label>
-                Title EN
-                <input id="titleEn">
+                Title
+                <input id="name" required maxlength="255" placeholder="Einführung in die Informatik">
             </label>
 
             <label>
                 Credits
-                <input id="credits" type="number" step="0.5">
+                <input id="credits" type="number" step="0.5" required oninput="updateWorkloadPreview()">
             </label>
+
+            <section class="workload-editor">
+                <h2>Workload</h2>
+                <div id="workloadComponents"></div>
+                <button type="button" onclick="addWorkloadRow()">+ Lehrveranstaltung hinzufügen</button>
+
+                <div class="workload-summary">
+                    <label>
+                        Präsenzstunden
+                        <input id="workloadPresenceHours" type="number" step="1" readonly>
+                        <span id="workloadPresenceHint" class="field-hint"></span>
+                    </label>
+
+                    <label>
+                        Selbststudium
+                        <input id="workloadSelfStudyHours" type="number" step="1" readonly>
+                        <span id="workloadSelfStudyHint" class="field-hint"></span>
+                    </label>
+                </div>
+
+                <div id="workloadPreview" class="workload-preview"></div>
+            </section>
+
+            <section class="module-teaching-forms">
+                <h2>Teaching forms</h2>
+                <div id="moduleTeachingForms" class="checkbox-list"></div>
+            </section>
 
             <label>
                 Modulebook id
@@ -116,20 +147,18 @@
                 Description
                 <textarea id="description" rows="10"></textarea>
             </label>
-
-            <div class="form-actions">
-                <button type="submit">Save</button>
-                <button type="button" onclick="deleteCurrentModule()">Delete</button>
-                <a id="backLink" href="/index.html">Back to study program</a>
-            </div>
         </form>
     </section>
 
-    <script src="/api.js"></script>
+    <script src="/api.js?v=workload-teaching-forms"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const moduleId = params.get("id");
+        const weeksPerSemester = 17;
+        const hoursPerCredit = 30;
         let currentModule = null;
+        let teachingForms = [];
+        let extraTeachingFormIds = new Set();
 
         async function init() {
             if (!moduleId) {
@@ -138,7 +167,10 @@
             }
 
             try {
-                currentModule = await loadModule(moduleId);
+                [teachingForms, currentModule] = await Promise.all([
+                    loadTeachingForms(),
+                    loadModule(moduleId)
+                ]);
                 fillForm(currentModule);
                 document.getElementById("moduleForm").hidden = false;
                 setStatus(`Loaded module ${currentModule.id}.`);
@@ -150,9 +182,14 @@
         function fillForm(module) {
             document.getElementById("studyProgramId").value = module.studyProgramId ?? "";
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
-            document.getElementById("titleDe").value = module.titleDe || module.name || "";
-            document.getElementById("titleEn").value = module.titleEn || "";
+            document.getElementById("name").value = module.name || "";
             document.getElementById("credits").value = module.credits ?? "";
+            document.getElementById("workloadPresenceHours").value = module.workload?.presenceHours ?? "";
+            document.getElementById("workloadSelfStudyHours").value = module.workload?.selfStudyHours ?? "";
+            fillWorkloadRows(module.workload?.components || []);
+            setExtraTeachingForms(module);
+            renderModuleTeachingForms();
+            updateWorkloadPreview();
             document.getElementById("modulebookId").value = module.modulebookId ?? "";
             document.getElementById("moduleType").value = module.moduleType || "";
             document.getElementById("coordinator").value = module.coordinator || "";
@@ -174,24 +211,195 @@
             }
         }
 
+        function fillWorkloadRows(components) {
+            const container = document.getElementById("workloadComponents");
+            container.innerHTML = "";
+
+            if (components.length === 0) {
+                addWorkloadRow();
+                return;
+            }
+
+            components.forEach(component => {
+                addWorkloadRow(component.teachingFormId, component.swsAmount);
+            });
+        }
+
+        function setExtraTeachingForms(module) {
+            const workloadTeachingFormIds = new Set(
+                (module.workload?.components || [])
+                    .map(component => Number(component.teachingFormId))
+                    .filter(Number.isFinite)
+            );
+
+            extraTeachingFormIds = new Set(
+                (module.teachingForms || [])
+                    .map(teachingForm => Number(teachingForm.id))
+                    .filter(id => Number.isFinite(id) && !workloadTeachingFormIds.has(id))
+            );
+        }
+
+        function addWorkloadRow(teachingFormId = "", swsAmount = "") {
+            const container = document.getElementById("workloadComponents");
+            const row = document.createElement("div");
+            row.className = "workload-row";
+            row.innerHTML = `
+                <label>
+                    Typ
+                    <select class="workloadTeachingForm" onchange="onWorkloadChanged()">
+                        <option value="">Bitte wählen</option>
+                        ${teachingForms.map(teachingForm => `
+                            <option value="${teachingForm.id}">
+                                ${escapeHtml(teachingFormLabel(teachingForm))}
+                            </option>
+                        `).join("")}
+                    </select>
+                </label>
+                <label>
+                    SWS
+                    <input class="workloadSws" type="number" step="0.5" min="0" oninput="onWorkloadChanged()">
+                </label>
+                <button type="button" onclick="removeWorkloadRow(this)">Entfernen</button>
+            `;
+
+            container.appendChild(row);
+            row.querySelector(".workloadTeachingForm").value = teachingFormId ?? "";
+            row.querySelector(".workloadSws").value = swsAmount ?? "";
+            onWorkloadChanged();
+        }
+
+        function removeWorkloadRow(button) {
+            button.closest(".workload-row").remove();
+            if (document.querySelectorAll(".workload-row").length === 0) {
+                addWorkloadRow();
+                return;
+            }
+            onWorkloadChanged();
+        }
+
+        function onWorkloadChanged() {
+            renderModuleTeachingForms();
+            updateWorkloadPreview();
+        }
+
+        function renderModuleTeachingForms() {
+            const container = document.getElementById("moduleTeachingForms");
+            const workloadTeachingFormIds = workloadTeachingFormIdsSet();
+
+            container.innerHTML = teachingForms.map(teachingForm => {
+                const id = Number(teachingForm.id);
+                const requiredByWorkload = workloadTeachingFormIds.has(id);
+                const checked = requiredByWorkload || extraTeachingFormIds.has(id);
+                const disabled = requiredByWorkload ? "disabled" : "";
+                const checkedAttribute = checked ? "checked" : "";
+
+                return `
+                    <label>
+                        <input
+                            type="checkbox"
+                            class="moduleTeachingForm"
+                            value="${id}"
+                            ${checkedAttribute}
+                            ${disabled}
+                            onchange="onModuleTeachingFormChanged(this)"
+                        >
+                        ${escapeHtml(teachingFormLabel(teachingForm))}
+                    </label>
+                `;
+            }).join("");
+        }
+
+        function onModuleTeachingFormChanged(checkbox) {
+            const id = Number(checkbox.value);
+            if (checkbox.checked) {
+                extraTeachingFormIds.add(id);
+            } else {
+                extraTeachingFormIds.delete(id);
+            }
+        }
+
+        function collectWorkloadComponents() {
+            return Array.from(document.querySelectorAll(".workload-row"))
+                .map(row => ({
+                    teachingFormId: numberOrNull(row.querySelector(".workloadTeachingForm").value),
+                    swsAmount: numberOrNull(row.querySelector(".workloadSws").value)
+                }))
+                .filter(component => component.teachingFormId !== null && component.swsAmount !== null);
+        }
+
+        function collectModuleTeachingFormIds() {
+            return Array.from(document.querySelectorAll(".moduleTeachingForm"))
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => Number(checkbox.value));
+        }
+
+        function workloadTeachingFormIdsSet() {
+            return new Set(
+                collectWorkloadComponents()
+                    .map(component => Number(component.teachingFormId))
+                    .filter(Number.isFinite)
+            );
+        }
+
+        function updateWorkloadPreview() {
+            const credits = numberOrNull(document.getElementById("credits").value);
+            const components = collectWorkloadComponents();
+            const presenceHours = components.reduce(
+                (sum, component) => sum + component.swsAmount * weeksPerSemester,
+                0
+            );
+            const totalWorkload = credits === null ? null : credits * hoursPerCredit;
+            const selfStudyHours = totalWorkload === null ? null : totalWorkload - presenceHours;
+
+            document.getElementById("workloadPresenceHint").textContent =
+                `Hinweis: ${formatNumber(presenceHours)} Stunden nach SWS`;
+            document.getElementById("workloadSelfStudyHint").textContent =
+                selfStudyHours === null ? "" : `Hinweis: ${formatNumber(selfStudyHours)} Stunden nach CP und Präsenz`;
+            document.getElementById("workloadPreview").textContent = workloadPreviewText(
+                components,
+                presenceHours,
+                selfStudyHours
+            );
+        }
+
+        function workloadPreviewText(components, presenceHours, selfStudyHours) {
+            const parts = components.map(component => {
+                const teachingForm = teachingForms.find(option => Number(option.id) === Number(component.teachingFormId));
+                return `${formatNumber(component.swsAmount)} SWS ${teachingForm?.code || ""}`.trim();
+            });
+
+            const workloadPart = parts.length > 0 ? ` (${parts.join(" + ")})` : "";
+            const selfStudyPart = selfStudyHours === null ? "" : `, ${formatNumber(selfStudyHours)} Stunden Selbststudium`;
+            return `${formatNumber(presenceHours)} Stunden Präsenz${workloadPart}${selfStudyPart}`;
+        }
+
+        function teachingFormLabel(teachingForm) {
+            const label = teachingForm.labelDe || teachingForm.labelEn || "";
+            return label ? `${teachingForm.code} - ${label}` : teachingForm.code;
+        }
+
         async function saveModule(event) {
             event.preventDefault();
 
             const moduleNumber = document.getElementById("moduleNumber").value.trim();
-            const titleDe = document.getElementById("titleDe").value.trim();
-            const titleEn = document.getElementById("titleEn").value.trim();
+            const name = document.getElementById("name").value.trim();
 
             const request = {
                 studyProgramId: numberOrNull(document.getElementById("studyProgramId").value),
                 moduleNumber: moduleNumber,
-                name: titleDe || titleEn || currentModule?.name || moduleNumber,
+                name: name,
+                titleDe: currentModule?.titleDe || "",
+                titleEn: currentModule?.titleEn || "",
                 credits: numberOrNull(document.getElementById("credits").value),
+                teachingFormIds: collectModuleTeachingFormIds(),
+                workload: {
+                    components: collectWorkloadComponents(),
+                    rawText: ""
+                },
                 description: document.getElementById("description").value.trim(),
 
                 modulebookId: numberOrNull(document.getElementById("modulebookId").value),
                 moduleType: document.getElementById("moduleType").value.trim(),
-                titleDe: titleDe,
-                titleEn: titleEn,
                 coordinator: document.getElementById("coordinator").value.trim(),
                 applicability: document.getElementById("applicability").value.trim(),
                 learningArea: document.getElementById("learningArea").value.trim(),
@@ -240,6 +448,17 @@
 
         function setStatus(message) {
             document.getElementById("status").textContent = message;
+        }
+
+        function updateModuleNumberWarning() {
+            const value = document.getElementById("moduleNumber").value.trim();
+
+            document.getElementById("moduleNumberWarning").hidden =
+                value === "" || /^[A-Z0-9]+$/.test(value);
+        }
+
+        function formatNumber(value) {
+            return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(2)));
         }
 
         init();

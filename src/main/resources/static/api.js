@@ -25,6 +25,10 @@ async function loadModule(moduleId) {
     return requestJson(`/api/modules/${moduleId}`);
 }
 
+async function loadTeachingForms() {
+    return requestJson("/api/teaching-forms");
+}
+
 async function updateModule(moduleId, request) {
     return requestJson(`/api/modules/${moduleId}`, {
         method: "PUT",
