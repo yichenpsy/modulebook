@@ -22,7 +22,7 @@ public class ModuleRepository {
             id, study_program_id, module_number, name, credits, description,
             modulebook_id, module_type, title_de, title_en, coordinator, applicability,
             learning_area, learning_objectives, prerequisites, level, status, frequency,
-            contents, literature, additional_notes, module_weight, created_at, updated_at
+            examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at
             """;
 
     // JdbcTemplate is Spring's helper class for running SQL.
@@ -58,6 +58,7 @@ public class ModuleRepository {
                         "level",
                         "status",
                         "frequency",
+                        "examination_form",
                         "contents",
                         "literature",
                         "additional_notes",
@@ -87,6 +88,7 @@ public class ModuleRepository {
         values.put("level", module.getLevel());
         values.put("status", module.getStatus());
         values.put("frequency", module.getFrequency());
+        values.put("examination_form", module.getExaminationForm());
         values.put("contents", module.getContents());
         values.put("literature", module.getLiterature());
         values.put("additional_notes", module.getAdditionalNotes());
@@ -147,6 +149,7 @@ public class ModuleRepository {
                             level = ?,
                             status = ?,
                             frequency = ?,
+                            examination_form = ?,
                             contents = ?,
                             literature = ?,
                             additional_notes = ?,
@@ -173,6 +176,7 @@ public class ModuleRepository {
                 module.getLevel(),
                 module.getStatus(),
                 module.getFrequency(),
+                module.getExaminationForm(),
                 module.getContents(),
                 module.getLiterature(),
                 module.getAdditionalNotes(),
@@ -214,6 +218,7 @@ public class ModuleRepository {
                     rs.getString("level"),
                     rs.getString("status"),
                     rs.getString("frequency"),
+                    rs.getString("examination_form"),
                     rs.getString("contents"),
                     rs.getString("literature"),
                     rs.getString("additional_notes"),

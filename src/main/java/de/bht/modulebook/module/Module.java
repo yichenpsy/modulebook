@@ -29,6 +29,7 @@ public class Module {
     private BigDecimal moduleWeight;
     private Instant createdAt;
     private Instant updatedAt;
+    private String examinationForm;
 
     public Module() {
     }
@@ -36,7 +37,7 @@ public class Module {
     public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
             String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
             String coordinator, String applicability, String learningArea, String learningObjectives,
-            String prerequisites, String level, String status, String frequency, String contents,
+            String prerequisites, String level, String status, String frequency, String examinationForm, String contents,
             String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
             Instant updatedAt) {
         this.id = id;
@@ -57,6 +58,7 @@ public class Module {
         this.level = level;
         this.status = status;
         this.frequency = frequency;
+        this.examinationForm = examinationForm;
         this.contents = contents;
         this.literature = literature;
         this.additionalNotes = additionalNotes;
@@ -255,6 +257,14 @@ public class Module {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getExaminationForm() {
+        return examinationForm;
+    }
+
+    public void setExaminationForm(String examinationForm) {
+        this.examinationForm = examinationForm;
     }
 
 }

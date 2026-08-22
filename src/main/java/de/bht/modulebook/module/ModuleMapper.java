@@ -36,6 +36,7 @@ public class ModuleMapper {
         module.setLiterature(request.literature());
         module.setAdditionalNotes(request.additionalNotes());
         module.setModuleWeight(request.moduleWeight());
+        module.setExaminationForm(request.examinationForm());
         return module;
     }
 
@@ -73,6 +74,7 @@ public class ModuleMapper {
             module.getLevel(),
             module.getStatus(),
             module.getFrequency(),
+            module.getExaminationForm(),
             module.getContents(),
             module.getLiterature(),
             module.getAdditionalNotes(),

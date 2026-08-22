@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit Module</title>
@@ -124,6 +122,11 @@
             </label>
 
             <label>
+                Examination form
+                <textarea id="examinationForm" rows="5"></textarea>
+            </label>
+
+            <label>
                 Contents
                 <textarea id="contents" rows="8"></textarea>
             </label>
@@ -159,6 +162,7 @@
         let currentModule = null;
         let teachingForms = [];
         let extraTeachingFormIds = new Set();
+        let excludedWorkloadTeachingFormIds = new Set();
 
         async function init() {
             if (!moduleId) {
@@ -200,6 +204,7 @@
             document.getElementById("level").value = module.level || "";
             document.getElementById("moduleStatus").value = module.status || "";
             document.getElementById("frequency").value = module.frequency || "";
+            document.getElementById("examinationForm").value = module.examinationForm || "";
             document.getElementById("contents").value = module.contents || "";
             document.getElementById("literature").value = module.literature || "";
             document.getElementById("additionalNotes").value = module.additionalNotes || "";
@@ -237,6 +242,7 @@
                     .map(teachingForm => Number(teachingForm.id))
                     .filter(id => Number.isFinite(id) && !workloadTeachingFormIds.has(id))
             );
+            excludedWorkloadTeachingFormIds = new Set();
         }
 
         function addWorkloadRow(teachingFormId = "", swsAmount = "") {
@@ -289,8 +295,9 @@
             container.innerHTML = teachingForms.map(teachingForm => {
                 const id = Number(teachingForm.id);
                 const requiredByWorkload = workloadTeachingFormIds.has(id);
-                const checked = requiredByWorkload || extraTeachingFormIds.has(id);
-                const disabled = requiredByWorkload ? "disabled" : "";
+                const checked = requiredByWorkload
+                    ? !excludedWorkloadTeachingFormIds.has(id)
+                    : extraTeachingFormIds.has(id);
                 const checkedAttribute = checked ? "checked" : "";
 
                 return `
@@ -300,7 +307,6 @@
                             class="moduleTeachingForm"
                             value="${id}"
                             ${checkedAttribute}
-                            ${disabled}
                             onchange="onModuleTeachingFormChanged(this)"
                         >
                         ${escapeHtml(teachingFormLabel(teachingForm))}
@@ -311,6 +317,17 @@
 
         function onModuleTeachingFormChanged(checkbox) {
             const id = Number(checkbox.value);
+            const requiredByWorkload = workloadTeachingFormIdsSet().has(id);
+
+            if (requiredByWorkload) {
+                if (checkbox.checked) {
+                    excludedWorkloadTeachingFormIds.delete(id);
+                } else {
+                    excludedWorkloadTeachingFormIds.add(id);
+                }
+                return;
+            }
+
             if (checkbox.checked) {
                 extraTeachingFormIds.add(id);
             } else {
@@ -408,6 +425,7 @@
                 level: document.getElementById("level").value.trim(),
                 status: document.getElementById("moduleStatus").value.trim(),
                 frequency: document.getElementById("frequency").value.trim(),
+                examinationForm: document.getElementById("examinationForm").value.trim(),
                 contents: document.getElementById("contents").value.trim(),
                 literature: document.getElementById("literature").value.trim(),
                 additionalNotes: document.getElementById("additionalNotes").value.trim(),

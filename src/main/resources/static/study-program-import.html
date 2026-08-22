@@ -223,6 +223,11 @@
                         <textarea data-field="learning_objectives">${escapeHtml(module.learning_objectives || "")}</textarea>
                     </label>
 
+                    <label>
+                        Examination form
+                        <textarea data-field="exam_form">${escapeHtml(module.exam_form || "")}</textarea>
+                    </label>
+
                     <button type="button" onclick="removeImportedModule(${index})">Remove</button>
                 </div>
             `).join("");

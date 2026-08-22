@@ -216,6 +216,3 @@ This makes the workload searchable, editable, and calculable while still keeping
 
 ## Open Questions
 
-- Should `presence_hours` and `self_study_hours` always be calculated, or can users override them?
-- Should `teaching_form_id` be required in `presence_hour_components`?
-- Should the database store the constants `30 hours per CP` and `17 weeks per semester`, instead of keeping them only in code?

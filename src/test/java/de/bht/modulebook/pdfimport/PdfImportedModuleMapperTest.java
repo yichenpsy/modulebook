@@ -27,6 +27,7 @@ class PdfImportedModuleMapperTest {
                   "title": "Test Module",
                   "credits": 5.0,
                   "status": "Pflichtmodul",
+                  "exam_form": "100% Klausur (90 Minuten)",
                   "contents": "Test contents",
                   "learning_objectives": "Test objectives",
                   "source_file": "test.pdf",
@@ -42,6 +43,7 @@ class PdfImportedModuleMapperTest {
         assertThat(module.getName()).isEqualTo("Test Module");
         assertThat(module.getCredits()).isEqualByComparingTo("5.0");
         assertThat(module.getStatus()).isEqualTo("Pflichtmodul");
+        assertThat(module.getExaminationForm()).isEqualTo("100% Klausur (90 Minuten)");
         assertThat(module.getContents()).isEqualTo("Test contents");
         assertThat(module.getLearningObjectives()).isEqualTo("Test objectives");
 

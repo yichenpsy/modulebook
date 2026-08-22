@@ -26,6 +26,7 @@ public record ModuleResponse(
     String level,
     String status,
     String frequency,
+    String examinationForm,
     String contents,
     String literature,
     String additionalNotes,
