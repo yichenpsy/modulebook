@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Program History</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <h1>Study Program History</h1>
+
+    <section>
+        <div id="status" class="status">Loading history...</div>
+        <div class="form-actions">
+            <a id="backLink" href="/index.html">Back to study program</a>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="studyProgramTitle">History</h2>
+        <div id="history">Loading...</div>
+    </section>
+
+    <script src="/api.js?v=study-program-history"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const studyProgramId = params.get("id");
+        let studyProgram = null;
+        let modules = [];
+        let historyRows = [];
+
+        async function init() {
+            if (!studyProgramId) {
+                setStatus("Missing study program id in URL. Example: /study-program-history.html?id=3");
+                return;
+            }
+
+            document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
+
+            try {
+                const studyPrograms = await loadStudyPrograms();
+                studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
+                modules = await loadModulesForStudyProgram(studyProgramId);
+                await loadHistoryRows();
+                renderTitle();
+                renderHistory();
+                setStatus(`Loaded ${historyRows.length} history entries from ${modules.length} modules.`);
+            } catch (error) {
+                setStatus("Could not load study program history: " + error.message);
+            }
+        }
+
+        async function loadHistoryRows() {
+            const versionLists = await Promise.all(
+                modules.map(module => loadModuleVersions(module.id))
+            );
+
+            historyRows = versionLists.flatMap((versions, index) =>
+                versions.map(version => ({
+                    module: modules[index],
+                    version: version
+                }))
+            );
+
+            historyRows.sort((left, right) =>
+                new Date(right.version.createdAt || 0) - new Date(left.version.createdAt || 0)
+            );
+        }
+
+        function renderTitle() {
+            if (!studyProgram) {
+                document.getElementById("studyProgramTitle").textContent =
+                    `Study program ${studyProgramId}`;
+                return;
+            }
+
+            document.getElementById("studyProgramTitle").textContent =
+                `${studyProgram.name} (${studyProgram.year})`;
+        }
+
+        function renderHistory() {
+            const container = document.getElementById("history");
+
+            if (historyRows.length === 0) {
+                container.textContent = "No module history exists for this study program yet.";
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Created</th>
+                            <th>Module</th>
+                            <th>Version</th>
+                            <th>Reason</th>
+                            <th>Snapshot</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${historyRows.map(row => {
+                            const snapshot = parseSnapshot(row.version.snapshotJson);
+                            const moduleSnapshot = snapshot.module || snapshot;
+                            return `
+                                <tr>
+                                    <td>${escapeHtml(formatDate(row.version.createdAt))}</td>
+                                    <td>
+                                        <strong>${escapeHtml(row.module.moduleNumber || "")}</strong>
+                                        ${escapeHtml(row.module.name || "")}
+                                    </td>
+                                    <td>${escapeHtml(String(row.version.versionNumber))}</td>
+                                    <td>${escapeHtml(row.version.reason || "")}</td>
+                                    <td>
+                                        <strong>${escapeHtml(moduleSnapshot.moduleNumber || "")}</strong>
+                                        ${escapeHtml(moduleSnapshot.name || "")}
+                                    </td>
+                                    <td class="row-actions">
+                                        <a href="/module-versions.html?id=${escapeHtml(String(row.module.id))}">Module history</a>
+                                        <a href="/module-edit.html?id=${escapeHtml(String(row.module.id))}">Edit</a>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function parseSnapshot(snapshotJson) {
+            try {
+                return JSON.parse(snapshotJson);
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(value).toLocaleString();
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module Versions</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <h1>Module Versions</h1>
+
+    <section>
+        <div id="status" class="status">Loading versions...</div>
+        <div class="form-actions">
+            <a id="editLink" href="/index.html">Back to module</a>
+            <a id="compareLink" href="/index.html" hidden>Compare versions</a>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="moduleTitle">History</h2>
+        <div id="versions">Loading...</div>
+    </section>
+
+    <section id="previewSection" hidden>
+        <h2>Snapshot Preview</h2>
+        <div id="preview" class="summary"></div>
+    </section>
+
+    <script src="/api.js?v=module-versions"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const moduleId = params.get("id");
+        let currentModule = null;
+        let versions = [];
+
+        async function init() {
+            if (!moduleId) {
+                setStatus("Missing module id in URL. Example: /module-versions.html?id=12");
+                return;
+            }
+
+            document.getElementById("editLink").href = `/module-edit.html?id=${moduleId}`;
+            document.getElementById("compareLink").href = `/module-version-compare.html?id=${moduleId}`;
+
+            try {
+                [currentModule, versions] = await Promise.all([
+                    loadModule(moduleId),
+                    loadModuleVersions(moduleId)
+                ]);
+                renderTitle();
+                renderVersions();
+                document.getElementById("compareLink").hidden = versions.length < 2;
+                setStatus(`Loaded ${versions.length} saved versions.`);
+            } catch (error) {
+                setStatus("Could not load versions: " + error.message);
+            }
+        }
+
+        function renderTitle() {
+            const number = currentModule.moduleNumber || currentModule.id;
+            const name = currentModule.name || "Untitled module";
+            document.getElementById("moduleTitle").textContent = `${number} - ${name}`;
+        }
+
+        function renderVersions() {
+            const container = document.getElementById("versions");
+
+            if (versions.length === 0) {
+                container.textContent = "No versions saved yet. A version is created when you update the module.";
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Created</th>
+                            <th>Change message</th>
+                            <th>Snapshot</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${versions.map(version => {
+                            const snapshot = parseSnapshot(version.snapshotJson);
+                            const module = snapshot.module || snapshot;
+                            return `
+                                <tr>
+                                    <td>${escapeHtml(String(version.versionNumber))}</td>
+                                    <td>${escapeHtml(formatDate(version.createdAt))}</td>
+                                    <td>${escapeHtml(version.reason || "")}</td>
+                                    <td>
+                                        <strong>${escapeHtml(module.moduleNumber || "")}</strong>
+                                        ${escapeHtml(module.name || "")}
+                                    </td>
+                                    <td class="row-actions">
+                                        <button type="button" onclick="showPreview(${version.versionNumber})">Preview</button>
+                                        <button type="button" onclick="restoreVersion(${version.versionNumber})">Restore</button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function showPreview(versionNumber) {
+            const version = versions.find(item => Number(item.versionNumber) === Number(versionNumber));
+            if (!version) {
+                return;
+            }
+
+            const snapshot = parseSnapshot(version.snapshotJson);
+            const module = snapshot.module || snapshot;
+            const workload = snapshot.workload;
+            const teachingFormIds = snapshot.teachingFormIds || [];
+
+            document.getElementById("previewSection").hidden = false;
+            document.getElementById("preview").innerHTML = `
+                <dl class="snapshot-grid">
+                    <dt>Version</dt>
+                    <dd>${escapeHtml(String(version.versionNumber))}</dd>
+                    <dt>Module number</dt>
+                    <dd>${escapeHtml(module.moduleNumber || "")}</dd>
+                    <dt>Name</dt>
+                    <dd>${escapeHtml(module.name || "")}</dd>
+                    <dt>Credits</dt>
+                    <dd>${escapeHtml(String(module.credits ?? ""))}</dd>
+                    <dt>Status</dt>
+                    <dd>${escapeHtml(module.status || "")}</dd>
+                    <dt>Coordinator</dt>
+                    <dd>${escapeHtml(module.coordinator || "")}</dd>
+                    <dt>Workload</dt>
+                    <dd>${escapeHtml(workloadSummary(workload))}</dd>
+                    <dt>Teaching form ids</dt>
+                    <dd>${escapeHtml(teachingFormIds.join(", "))}</dd>
+                    <dt>Contents</dt>
+                    <dd>${escapeHtml(module.contents || "")}</dd>
+                </dl>
+            `;
+        }
+
+        async function restoreVersion(versionNumber) {
+            const message = `Restore version ${versionNumber}? This will save the current module as a new version first.`;
+            if (!confirm(message)) {
+                return;
+            }
+
+            setStatus(`Restoring version ${versionNumber}...`);
+
+            try {
+                currentModule = await restoreModuleVersion(moduleId, versionNumber);
+                versions = await loadModuleVersions(moduleId);
+                renderTitle();
+                renderVersions();
+                document.getElementById("compareLink").hidden = versions.length < 2;
+                document.getElementById("previewSection").hidden = true;
+                setStatus(`Restored version ${versionNumber}.`);
+            } catch (error) {
+                setStatus("Restore failed: " + error.message);
+            }
+        }
+
+        function parseSnapshot(snapshotJson) {
+            try {
+                return JSON.parse(snapshotJson);
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function workloadSummary(workload) {
+            if (!workload) {
+                return "No workload";
+            }
+
+            const componentCount = workload.components ? workload.components.length : 0;
+            return `${workload.presenceHours ?? ""} presence hours, ${workload.selfStudyHours ?? ""} self-study hours, ${componentCount} components`;
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(value).toLocaleString();
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>

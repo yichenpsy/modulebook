@@ -83,6 +83,13 @@ public class ModuleWorkloadRepository {
         }
     }
 
+    public void deleteByModuleId(Long moduleId) {
+        jdbcTemplate.update(
+                "DELETE FROM module_workloads WHERE module_id = ?",
+                moduleId
+        );
+    }
+
     private ModuleWorkload mapRow(ResultSet rs, int rowNum) throws SQLException {
         ModuleWorkload workload = new ModuleWorkload();
         workload.setId(rs.getLong("id"));

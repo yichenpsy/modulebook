@@ -18,8 +18,20 @@
             <div class="form-actions">
                 <button type="submit">Save</button>
                 <button type="button" onclick="deleteCurrentModule()">Delete</button>
+                <a id="versionsLink" href="/index.html">History</a>
                 <a id="backLink" href="/index.html">Back to study program</a>
             </div>
+
+            <section id="commitMessagePanel" class="commit-message-panel" hidden>
+                <label>
+                    Commit message
+                    <textarea id="versionReason" rows="3" maxlength="500"></textarea>
+                </label>
+                <div class="form-actions">
+                    <button type="button" onclick="confirmSaveModule()">Confirm save</button>
+                    <button type="button" onclick="cancelSaveModule()">Cancel</button>
+                </div>
+            </section>
 
             <label>
                 Study program id (for debug, delete later)
@@ -163,6 +175,7 @@
         let teachingForms = [];
         let extraTeachingFormIds = new Set();
         let excludedWorkloadTeachingFormIds = new Set();
+        let pendingModuleRequest = null;
 
         async function init() {
             if (!moduleId) {
@@ -214,6 +227,7 @@
             if (module.studyProgramId) {
                 document.getElementById("backLink").href = `/index.html?studyProgramId=${module.studyProgramId}`;
             }
+            document.getElementById("versionsLink").href = `/module-versions.html?id=${module.id}`;
         }
 
         function fillWorkloadRows(components) {
@@ -397,11 +411,19 @@
 
         async function saveModule(event) {
             event.preventDefault();
+            pendingModuleRequest = buildModuleRequest();
+            document.getElementById("versionReason").value = buildChangeMessage(currentModule, pendingModuleRequest);
+            document.getElementById("commitMessagePanel").hidden = false;
+            document.getElementById("versionReason").focus();
+            setStatus("Review the commit message, then confirm save.");
+        }
+
+        function buildModuleRequest() {
 
             const moduleNumber = document.getElementById("moduleNumber").value.trim();
             const name = document.getElementById("name").value.trim();
 
-            const request = {
+            return {
                 studyProgramId: numberOrNull(document.getElementById("studyProgramId").value),
                 moduleNumber: moduleNumber,
                 name: name,
@@ -431,16 +453,126 @@
                 additionalNotes: document.getElementById("additionalNotes").value.trim(),
                 moduleWeight: numberOrNull(document.getElementById("moduleWeight").value)
             };
+        }
+
+        async function confirmSaveModule() {
+            if (!pendingModuleRequest) {
+                return;
+            }
+
+            const versionReason = document.getElementById("versionReason").value.trim();
+            if (!versionReason) {
+                setStatus("Commit message is required.");
+                document.getElementById("versionReason").focus();
+                return;
+            }
+
+            const request = {
+                ...pendingModuleRequest,
+                versionReason: versionReason
+            };
 
             setStatus("Saving module...");
 
             try {
                 currentModule = await updateModule(moduleId, request);
-                fillForm(currentModule);
-                setStatus(`Saved module ${currentModule.id}.`);
+                window.location.href = `/module-versions.html?id=${currentModule.id}`;
             } catch (error) {
                 setStatus("Save failed: " + error.message);
             }
+        }
+
+        function cancelSaveModule() {
+            pendingModuleRequest = null;
+            document.getElementById("commitMessagePanel").hidden = true;
+            setStatus(`Loaded module ${currentModule.id}.`);
+        }
+
+        function buildChangeMessage(oldModule, request) {
+            const changes = [
+                changeMessagePart("module number", oldModule.moduleNumber, request.moduleNumber),
+                changeMessagePart("title", oldModule.name, request.name),
+                changeMessagePart("credits", oldModule.credits, request.credits),
+                changeMessagePart("module type", oldModule.moduleType, request.moduleType),
+                changeMessagePart("coordinator", oldModule.coordinator, request.coordinator),
+                changeMessagePart("applicability", oldModule.applicability, request.applicability),
+                changeMessagePart("learning area", oldModule.learningArea, request.learningArea),
+                changeMessagePart("learning objectives", oldModule.learningObjectives, request.learningObjectives),
+                changeMessagePart("prerequisites", oldModule.prerequisites, request.prerequisites),
+                changeMessagePart("level", oldModule.level, request.level),
+                changeMessagePart("status", oldModule.status, request.status),
+                changeMessagePart("frequency", oldModule.frequency, request.frequency),
+                changeMessagePart("examination form", oldModule.examinationForm, request.examinationForm),
+                changeMessagePart("contents", oldModule.contents, request.contents),
+                changeMessagePart("literature", oldModule.literature, request.literature),
+                changeMessagePart("additional notes", oldModule.additionalNotes, request.additionalNotes),
+                changeMessagePart("module weight", oldModule.moduleWeight, request.moduleWeight),
+                changeMessagePart("description", oldModule.description, request.description),
+                changeMessagePart(
+                    "teaching forms",
+                    teachingFormIdsForModule(oldModule),
+                    request.teachingFormIds
+                ),
+                changeMessagePart(
+                    "workload",
+                    workloadComparableValue(oldModule.workload),
+                    workloadComparableValue(request.workload)
+                )
+            ].filter(Boolean);
+
+            return changes.length > 0 ? changes.join("; ") : "updated module without field changes";
+        }
+
+        function changeMessagePart(label, oldValue, newValue) {
+            const oldText = comparableText(oldValue);
+            const newText = comparableText(newValue);
+
+            if (oldText === newText) {
+                return "";
+            }
+
+            return `changed ${label} from ${displayValue(oldText)} to ${displayValue(newText)}`;
+        }
+
+        function teachingFormIdsForModule(module) {
+            return (module.teachingForms || [])
+                .map(teachingForm => Number(teachingForm.id))
+                .filter(Number.isFinite)
+                .sort((left, right) => left - right);
+        }
+
+        function workloadComparableValue(workload) {
+            if (!workload) {
+                return [];
+            }
+
+            return (workload.components || [])
+                .map(component => ({
+                    teachingFormId: component.teachingFormId,
+                    swsAmount: component.swsAmount
+                }))
+                .sort((left, right) => {
+                    const leftId = Number(left.teachingFormId) || 0;
+                    const rightId = Number(right.teachingFormId) || 0;
+                    return leftId - rightId;
+                });
+        }
+
+        function comparableText(value) {
+            if (Array.isArray(value) || (value && typeof value === "object")) {
+                return JSON.stringify(value);
+            }
+
+            return String(value ?? "").trim();
+        }
+
+        function displayValue(value) {
+            if (!value) {
+                return "\"\"";
+            }
+
+            const shortValue = value.length > 80 ? `${value.slice(0, 77)}...` : value;
+            return `"${shortValue}"`;
         }
 
         async function deleteCurrentModule() {

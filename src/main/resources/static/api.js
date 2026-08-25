@@ -25,6 +25,22 @@ async function loadModule(moduleId) {
     return requestJson(`/api/modules/${moduleId}`);
 }
 
+async function loadModuleVersions(moduleId) {
+    return requestJson(`/api/modules/${moduleId}/versions`);
+}
+
+async function restoreModuleVersion(moduleId, versionNumber) {
+    return requestJson(`/api/modules/${moduleId}/versions/${versionNumber}/restore`, {
+        method: "POST"
+    });
+}
+
+async function compareModuleVersions(moduleId, fromVersionNumber, toVersionNumber) {
+    return requestJson(
+        `/api/modules/${moduleId}/versions/compare?from=${fromVersionNumber}&to=${toVersionNumber}`
+    );
+}
+
 async function loadTeachingForms() {
     return requestJson("/api/teaching-forms");
 }

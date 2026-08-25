@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Module Versions</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <h1>Compare Module Versions</h1>
+
+    <section>
+        <div id="status" class="status">Loading versions...</div>
+        <div class="form-actions">
+            <a id="historyLink" href="/index.html">Back to history</a>
+            <a id="editLink" href="/index.html">Edit module</a>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="moduleTitle">Module</h2>
+        <div class="compare-controls">
+            <label>
+                From version
+                <select id="fromVersion"></select>
+            </label>
+
+            <label>
+                To version
+                <select id="toVersion"></select>
+            </label>
+
+            <button type="button" onclick="runCompare()">Compare</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Differences</h2>
+        <div id="diffResult">Choose two versions to compare.</div>
+    </section>
+
+    <script src="/api.js?v=module-version-compare"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const moduleId = params.get("id");
+        const initialFrom = params.get("from");
+        const initialTo = params.get("to");
+        let currentModule = null;
+        let versions = [];
+
+        async function init() {
+            if (!moduleId) {
+                setStatus("Missing module id in URL. Example: /module-version-compare.html?id=12");
+                return;
+            }
+
+            document.getElementById("historyLink").href = `/module-versions.html?id=${moduleId}`;
+            document.getElementById("editLink").href = `/module-edit.html?id=${moduleId}`;
+
+            try {
+                [currentModule, versions] = await Promise.all([
+                    loadModule(moduleId),
+                    loadModuleVersions(moduleId)
+                ]);
+                renderTitle();
+                renderVersionSelects();
+                setStatus(`Loaded ${versions.length} versions.`);
+
+                if (versions.length >= 2) {
+                    await runCompare();
+                }
+            } catch (error) {
+                setStatus("Could not load compare page: " + error.message);
+            }
+        }
+
+        function renderTitle() {
+            const number = currentModule.moduleNumber || currentModule.id;
+            const name = currentModule.name || "Untitled module";
+            document.getElementById("moduleTitle").textContent = `${number} - ${name}`;
+        }
+
+        function renderVersionSelects() {
+            const fromSelect = document.getElementById("fromVersion");
+            const toSelect = document.getElementById("toVersion");
+
+            if (versions.length < 2) {
+                fromSelect.innerHTML = "";
+                toSelect.innerHTML = "";
+                document.getElementById("diffResult").textContent =
+                    "At least two saved versions are needed for comparison.";
+                return;
+            }
+
+            const options = versions.map(version => `
+                <option value="${escapeHtml(String(version.versionNumber))}">
+                    Version ${escapeHtml(String(version.versionNumber))} - ${escapeHtml(formatDate(version.createdAt))}
+                </option>
+            `).join("");
+
+            fromSelect.innerHTML = options;
+            toSelect.innerHTML = options;
+
+            fromSelect.value = initialFrom || String(versions[1].versionNumber);
+            toSelect.value = initialTo || String(versions[0].versionNumber);
+        }
+
+        async function runCompare() {
+            const fromVersionNumber = document.getElementById("fromVersion").value;
+            const toVersionNumber = document.getElementById("toVersion").value;
+
+            if (!fromVersionNumber || !toVersionNumber) {
+                return;
+            }
+
+            setStatus(`Comparing version ${fromVersionNumber} to ${toVersionNumber}...`);
+
+            try {
+                const diff = await compareModuleVersions(moduleId, fromVersionNumber, toVersionNumber);
+                renderDiff(diff);
+                setStatus(`Found ${diff.changes.length} changed fields.`);
+            } catch (error) {
+                setStatus("Compare failed: " + error.message);
+            }
+        }
+
+        function renderDiff(diff) {
+            const container = document.getElementById("diffResult");
+
+            if (diff.changes.length === 0) {
+                container.textContent = "No differences found.";
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Version ${escapeHtml(String(diff.fromVersionNumber))}</th>
+                            <th>Version ${escapeHtml(String(diff.toVersionNumber))}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${diff.changes.map(change => `
+                            <tr>
+                                <td>${escapeHtml(readablePath(change.path))}</td>
+                                <td class="diff-old">${highlightOldValue(change.oldValue, change.newValue)}</td>
+                                <td class="diff-new">${highlightNewValue(change.oldValue, change.newValue)}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function highlightOldValue(oldValue, newValue) {
+            const diffParts = diffText(String(oldValue ?? ""), String(newValue ?? ""));
+            return diffParts
+                .filter(part => part.type !== "added")
+                .map(part => part.type === "removed"
+                    ? `<mark class="diff-removed">${escapeHtml(part.text)}</mark>`
+                    : escapeHtml(part.text)
+                )
+                .join("");
+        }
+
+        function highlightNewValue(oldValue, newValue) {
+            const diffParts = diffText(String(oldValue ?? ""), String(newValue ?? ""));
+            return diffParts
+                .filter(part => part.type !== "removed")
+                .map(part => part.type === "added"
+                    ? `<mark class="diff-added">${escapeHtml(part.text)}</mark>`
+                    : escapeHtml(part.text)
+                )
+                .join("");
+        }
+
+        function diffText(oldText, newText) {
+            if (oldText === newText) {
+                return [{ type: "same", text: oldText }];
+            }
+
+            const oldTokens = tokenize(oldText);
+            const newTokens = tokenize(newText);
+            const table = buildLcsTable(oldTokens, newTokens);
+            const parts = [];
+            let oldIndex = 0;
+            let newIndex = 0;
+
+            while (oldIndex < oldTokens.length && newIndex < newTokens.length) {
+                if (oldTokens[oldIndex] === newTokens[newIndex]) {
+                    parts.push({ type: "same", text: oldTokens[oldIndex] });
+                    oldIndex++;
+                    newIndex++;
+                } else if (table[oldIndex + 1][newIndex] >= table[oldIndex][newIndex + 1]) {
+                    parts.push({ type: "removed", text: oldTokens[oldIndex] });
+                    oldIndex++;
+                } else {
+                    parts.push({ type: "added", text: newTokens[newIndex] });
+                    newIndex++;
+                }
+            }
+
+            while (oldIndex < oldTokens.length) {
+                parts.push({ type: "removed", text: oldTokens[oldIndex] });
+                oldIndex++;
+            }
+
+            while (newIndex < newTokens.length) {
+                parts.push({ type: "added", text: newTokens[newIndex] });
+                newIndex++;
+            }
+
+            return mergeAdjacentParts(parts);
+        }
+
+        function tokenize(text) {
+            return text.match(/(\s+|[A-Za-z0-9_ÄÖÜäöüß]+|[^\sA-Za-z0-9_ÄÖÜäöüß])/g) || [];
+        }
+
+        function buildLcsTable(oldTokens, newTokens) {
+            const table = Array.from(
+                { length: oldTokens.length + 1 },
+                () => Array(newTokens.length + 1).fill(0)
+            );
+
+            for (let oldIndex = oldTokens.length - 1; oldIndex >= 0; oldIndex--) {
+                for (let newIndex = newTokens.length - 1; newIndex >= 0; newIndex--) {
+                    table[oldIndex][newIndex] = oldTokens[oldIndex] === newTokens[newIndex]
+                        ? table[oldIndex + 1][newIndex + 1] + 1
+                        : Math.max(table[oldIndex + 1][newIndex], table[oldIndex][newIndex + 1]);
+                }
+            }
+
+            return table;
+        }
+
+        function mergeAdjacentParts(parts) {
+            return parts.reduce((merged, part) => {
+                const previous = merged[merged.length - 1];
+                if (previous && previous.type === part.type) {
+                    previous.text += part.text;
+                } else {
+                    merged.push({ ...part });
+                }
+                return merged;
+            }, []);
+        }
+
+        function readablePath(path) {
+            return path
+                .replace(/^module\./, "")
+                .replaceAll(".", " / ");
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(value).toLocaleString();
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>

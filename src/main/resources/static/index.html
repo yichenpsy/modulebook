@@ -22,6 +22,9 @@
         </label>
 
         <div id="status" class="status">Loading study programs...</div>
+        <div class="form-actions">
+            <a id="studyProgramHistoryLink" href="/index.html" hidden>Study program history</a>
+        </div>
     </section>
 
     <section>
@@ -83,9 +86,13 @@
             if (!programId) {
                 modules = [];
                 document.getElementById("modules").textContent = "Select a study program.";
+                document.getElementById("studyProgramHistoryLink").hidden = true;
                 return;
             }
 
+            const historyLink = document.getElementById("studyProgramHistoryLink");
+            historyLink.href = `/study-program-history.html?id=${programId}`;
+            historyLink.hidden = false;
             setStatus("Loading modules...");
 
             try {
@@ -121,8 +128,9 @@
                                 <td>${escapeHtml(module.moduleNumber || "")}</td>
                                 <td>${escapeHtml(module.name || "")}</td>
                                 <td>${escapeHtml(String(module.credits ?? ""))}</td>
-                                <td>
+                                <td class="row-actions">
                                     <a href="/module-edit.html?id=${escapeHtml(String(module.id))}">Edit</a>
+                                    <a href="/module-versions.html?id=${escapeHtml(String(module.id))}">History</a>
                                 </td>
                             </tr>
                         `).join("")}

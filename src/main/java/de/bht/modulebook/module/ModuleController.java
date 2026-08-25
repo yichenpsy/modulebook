@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import de.bht.modulebook.module.dto.ModuleRequest;
 import de.bht.modulebook.module.dto.ModuleResponse;
@@ -56,11 +57,16 @@ public class ModuleController {
 
     @PutMapping("/{id}") //PUT /api/modules/1
     public ModuleResponse update(@PathVariable Long id, @Valid @RequestBody ModuleRequest request) {
+        if (request.versionReason() == null || request.versionReason().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Commit message is required");
+        }
+
         Module updated = moduleService.update(
             id, 
             ModuleMapper.toEntity(request),
             ModuleWorkloadMapper.toEntity(request.workload()),
-            request.teachingFormIds()
+            request.teachingFormIds(),
+            request.versionReason()
         );
         return ModuleMapper.toResponse(
             updated,

@@ -38,6 +38,7 @@ public record ModuleRequest(
     BigDecimal moduleWeight,
     List<Long> teachingFormIds,
     ModuleWorkloadRequest workload,
-    String examinationForm
+    String examinationForm,
+    String versionReason
 ){
 }

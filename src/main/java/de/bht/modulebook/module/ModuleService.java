@@ -16,6 +16,7 @@ import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.workload.PresenceHourComponent;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
+import de.bht.modulebook.module.version.ModuleVersionService;
 import de.bht.modulebook.teachingform.TeachingForm;
 
 // logic layer, checkes things like "module not found", calls repository
@@ -27,16 +28,20 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository moduleTeachingFormRepository;
+    private final ModuleVersionService versionService;
+    
 
     public ModuleService(
         ModuleRepository moduleRepository,
         ModuleWorkloadRepository workloadRepository,
-        ModuleTeachingFormRepository moduleTeachingFormRepository
+        ModuleTeachingFormRepository moduleTeachingFormRepository,
+        ModuleVersionService versionService
     ) {
         // The service needs the repository to access the database.
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
         this.moduleTeachingFormRepository = moduleTeachingFormRepository;
+        this.versionService = versionService;
     }
 
     public Module create(Module module) {
@@ -79,6 +84,7 @@ public class ModuleService {
     }
       
     public Module update(Long id, Module module) {
+        versionService.saveSnapshot(id, "before update");
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -98,6 +104,12 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds){
+        return update(id, module, workload, teachingFormIds, null);
+    }
+
+    @Transactional
+    public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason){
+        versionService.saveSnapshot(id, normalizeVersionReason(versionReason));
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -159,5 +171,12 @@ public class ModuleService {
                     .forEach(mergedIds::add);
         }
         return new ArrayList<>(mergedIds);
+    }
+
+    private String normalizeVersionReason(String versionReason) {
+        if (versionReason == null || versionReason.isBlank()) {
+            return "before update";
+        }
+        return versionReason.trim();
     }
 }

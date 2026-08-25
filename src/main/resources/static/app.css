@@ -75,6 +75,22 @@ th {
     max-width: 720px;
 }
 
+.snapshot-grid {
+    display: grid;
+    grid-template-columns: 160px minmax(220px, 1fr);
+    gap: 8px 12px;
+    margin: 0;
+}
+
+.snapshot-grid dt {
+    font-weight: bold;
+}
+
+.snapshot-grid dd {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
 .row-actions {
     white-space: nowrap;
 }
@@ -99,6 +115,18 @@ th {
 
 .form-actions {
     margin-top: 16px;
+}
+
+.commit-message-panel {
+    max-width: 720px;
+    margin: 12px 0 16px;
+    padding: 12px;
+    border: 1px solid #c8d8f0;
+    background: #f7fbff;
+}
+
+.commit-message-panel textarea {
+    max-width: 100%;
 }
 
 .workload-editor,
@@ -134,6 +162,46 @@ th {
     color: #333;
 }
 
+.compare-controls {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+    gap: 12px;
+    align-items: end;
+    max-width: 900px;
+}
+
+.compare-controls label {
+    margin-bottom: 0;
+}
+
+.diff-old,
+.diff-new {
+    white-space: pre-wrap;
+}
+
+.diff-old {
+    background: #fff4f4;
+}
+
+.diff-new {
+    background: #f3fff4;
+}
+
+.diff-removed,
+.diff-added {
+    padding: 1px 2px;
+    border-radius: 2px;
+}
+
+.diff-removed {
+    background: #ffd7d7;
+    text-decoration: line-through;
+}
+
+.diff-added {
+    background: #c9f7d0;
+}
+
 .field-hint {
     display: block;
     margin-top: 4px;
@@ -166,7 +234,9 @@ th {
     }
 
     .workload-row,
-    .workload-summary {
+    .workload-summary,
+    .snapshot-grid,
+    .compare-controls {
         grid-template-columns: 1fr;
     }
 }
