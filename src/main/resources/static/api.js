@@ -55,6 +55,16 @@ async function updateModule(moduleId, request) {
     });
 }
 
+async function createModule(request) {
+    return requestJson("/api/modules", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+    });
+}
+
 async function deleteModule(moduleId) {
     await requestJson(`/api/modules/${moduleId}`, {
         method: "DELETE"

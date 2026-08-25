@@ -1,6 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Module</title>
+    <title id="documentTitle">Edit Module</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -9,7 +11,7 @@
         <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
-    <h1>Edit Module</h1>
+    <h1 id="pageTitle">Edit Module</h1>
 
     <section>
         <div id="status" class="status">Loading module...</div>
@@ -17,7 +19,7 @@
         <form id="moduleForm" onsubmit="saveModule(event)" hidden>
             <div class="form-actions">
                 <button type="submit">Save</button>
-                <button type="button" onclick="deleteCurrentModule()">Delete</button>
+                <button id="deleteButton" type="button" onclick="deleteCurrentModule()">Delete</button>
                 <a id="versionsLink" href="/index.html">History</a>
                 <a id="backLink" href="/index.html">Back to study program</a>
             </div>
@@ -165,10 +167,12 @@
         </form>
     </section>
 
-    <script src="/api.js?v=workload-teaching-forms"></script>
+    <script src="/api.js?v=add-module"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const moduleId = params.get("id");
+        const studyProgramId = params.get("studyProgramId");
+        const isCreateMode = !moduleId;
         const weeksPerSemester = 17;
         const hoursPerCredit = 30;
         let currentModule = null;
@@ -178,25 +182,43 @@
         let pendingModuleRequest = null;
 
         async function init() {
-            if (!moduleId) {
-                setStatus("Missing module id in URL. Example: /module-edit.html?id=12");
+            if (isCreateMode && !studyProgramId) {
+                setStatus("Missing study program id in URL. Example: /module-edit.html?studyProgramId=3");
                 return;
             }
 
             try {
-                [teachingForms, currentModule] = await Promise.all([
-                    loadTeachingForms(),
-                    loadModule(moduleId)
-                ]);
-                fillForm(currentModule);
+                teachingForms = await loadTeachingForms();
+
+                if (isCreateMode) {
+                    prepareCreateForm();
+                } else {
+                    currentModule = await loadModule(moduleId);
+                    fillForm(currentModule);
+                }
+
                 document.getElementById("moduleForm").hidden = false;
-                setStatus(`Loaded module ${currentModule.id}.`);
             } catch (error) {
-                setStatus("Could not load module: " + error.message);
+                setStatus("Could not load page data: " + error.message);
             }
         }
 
+        function prepareCreateForm() {
+            document.getElementById("pageTitle").textContent = "Add New Module";
+            document.getElementById("documentTitle").textContent = "Add New Module";
+            document.getElementById("deleteButton").hidden = true;
+            document.getElementById("versionsLink").hidden = true;
+            document.getElementById("studyProgramId").value = studyProgramId;
+            document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
+            fillWorkloadRows([]);
+            renderModuleTeachingForms();
+            updateWorkloadPreview();
+            setStatus("Creating a new module.");
+        }
+
         function fillForm(module) {
+            document.getElementById("pageTitle").textContent = "Edit Module";
+            document.getElementById("documentTitle").textContent = "Edit Module";
             document.getElementById("studyProgramId").value = module.studyProgramId ?? "";
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
             document.getElementById("name").value = module.name || "";
@@ -228,6 +250,7 @@
                 document.getElementById("backLink").href = `/index.html?studyProgramId=${module.studyProgramId}`;
             }
             document.getElementById("versionsLink").href = `/module-versions.html?id=${module.id}`;
+            setStatus(`Loaded module ${module.id}.`);
         }
 
         function fillWorkloadRows(components) {
@@ -412,6 +435,12 @@
         async function saveModule(event) {
             event.preventDefault();
             pendingModuleRequest = buildModuleRequest();
+
+            if (isCreateMode) {
+                await createCurrentModule();
+                return;
+            }
+
             document.getElementById("versionReason").value = buildChangeMessage(currentModule, pendingModuleRequest);
             document.getElementById("commitMessagePanel").hidden = false;
             document.getElementById("versionReason").focus();
@@ -453,6 +482,17 @@
                 additionalNotes: document.getElementById("additionalNotes").value.trim(),
                 moduleWeight: numberOrNull(document.getElementById("moduleWeight").value)
             };
+        }
+
+        async function createCurrentModule() {
+            setStatus("Creating module...");
+
+            try {
+                currentModule = await createModule(pendingModuleRequest);
+                window.location.href = `/module-edit.html?id=${currentModule.id}`;
+            } catch (error) {
+                setStatus("Create failed: " + error.message);
+            }
         }
 
         async function confirmSaveModule() {
