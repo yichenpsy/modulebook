@@ -114,7 +114,7 @@ public class PdfImportService {
                     .findByStudyProgramIdAndModuleNumber(studyProgram.getId(),
                     module.getModuleNumber()).orElse(null);
                 if(existing == null){
-                    saved = moduleService.create(module);
+                    saved = moduleService.createFromPdfImport(module);
                 } else {
                     saved = moduleService.update(existing.getId(), module);
 

@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleRepository;
+import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.teachingform.TeachingForm;
@@ -59,8 +60,53 @@ public class ModuleVersionService {
         }
     }
 
+    @Transactional
     public List<ModuleVersion> getHistory(Long moduleId) {
-        return versionRepository.findByModuleId(moduleId);
+        List<ModuleVersion> history = versionRepository.findByModuleId(moduleId);
+        if (history.isEmpty()) {
+            saveSnapshot(moduleId, initialVersionReasonForExistingModule(moduleId));
+            return versionRepository.findByModuleId(moduleId);
+        }
+
+        if (repairInitialVersionReason(moduleId, history)) {
+            return versionRepository.findByModuleId(moduleId);
+        }
+
+        return history;
+    }
+
+    private boolean repairInitialVersionReason(Long moduleId, List<ModuleVersion> history) {
+        ModuleVersion firstVersion = history.stream()
+                .filter(version -> version.getVersionNumber() != null && version.getVersionNumber() == 1)
+                .findFirst()
+                .orElse(null);
+
+        if (firstVersion == null || !"initial version".equals(firstVersion.getReason())) {
+            return false;
+        }
+
+        versionRepository.updateReason(moduleId, 1, initialVersionReasonForExistingModule(moduleId));
+        return true;
+    }
+
+    private String initialVersionReasonForExistingModule(Long moduleId) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+
+        if (looksLikePdfImportedModule(module)) {
+            return ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON;
+        }
+
+        return ModuleService.MANUAL_INITIAL_VERSION_REASON;
+    }
+
+    private boolean looksLikePdfImportedModule(Module module) {
+        String description = module.getDescription();
+        if (description == null) {
+            return false;
+        }
+
+        return description.contains("Source file:") && description.contains("Source pages:");
     }
 
     @Transactional

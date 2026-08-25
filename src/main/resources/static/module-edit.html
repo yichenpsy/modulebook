@@ -435,13 +435,9 @@
         async function saveModule(event) {
             event.preventDefault();
             pendingModuleRequest = buildModuleRequest();
-
-            if (isCreateMode) {
-                await createCurrentModule();
-                return;
-            }
-
-            document.getElementById("versionReason").value = buildChangeMessage(currentModule, pendingModuleRequest);
+            document.getElementById("versionReason").value = isCreateMode
+                ? "created module manually"
+                : buildChangeMessage(currentModule, pendingModuleRequest);
             document.getElementById("commitMessagePanel").hidden = false;
             document.getElementById("versionReason").focus();
             setStatus("Review the commit message, then confirm save.");
@@ -484,17 +480,6 @@
             };
         }
 
-        async function createCurrentModule() {
-            setStatus("Creating module...");
-
-            try {
-                currentModule = await createModule(pendingModuleRequest);
-                window.location.href = `/module-edit.html?id=${currentModule.id}`;
-            } catch (error) {
-                setStatus("Create failed: " + error.message);
-            }
-        }
-
         async function confirmSaveModule() {
             if (!pendingModuleRequest) {
                 return;
@@ -512,20 +497,22 @@
                 versionReason: versionReason
             };
 
-            setStatus("Saving module...");
+            setStatus(isCreateMode ? "Creating module..." : "Saving module...");
 
             try {
-                currentModule = await updateModule(moduleId, request);
+                currentModule = isCreateMode
+                    ? await createModule(request)
+                    : await updateModule(moduleId, request);
                 window.location.href = `/module-versions.html?id=${currentModule.id}`;
             } catch (error) {
-                setStatus("Save failed: " + error.message);
+                setStatus((isCreateMode ? "Create" : "Save") + " failed: " + error.message);
             }
         }
 
         function cancelSaveModule() {
             pendingModuleRequest = null;
             document.getElementById("commitMessagePanel").hidden = true;
-            setStatus(`Loaded module ${currentModule.id}.`);
+            setStatus(isCreateMode ? "Creating a new module." : `Loaded module ${currentModule.id}.`);
         }
 
         function buildChangeMessage(oldModule, request) {

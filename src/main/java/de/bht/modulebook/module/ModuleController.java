@@ -28,7 +28,8 @@ public class ModuleController {
         Module created = moduleService.create(
             ModuleMapper.toEntity(request),
             ModuleWorkloadMapper.toEntity(request.workload()),
-            request.teachingFormIds()
+            request.teachingFormIds(),
+            request.versionReason()
         );
         return ModuleMapper.toResponse(
             created,

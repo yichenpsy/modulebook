@@ -124,7 +124,7 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         ));
         when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
-        when(moduleService.create(mapped)).thenReturn(created);
+        when(moduleService.createFromPdfImport(mapped)).thenReturn(created);
 
         // This is the request body shape sent to POST /api/pdf-import/modules.
         SaveImportedModulesRequest request = new SaveImportedModulesRequest(
@@ -145,7 +145,7 @@ class PdfImportServiceTest {
         assertThat(response.createdModules().get(0).studyProgramId()).isEqualTo(10L);
         assertThat(response.createdModules().get(0).moduleNumber()).isEqualTo("B01");
         assertThat(response.errors()).isEmpty();
-        verify(moduleService).create(mapped);
+        verify(moduleService).createFromPdfImport(mapped);
         assertThat(mapped.getStudyProgramId()).isEqualTo(10L);
     }
 
@@ -173,7 +173,7 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         ));
         when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
-        when(moduleService.create(mapped)).thenThrow(new IllegalArgumentException("Duplicate module code"));
+        when(moduleService.createFromPdfImport(mapped)).thenThrow(new IllegalArgumentException("Duplicate module code"));
 
         SaveImportedModulesRequest request = new SaveImportedModulesRequest(
                 "Architektur",

@@ -88,10 +88,11 @@ class ModuleControllerTest {
                 List.of(),
                 null,
                 "Klausur",
-                null
+                "created module manually"
         );
 
-        when(moduleService.create(any(Module.class), any(), eq(List.of()))).thenReturn(created);
+        when(moduleService.create(any(Module.class), any(), eq(List.of()), eq("created module manually")))
+                .thenReturn(created);
         when(moduleService.getWorkloadByModuleId(100L)).thenReturn(Optional.empty());
         when(moduleService.getTeachingFormsByModuleId(100L)).thenReturn(List.of());
 
@@ -101,6 +102,6 @@ class ModuleControllerTest {
         assertThat(response.studyProgramId()).isEqualTo(10L);
         assertThat(response.moduleNumber()).isEqualTo("B01");
         assertThat(response.name()).isEqualTo("New Module");
-        verify(moduleService).create(any(Module.class), isNull(), eq(List.of()));
+        verify(moduleService).create(any(Module.class), isNull(), eq(List.of()), eq("created module manually"));
     }
 }

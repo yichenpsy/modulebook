@@ -24,6 +24,8 @@ import de.bht.modulebook.teachingform.TeachingForm;
 public class ModuleService {
     private static final BigDecimal WEEKS_PER_SEMESTER = BigDecimal.valueOf(17);
     private static final BigDecimal HOURS_PER_CREDIT = BigDecimal.valueOf(30);
+    public static final String MANUAL_INITIAL_VERSION_REASON = "created manually";
+    public static final String PDF_IMPORT_INITIAL_VERSION_REASON = "created from PDF import";
 
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
@@ -45,15 +47,30 @@ public class ModuleService {
     }
 
     public Module create(Module module) {
-        return create(module, null);
+        return create(module, null, List.of(), MANUAL_INITIAL_VERSION_REASON);
     }
 
     public Module create(Module module, ModuleWorkload workload) {
-        return create(module, workload, List.of());
+        return create(module, workload, List.of(), MANUAL_INITIAL_VERSION_REASON);
     }
 
     @Transactional
     public Module create(Module module, ModuleWorkload workload, List<Long> teachingFormIds) {
+        return create(module, workload, teachingFormIds, MANUAL_INITIAL_VERSION_REASON);
+    }
+
+    @Transactional
+    public Module createFromPdfImport(Module module) {
+        return create(module, null, List.of(), PDF_IMPORT_INITIAL_VERSION_REASON);
+    }
+
+    @Transactional
+    public Module create(
+            Module module,
+            ModuleWorkload workload,
+            List<Long> teachingFormIds,
+            String initialVersionReason
+    ) {
         Module created = moduleRepository.insert(module);
         if (workload != null) {
             calculateWorkload(created, workload);
@@ -63,6 +80,7 @@ public class ModuleService {
                 created.getId(),
                 mergeTeachingFormIds(teachingFormIds, workload)
         );
+        versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason));
         return getById(created.getId());
     }
 
@@ -178,5 +196,12 @@ public class ModuleService {
             return "before update";
         }
         return versionReason.trim();
+    }
+
+    private String normalizeInitialVersionReason(String initialVersionReason) {
+        if (initialVersionReason == null || initialVersionReason.isBlank()) {
+            return MANUAL_INITIAL_VERSION_REASON;
+        }
+        return initialVersionReason.trim();
     }
 }

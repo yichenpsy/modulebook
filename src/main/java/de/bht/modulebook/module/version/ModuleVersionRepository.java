@@ -42,6 +42,19 @@ public class ModuleVersionRepository {
         );
     }
 
+    public void updateReason(Long moduleId, int versionNumber, String reason) {
+        jdbcTemplate.update(
+                """
+                UPDATE module_versions
+                SET reason = ?
+                WHERE module_id = ? AND version_number = ?
+                """,
+                reason,
+                moduleId,
+                versionNumber
+        );
+    }
+
     public List<ModuleVersion> findByModuleId(Long moduleId) {
         return jdbcTemplate.query(
                 """
