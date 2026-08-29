@@ -5,6 +5,7 @@ import java.time.Instant;
 public class ModuleVersion {
     private Long id;
     private Long moduleId;
+    private Long studyProgramId;
     private Integer versionNumber;
     private String snapshotJson;
     private String reason;
@@ -12,8 +13,14 @@ public class ModuleVersion {
 
     public ModuleVersion(Long id, Long moduleId, Integer versionNumber,
                          String snapshotJson, String reason, Instant createdAt) {
+        this(id, moduleId, null, versionNumber, snapshotJson, reason, createdAt);
+    }
+
+    public ModuleVersion(Long id, Long moduleId, Long studyProgramId, Integer versionNumber,
+                         String snapshotJson, String reason, Instant createdAt) {
         this.id = id;
         this.moduleId = moduleId;
+        this.studyProgramId = studyProgramId;
         this.versionNumber = versionNumber;
         this.snapshotJson = snapshotJson;
         this.reason = reason;
@@ -22,6 +29,7 @@ public class ModuleVersion {
 
     public Long getId() { return id; }
     public Long getModuleId() { return moduleId; }
+    public Long getStudyProgramId() { return studyProgramId; }
     public Integer getVersionNumber() { return versionNumber; }
     public String getSnapshotJson() { return snapshotJson; }
     public String getReason() { return reason; }

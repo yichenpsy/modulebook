@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -116,6 +117,7 @@ class PdfImportServiceTest {
 
         // Define how the mocked collaborators should behave for this example.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");
+        when(importedModuleMapper.moduleId(imported)).thenReturn(null);
         when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(new StudyProgram(
                 10L,
                 "Architektur",
@@ -124,6 +126,7 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         ));
         when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
+        when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
         when(moduleService.createFromPdfImport(mapped)).thenReturn(created);
 
         // This is the request body shape sent to POST /api/pdf-import/modules.
@@ -165,6 +168,7 @@ class PdfImportServiceTest {
 
         // Simulate a save failure, such as a duplicate module code from the database.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");
+        when(importedModuleMapper.moduleId(imported)).thenReturn(null);
         when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(new StudyProgram(
                 10L,
                 "Architektur",
@@ -173,6 +177,7 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         ));
         when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
+        when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
         when(moduleService.createFromPdfImport(mapped)).thenThrow(new IllegalArgumentException("Duplicate module code"));
 
         SaveImportedModulesRequest request = new SaveImportedModulesRequest(

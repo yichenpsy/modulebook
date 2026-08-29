@@ -1,6 +1,7 @@
 package de.bht.modulebook.module.version;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleRepository;
 import de.bht.modulebook.module.ModuleService;
+import de.bht.modulebook.module.version.dto.StudyProgramModuleHistoryResponse;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.teachingform.TeachingForm;
@@ -54,10 +56,19 @@ public class ModuleVersionService {
         try {
             int versionNumber = versionRepository.nextVersionNumber(moduleId);
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
-            versionRepository.insert(moduleId, versionNumber, snapshotJson, reason);
+            versionRepository.insert(moduleId, module.getStudyProgramId(), versionNumber, snapshotJson, reason);
         } catch (JacksonException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create module snapshot");
         }
+    }
+
+    public List<StudyProgramModuleHistoryResponse> getStudyProgramHistory(Long studyProgramId) {
+        return versionRepository.findByStudyProgramId(studyProgramId)
+                .stream()
+                .map(this::toStudyProgramHistoryResponse)
+                .filter(row -> row.module() != null
+                        && Objects.equals(row.module().getStudyProgramId(), studyProgramId))
+                .toList();
     }
 
     @Transactional
@@ -107,6 +118,27 @@ public class ModuleVersionService {
         }
 
         return description.contains("Source file:") && description.contains("Source pages:");
+    }
+
+    private StudyProgramModuleHistoryResponse toStudyProgramHistoryResponse(ModuleVersion version) {
+        Module currentModule = version.getModuleId() == null
+                ? null
+                : moduleRepository.findById(version.getModuleId()).orElse(null);
+        Module moduleForDisplay = currentModule == null ? moduleFromSnapshot(version) : currentModule;
+
+        return new StudyProgramModuleHistoryResponse(
+                moduleForDisplay,
+                version,
+                currentModule == null
+        );
+    }
+
+    private Module moduleFromSnapshot(ModuleVersion version) {
+        try {
+            return jsonMapper.readValue(version.getSnapshotJson(), ModuleSnapshot.class).getModule();
+        } catch (JacksonException e) {
+            return null;
+        }
     }
 
     @Transactional

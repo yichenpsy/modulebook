@@ -95,6 +95,15 @@ th {
     white-space: nowrap;
 }
 
+.row-actions a + a {
+    margin-left: 16px;
+}
+
+.muted {
+    color: #666;
+    margin-left: 8px;
+}
+
 .module-card {
     border: 1px solid #ddd;
     padding: 12px;
@@ -129,12 +138,60 @@ th {
     max-width: 100%;
 }
 
+.module-field-table {
+    display: grid;
+    grid-template-columns: 220px minmax(320px, 1fr);
+    max-width: 1100px;
+    margin-top: 16px;
+    border: 1px solid #aaa;
+}
+
+.module-field-row {
+    display: contents;
+}
+
+.module-field-label,
+.module-field-control {
+    padding: 12px;
+    border-bottom: 1px solid #aaa;
+}
+
+.module-field-row:last-child .module-field-label,
+.module-field-row:last-child .module-field-control {
+    border-bottom: 0;
+}
+
+.module-field-label {
+    margin: 0;
+    font-weight: bold;
+    background: #f0f0f0;
+    border-right: 1px solid #aaa;
+}
+
+.module-field-control input,
+.module-field-control select,
+.module-field-control textarea {
+    max-width: none;
+    margin-top: 0;
+}
+
+.module-field-control textarea {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.readonly-value {
+    min-height: 37px;
+    display: flex;
+    align-items: center;
+}
+
 .workload-editor,
 .module-teaching-forms {
-    max-width: 900px;
-    margin: 16px 0;
-    padding: 12px;
-    border: 1px solid #ddd;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 .workload-row {
@@ -229,6 +286,25 @@ th {
 }
 
 @media (max-width: 720px) {
+    .module-field-table {
+        display: block;
+        border-bottom: 0;
+    }
+
+    .module-field-row {
+        display: block;
+    }
+
+    .module-field-label,
+    .module-field-control {
+        display: block;
+        border-right: 0;
+    }
+
+    .module-field-label {
+        border-bottom: 0;
+    }
+
     .module-grid {
         grid-template-columns: 1fr;
     }

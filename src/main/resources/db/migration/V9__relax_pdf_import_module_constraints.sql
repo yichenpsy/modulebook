@@ -1,0 +1,10 @@
+ALTER TABLE modules
+DROP CONSTRAINT IF EXISTS uq_modules_study_program_module_number;
+
+ALTER TABLE modules
+ALTER COLUMN module_number DROP NOT NULL,
+ALTER COLUMN name DROP NOT NULL,
+ALTER COLUMN name TYPE TEXT,
+ALTER COLUMN credits DROP NOT NULL,
+ALTER COLUMN credits TYPE TEXT USING credits::TEXT,
+ALTER COLUMN module_weight TYPE TEXT USING module_weight::TEXT;

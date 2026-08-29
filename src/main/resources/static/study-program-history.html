@@ -25,13 +25,15 @@
         <div id="history">Loading...</div>
     </section>
 
-    <script src="/api.js?v=study-program-history"></script>
+    <script src="/api.js?v=study-program-history-v2"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const studyProgramId = params.get("id");
+        const selectedCreatedAt = params.get("createdAt");
         let studyProgram = null;
         let modules = [];
         let historyRows = [];
+        let historyGroups = [];
 
         async function init() {
             if (!studyProgramId) {
@@ -44,30 +46,40 @@
             try {
                 const studyPrograms = await loadStudyPrograms();
                 studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
-                modules = await loadModulesForStudyProgram(studyProgramId);
                 await loadHistoryRows();
+                buildHistoryGroups();
                 renderTitle();
                 renderHistory();
-                setStatus(`Loaded ${historyRows.length} history entries from ${modules.length} modules.`);
+                setStatus(`Loaded ${historyGroups.length} history changes.`);
             } catch (error) {
                 setStatus("Could not load study program history: " + error.message);
             }
         }
 
         async function loadHistoryRows() {
-            const versionLists = await Promise.all(
-                modules.map(module => loadModuleVersions(module.id))
-            );
-
-            historyRows = versionLists.flatMap((versions, index) =>
-                versions.map(version => ({
-                    module: modules[index],
-                    version: version
-                }))
-            );
+            historyRows = await loadStudyProgramHistory(studyProgramId);
 
             historyRows.sort((left, right) =>
                 new Date(right.version.createdAt || 0) - new Date(left.version.createdAt || 0)
+            );
+        }
+
+        function buildHistoryGroups() {
+            const groupsByCreatedSecond = new Map();
+
+            historyRows.forEach(row => {
+                const createdSecond = createdAtSecond(row.version.createdAt);
+                if (!groupsByCreatedSecond.has(createdSecond)) {
+                    groupsByCreatedSecond.set(createdSecond, {
+                        createdAt: createdSecond,
+                        rows: []
+                    });
+                }
+                groupsByCreatedSecond.get(createdSecond).rows.push(row);
+            });
+
+            historyGroups = Array.from(groupsByCreatedSecond.values()).sort((left, right) =>
+                new Date(right.createdAt || 0) - new Date(left.createdAt || 0)
             );
         }
 
@@ -90,11 +102,61 @@
                 return;
             }
 
+            if (selectedCreatedAt) {
+                renderHistoryGroupDetail(container);
+                return;
+            }
+
+            renderHistoryGroups(container);
+        }
+
+        function renderHistoryGroups(container) {
             container.innerHTML = `
                 <table>
                     <thead>
                         <tr>
                             <th>Created</th>
+                            <th>Changed modules</th>
+                            <th>Reasons</th>
+                            <th>Modules</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${historyGroups.map(group => `
+                            <tr>
+                                <td>${escapeHtml(formatDate(group.createdAt))}</td>
+                                <td>${escapeHtml(String(group.rows.length))}</td>
+                                <td>${escapeHtml(uniqueReasons(group).join(", "))}</td>
+                                <td>${escapeHtml(moduleSummary(group))}</td>
+                                <td class="row-actions">
+                                    <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&createdAt=${encodeURIComponent(group.createdAt)}">Details</a>
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function renderHistoryGroupDetail(container) {
+            const group = historyGroups.find(item => item.createdAt === selectedCreatedAt);
+
+            if (!group) {
+                container.textContent = "No history entries found for this created time.";
+                return;
+            }
+
+            const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+
+            container.innerHTML = `
+                <div class="form-actions">
+                    <a href="${backUrl}">Back to program history</a>
+                </div>
+                <h3>${escapeHtml(formatDate(group.createdAt))}</h3>
+                <table>
+                    <thead>
+                        <tr>
                             <th>Module</th>
                             <th>Version</th>
                             <th>Reason</th>
@@ -103,15 +165,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        ${historyRows.map(row => {
+                        ${group.rows.map(row => {
                             const snapshot = parseSnapshot(row.version.snapshotJson);
                             const moduleSnapshot = snapshot.module || snapshot;
                             return `
                                 <tr>
-                                    <td>${escapeHtml(formatDate(row.version.createdAt))}</td>
                                     <td>
                                         <strong>${escapeHtml(row.module.moduleNumber || "")}</strong>
                                         ${escapeHtml(row.module.name || "")}
+                                        ${row.moduleDeleted ? "<span class=\"muted\">deleted</span>" : ""}
                                     </td>
                                     <td>${escapeHtml(String(row.version.versionNumber))}</td>
                                     <td>${escapeHtml(row.version.reason || "")}</td>
@@ -120,8 +182,10 @@
                                         ${escapeHtml(moduleSnapshot.name || "")}
                                     </td>
                                     <td class="row-actions">
-                                        <a href="/module-versions.html?id=${escapeHtml(String(row.module.id))}">Module history</a>
-                                        <a href="/module-edit.html?id=${escapeHtml(String(row.module.id))}">Edit</a>
+                                        ${row.moduleDeleted ? "" : `
+                                            <a href="/module-versions.html?id=${escapeHtml(String(row.module.id))}">Module history</a>
+                                            <a href="/module-edit.html?id=${escapeHtml(String(row.module.id))}">Edit</a>
+                                        `}
                                     </td>
                                 </tr>
                             `;
@@ -129,6 +193,20 @@
                     </tbody>
                 </table>
             `;
+        }
+
+        function uniqueReasons(group) {
+            return Array.from(new Set(
+                group.rows
+                    .map(row => row.version.reason || "")
+                    .filter(reason => reason.trim() !== "")
+            ));
+        }
+
+        function moduleSummary(group) {
+            return group.rows
+                .map(row => `${row.module.moduleNumber || row.module.id} ${row.module.name || ""}`.trim())
+                .join(", ");
         }
 
         function parseSnapshot(snapshotJson) {
@@ -145,6 +223,16 @@
             }
 
             return new Date(value).toLocaleString();
+        }
+
+        function createdAtSecond(value) {
+            if (!value) {
+                return "";
+            }
+
+            const date = new Date(value);
+            date.setMilliseconds(0);
+            return date.toISOString();
         }
 
         function setStatus(message) {

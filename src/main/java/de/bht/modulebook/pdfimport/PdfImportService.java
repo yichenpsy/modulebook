@@ -27,6 +27,8 @@ import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class PdfImportService {
+    private static final String PDF_REIMPORT_VERSION_REASON = "before PDF re-import";
+
     private final PythonPdfImportRunner runner;
     private final PdfImportProperties properties;
     private final ObjectMapper objectMapper;
@@ -110,14 +112,23 @@ public class PdfImportService {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
                 module.setStudyProgramId(studyProgram.getId());
                 Module saved;
-                Module existing = moduleService
-                    .findByStudyProgramIdAndModuleNumber(studyProgram.getId(),
-                    module.getModuleNumber()).orElse(null);
-                if(existing == null){
-                    saved = moduleService.createFromPdfImport(module);
-                } else {
-                    saved = moduleService.update(existing.getId(), module);
 
+                Long moduleId = importedModuleMapper.moduleId(imported);
+
+                if (moduleId != null) {
+                    saved = moduleService.update(moduleId, module, PDF_REIMPORT_VERSION_REASON);
+                } else if (module.getModuleNumber() != null && !module.getModuleNumber().isBlank()) {
+                    Module existing = moduleService
+                        .findByStudyProgramIdAndModuleNumber(studyProgram.getId(), module.getModuleNumber())
+                        .orElse(null);
+
+                    if (existing == null) {
+                        saved = moduleService.createFromPdfImport(module);
+                    } else {
+                        saved = moduleService.update(existing.getId(), module, PDF_REIMPORT_VERSION_REASON);
+                    }
+                } else {
+                    saved = moduleService.createFromPdfImport(module);
                 }
 
                 createdModules.add(ModuleMapper.toResponse(saved));

@@ -29,6 +29,10 @@ async function loadModuleVersions(moduleId) {
     return requestJson(`/api/modules/${moduleId}/versions`);
 }
 
+async function loadStudyProgramHistory(studyProgramId) {
+    return requestJson(`/api/study-programs/${studyProgramId}/history`);
+}
+
 async function restoreModuleVersion(moduleId, versionNumber) {
     return requestJson(`/api/modules/${moduleId}/versions/${versionNumber}/restore`, {
         method: "POST"

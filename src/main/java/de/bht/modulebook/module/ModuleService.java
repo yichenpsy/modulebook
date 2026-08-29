@@ -112,6 +112,18 @@ public class ModuleService {
         return getById(id);
     }
 
+    @Transactional
+    public Module update(Long id, Module module, String versionReason) {
+        versionService.saveSnapshot(id, normalizeVersionReason(versionReason));
+        boolean updated = moduleRepository.update(id, module);
+
+        if (!updated) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
+        }
+
+        return getById(id);
+    }
+
     public Module update(Long id, Module module, ModuleWorkload workload) {
         List<Long> existingTeachingFormIds = moduleTeachingFormRepository.findByModuleId(id)
                 .stream()
@@ -147,7 +159,9 @@ public class ModuleService {
     }
 
 
+    @Transactional
     public void delete(Long id) {
+        versionService.saveSnapshot(id, "before delete");
         boolean deleted = moduleRepository.delete(id);
 
         // The repository returns false when no row with this id exists.

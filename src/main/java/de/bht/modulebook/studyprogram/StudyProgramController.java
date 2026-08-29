@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import de.bht.modulebook.module.ModuleMapper;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
+import de.bht.modulebook.module.version.ModuleVersionService;
+import de.bht.modulebook.module.version.dto.StudyProgramModuleHistoryResponse;
 import de.bht.modulebook.studyprogram.dto.StudyProgramRequest;
 import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 
@@ -23,10 +25,16 @@ public class StudyProgramController {
 
     private final StudyProgramService studyProgramService;
     private final ModuleService moduleService;
+    private final ModuleVersionService moduleVersionService;
 
-    public StudyProgramController(StudyProgramService studyProgramService, ModuleService moduleService) {
+    public StudyProgramController(
+            StudyProgramService studyProgramService,
+            ModuleService moduleService,
+            ModuleVersionService moduleVersionService
+    ) {
         this.studyProgramService = studyProgramService;
         this.moduleService = moduleService;
+        this.moduleVersionService = moduleVersionService;
     }
 
     @PostMapping
@@ -61,5 +69,11 @@ public class StudyProgramController {
                 .stream()
                 .map(ModuleMapper::toResponse)
                 .toList();
+    }
+
+    @GetMapping("/{id}/history")
+    public List<StudyProgramModuleHistoryResponse> getHistory(@PathVariable Long id) {
+        studyProgramService.getById(id);
+        return moduleVersionService.getStudyProgramHistory(id);
     }
 }

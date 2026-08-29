@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Study Programs</title>
-    <link rel="stylesheet" href="/app.css">
+    <link rel="stylesheet" href="/app.css?v=actions-gap">
 </head>
 <body>
     <nav>
@@ -14,23 +14,13 @@
     <h1>Study Programs</h1>
 
     <section>
-        <label>
-            Study program
-            <select id="studyProgramSelect" onchange="onStudyProgramSelected()">
-                <option value="">Loading...</option>
-            </select>
-        </label>
-
         <div id="status" class="status">Loading study programs...</div>
-        <div class="form-actions">
-            <a id="addModuleLink" href="/index.html" hidden>Add new module</a>
-            <a id="studyProgramHistoryLink" href="/index.html" hidden>Study program history</a>
-        </div>
+        <div id="studyPrograms">Loading...</div>
     </section>
 
     <section>
-        <h2>Modules</h2>
-        <div id="modules">Select a study program.</div>
+        <h2 id="modulesTitle">Modules</h2>
+        <div id="modules">Open a study program to see its modules.</div>
     </section>
 
     <script src="/api.js"></script>
@@ -43,9 +33,9 @@
         async function init() {
             try {
                 studyPrograms = await loadStudyPrograms();
-                renderStudyProgramSelect();
+                renderStudyPrograms();
                 if (selectInitialStudyProgram()) {
-                    await onStudyProgramSelected();
+                    await loadSelectedStudyProgramModules(initialStudyProgramId);
                 } else {
                     setStatus(`Loaded ${studyPrograms.length} study programs.`);
                 }
@@ -54,16 +44,37 @@
             }
         }
 
-        function renderStudyProgramSelect() {
-            const select = document.getElementById("studyProgramSelect");
+        function renderStudyPrograms() {
+            const container = document.getElementById("studyPrograms");
 
-            select.innerHTML = `
-                <option value="">Choose a study program</option>
-                ${studyPrograms.map(program => `
-                    <option value="${escapeHtml(String(program.id))}">
-                        ${escapeHtml(program.name)} (${escapeHtml(String(program.year))})
-                    </option>
-                `).join("")}
+            if (studyPrograms.length === 0) {
+                container.textContent = "No study programs saved yet.";
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Year</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${studyPrograms.map(program => `
+                            <tr>
+                                <td>${escapeHtml(program.name || "")}</td>
+                                <td>${escapeHtml(String(program.year ?? ""))}</td>
+                                <td class="row-actions">
+                                    <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
+                                    <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
+                                    <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
             `;
         }
 
@@ -72,33 +83,21 @@
                 return false;
             }
 
-            const exists = studyPrograms.some(program => String(program.id) === initialStudyProgramId);
-
-            if (exists) {
-                document.getElementById("studyProgramSelect").value = initialStudyProgramId;
-            }
-
-            return exists;
+            return studyPrograms.some(program => String(program.id) === initialStudyProgramId);
         }
 
-        async function onStudyProgramSelected() {
-            const programId = document.getElementById("studyProgramSelect").value;
+        async function loadSelectedStudyProgramModules(programId) {
+            const selectedProgram = studyPrograms.find(program => String(program.id) === String(programId));
 
-            if (!programId) {
+            if (!selectedProgram) {
                 modules = [];
-                document.getElementById("modules").textContent = "Select a study program.";
-                document.getElementById("addModuleLink").hidden = true;
-                document.getElementById("studyProgramHistoryLink").hidden = true;
+                document.getElementById("modulesTitle").textContent = "Modules";
+                document.getElementById("modules").textContent = "Open a study program to see its modules.";
                 return;
             }
 
-            const addModuleLink = document.getElementById("addModuleLink");
-            addModuleLink.href = `/module-edit.html?studyProgramId=${programId}`;
-            addModuleLink.hidden = false;
-
-            const historyLink = document.getElementById("studyProgramHistoryLink");
-            historyLink.href = `/study-program-history.html?id=${programId}`;
-            historyLink.hidden = false;
+            document.getElementById("modulesTitle").textContent =
+                `${selectedProgram.name} (${selectedProgram.year}) modules`;
             setStatus("Loading modules...");
 
             try {

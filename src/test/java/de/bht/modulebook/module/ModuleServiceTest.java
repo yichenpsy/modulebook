@@ -129,4 +129,15 @@ class ModuleServiceTest {
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
         inOrder.verify(versionService).saveSnapshot(100L, "created module manually");
     }
+
+    @Test
+    void deleteSavesVersionBeforeDeletingModule() {
+        when(moduleRepository.delete(100L)).thenReturn(true);
+
+        service.delete(100L);
+
+        InOrder inOrder = inOrder(versionService, moduleRepository);
+        inOrder.verify(versionService).saveSnapshot(100L, "before delete");
+        inOrder.verify(moduleRepository).delete(100L);
+    }
 }

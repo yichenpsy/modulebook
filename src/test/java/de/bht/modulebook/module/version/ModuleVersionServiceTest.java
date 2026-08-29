@@ -79,6 +79,7 @@ class ModuleVersionServiceTest {
         assertThat(history).containsExactly(initialVersion);
         verify(versionRepository).insert(
                 org.mockito.ArgumentMatchers.eq(528L),
+                org.mockito.ArgumentMatchers.eq(10L),
                 org.mockito.ArgumentMatchers.eq(1),
                 org.mockito.ArgumentMatchers.anyString(),
                 org.mockito.ArgumentMatchers.eq(ModuleService.MANUAL_INITIAL_VERSION_REASON)

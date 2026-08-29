@@ -56,6 +56,19 @@ public class PdfImportedModuleMapper {
         return text(imported, "module_number");
     }
 
+    public Long moduleId(JsonNode imported) {
+        if (imported == null || imported.isNull()) {
+            return null;
+        }
+
+        JsonNode value = imported.get("id");
+        if (value == null || value.isNull() || value.asString().isBlank()) {
+            return null;
+        }
+
+        return value.asLong();
+    }
+
     private String buildDescription(JsonNode imported, String studyProgram, Integer year) {
         return """
                 Study program: %s

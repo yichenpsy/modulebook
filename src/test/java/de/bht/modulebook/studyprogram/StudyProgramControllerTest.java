@@ -17,6 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
+import de.bht.modulebook.module.version.ModuleVersionService;
+import de.bht.modulebook.module.version.dto.StudyProgramModuleHistoryResponse;
 import de.bht.modulebook.studyprogram.dto.StudyProgramRequest;
 import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 
@@ -29,11 +31,14 @@ class StudyProgramControllerTest {
     @Mock
     private ModuleService moduleService;
 
+    @Mock
+    private ModuleVersionService moduleVersionService;
+
     private StudyProgramController controller;
 
     @BeforeEach
     void setUp() {
-        controller = new StudyProgramController(studyProgramService, moduleService);
+        controller = new StudyProgramController(studyProgramService, moduleService, moduleVersionService);
     }
 
     @Test
@@ -115,5 +120,24 @@ class StudyProgramControllerTest {
         assertThat(response.get(0).moduleNumber()).isEqualTo("B01");
         verify(studyProgramService).getById(10L);
         verify(moduleService).getByStudyProgramId(10L);
+    }
+
+    @Test
+    void getHistoryLoadsHistoryForSelectedStudyProgram() {
+        StudyProgram studyProgram = new StudyProgram(10L, "Architektur", 2021, null, null);
+        StudyProgramModuleHistoryResponse historyRow = new StudyProgramModuleHistoryResponse(
+                new Module(),
+                null,
+                true
+        );
+
+        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(moduleVersionService.getStudyProgramHistory(10L)).thenReturn(List.of(historyRow));
+
+        List<StudyProgramModuleHistoryResponse> response = controller.getHistory(10L);
+
+        assertThat(response).containsExactly(historyRow);
+        verify(studyProgramService).getById(10L);
+        verify(moduleVersionService).getStudyProgramHistory(10L);
     }
 }

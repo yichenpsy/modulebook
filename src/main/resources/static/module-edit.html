@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title id="documentTitle">Edit Module</title>
-    <link rel="stylesheet" href="/app.css">
+    <link rel="stylesheet" href="/app.css?v=module-field-table">
 </head>
 <body>
     <nav>
@@ -35,135 +35,186 @@
                 </div>
             </section>
 
-            <label>
-                Study program id (for debug, delete later)
-                <input id="studyProgramId" type="number">
-            </label>
-
-            <label>
-                Module number
-                 <input id="moduleNumber" required maxlength="50" placeholder="B01" oninput="updateModuleNumberWarning()">
-                 <span id="moduleNumberWarning" class="field-warning" hidden>
-                    Usually only uppercase letters and numbers, for example B01.
-                 </span>
-            </label>
-
-            <label>
-                Title
-                <input id="name" required maxlength="255" placeholder="Einführung in die Informatik">
-            </label>
-
-            <label>
-                Credits
-                <input id="credits" type="number" step="0.5" required oninput="updateWorkloadPreview()">
-            </label>
-
-            <section class="workload-editor">
-                <h2>Workload</h2>
-                <div id="workloadComponents"></div>
-                <button type="button" onclick="addWorkloadRow()">+ Lehrveranstaltung hinzufügen</button>
-
-                <div class="workload-summary">
-                    <label>
-                        Präsenzstunden
-                        <input id="workloadPresenceHours" type="number" step="1" readonly>
-                        <span id="workloadPresenceHint" class="field-hint"></span>
-                    </label>
-
-                    <label>
-                        Selbststudium
-                        <input id="workloadSelfStudyHours" type="number" step="1" readonly>
-                        <span id="workloadSelfStudyHint" class="field-hint"></span>
-                    </label>
+            <div class="module-field-table">
+                <div class="module-field-row">
+                    <div class="module-field-label">Study program</div>
+                    <div class="module-field-control">
+                        <div id="studyProgramDisplay" class="readonly-value">Loading...</div>
+                        <input id="studyProgramId" type="hidden">
+                    </div>
                 </div>
 
-                <div id="workloadPreview" class="workload-preview"></div>
-            </section>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="moduleNumber">Module number</label>
+                    <div class="module-field-control">
+                        <input id="moduleNumber" required maxlength="50" placeholder="B01" oninput="updateModuleNumberWarning()">
+                        <span id="moduleNumberWarning" class="field-warning" hidden>
+                            Usually only uppercase letters and numbers, for example B01.
+                        </span>
+                    </div>
+                </div>
 
-            <section class="module-teaching-forms">
-                <h2>Teaching forms</h2>
-                <div id="moduleTeachingForms" class="checkbox-list"></div>
-            </section>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="name">Title</label>
+                    <div class="module-field-control">
+                        <input id="name" required maxlength="255" placeholder="Einführung in die Informatik">
+                    </div>
+                </div>
 
-            <label>
-                Modulebook id
-                <input id="modulebookId" type="number">
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="credits">Credits</label>
+                    <div class="module-field-control">
+                        <input id="credits" type="number" step="0.5" required oninput="updateWorkloadPreview()">
+                    </div>
+                </div>
 
-            <label>
-                Module type
-                <input id="moduleType">
-            </label>
+                <div class="module-field-row">
+                    <div class="module-field-label">Workload</div>
+                    <div class="module-field-control">
+                        <section class="workload-editor">
+                            <div id="workloadComponents"></div>
+                            <button type="button" onclick="addWorkloadRow()">+ Lehrveranstaltung hinzufügen</button>
 
-            <label>
-                Coordinator
-                <input id="coordinator">
-            </label>
+                            <div class="workload-summary">
+                                <label>
+                                    Präsenzstunden
+                                    <input id="workloadPresenceHours" type="number" step="1" readonly>
+                                    <span id="workloadPresenceHint" class="field-hint"></span>
+                                </label>
 
-            <label>
-                Applicability
-                <textarea id="applicability" rows="4"></textarea>
-            </label>
+                                <label>
+                                    Selbststudium
+                                    <input id="workloadSelfStudyHours" type="number" step="1" readonly>
+                                    <span id="workloadSelfStudyHint" class="field-hint"></span>
+                                </label>
+                            </div>
 
-            <label>
-                Learning area
-                <input id="learningArea">
-            </label>
+                            <div id="workloadPreview" class="workload-preview"></div>
+                        </section>
+                    </div>
+                </div>
 
-            <label>
-                Learning objectives
-                <textarea id="learningObjectives" rows="6"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <div class="module-field-label">Teaching forms</div>
+                    <div class="module-field-control">
+                        <section class="module-teaching-forms">
+                            <div id="moduleTeachingForms" class="checkbox-list"></div>
+                        </section>
+                    </div>
+                </div>
 
-            <label>
-                Prerequisites
-                <textarea id="prerequisites" rows="4"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="modulebookId">Modulebook id</label>
+                    <div class="module-field-control">
+                        <input id="modulebookId" type="number">
+                    </div>
+                </div>
 
-            <label>
-                Level
-                <input id="level">
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="moduleType">Module type</label>
+                    <div class="module-field-control">
+                        <input id="moduleType">
+                    </div>
+                </div>
 
-            <label>
-                Status
-                <input id="moduleStatus">
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="coordinator">Coordinator</label>
+                    <div class="module-field-control">
+                        <input id="coordinator">
+                    </div>
+                </div>
 
-            <label>
-                Frequency
-                <input id="frequency">
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="applicability">Applicability</label>
+                    <div class="module-field-control">
+                        <textarea id="applicability" rows="4"></textarea>
+                    </div>
+                </div>
 
-            <label>
-                Examination form
-                <textarea id="examinationForm" rows="5"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="learningArea">Learning area</label>
+                    <div class="module-field-control">
+                        <input id="learningArea">
+                    </div>
+                </div>
 
-            <label>
-                Contents
-                <textarea id="contents" rows="8"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="learningObjectives">Learning objectives</label>
+                    <div class="module-field-control">
+                        <textarea id="learningObjectives" rows="6"></textarea>
+                    </div>
+                </div>
 
-            <label>
-                Literature
-                <textarea id="literature" rows="6"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="prerequisites">Prerequisites</label>
+                    <div class="module-field-control">
+                        <textarea id="prerequisites" rows="4"></textarea>
+                    </div>
+                </div>
 
-            <label>
-                Additional notes
-                <textarea id="additionalNotes" rows="4"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="level">Level</label>
+                    <div class="module-field-control">
+                        <input id="level">
+                    </div>
+                </div>
 
-            <label>
-                Module weight
-                <input id="moduleWeight" type="number" step="0.01">
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="moduleStatus">Status</label>
+                    <div class="module-field-control">
+                        <input id="moduleStatus">
+                    </div>
+                </div>
 
-            <label>
-                Description
-                <textarea id="description" rows="10"></textarea>
-            </label>
+                <div class="module-field-row">
+                    <label class="module-field-label" for="frequency">Frequency</label>
+                    <div class="module-field-control">
+                        <input id="frequency">
+                    </div>
+                </div>
+
+                <div class="module-field-row">
+                    <label class="module-field-label" for="examinationForm">Examination form</label>
+                    <div class="module-field-control">
+                        <textarea id="examinationForm" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <div class="module-field-row">
+                    <label class="module-field-label" for="contents">Contents</label>
+                    <div class="module-field-control">
+                        <textarea id="contents" rows="8"></textarea>
+                    </div>
+                </div>
+
+                <div class="module-field-row">
+                    <label class="module-field-label" for="literature">Literature</label>
+                    <div class="module-field-control">
+                        <textarea id="literature" rows="6"></textarea>
+                    </div>
+                </div>
+
+                <div class="module-field-row">
+                    <label class="module-field-label" for="additionalNotes">Additional notes</label>
+                    <div class="module-field-control">
+                        <textarea id="additionalNotes" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="module-field-row">
+                    <label class="module-field-label" for="moduleWeight">Module weight</label>
+                    <div class="module-field-control">
+                        <input id="moduleWeight" type="number" step="0.01">
+                    </div>
+                </div>
+
+                <div class="module-field-row">
+                    <label class="module-field-label" for="description">Description</label>
+                    <div class="module-field-control">
+                        <textarea id="description" rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
         </form>
     </section>
 
@@ -176,6 +227,7 @@
         const weeksPerSemester = 17;
         const hoursPerCredit = 30;
         let currentModule = null;
+        let studyPrograms = [];
         let teachingForms = [];
         let extraTeachingFormIds = new Set();
         let excludedWorkloadTeachingFormIds = new Set();
@@ -188,7 +240,10 @@
             }
 
             try {
-                teachingForms = await loadTeachingForms();
+                [studyPrograms, teachingForms] = await Promise.all([
+                    loadStudyPrograms(),
+                    loadTeachingForms()
+                ]);
 
                 if (isCreateMode) {
                     prepareCreateForm();
@@ -209,6 +264,7 @@
             document.getElementById("deleteButton").hidden = true;
             document.getElementById("versionsLink").hidden = true;
             document.getElementById("studyProgramId").value = studyProgramId;
+            renderStudyProgramDisplay(studyProgramId);
             document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
             fillWorkloadRows([]);
             renderModuleTeachingForms();
@@ -220,6 +276,7 @@
             document.getElementById("pageTitle").textContent = "Edit Module";
             document.getElementById("documentTitle").textContent = "Edit Module";
             document.getElementById("studyProgramId").value = module.studyProgramId ?? "";
+            renderStudyProgramDisplay(module.studyProgramId);
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
             document.getElementById("name").value = module.name || "";
             document.getElementById("credits").value = module.credits ?? "";
@@ -251,6 +308,16 @@
             }
             document.getElementById("versionsLink").href = `/module-versions.html?id=${module.id}`;
             setStatus(`Loaded module ${module.id}.`);
+        }
+
+        function renderStudyProgramDisplay(selectedStudyProgramId) {
+            const selectedProgram = studyPrograms.find(program =>
+                String(program.id) === String(selectedStudyProgramId)
+            );
+
+            document.getElementById("studyProgramDisplay").textContent = selectedProgram
+                ? `${selectedProgram.name} (${selectedProgram.year})`
+                : `Study program ${selectedStudyProgramId}`;
         }
 
         function fillWorkloadRows(components) {

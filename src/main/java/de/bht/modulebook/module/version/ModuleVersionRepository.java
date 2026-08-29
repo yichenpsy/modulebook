@@ -29,17 +29,22 @@ public class ModuleVersionRepository {
         return max + 1;
     }
 
-    public void insert(Long moduleId, int versionNumber, String snapshotJson, String reason) {
+    public void insert(Long moduleId, Long studyProgramId, int versionNumber, String snapshotJson, String reason) {
         jdbcTemplate.update(
                 """
-                INSERT INTO module_versions (module_id, version_number, snapshot_json, reason)
-                VALUES (?, ?, CAST(? AS jsonb), ?)
+                INSERT INTO module_versions (module_id, study_program_id, version_number, snapshot_json, reason)
+                VALUES (?, ?, ?, CAST(? AS jsonb), ?)
                 """,
                 moduleId,
+                studyProgramId,
                 versionNumber,
                 snapshotJson,
                 reason
         );
+    }
+
+    public void insert(Long moduleId, int versionNumber, String snapshotJson, String reason) {
+        insert(moduleId, null, versionNumber, snapshotJson, reason);
     }
 
     public void updateReason(Long moduleId, int versionNumber, String reason) {
@@ -58,7 +63,7 @@ public class ModuleVersionRepository {
     public List<ModuleVersion> findByModuleId(Long moduleId) {
         return jdbcTemplate.query(
                 """
-                SELECT id, module_id, version_number, snapshot_json::text AS snapshot_json, reason, created_at
+                SELECT id, module_id, study_program_id, version_number, snapshot_json::text AS snapshot_json, reason, created_at
                 FROM module_versions
                 WHERE module_id = ?
                 ORDER BY version_number DESC
@@ -68,10 +73,23 @@ public class ModuleVersionRepository {
         );
     }
 
+    public List<ModuleVersion> findByStudyProgramId(Long studyProgramId) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, module_id, study_program_id, version_number, snapshot_json::text AS snapshot_json, reason, created_at
+                FROM module_versions
+                WHERE study_program_id = ?
+                ORDER BY created_at DESC, id DESC
+                """,
+                rowMapper,
+                studyProgramId
+        );
+    }
+
     public Optional<ModuleVersion> findByModuleIdAndVersionNumber(Long moduleId, int versionNumber) {
         List<ModuleVersion> versions = jdbcTemplate.query(
                 """
-                SELECT id, module_id, version_number, snapshot_json::text AS snapshot_json, reason, created_at
+                SELECT id, module_id, study_program_id, version_number, snapshot_json::text AS snapshot_json, reason, created_at
                 FROM module_versions
                 WHERE module_id = ? AND version_number = ?
                 """,
@@ -90,12 +108,18 @@ public class ModuleVersionRepository {
 
             return new ModuleVersion(
                     rs.getLong("id"),
-                    rs.getLong("module_id"),
+                    getLongOrNull(rs, "module_id"),
+                    getLongOrNull(rs, "study_program_id"),
                     rs.getInt("version_number"),
                     rs.getString("snapshot_json"),
                     rs.getString("reason"),
                     createdAtInstant
             );
+        }
+
+        private Long getLongOrNull(ResultSet rs, String columnName) throws SQLException {
+            long value = rs.getLong(columnName);
+            return rs.wasNull() ? null : value;
         }
     }
 }
