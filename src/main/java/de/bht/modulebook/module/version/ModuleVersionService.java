@@ -14,6 +14,8 @@ import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.version.dto.StudyProgramModuleHistoryResponse;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import de.bht.modulebook.teachingform.TeachingForm;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
@@ -24,6 +26,7 @@ public class ModuleVersionService {
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository teachingFormRepository;
+    private final StudyProgramChangeSetService changeSetService;
     private final JsonMapper jsonMapper;
 
     public ModuleVersionService(
@@ -31,18 +34,37 @@ public class ModuleVersionService {
             ModuleRepository moduleRepository,
             ModuleWorkloadRepository workloadRepository,
             ModuleTeachingFormRepository teachingFormRepository,
+            StudyProgramChangeSetService changeSetService,
             JsonMapper jsonMapper
     ) {
         this.versionRepository = versionRepository;
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
         this.teachingFormRepository = teachingFormRepository;
+        this.changeSetService = changeSetService;
         this.jsonMapper = jsonMapper;
     }
 
     public void saveSnapshot(Long moduleId, String reason) {
+        saveSnapshot(moduleId, reason, null);
+    }
+
+    public void saveSnapshot(Long moduleId, String reason, Long changeSetId) {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+        saveSnapshot(module, reason, changeSetId);
+    }
+
+    public StudyProgramChangeSet saveSnapshotInNewChangeSet(Long moduleId, String reason, String sourceType) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+        StudyProgramChangeSet changeSet = changeSetService.create(module.getStudyProgramId(), sourceType, reason);
+        saveSnapshot(module, reason, changeSet.getId());
+        return changeSet;
+    }
+
+    private void saveSnapshot(Module module, String reason, Long changeSetId) {
+        Long moduleId = module.getId();
         List<Long> teachingFormIds = teachingFormRepository.findByModuleId(moduleId)
                 .stream()
                 .map(TeachingForm::getId)
@@ -56,7 +78,7 @@ public class ModuleVersionService {
         try {
             int versionNumber = versionRepository.nextVersionNumber(moduleId);
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
-            versionRepository.insert(moduleId, module.getStudyProgramId(), versionNumber, snapshotJson, reason);
+            versionRepository.insert(moduleId, module.getStudyProgramId(), changeSetId, versionNumber, snapshotJson, reason);
         } catch (JacksonException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create module snapshot");
         }
@@ -146,7 +168,11 @@ public class ModuleVersionService {
         ModuleVersion version = versionRepository.findByModuleIdAndVersionNumber(moduleId, versionNumber)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
 
-        saveSnapshot(moduleId, "before restore to version " + versionNumber);
+        saveSnapshotInNewChangeSet(
+                moduleId,
+                "before restore to version " + versionNumber,
+                StudyProgramChangeSetService.SOURCE_RESTORE
+        );
 
         try {
             ModuleSnapshot snapshot = jsonMapper.readValue(version.getSnapshotJson(), ModuleSnapshot.class);

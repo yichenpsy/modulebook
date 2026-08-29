@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleVersionService;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 
 @ExtendWith(MockitoExtension.class)
 class ModuleServiceTest {
@@ -34,6 +36,9 @@ class ModuleServiceTest {
     @Mock
     private ModuleVersionService versionService;
 
+    @Mock
+    private StudyProgramChangeSetService changeSetService;
+
     private ModuleService service;
 
     @BeforeEach
@@ -42,7 +47,8 @@ class ModuleServiceTest {
                 moduleRepository,
                 workloadRepository,
                 moduleTeachingFormRepository,
-                versionService
+                versionService,
+                changeSetService
         );
     }
 
@@ -63,15 +69,18 @@ class ModuleServiceTest {
 
         when(moduleRepository.insert(request)).thenReturn(inserted);
         when(moduleRepository.findById(100L)).thenReturn(Optional.of(inserted));
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.MANUAL_INITIAL_VERSION_REASON))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.MANUAL_INITIAL_VERSION_REASON, null));
 
         Module result = service.create(request, null, List.of());
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(moduleRepository, moduleTeachingFormRepository, versionService);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
+        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.MANUAL_INITIAL_VERSION_REASON);
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
-        inOrder.verify(versionService).saveSnapshot(100L, ModuleService.MANUAL_INITIAL_VERSION_REASON);
+        inOrder.verify(versionService).saveSnapshot(100L, ModuleService.MANUAL_INITIAL_VERSION_REASON, 99L);
     }
 
     @Test
@@ -91,15 +100,18 @@ class ModuleServiceTest {
 
         when(moduleRepository.insert(request)).thenReturn(inserted);
         when(moduleRepository.findById(100L)).thenReturn(Optional.of(inserted));
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, null));
 
         Module result = service.createFromPdfImport(request);
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(moduleRepository, moduleTeachingFormRepository, versionService);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
+        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON);
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
-        inOrder.verify(versionService).saveSnapshot(100L, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON);
+        inOrder.verify(versionService).saveSnapshot(100L, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L);
     }
 
     @Test
@@ -119,15 +131,18 @@ class ModuleServiceTest {
 
         when(moduleRepository.insert(request)).thenReturn(inserted);
         when(moduleRepository.findById(100L)).thenReturn(Optional.of(inserted));
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, "created module manually"))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, "created module manually", null));
 
         Module result = service.create(request, null, List.of(), "created module manually");
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(moduleRepository, moduleTeachingFormRepository, versionService);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
+        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, "created module manually");
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
-        inOrder.verify(versionService).saveSnapshot(100L, "created module manually");
+        inOrder.verify(versionService).saveSnapshot(100L, "created module manually", 99L);
     }
 
     @Test
@@ -137,7 +152,7 @@ class ModuleServiceTest {
         service.delete(100L);
 
         InOrder inOrder = inOrder(versionService, moduleRepository);
-        inOrder.verify(versionService).saveSnapshot(100L, "before delete");
+        inOrder.verify(versionService).saveSnapshotInNewChangeSet(100L, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
         inOrder.verify(moduleRepository).delete(100L);
     }
 }

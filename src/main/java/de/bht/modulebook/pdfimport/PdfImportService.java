@@ -3,8 +3,10 @@ package de.bht.modulebook.pdfimport;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -22,12 +24,17 @@ import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
 import de.bht.modulebook.studyprogram.StudyProgram;
 import de.bht.modulebook.studyprogram.StudyProgramService;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class PdfImportService {
     private static final String PDF_REIMPORT_VERSION_REASON = "before PDF re-import";
+    private static final String ACTIVE_STATUS = "ACTIVE";
+    private static final String MISSING_FROM_IMPORT_STATUS = "MISSING_FROM_IMPORT";
+    private static final String MISSING_FROM_IMPORT_VERSION_REASON = "before marking missing from PDF re-import";
 
     private final PythonPdfImportRunner runner;
     private final PdfImportProperties properties;
@@ -35,6 +42,7 @@ public class PdfImportService {
     private final ModuleService moduleService;
     private final PdfImportedModuleMapper importedModuleMapper;
     private final StudyProgramService studyProgramService;
+    private final StudyProgramChangeSetService changeSetService;
 
     public PdfImportService(
         PythonPdfImportRunner runner,
@@ -42,7 +50,8 @@ public class PdfImportService {
         ObjectMapper objectMapper,
         ModuleService moduleService,
         PdfImportedModuleMapper importedModuleMapper,
-        StudyProgramService studyProgramService
+        StudyProgramService studyProgramService,
+        StudyProgramChangeSetService changeSetService
     ){
         this.runner = runner;
         this.properties = properties;
@@ -50,6 +59,7 @@ public class PdfImportService {
         this.moduleService = moduleService;
         this.importedModuleMapper = importedModuleMapper;
         this.studyProgramService = studyProgramService;
+        this.changeSetService = changeSetService;
     }
 
     public Map<String, JsonNode> importPdf(String studyProgram, Integer year, MultipartFile file) throws Exception {
@@ -103,32 +113,48 @@ public class PdfImportService {
         List<ModuleResponse> createdModules = new ArrayList<>();
         List<SaveImportedModuleError> errors = new ArrayList<>();
         StudyProgram studyProgram = studyProgramService.findOrCreate(request.studyProgram(), request.year());
+        String changeSetReason = "Re-import " + studyProgram.getName() + " " + studyProgram.getYear() + " PDF";
+        StudyProgramChangeSet changeSet = changeSetService.create(
+                studyProgram.getId(),
+                StudyProgramChangeSetService.SOURCE_PDF_IMPORT,
+                changeSetReason
+        );
+        List<Module> existingModules = moduleService.getByStudyProgramId(studyProgram.getId());
+        Set<Long> importedModuleIds = new HashSet<>();
+        Set<String> importedModuleNumbers = new HashSet<>();
 
         for (int i = 0; i < request.modules().size(); i++) {
             JsonNode imported = request.modules().get(i);
             String moduleNumber = importedModuleMapper.moduleNumber(imported);
+            Long moduleId = importedModuleMapper.moduleId(imported);
+
+            if (moduleId != null) {
+                importedModuleIds.add(moduleId);
+            }
+            if (moduleNumber != null && !moduleNumber.isBlank()) {
+                importedModuleNumbers.add(moduleNumber.trim());
+            }
 
             try {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
                 module.setStudyProgramId(studyProgram.getId());
+                module.setStatus(ACTIVE_STATUS);
                 Module saved;
 
-                Long moduleId = importedModuleMapper.moduleId(imported);
-
                 if (moduleId != null) {
-                    saved = moduleService.update(moduleId, module, PDF_REIMPORT_VERSION_REASON);
+                    saved = moduleService.update(moduleId, module, PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                 } else if (module.getModuleNumber() != null && !module.getModuleNumber().isBlank()) {
                     Module existing = moduleService
                         .findByStudyProgramIdAndModuleNumber(studyProgram.getId(), module.getModuleNumber())
                         .orElse(null);
 
                     if (existing == null) {
-                        saved = moduleService.createFromPdfImport(module);
+                        saved = moduleService.createFromPdfImport(module, changeSet.getId());
                     } else {
-                        saved = moduleService.update(existing.getId(), module, PDF_REIMPORT_VERSION_REASON);
+                        saved = moduleService.update(existing.getId(), module, PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                     }
                 } else {
-                    saved = moduleService.createFromPdfImport(module);
+                    saved = moduleService.createFromPdfImport(module, changeSet.getId());
                 }
 
                 createdModules.add(ModuleMapper.toResponse(saved));
@@ -140,13 +166,72 @@ public class PdfImportService {
                 ));
             }
         }
+        markModulesMissingFromImport(existingModules, importedModuleIds, importedModuleNumbers, changeSet.getId());
 
         return new SaveImportedModulesResponse(
             request.modules().size(),
             createdModules.size(),
             errors.size(),
+            changeSet.getId(),
             createdModules,
             errors
+        );
+    }
+
+    private void markModulesMissingFromImport(
+            List<Module> existingModules,
+            Set<Long> importedModuleIds,
+            Set<String> importedModuleNumbers,
+            Long changeSetId
+    ) {
+        for (Module existing : existingModules) {
+            if (wasSeenInImport(existing, importedModuleIds, importedModuleNumbers)
+                    || MISSING_FROM_IMPORT_STATUS.equals(existing.getStatus())) {
+                continue;
+            }
+
+            Module missing = copyModule(existing);
+            missing.setStatus(MISSING_FROM_IMPORT_STATUS);
+            moduleService.update(existing.getId(), missing, MISSING_FROM_IMPORT_VERSION_REASON, changeSetId);
+        }
+    }
+
+    private boolean wasSeenInImport(Module module, Set<Long> importedModuleIds, Set<String> importedModuleNumbers) {
+        if (module.getId() != null && importedModuleIds.contains(module.getId())) {
+            return true;
+        }
+
+        String moduleNumber = module.getModuleNumber();
+        return moduleNumber != null && importedModuleNumbers.contains(moduleNumber.trim());
+    }
+
+    private Module copyModule(Module source) {
+        return new Module(
+                source.getId(),
+                source.getStudyProgramId(),
+                source.getModuleNumber(),
+                source.getName(),
+                source.getCredits(),
+                source.getDescription(),
+                source.getModulebookId(),
+                source.getModuleType(),
+                source.getTitleDe(),
+                source.getTitleEn(),
+                source.getCoordinator(),
+                source.getApplicability(),
+                source.getLearningArea(),
+                source.getLearningObjectives(),
+                source.getPrerequisites(),
+                source.getLevel(),
+                source.getStatus(),
+                source.getFrequency(),
+                source.getExaminationForm(),
+                source.getContents(),
+                source.getLiterature(),
+                source.getAdditionalNotes(),
+                source.getModuleWeight(),
+                source.getCreatedAt(),
+                source.getUpdatedAt()
         );
     }
 

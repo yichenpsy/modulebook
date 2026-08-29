@@ -9,6 +9,7 @@ public record SaveImportedModulesResponse(
         int requestedCount,
         int createdCount,
         int errorCount,
+        Long changeSetId,
         List<ModuleResponse> createdModules,
         List<SaveImportedModuleError> errors
 ) {

@@ -18,6 +18,7 @@ import de.bht.modulebook.module.workload.PresenceHourComponent;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleVersionService;
 import de.bht.modulebook.teachingform.TeachingForm;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 
 // logic layer, checkes things like "module not found", calls repository
 @Service
@@ -31,19 +32,22 @@ public class ModuleService {
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository moduleTeachingFormRepository;
     private final ModuleVersionService versionService;
+    private final StudyProgramChangeSetService changeSetService;
     
 
     public ModuleService(
         ModuleRepository moduleRepository,
         ModuleWorkloadRepository workloadRepository,
         ModuleTeachingFormRepository moduleTeachingFormRepository,
-        ModuleVersionService versionService
+        ModuleVersionService versionService,
+        StudyProgramChangeSetService changeSetService
     ) {
         // The service needs the repository to access the database.
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
         this.moduleTeachingFormRepository = moduleTeachingFormRepository;
         this.versionService = versionService;
+        this.changeSetService = changeSetService;
     }
 
     public Module create(Module module) {
@@ -65,11 +69,29 @@ public class ModuleService {
     }
 
     @Transactional
+    public Module createFromPdfImport(Module module, Long changeSetId) {
+        return create(module, null, List.of(), PDF_IMPORT_INITIAL_VERSION_REASON, changeSetId);
+    }
+
+    @Transactional
     public Module create(
             Module module,
             ModuleWorkload workload,
             List<Long> teachingFormIds,
             String initialVersionReason
+    ) {
+        String normalizedReason = normalizeInitialVersionReason(initialVersionReason);
+        Long changeSetId = createChangeSet(module.getStudyProgramId(), normalizedReason, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE);
+        return create(module, workload, teachingFormIds, normalizedReason, changeSetId);
+    }
+
+    @Transactional
+    public Module create(
+            Module module,
+            ModuleWorkload workload,
+            List<Long> teachingFormIds,
+            String initialVersionReason,
+            Long changeSetId
     ) {
         Module created = moduleRepository.insert(module);
         if (workload != null) {
@@ -80,7 +102,7 @@ public class ModuleService {
                 created.getId(),
                 mergeTeachingFormIds(teachingFormIds, workload)
         );
-        versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason));
+        versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason), changeSetId);
         return getById(created.getId());
     }
 
@@ -102,7 +124,7 @@ public class ModuleService {
     }
       
     public Module update(Long id, Module module) {
-        versionService.saveSnapshot(id, "before update");
+        versionService.saveSnapshotInNewChangeSet(id, "before update", StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -114,7 +136,19 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, String versionReason) {
-        versionService.saveSnapshot(id, normalizeVersionReason(versionReason));
+        versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        boolean updated = moduleRepository.update(id, module);
+
+        if (!updated) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
+        }
+
+        return getById(id);
+    }
+
+    @Transactional
+    public Module update(Long id, Module module, String versionReason, Long changeSetId) {
+        versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -139,7 +173,17 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason){
-        versionService.saveSnapshot(id, normalizeVersionReason(versionReason));
+        versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        return updateAfterSnapshot(id, module, workload, teachingFormIds);
+    }
+
+    @Transactional
+    public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason, Long changeSetId){
+        versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
+        return updateAfterSnapshot(id, module, workload, teachingFormIds);
+    }
+
+    private Module updateAfterSnapshot(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds) {
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -161,7 +205,7 @@ public class ModuleService {
 
     @Transactional
     public void delete(Long id) {
-        versionService.saveSnapshot(id, "before delete");
+        versionService.saveSnapshotInNewChangeSet(id, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
         boolean deleted = moduleRepository.delete(id);
 
         // The repository returns false when no row with this id exists.
@@ -217,5 +261,9 @@ public class ModuleService {
             return MANUAL_INITIAL_VERSION_REASON;
         }
         return initialVersionReason.trim();
+    }
+
+    private Long createChangeSet(Long studyProgramId, String reason, String sourceType) {
+        return changeSetService.create(studyProgramId, sourceType, reason).getId();
     }
 }

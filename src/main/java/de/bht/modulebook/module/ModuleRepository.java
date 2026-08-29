@@ -1,5 +1,6 @@
 package de.bht.modulebook.module;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -74,7 +75,7 @@ public class ModuleRepository {
         values.put("study_program_id", module.getStudyProgramId());
         values.put("module_number", module.getModuleNumber());
         values.put("name", module.getName());
-        values.put("credits", module.getCredits());
+        values.put("credits", decimalToText(module.getCredits()));
         values.put("description", module.getDescription());
         values.put("modulebook_id", module.getModulebookId());
         values.put("module_type", module.getModuleType());
@@ -92,7 +93,7 @@ public class ModuleRepository {
         values.put("contents", module.getContents());
         values.put("literature", module.getLiterature());
         values.put("additional_notes", module.getAdditionalNotes());
-        values.put("module_weight", module.getModuleWeight());
+        values.put("module_weight", decimalToText(module.getModuleWeight()));
 
         // PostgreSQL creates the id, so SimpleJdbcInsert returns the generated key.
         Number newId = insertModule.executeAndReturnKey(values);
@@ -162,7 +163,7 @@ public class ModuleRepository {
                 module.getStudyProgramId(),
                 module.getModuleNumber(),
                 module.getName(),
-                module.getCredits(),
+                decimalToText(module.getCredits()),
                 module.getDescription(),
                 module.getModulebookId(),
                 module.getModuleType(),
@@ -180,9 +181,13 @@ public class ModuleRepository {
                 module.getContents(),
                 module.getLiterature(),
                 module.getAdditionalNotes(),
-                module.getModuleWeight(),
+                decimalToText(module.getModuleWeight()),
                 id);
         return rowsUpdated == 1;
+    }
+
+    private String decimalToText(BigDecimal value) {
+        return value == null ? null : value.stripTrailingZeros().toPlainString();
     }
 
     // Deletes one module and returns false when no row with this id exists.
@@ -204,7 +209,7 @@ public class ModuleRepository {
                     getLongOrNull(rs, "study_program_id"),
                     rs.getString("module_number"),
                     rs.getString("name"),
-                    rs.getBigDecimal("credits"),
+                    getBigDecimalOrNull(rs, "credits"),
                     rs.getString("description"),
                     getLongOrNull(rs, "modulebook_id"),
                     rs.getString("module_type"),
@@ -222,7 +227,7 @@ public class ModuleRepository {
                     rs.getString("contents"),
                     rs.getString("literature"),
                     rs.getString("additional_notes"),
-                    rs.getBigDecimal("module_weight"),
+                    getBigDecimalOrNull(rs, "module_weight"),
                     toInstantOrNull(rs, "created_at"),
                     toInstantOrNull(rs, "updated_at"));
         }
@@ -230,6 +235,19 @@ public class ModuleRepository {
         private Long getLongOrNull(ResultSet rs, String columnName) throws SQLException {
             long value = rs.getLong(columnName);
             return rs.wasNull() ? null : value;
+        }
+
+        private BigDecimal getBigDecimalOrNull(ResultSet rs, String columnName) throws SQLException {
+            String value = rs.getString(columnName);
+            if (value == null || value.isBlank()) {
+                return null;
+            }
+
+            try {
+                return new BigDecimal(value.trim().replace(",", "."));
+            } catch (NumberFormatException exception) {
+                return null;
+            }
         }
 
         private Instant toInstantOrNull(ResultSet rs, String columnName) throws SQLException {

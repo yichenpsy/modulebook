@@ -29,6 +29,7 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const studyProgramId = params.get("id");
+        const selectedGroupKey = params.get("group");
         const selectedCreatedAt = params.get("createdAt");
         let studyProgram = null;
         let modules = [];
@@ -65,20 +66,26 @@
         }
 
         function buildHistoryGroups() {
-            const groupsByCreatedSecond = new Map();
+            const groupsByKey = new Map();
 
             historyRows.forEach(row => {
                 const createdSecond = createdAtSecond(row.version.createdAt);
-                if (!groupsByCreatedSecond.has(createdSecond)) {
-                    groupsByCreatedSecond.set(createdSecond, {
+                const groupKey = row.version.changeSetId
+                    ? `change-set-${row.version.changeSetId}`
+                    : `created-at-${createdSecond}`;
+
+                if (!groupsByKey.has(groupKey)) {
+                    groupsByKey.set(groupKey, {
+                        key: groupKey,
+                        changeSetId: row.version.changeSetId || null,
                         createdAt: createdSecond,
                         rows: []
                     });
                 }
-                groupsByCreatedSecond.get(createdSecond).rows.push(row);
+                groupsByKey.get(groupKey).rows.push(row);
             });
 
-            historyGroups = Array.from(groupsByCreatedSecond.values()).sort((left, right) =>
+            historyGroups = Array.from(groupsByKey.values()).sort((left, right) =>
                 new Date(right.createdAt || 0) - new Date(left.createdAt || 0)
             );
         }
@@ -102,7 +109,7 @@
                 return;
             }
 
-            if (selectedCreatedAt) {
+            if (selectedGroupKey || selectedCreatedAt) {
                 renderHistoryGroupDetail(container);
                 return;
             }
@@ -116,6 +123,7 @@
                     <thead>
                         <tr>
                             <th>Created</th>
+                            <th>Change set</th>
                             <th>Changed modules</th>
                             <th>Reasons</th>
                             <th>Modules</th>
@@ -126,11 +134,12 @@
                         ${historyGroups.map(group => `
                             <tr>
                                 <td>${escapeHtml(formatDate(group.createdAt))}</td>
+                                <td>${escapeHtml(group.changeSetId ? String(group.changeSetId) : "legacy")}</td>
                                 <td>${escapeHtml(String(group.rows.length))}</td>
                                 <td>${escapeHtml(uniqueReasons(group).join(", "))}</td>
                                 <td>${escapeHtml(moduleSummary(group))}</td>
                                 <td class="row-actions">
-                                    <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&createdAt=${encodeURIComponent(group.createdAt)}">Details</a>
+                                    <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&group=${encodeURIComponent(group.key)}">Details</a>
                                 </td>
                             </tr>
                         `).join("")}
@@ -140,7 +149,9 @@
         }
 
         function renderHistoryGroupDetail(container) {
-            const group = historyGroups.find(item => item.createdAt === selectedCreatedAt);
+            const group = selectedGroupKey
+                ? historyGroups.find(item => item.key === selectedGroupKey)
+                : historyGroups.find(item => item.createdAt === selectedCreatedAt);
 
             if (!group) {
                 container.textContent = "No history entries found for this created time.";
@@ -154,6 +165,7 @@
                     <a href="${backUrl}">Back to program history</a>
                 </div>
                 <h3>${escapeHtml(formatDate(group.createdAt))}</h3>
+                ${group.changeSetId ? `<p class="muted">Change set ${escapeHtml(String(group.changeSetId))}</p>` : ""}
                 <table>
                     <thead>
                         <tr>

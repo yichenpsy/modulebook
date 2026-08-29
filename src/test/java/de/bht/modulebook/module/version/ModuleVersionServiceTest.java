@@ -20,6 +20,7 @@ import de.bht.modulebook.module.ModuleRepository;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +38,9 @@ class ModuleVersionServiceTest {
     @Mock
     private ModuleTeachingFormRepository teachingFormRepository;
 
+    @Mock
+    private StudyProgramChangeSetService changeSetService;
+
     private ModuleVersionService service;
 
     @BeforeEach
@@ -46,6 +50,7 @@ class ModuleVersionServiceTest {
                 moduleRepository,
                 workloadRepository,
                 teachingFormRepository,
+                changeSetService,
                 JsonMapper.builder().build()
         );
     }
@@ -80,6 +85,7 @@ class ModuleVersionServiceTest {
         verify(versionRepository).insert(
                 org.mockito.ArgumentMatchers.eq(528L),
                 org.mockito.ArgumentMatchers.eq(10L),
+                org.mockito.ArgumentMatchers.isNull(),
                 org.mockito.ArgumentMatchers.eq(1),
                 org.mockito.ArgumentMatchers.anyString(),
                 org.mockito.ArgumentMatchers.eq(ModuleService.MANUAL_INITIAL_VERSION_REASON)

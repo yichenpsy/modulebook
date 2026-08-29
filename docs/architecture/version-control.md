@@ -4,6 +4,8 @@ This document explains how module version control works in Modulebook.
 
 The current implementation uses a snapshot-first model. This means the app saves a full copy of the module state before an update happens. Later, the app can list old snapshots, restore one snapshot, or compare two snapshots.
 
+The app also groups related module snapshots into a study program change set. A change set is one user operation, for example one manual edit or one PDF import. It is not a full study program snapshot.
+
 It is not a Git-style system that stores only patches. The database stores complete snapshots.
 
 ## Main Idea
@@ -22,6 +24,9 @@ User confirms or edits change message
         |
         v
 ModuleService.update(...)
+        |
+        v
+StudyProgramChangeSetService.create(...)
         |
         v
 ModuleVersionService.saveSnapshot(...)
@@ -63,6 +68,7 @@ version_number  Version number inside one module, for example 1, 2, 3
 snapshot_json   Full JSON snapshot of the old module state
 reason          Why the snapshot was created
 created_at      Time when the snapshot was saved
+change_set_id   Optional link to the operation that created this snapshot
 ```
 
 `module_id` comes from `modules.id`.
@@ -73,6 +79,65 @@ created_at      Time when the snapshot was saved
 
 `reason` stores the exact change message confirmed by the user for module updates.
 For restore actions, the backend creates an automatic reason like `before restore to version 2`.
+
+## Study Program Change Sets
+
+Change sets are stored in:
+
+```text
+study_program_change_sets
+```
+
+Important columns:
+
+```text
+id                Primary key of the change set
+study_program_id  The study program affected by this operation
+source_type       Where the operation came from
+reason            Human-readable operation message
+created_at        Time when the operation started
+```
+
+Current source types:
+
+```text
+MANUAL_EDIT
+PDF_IMPORT
+RESTORE
+DELETE
+INITIAL_MODULE
+```
+
+`change_set_id` in `module_versions` points to `study_program_change_sets.id`.
+This is what connects many module snapshots to one operation.
+
+Example:
+
+```text
+study_program_change_sets.id = 15
+source_type = PDF_IMPORT
+reason = before PDF re-import
+
+module_versions:
+B01 version 4 -> change_set_id 15
+B02 version 3 -> change_set_id 15
+B05 version 2 -> change_set_id 15
+```
+
+This means one PDF import changed B01, B02, and B05.
+The module histories still remain separate, but the study program history page can group them as one operation.
+
+Change sets are different from future study program versions:
+
+```text
+StudyProgramChangeSet
+= one operation that changed one or more modules
+
+StudyProgramVersion
+= a complete snapshot of the whole study program
+```
+
+The current code implements `StudyProgramChangeSet`, not `StudyProgramVersion`.
 
 ## Snapshot Structure
 
