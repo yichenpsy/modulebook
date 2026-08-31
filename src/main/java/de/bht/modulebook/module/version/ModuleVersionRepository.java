@@ -91,6 +91,34 @@ public class ModuleVersionRepository {
         );
     }
 
+    public Optional<ModuleVersion> findById(Long id) {
+        List<ModuleVersion> versions = jdbcTemplate.query(
+                """
+                SELECT id, module_id, study_program_id, change_set_id, version_number, snapshot_json::text AS snapshot_json, reason, created_at
+                FROM module_versions
+                WHERE id = ?
+                """,
+                rowMapper,
+                id
+        );
+        return versions.stream().findFirst();
+    }
+
+    public void relinkDeletedModuleHistory(Long studyProgramId, Long oldModuleId, Long newModuleId) {
+        jdbcTemplate.update(
+                """
+                UPDATE module_versions
+                SET module_id = ?
+                WHERE study_program_id = ?
+                  AND module_id IS NULL
+                  AND snapshot_json -> 'module' ->> 'id' = ?
+                """,
+                newModuleId,
+                studyProgramId,
+                String.valueOf(oldModuleId)
+        );
+    }
+
     public Optional<ModuleVersion> findByModuleIdAndVersionNumber(Long moduleId, int versionNumber) {
         List<ModuleVersion> versions = jdbcTemplate.query(
                 """

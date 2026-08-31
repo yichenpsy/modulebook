@@ -70,12 +70,41 @@
                                     <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
                                     <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
+                                    <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
                                 </td>
                             </tr>
                         `).join("")}
                     </tbody>
                 </table>
             `;
+        }
+
+        async function confirmDeleteStudyProgram(programId) {
+            const program = studyPrograms.find(item => Number(item.id) === Number(programId));
+            const label = program ? `${program.name} (${program.year})` : `study program ${programId}`;
+            const confirmed = confirm(
+                `Delete ${label}?\n\nThis will delete the study program and all related records, including modules and history.`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            setStatus(`Deleting ${label}...`);
+
+            try {
+                await deleteStudyProgram(programId);
+                studyPrograms = studyPrograms.filter(item => Number(item.id) !== Number(programId));
+                renderStudyPrograms();
+                studyPrograms = await loadStudyPrograms();
+                modules = [];
+                renderStudyPrograms();
+                document.getElementById("modulesTitle").textContent = "Modules";
+                document.getElementById("modules").textContent = "Open a study program to see its modules.";
+                setStatus(`Deleted ${label}. Loaded ${studyPrograms.length} study programs.`);
+            } catch (error) {
+                setStatus("Could not delete study program: " + error.message);
+            }
         }
 
         function selectInitialStudyProgram() {
@@ -138,12 +167,38 @@
                                 <td class="row-actions">
                                     <a href="/module-edit.html?id=${escapeHtml(String(module.id))}">Edit</a>
                                     <a href="/module-versions.html?id=${escapeHtml(String(module.id))}">History</a>
+                                    <button class="link-button" type="button" onclick="confirmDeleteModule(${module.id})">Delete</button>
                                 </td>
                             </tr>
                         `).join("")}
                     </tbody>
                 </table>
             `;
+        }
+
+        async function confirmDeleteModule(moduleId) {
+            const module = modules.find(item => Number(item.id) === Number(moduleId));
+            const label = module
+                ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
+                : `module ${moduleId}`;
+            const confirmed = confirm(
+                `Delete ${label}?\n\nThis will mark the module as DELETED. The module record and history will stay saved.`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            setStatus(`Deleting ${label}...`);
+
+            try {
+                await deleteModule(moduleId);
+                modules = await loadModulesForStudyProgram(currentStudyProgram.id);
+                renderModules();
+                setStatus(`Marked ${label} as DELETED. Loaded ${modules.length} modules.`);
+            } catch (error) {
+                setStatus("Could not delete module: " + error.message);
+            }
         }
 
         function setStatus(message) {

@@ -75,6 +75,7 @@ class ModuleServiceTest {
         Module result = service.create(request, null, List.of());
 
         assertThat(result.getId()).isEqualTo(100L);
+        assertThat(request.getStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
 
         InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
         inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.MANUAL_INITIAL_VERSION_REASON);
@@ -146,13 +147,13 @@ class ModuleServiceTest {
     }
 
     @Test
-    void deleteSavesVersionBeforeDeletingModule() {
-        when(moduleRepository.delete(100L)).thenReturn(true);
+    void deleteSavesVersionBeforeMarkingModuleDeleted() {
+        when(moduleRepository.updateStatus(100L, ModuleService.DELETED_STATUS)).thenReturn(true);
 
         service.delete(100L);
 
         InOrder inOrder = inOrder(versionService, moduleRepository);
         inOrder.verify(versionService).saveSnapshotInNewChangeSet(100L, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
-        inOrder.verify(moduleRepository).delete(100L);
+        inOrder.verify(moduleRepository).updateStatus(100L, ModuleService.DELETED_STATUS);
     }
 }

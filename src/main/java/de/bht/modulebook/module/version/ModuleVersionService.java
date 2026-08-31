@@ -176,7 +176,8 @@ public class ModuleVersionService {
 
         try {
             ModuleSnapshot snapshot = jsonMapper.readValue(version.getSnapshotJson(), ModuleSnapshot.class);
-            boolean updated = moduleRepository.update(moduleId, snapshot.getModule());
+            Module module = restorableModule(snapshot);
+            boolean updated = moduleRepository.update(moduleId, module);
 
             if (!updated) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
@@ -192,6 +193,57 @@ public class ModuleVersionService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
         } catch (JacksonException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not restore module snapshot");
+        }
+    }
+
+    private Module restorableModule(ModuleSnapshot snapshot) {
+        Module module = snapshot.getModule();
+        if (module == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Version does not contain a restorable module");
+        }
+
+        if (ModuleService.DELETED_STATUS.equals(module.getStatus())) {
+            module.setStatus(ModuleService.ACTIVE_STATUS);
+        }
+
+        return module;
+    }
+
+    @Transactional
+    public Module restoreDeleted(Long versionId) {
+        ModuleVersion version = versionRepository.findById(versionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
+
+        try {
+            ModuleSnapshot snapshot = jsonMapper.readValue(version.getSnapshotJson(), ModuleSnapshot.class);
+            Module module = restorableModule(snapshot);
+            if (version.getStudyProgramId() == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Version does not contain a restorable module");
+            }
+
+            Long oldModuleId = module.getId();
+            module.setStudyProgramId(version.getStudyProgramId());
+
+            StudyProgramChangeSet changeSet = changeSetService.create(
+                    version.getStudyProgramId(),
+                    StudyProgramChangeSetService.SOURCE_RESTORE,
+                    "restore deleted module from version " + version.getVersionNumber()
+            );
+
+            Module restored = moduleRepository.insert(module);
+            if (snapshot.getWorkload() != null) {
+                workloadRepository.upsert(restored.getId(), snapshot.getWorkload());
+            }
+            teachingFormRepository.replaceForModule(restored.getId(), snapshot.getTeachingFormIds());
+            if (oldModuleId != null) {
+                versionRepository.relinkDeletedModuleHistory(version.getStudyProgramId(), oldModuleId, restored.getId());
+            }
+            saveSnapshot(restored.getId(), "restored deleted module from version " + version.getVersionNumber(), changeSet.getId());
+
+            return moduleRepository.findById(restored.getId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+        } catch (JacksonException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not restore deleted module snapshot");
         }
     }
 }

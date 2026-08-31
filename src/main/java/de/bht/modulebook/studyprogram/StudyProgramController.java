@@ -3,6 +3,7 @@ package de.bht.modulebook.studyprogram;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,5 +76,11 @@ public class StudyProgramController {
     public List<StudyProgramModuleHistoryResponse> getHistory(@PathVariable Long id) {
         studyProgramService.getById(id);
         return moduleVersionService.getStudyProgramHistory(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        studyProgramService.delete(id);
     }
 }

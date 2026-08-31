@@ -13,6 +13,12 @@ async function loadStudyPrograms() {
     return requestJson("/api/study-programs");
 }
 
+async function deleteStudyProgram(studyProgramId) {
+    await requestJson(`/api/study-programs/${studyProgramId}`, {
+        method: "DELETE"
+    });
+}
+
 async function loadAllModules() {
     return requestJson("/api/modules");
 }
@@ -35,6 +41,12 @@ async function loadStudyProgramHistory(studyProgramId) {
 
 async function restoreModuleVersion(moduleId, versionNumber) {
     return requestJson(`/api/modules/${moduleId}/versions/${versionNumber}/restore`, {
+        method: "POST"
+    });
+}
+
+async function restoreDeletedModuleVersion(versionId) {
+    return requestJson(`/api/module-versions/${versionId}/restore-deleted`, {
         method: "POST"
     });
 }

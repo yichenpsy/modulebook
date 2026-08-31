@@ -180,12 +180,13 @@
                         ${group.rows.map(row => {
                             const snapshot = parseSnapshot(row.version.snapshotJson);
                             const moduleSnapshot = snapshot.module || snapshot;
+                            const moduleIsDeleted = row.moduleDeleted || row.module.status === "DELETED";
                             return `
                                 <tr>
                                     <td>
                                         <strong>${escapeHtml(row.module.moduleNumber || "")}</strong>
                                         ${escapeHtml(row.module.name || "")}
-                                        ${row.moduleDeleted ? "<span class=\"muted\">deleted</span>" : ""}
+                                        ${moduleIsDeleted ? "<span class=\"muted\">deleted</span>" : ""}
                                     </td>
                                     <td>${escapeHtml(String(row.version.versionNumber))}</td>
                                     <td>${escapeHtml(row.version.reason || "")}</td>
@@ -194,7 +195,10 @@
                                         ${escapeHtml(moduleSnapshot.name || "")}
                                     </td>
                                     <td class="row-actions">
-                                        ${row.moduleDeleted ? "" : `
+                                        ${row.moduleDeleted ? `
+                                            <button class="link-button" type="button" onclick="restoreDeletedModule(${row.version.id})">Restore</button>
+                                        ` : `
+                                            <button class="link-button" type="button" onclick="restoreExistingModule(${row.module.id}, ${row.version.versionNumber})">Restore</button>
                                             <a href="/module-versions.html?id=${escapeHtml(String(row.module.id))}">Module history</a>
                                             <a href="/module-edit.html?id=${escapeHtml(String(row.module.id))}">Edit</a>
                                         `}
@@ -205,6 +209,62 @@
                     </tbody>
                 </table>
             `;
+        }
+
+        async function restoreExistingModule(moduleId, versionNumber) {
+            const row = historyRows.find(item =>
+                item.module
+                && Number(item.module.id) === Number(moduleId)
+                && Number(item.version.versionNumber) === Number(versionNumber)
+            );
+            const label = row && row.module
+                ? `${row.module.moduleNumber || ""} ${row.module.name || ""}`.trim()
+                : `module ${moduleId}`;
+            const confirmed = confirm(
+                `Restore ${label} to version ${versionNumber}?\n\nThis will save the current module as a new version first.`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            setStatus(`Restoring ${label}...`);
+
+            try {
+                await restoreModuleVersion(moduleId, versionNumber);
+                await loadHistoryRows();
+                buildHistoryGroups();
+                renderHistory();
+                setStatus(`Restored ${label} to version ${versionNumber}.`);
+            } catch (error) {
+                setStatus("Restore failed: " + error.message);
+            }
+        }
+
+        async function restoreDeletedModule(versionId) {
+            const row = historyRows.find(item => Number(item.version.id) === Number(versionId));
+            const label = row && row.module
+                ? `${row.module.moduleNumber || ""} ${row.module.name || ""}`.trim()
+                : `version ${versionId}`;
+            const confirmed = confirm(
+                `Restore ${label}?\n\nThis will create the module again from this saved snapshot.`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            setStatus(`Restoring ${label}...`);
+
+            try {
+                await restoreDeletedModuleVersion(versionId);
+                await loadHistoryRows();
+                buildHistoryGroups();
+                renderHistory();
+                setStatus(`Restored ${label}.`);
+            } catch (error) {
+                setStatus("Restore failed: " + error.message);
+            }
         }
 
         function uniqueReasons(group) {

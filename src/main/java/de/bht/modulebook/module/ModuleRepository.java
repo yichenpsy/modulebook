@@ -190,7 +190,21 @@ public class ModuleRepository {
         return value == null ? null : value.stripTrailingZeros().toPlainString();
     }
 
-    // Deletes one module and returns false when no row with this id exists.
+    // Updates only the status and returns false when no row with this id exists.
+    public boolean updateStatus(Long id, String status) {
+        int rowsUpdated = jdbcTemplate.update(
+                """
+                        UPDATE modules
+                        SET status = ?,
+                            updated_at = now()
+                        WHERE id = ?
+                        """,
+                status,
+                id);
+        return rowsUpdated == 1;
+    }
+
+    // Physically deletes one module and returns false when no row with this id exists.
     public boolean delete(Long id) {
         int rowsDeleted = jdbcTemplate.update(
                 "DELETE FROM modules WHERE id = ?",

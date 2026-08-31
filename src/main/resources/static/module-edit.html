@@ -269,6 +269,7 @@
             fillWorkloadRows([]);
             renderModuleTeachingForms();
             updateWorkloadPreview();
+            document.getElementById("moduleStatus").value = "ACTIVE";
             setStatus("Creating a new module.");
         }
 
@@ -674,11 +675,11 @@
                 return;
             }
 
-            if (!confirm(`Delete module ${currentModule.moduleNumber || currentModule.id}?`)) {
+            if (!confirm(`Delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis will mark the module as DELETED. The module record and history will stay saved.`)) {
                 return;
             }
 
-            setStatus("Deleting module...");
+            setStatus("Marking module as DELETED...");
 
             try {
                 await deleteModule(moduleId);

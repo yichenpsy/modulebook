@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -39,6 +40,16 @@ public class StudyProgramService {
 
     public List<StudyProgram> getAll() {
         return studyProgramRepository.findAll();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        getById(id);
+        boolean deleted = studyProgramRepository.delete(id);
+
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Study program not found");
+        }
     }
 
     private void validate(StudyProgram studyProgram) {

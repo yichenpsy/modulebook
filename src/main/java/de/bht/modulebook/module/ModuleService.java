@@ -25,6 +25,8 @@ import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 public class ModuleService {
     private static final BigDecimal WEEKS_PER_SEMESTER = BigDecimal.valueOf(17);
     private static final BigDecimal HOURS_PER_CREDIT = BigDecimal.valueOf(30);
+    public static final String ACTIVE_STATUS = "ACTIVE";
+    public static final String DELETED_STATUS = "DELETED";
     public static final String MANUAL_INITIAL_VERSION_REASON = "created manually";
     public static final String PDF_IMPORT_INITIAL_VERSION_REASON = "created from PDF import";
 
@@ -93,6 +95,7 @@ public class ModuleService {
             String initialVersionReason,
             Long changeSetId
     ) {
+        applyDefaultStatus(module);
         Module created = moduleRepository.insert(module);
         if (workload != null) {
             calculateWorkload(created, workload);
@@ -104,6 +107,12 @@ public class ModuleService {
         );
         versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason), changeSetId);
         return getById(created.getId());
+    }
+
+    private void applyDefaultStatus(Module module) {
+        if (module.getStatus() == null || module.getStatus().isBlank()) {
+            module.setStatus(ACTIVE_STATUS);
+        }
     }
 
     public Module getById(Long id) {
@@ -206,7 +215,7 @@ public class ModuleService {
     @Transactional
     public void delete(Long id) {
         versionService.saveSnapshotInNewChangeSet(id, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
-        boolean deleted = moduleRepository.delete(id);
+        boolean deleted = moduleRepository.updateStatus(id, DELETED_STATUS);
 
         // The repository returns false when no row with this id exists.
         if (!deleted) {

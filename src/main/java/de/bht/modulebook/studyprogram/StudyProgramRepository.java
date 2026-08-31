@@ -74,6 +74,35 @@ public class StudyProgramRepository {
         );
     }
 
+    public boolean delete(Long id) {
+        // Version/history rows belong to the study program too.
+        // Delete them explicitly so this operation does not depend on FK cascade order.
+        jdbcTemplate.update("DELETE FROM module_versions WHERE study_program_id = ?", id);
+        jdbcTemplate.update("DELETE FROM study_program_change_sets WHERE study_program_id = ?", id);
+
+        // modules.study_program_id comes from this study program.
+        // Deleting modules first also deletes module child rows such as workloads.
+        jdbcTemplate.update("DELETE FROM modules WHERE study_program_id = ?", id);
+
+        // modulebooks are connected through study_examination_regulations.
+        jdbcTemplate.update(
+                """
+                DELETE FROM modulebooks
+                WHERE study_examination_regulation_id IN (
+                    SELECT id
+                    FROM study_examination_regulations
+                    WHERE study_program_id = ?
+                )
+                """,
+                id
+        );
+
+        jdbcTemplate.update("DELETE FROM study_examination_regulations WHERE study_program_id = ?", id);
+
+        int rowsDeleted = jdbcTemplate.update("DELETE FROM study_programs WHERE id = ?", id);
+        return rowsDeleted == 1;
+    }
+
     private static class StudyProgramRowMapper implements RowMapper<StudyProgram> {
 
         // Converts one database row from study_programs into one Java StudyProgram object.

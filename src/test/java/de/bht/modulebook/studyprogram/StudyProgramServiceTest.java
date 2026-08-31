@@ -109,4 +109,16 @@ class StudyProgramServiceTest {
         assertThat(result).containsExactly(studyProgram);
         verify(studyProgramRepository).findAll();
     }
+
+    @Test
+    void deleteUsesRepositoryAfterCheckingStudyProgramExists() {
+        StudyProgram studyProgram = new StudyProgram(10L, "Architektur", 2021, null, null);
+        when(studyProgramRepository.findById(10L)).thenReturn(Optional.of(studyProgram));
+        when(studyProgramRepository.delete(10L)).thenReturn(true);
+
+        service.delete(10L);
+
+        verify(studyProgramRepository).findById(10L);
+        verify(studyProgramRepository).delete(10L);
+    }
 }

@@ -1,6 +1,7 @@
 package de.bht.modulebook.module.version;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,6 +22,7 @@ import de.bht.modulebook.module.ModuleRepository;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
+import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -126,5 +129,51 @@ class ModuleVersionServiceTest {
 
         assertThat(history).containsExactly(repairedInitialVersion);
         verify(versionRepository).updateReason(528L, 1, ModuleService.MANUAL_INITIAL_VERSION_REASON);
+    }
+
+    @Test
+    void restoreTurnsDeletedSnapshotBackToActive() {
+        Module currentModule = new Module();
+        currentModule.setId(528L);
+        currentModule.setStudyProgramId(10L);
+        currentModule.setModuleNumber("B01");
+        currentModule.setName("Deleted Module");
+        currentModule.setCredits(new BigDecimal("5.0"));
+        currentModule.setStatus(ModuleService.DELETED_STATUS);
+
+        Module restoredModule = new Module();
+        restoredModule.setId(528L);
+        restoredModule.setStudyProgramId(10L);
+        restoredModule.setModuleNumber("B01");
+        restoredModule.setName("Deleted Module");
+        restoredModule.setCredits(new BigDecimal("5.0"));
+        restoredModule.setStatus(ModuleService.ACTIVE_STATUS);
+
+        ModuleVersion deletedVersion = new ModuleVersion(
+                1L,
+                528L,
+                1,
+                """
+                {"module":{"id":528,"studyProgramId":10,"moduleNumber":"B01","name":"Deleted Module","credits":5.0,"status":"DELETED"}}
+                """,
+                "deleted snapshot",
+                Instant.parse("2026-08-25T10:20:00Z")
+        );
+
+        when(versionRepository.findByModuleIdAndVersionNumber(528L, 1)).thenReturn(Optional.of(deletedVersion));
+        when(moduleRepository.findById(528L)).thenReturn(Optional.of(currentModule), Optional.of(restoredModule));
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_RESTORE, "before restore to version 1"))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_RESTORE, "before restore to version 1", null));
+        when(teachingFormRepository.findByModuleId(528L)).thenReturn(List.of());
+        when(workloadRepository.findByModuleId(528L)).thenReturn(Optional.empty());
+        when(versionRepository.nextVersionNumber(528L)).thenReturn(2);
+        when(moduleRepository.update(eq(528L), org.mockito.ArgumentMatchers.any(Module.class))).thenReturn(true);
+
+        Module result = service.restore(528L, 1);
+
+        ArgumentCaptor<Module> restoredCaptor = ArgumentCaptor.forClass(Module.class);
+        verify(moduleRepository).update(eq(528L), restoredCaptor.capture());
+        assertThat(restoredCaptor.getValue().getStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
+        assertThat(result.getStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
     }
 }

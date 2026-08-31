@@ -32,7 +32,6 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class PdfImportService {
     private static final String PDF_REIMPORT_VERSION_REASON = "before PDF re-import";
-    private static final String ACTIVE_STATUS = "ACTIVE";
     private static final String MISSING_FROM_IMPORT_STATUS = "MISSING_FROM_IMPORT";
     private static final String MISSING_FROM_IMPORT_VERSION_REASON = "before marking missing from PDF re-import";
 
@@ -138,7 +137,7 @@ public class PdfImportService {
             try {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
                 module.setStudyProgramId(studyProgram.getId());
-                module.setStatus(ACTIVE_STATUS);
+                module.setStatus(ModuleService.ACTIVE_STATUS);
                 Module saved;
 
                 if (moduleId != null) {
@@ -186,7 +185,8 @@ public class PdfImportService {
     ) {
         for (Module existing : existingModules) {
             if (wasSeenInImport(existing, importedModuleIds, importedModuleNumbers)
-                    || MISSING_FROM_IMPORT_STATUS.equals(existing.getStatus())) {
+                    || MISSING_FROM_IMPORT_STATUS.equals(existing.getStatus())
+                    || ModuleService.DELETED_STATUS.equals(existing.getStatus())) {
                 continue;
             }
 

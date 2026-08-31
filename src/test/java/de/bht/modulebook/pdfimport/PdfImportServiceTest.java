@@ -3,6 +3,7 @@ package de.bht.modulebook.pdfimport;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -237,6 +238,7 @@ class PdfImportServiceTest {
         Module existingB01 = module(1L, "B01", "Old B01", "ACTIVE");
         Module existingB02 = module(2L, "B02", "Old B02", "ACTIVE");
         Module existingB03 = module(3L, "B03", "Old B03", "ACTIVE");
+        Module existingB04 = module(4L, "B04", "Deleted B04", ModuleService.DELETED_STATUS);
         Module mappedB01 = module(null, "B01", "Module B01", "Pflichtmodul");
         Module mappedB03 = module(null, "B03", "Module B03", "Pflichtmodul");
         Module savedB01 = module(1L, "B01", "Module B01", "ACTIVE");
@@ -253,7 +255,7 @@ class PdfImportServiceTest {
         when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(studyProgram);
         when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF"))
                 .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF", null));
-        when(moduleService.getByStudyProgramId(10L)).thenReturn(List.of(existingB01, existingB02, existingB03));
+        when(moduleService.getByStudyProgramId(10L)).thenReturn(List.of(existingB01, existingB02, existingB03, existingB04));
         when(importedModuleMapper.moduleNumber(importedB01)).thenReturn("B01");
         when(importedModuleMapper.moduleNumber(importedB03)).thenReturn("B03");
         when(importedModuleMapper.moduleId(importedB01)).thenReturn(null);
@@ -283,6 +285,7 @@ class PdfImportServiceTest {
         verify(moduleService).update(eq(2L), missingModule.capture(), eq("before marking missing from PDF re-import"), eq(99L));
         assertThat(missingModule.getValue().getModuleNumber()).isEqualTo("B02");
         assertThat(missingModule.getValue().getStatus()).isEqualTo("MISSING_FROM_IMPORT");
+        verify(moduleService, never()).update(eq(4L), org.mockito.ArgumentMatchers.any(Module.class), eq("before marking missing from PDF re-import"), eq(99L));
     }
 
     @Test
