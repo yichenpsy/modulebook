@@ -6,9 +6,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 
 import de.bht.modulebook.module.Module;
+import de.bht.modulebook.module.workload.ModuleWorkload;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
+
+import java.util.Map;
 
 class PdfImportedModuleMapperTest {
 
@@ -68,5 +71,27 @@ class PdfImportedModuleMapperTest {
         assertThatThrownBy(() -> mapper.toModule(imported, "Architektur", 2021))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Missing module_number");
+    }
+
+    @Test
+    void mapsImportedWorkloadTextToComponents() throws Exception {
+        JsonNode imported = objectMapper.readTree("""
+                {
+                  "workload": "102 Stunden Präsenz (4 SWS SU + 2 SWS Ü), 48 Stunden Selbststudium"
+                }
+                """);
+
+        ModuleWorkload workload = mapper.toWorkload(imported, Map.of(
+                "SU", 1L,
+                "UE", 2L
+        ));
+
+        assertThat(workload).isNotNull();
+        assertThat(workload.getRawText()).contains("102 Stunden Präsenz");
+        assertThat(workload.getComponents()).hasSize(2);
+        assertThat(workload.getComponents().get(0).getTeachingFormId()).isEqualTo(1L);
+        assertThat(workload.getComponents().get(0).getSwsAmount()).isEqualByComparingTo("4");
+        assertThat(workload.getComponents().get(1).getTeachingFormId()).isEqualTo(2L);
+        assertThat(workload.getComponents().get(1).getSwsAmount()).isEqualByComparingTo("2");
     }
 }

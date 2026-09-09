@@ -19,6 +19,7 @@ import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleMapper;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
+import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModuleError;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
@@ -26,6 +27,8 @@ import de.bht.modulebook.studyprogram.StudyProgram;
 import de.bht.modulebook.studyprogram.StudyProgramService;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
+import de.bht.modulebook.teachingform.TeachingForm;
+import de.bht.modulebook.teachingform.TeachingFormRepository;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -42,6 +45,7 @@ public class PdfImportService {
     private final PdfImportedModuleMapper importedModuleMapper;
     private final StudyProgramService studyProgramService;
     private final StudyProgramChangeSetService changeSetService;
+    private final TeachingFormRepository teachingFormRepository;
 
     public PdfImportService(
         PythonPdfImportRunner runner,
@@ -50,7 +54,8 @@ public class PdfImportService {
         ModuleService moduleService,
         PdfImportedModuleMapper importedModuleMapper,
         StudyProgramService studyProgramService,
-        StudyProgramChangeSetService changeSetService
+        StudyProgramChangeSetService changeSetService,
+        TeachingFormRepository teachingFormRepository
     ){
         this.runner = runner;
         this.properties = properties;
@@ -59,6 +64,7 @@ public class PdfImportService {
         this.importedModuleMapper = importedModuleMapper;
         this.studyProgramService = studyProgramService;
         this.changeSetService = changeSetService;
+        this.teachingFormRepository = teachingFormRepository;
     }
 
     public Map<String, JsonNode> importPdf(String studyProgram, Integer year, MultipartFile file) throws Exception {
@@ -121,6 +127,12 @@ public class PdfImportService {
         List<Module> existingModules = moduleService.getByStudyProgramId(studyProgram.getId());
         Set<Long> importedModuleIds = new HashSet<>();
         Set<String> importedModuleNumbers = new HashSet<>();
+        Map<String, Long> teachingFormIdsByCode = teachingFormRepository.findAll()
+                .stream()
+                .collect(java.util.stream.Collectors.toMap(
+                        TeachingForm::getCode,
+                        TeachingForm::getId
+                ));
 
         for (int i = 0; i < request.modules().size(); i++) {
             JsonNode imported = request.modules().get(i);
@@ -136,24 +148,25 @@ public class PdfImportService {
 
             try {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
+                ModuleWorkload workload = importedModuleMapper.toWorkload(imported, teachingFormIdsByCode);
                 module.setStudyProgramId(studyProgram.getId());
                 module.setStatus(ModuleService.ACTIVE_STATUS);
                 Module saved;
 
                 if (moduleId != null) {
-                    saved = moduleService.update(moduleId, module, PDF_REIMPORT_VERSION_REASON, changeSet.getId());
+                    saved = moduleService.update(moduleId, module, workload, List.of(), PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                 } else if (module.getModuleNumber() != null && !module.getModuleNumber().isBlank()) {
                     Module existing = moduleService
                         .findByStudyProgramIdAndModuleNumber(studyProgram.getId(), module.getModuleNumber())
                         .orElse(null);
 
                     if (existing == null) {
-                        saved = moduleService.createFromPdfImport(module, changeSet.getId());
+                        saved = moduleService.create(module, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, changeSet.getId());
                     } else {
-                        saved = moduleService.update(existing.getId(), module, PDF_REIMPORT_VERSION_REASON, changeSet.getId());
+                        saved = moduleService.update(existing.getId(), module, workload, List.of(), PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                     }
                 } else {
-                    saved = moduleService.createFromPdfImport(module, changeSet.getId());
+                    saved = moduleService.create(module, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, changeSet.getId());
                 }
 
                 createdModules.add(ModuleMapper.toResponse(saved));

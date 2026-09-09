@@ -1,14 +1,27 @@
 package de.bht.modulebook.pdfimport;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
 import de.bht.modulebook.module.Module;
+import de.bht.modulebook.module.workload.ModuleWorkload;
+import de.bht.modulebook.module.workload.PresenceHourComponent;
 import tools.jackson.databind.JsonNode;
 
 @Component
 public class PdfImportedModuleMapper {
+    private static final Pattern SWS_COMPONENT_PATTERN = Pattern.compile(
+            "(\\d+(?:[,.]\\d+)?)\\s*SWS\\s*([\\p{L}]+)",
+            Pattern.CASE_INSENSITIVE
+    );
+
     public Module toModule(JsonNode imported, String studyProgram, Integer year) {
         if (imported == null || imported.isNull()) {
             throw new IllegalArgumentException("Missing imported module");
@@ -50,6 +63,34 @@ public class PdfImportedModuleMapper {
         module.setAdditionalNotes(text(imported, "additional_notes"));
 
         return module;
+    }
+
+    public ModuleWorkload toWorkload(JsonNode imported, Map<String, Long> teachingFormIdsByCode) {
+        String rawText = text(imported, "workload");
+        if (rawText == null || rawText.isBlank()) {
+            return null;
+        }
+
+        ModuleWorkload workload = new ModuleWorkload();
+        workload.setRawText(rawText);
+
+        List<PresenceHourComponent> components = new ArrayList<>();
+        Matcher matcher = SWS_COMPONENT_PATTERN.matcher(rawText);
+        while (matcher.find()) {
+            String normalizedCode = normalizeTeachingFormCode(matcher.group(2));
+            Long teachingFormId = teachingFormIdsByCode.get(normalizedCode);
+            if (teachingFormId == null) {
+                continue;
+            }
+
+            PresenceHourComponent component = new PresenceHourComponent();
+            component.setTeachingFormId(teachingFormId);
+            component.setSwsAmount(new BigDecimal(matcher.group(1).replace(",", ".")));
+            components.add(component);
+        }
+
+        workload.setComponents(components);
+        return workload;
     }
 
     public String moduleNumber(JsonNode imported) {
@@ -105,6 +146,21 @@ public class PdfImportedModuleMapper {
                 text(imported, "source_file"),
                 imported.get("source_pages")
         );
+    }
+
+    private String normalizeTeachingFormCode(String code) {
+        if (code == null) {
+            return "";
+        }
+
+        String normalized = code.trim().toUpperCase(Locale.ROOT);
+        return switch (normalized) {
+            case "Ü", "ÜBUNG", "UEBUNG" -> "UE";
+            case "PRAKTIKUM" -> "P";
+            case "VORLESUNG" -> "V";
+            case "SEMINAR" -> "S";
+            default -> normalized;
+        };
     }
 
     private String text(JsonNode node, String fieldName) {
