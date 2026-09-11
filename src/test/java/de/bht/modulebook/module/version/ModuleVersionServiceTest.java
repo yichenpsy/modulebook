@@ -139,7 +139,7 @@ class ModuleVersionServiceTest {
         currentModule.setModuleNumber("B01");
         currentModule.setName("Deleted Module");
         currentModule.setCredits(new BigDecimal("5.0"));
-        currentModule.setStatus(ModuleService.DELETED_STATUS);
+        currentModule.setModuleStatus(ModuleService.DELETED_STATUS);
 
         Module restoredModule = new Module();
         restoredModule.setId(528L);
@@ -147,7 +147,7 @@ class ModuleVersionServiceTest {
         restoredModule.setModuleNumber("B01");
         restoredModule.setName("Deleted Module");
         restoredModule.setCredits(new BigDecimal("5.0"));
-        restoredModule.setStatus(ModuleService.ACTIVE_STATUS);
+        restoredModule.setModuleStatus(ModuleService.ACTIVE_STATUS);
 
         ModuleVersion deletedVersion = new ModuleVersion(
                 1L,
@@ -173,7 +173,7 @@ class ModuleVersionServiceTest {
 
         ArgumentCaptor<Module> restoredCaptor = ArgumentCaptor.forClass(Module.class);
         verify(moduleRepository).update(eq(528L), restoredCaptor.capture());
-        assertThat(restoredCaptor.getValue().getStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
-        assertThat(result.getStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
+        assertThat(restoredCaptor.getValue().getModuleStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
+        assertThat(result.getModuleStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
     }
 }

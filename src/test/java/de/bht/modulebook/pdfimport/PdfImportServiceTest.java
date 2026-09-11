@@ -174,7 +174,7 @@ class PdfImportServiceTest {
         assertThat(response.errors()).isEmpty();
         verify(moduleService).create(mapped, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L);
         assertThat(mapped.getStudyProgramId()).isEqualTo(10L);
-        assertThat(mapped.getStatus()).isEqualTo("ACTIVE");
+        assertThat(mapped.getModuleStatus()).isEqualTo("ACTIVE");
     }
 
     @Test
@@ -295,13 +295,13 @@ class PdfImportServiceTest {
         assertThat(response.requestedCount()).isEqualTo(2);
         assertThat(response.createdCount()).isEqualTo(2);
         assertThat(response.errorCount()).isZero();
-        assertThat(mappedB01.getStatus()).isEqualTo("ACTIVE");
-        assertThat(mappedB03.getStatus()).isEqualTo("ACTIVE");
+        assertThat(mappedB01.getModuleStatus()).isEqualTo("ACTIVE");
+        assertThat(mappedB03.getModuleStatus()).isEqualTo("ACTIVE");
 
         ArgumentCaptor<Module> missingModule = ArgumentCaptor.forClass(Module.class);
         verify(moduleService).update(eq(2L), missingModule.capture(), eq("before marking missing from PDF re-import"), eq(99L));
         assertThat(missingModule.getValue().getModuleNumber()).isEqualTo("B02");
-        assertThat(missingModule.getValue().getStatus()).isEqualTo("MISSING_FROM_IMPORT");
+        assertThat(missingModule.getValue().getModuleStatus()).isEqualTo("MISSING_FROM_IMPORT");
         verify(moduleService, never()).update(eq(4L), org.mockito.ArgumentMatchers.any(Module.class), eq("before marking missing from PDF re-import"), eq(99L));
     }
 
@@ -324,7 +324,7 @@ class PdfImportServiceTest {
                 .hasMessageContaining("No modules provided");
     }
 
-    private Module module(Long id, String moduleNumber, String name, String status) {
+    private Module module(Long id, String moduleNumber, String name, String moduleStatus) {
         Module module = new Module();
         module.setId(id);
         module.setStudyProgramId(10L);
@@ -332,7 +332,7 @@ class PdfImportServiceTest {
         module.setName(name);
         module.setCredits(new BigDecimal("5.0"));
         module.setDescription("description " + moduleNumber);
-        module.setStatus(status);
+        module.setModuleStatus(moduleStatus);
         return module;
     }
 

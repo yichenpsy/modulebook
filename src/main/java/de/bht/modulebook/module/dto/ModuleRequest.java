@@ -32,7 +32,7 @@ public record ModuleRequest(
     String learningObjectives,
     String prerequisites,
     String level,
-    String status,
+    String moduleStatus,
     String frequency,
     String contents,
     String literature,

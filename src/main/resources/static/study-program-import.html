@@ -58,6 +58,29 @@
     <script>
         let importedModules = [];
         let studyPrograms = [];
+        const importedModuleFieldDefinitions = [
+            { key: "module_number", label: "Module number", important: true, control: "input" },
+            { key: "title", label: "Title", important: true, control: "input" },
+            { key: "credits", label: "Credits", important: true, control: "number", step: "0.5" },
+            { key: "workload", label: "Workload", important: true, control: "textarea", rows: 3 },
+            { key: "teaching_form", label: "Teaching forms", important: true, control: "textarea", rows: 3 },
+            { key: "status", label: "Module type", important: true, control: "input" },
+            { key: "applicability", label: "Applicability", control: "textarea", rows: 4 },
+            { key: "learning_area", label: "Learning area", control: "input" },
+            { key: "learning_objectives", label: "Learning objectives", control: "textarea", rows: 6 },
+            { key: "prerequisites", label: "Prerequisites", control: "textarea", rows: 4 },
+            { key: "level", label: "Level", control: "input" },
+            { key: "frequency", label: "Frequency", control: "input" },
+            { key: "exam_form", label: "Examination form", control: "textarea", rows: 5 },
+            { key: "contents", label: "Contents", control: "textarea", rows: 8 },
+            { key: "literature", label: "Literature", control: "textarea", rows: 6 },
+            { key: "additional_notes", label: "Additional notes", control: "textarea", rows: 4 },
+            { key: "module_grade", label: "Module grade", control: "textarea", rows: 3 },
+            { key: "recognized_modules", label: "Recognized modules", control: "textarea", rows: 3 },
+            { key: "room_requirements", label: "Room requirements", control: "input" },
+            { key: "source_file", label: "Source file", control: "input" },
+            { key: "source_pages", label: "Source pages", control: "input" }
+        ];
 
         async function init() {
             try {
@@ -183,7 +206,82 @@
                 <div><strong>Detected modules:</strong> ${escapeHtml(String(report.detected_module_count || importedModules.length))}</div>
                 <div><strong>Required modules:</strong> ${escapeHtml(String(report.required_module_count || ""))}</div>
                 <div><strong>All required fields:</strong> ${escapeHtml(String(report.has_all_required_fields ?? ""))}</div>
+                ${renderEmptyImportedFields()}
             `;
+        }
+
+        function renderEmptyImportedFields() {
+            const modulesWithEmptyFields = importedModules
+                .map(module => ({
+                    moduleNumber: module.module_number,
+                    sourcePages: module.source_pages,
+                    emptyFields: emptyImportedFieldLabels(module)
+                }))
+                .filter(item => item.emptyFields.length > 0);
+
+            if (modulesWithEmptyFields.length === 0) {
+                return `
+                    <div class="import-report-ok">
+                        <strong>Empty fields:</strong> None
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="import-report-warning">
+                    <strong>Empty fields:</strong>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Source pages</th>
+                                <th>Empty fields</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${modulesWithEmptyFields.map(item => `
+                                <tr>
+                                    <td>${escapeHtml(item.moduleNumber || "No module number")}</td>
+                                    <td>${escapeHtml(formatImportedFieldValue(item.sourcePages))}</td>
+                                    <td>${escapeHtml(item.emptyFields.join(", "))}</td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function emptyImportedFieldLabels(module) {
+            const fields = secondaryImportedFields(module).concat(importantImportedFields());
+            const emptyFields = fields
+                .filter(field => isEmptyImportedValue(module[field.key]))
+                .map(field => field.label);
+            const additionalFields = module.additional_fields || {};
+            const emptyAdditionalFields = Object.keys(additionalFields)
+                .filter(label => isEmptyImportedValue(additionalFields[label]));
+
+            return emptyFields.concat(emptyAdditionalFields);
+        }
+
+        function isEmptyImportedValue(value) {
+            if (value === null || value === undefined) {
+                return true;
+            }
+
+            if (typeof value === "string") {
+                return value.trim() === "";
+            }
+
+            if (Array.isArray(value)) {
+                return value.length === 0;
+            }
+
+            if (typeof value === "object") {
+                return Object.keys(value).length === 0;
+            }
+
+            return false;
         }
 
         function renderImportedModules() {
@@ -196,41 +294,101 @@
 
             container.innerHTML = importedModules.map((module, index) => `
                 <div class="module-card" data-index="${index}">
-                    <div class="module-grid">
-                        <label>
-                            Code
-                            <input data-field="module_number" value="${escapeHtml(module.module_number || "")}">
-                        </label>
-
-                        <label>
-                            Title
-                            <input data-field="title" value="${escapeHtml(module.title || "")}">
-                        </label>
-
-                        <label>
-                            Credits
-                            <input data-field="credits" type="number" step="0.5" value="${escapeHtml(String(module.credits ?? ""))}">
-                        </label>
+                    <div class="module-field-table imported-module-field-table">
+                        ${importantImportedFields().map(field => renderImportedFieldRow(field, module)).join("")}
                     </div>
 
-                    <label>
-                        Contents
-                        <textarea data-field="contents">${escapeHtml(module.contents || "")}</textarea>
-                    </label>
-
-                    <label>
-                        Learning objectives
-                        <textarea data-field="learning_objectives">${escapeHtml(module.learning_objectives || "")}</textarea>
-                    </label>
-
-                    <label>
-                        Examination form
-                        <textarea data-field="exam_form">${escapeHtml(module.exam_form || "")}</textarea>
-                    </label>
+                    <details class="imported-module-details">
+                        <summary>Show all imported fields</summary>
+                        <div class="module-field-table imported-module-field-table">
+                            ${secondaryImportedFields(module).map(field => renderImportedFieldRow(field, module)).join("")}
+                            ${renderAdditionalFieldsRows(module)}
+                        </div>
+                    </details>
 
                     <button type="button" onclick="removeImportedModule(${index})">Remove</button>
                 </div>
             `).join("");
+        }
+
+        function importantImportedFields() {
+            return importedModuleFieldDefinitions.filter(field => field.important);
+        }
+
+        function secondaryImportedFields(module) {
+            const knownKeys = new Set(importedModuleFieldDefinitions.map(field => field.key));
+            const configuredSecondaryFields = importedModuleFieldDefinitions.filter(field => !field.important);
+            const extraTopLevelFields = Object.keys(module)
+                .filter(key => !knownKeys.has(key) && key !== "additional_fields")
+                .map(key => ({
+                    key: key,
+                    label: humanizeFieldName(key),
+                    control: Array.isArray(module[key]) || typeof module[key] === "object" ? "textarea" : "input"
+                }));
+
+            return configuredSecondaryFields.concat(extraTopLevelFields);
+        }
+
+        function renderImportedFieldRow(field, module) {
+            return `
+                <div class="module-field-row">
+                    <label class="module-field-label">${escapeHtml(field.label)}</label>
+                    <div class="module-field-control">
+                        ${renderImportedFieldControl(field, module)}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAdditionalFieldsRows(module) {
+            const additionalFields = module.additional_fields || {};
+
+            return Object.keys(additionalFields).map(label => `
+                <div class="module-field-row">
+                    <label class="module-field-label">${escapeHtml(label)}</label>
+                    <div class="module-field-control">
+                        <textarea data-additional-field="${escapeHtml(label)}" rows="3">${escapeHtml(formatImportedFieldValue(additionalFields[label]))}</textarea>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function renderImportedFieldControl(field, module) {
+            const value = formatImportedFieldValue(module[field.key]);
+            const rows = field.rows || 3;
+
+            if (field.control === "textarea") {
+                return `<textarea data-field="${escapeHtml(field.key)}" rows="${escapeHtml(String(rows))}">${escapeHtml(value)}</textarea>`;
+            }
+
+            if (field.control === "number") {
+                const step = field.step || "1";
+                return `<input data-field="${escapeHtml(field.key)}" type="number" step="${escapeHtml(step)}" value="${escapeHtml(value)}">`;
+            }
+
+            return `<input data-field="${escapeHtml(field.key)}" value="${escapeHtml(value)}">`;
+        }
+
+        function formatImportedFieldValue(value) {
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            if (Array.isArray(value)) {
+                return value.join(", ");
+            }
+
+            if (typeof value === "object") {
+                return JSON.stringify(value, null, 2);
+            }
+
+            return String(value);
+        }
+
+        function humanizeFieldName(key) {
+            return key
+                .replaceAll("_", " ")
+                .replace(/\b\w/g, character => character.toUpperCase());
         }
 
         function syncImportedModulesFromForm() {
@@ -240,7 +398,15 @@
 
                 card.querySelectorAll("[data-field]").forEach(input => {
                     const field = input.dataset.field;
-                    module[field] = field === "credits" ? Number(input.value) : input.value;
+                    module[field] = input.type === "number" ? numberOrNull(input.value) : input.value;
+                });
+
+                card.querySelectorAll("[data-additional-field]").forEach(input => {
+                    if (!module.additional_fields) {
+                        module.additional_fields = {};
+                    }
+
+                    module.additional_fields[input.dataset.additionalField] = input.value;
                 });
             });
         }

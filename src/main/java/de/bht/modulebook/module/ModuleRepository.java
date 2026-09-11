@@ -22,7 +22,7 @@ public class ModuleRepository {
     private static final String SELECT_COLUMNS = """
             id, study_program_id, module_number, name, credits, description,
             modulebook_id, module_type, title_de, title_en, coordinator, applicability,
-            learning_area, learning_objectives, prerequisites, level, status, frequency,
+            learning_area, learning_objectives, prerequisites, level, module_status, frequency,
             examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at
             """;
 
@@ -57,7 +57,7 @@ public class ModuleRepository {
                         "learning_objectives",
                         "prerequisites",
                         "level",
-                        "status",
+                        "module_status",
                         "frequency",
                         "examination_form",
                         "contents",
@@ -87,7 +87,7 @@ public class ModuleRepository {
         values.put("learning_objectives", module.getLearningObjectives());
         values.put("prerequisites", module.getPrerequisites());
         values.put("level", module.getLevel());
-        values.put("status", module.getStatus());
+        values.put("module_status", module.getModuleStatus());
         values.put("frequency", module.getFrequency());
         values.put("examination_form", module.getExaminationForm());
         values.put("contents", module.getContents());
@@ -148,7 +148,7 @@ public class ModuleRepository {
                             learning_objectives = ?,
                             prerequisites = ?,
                             level = ?,
-                            status = ?,
+                            module_status = ?,
                             frequency = ?,
                             examination_form = ?,
                             contents = ?,
@@ -175,7 +175,7 @@ public class ModuleRepository {
                 module.getLearningObjectives(),
                 module.getPrerequisites(),
                 module.getLevel(),
-                module.getStatus(),
+                module.getModuleStatus(),
                 module.getFrequency(),
                 module.getExaminationForm(),
                 module.getContents(),
@@ -190,16 +190,16 @@ public class ModuleRepository {
         return value == null ? null : value.stripTrailingZeros().toPlainString();
     }
 
-    // Updates only the status and returns false when no row with this id exists.
-    public boolean updateStatus(Long id, String status) {
+    // Updates only the module status and returns false when no row with this id exists.
+    public boolean updateModuleStatus(Long id, String moduleStatus) {
         int rowsUpdated = jdbcTemplate.update(
                 """
                         UPDATE modules
-                        SET status = ?,
+                        SET module_status = ?,
                             updated_at = now()
                         WHERE id = ?
                         """,
-                status,
+                moduleStatus,
                 id);
         return rowsUpdated == 1;
     }
@@ -235,7 +235,7 @@ public class ModuleRepository {
                     rs.getString("learning_objectives"),
                     rs.getString("prerequisites"),
                     rs.getString("level"),
-                    rs.getString("status"),
+                    rs.getString("module_status"),
                     rs.getString("frequency"),
                     rs.getString("examination_form"),
                     rs.getString("contents"),

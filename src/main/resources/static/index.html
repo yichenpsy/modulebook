@@ -153,7 +153,7 @@
                             <th>Module number</th>
                             <th>Name</th>
                             <th>Credits</th>
-                            <th>Status</th>
+                            <th>Module status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -163,7 +163,7 @@
                                 <td>${escapeHtml(module.moduleNumber || "")}</td>
                                 <td>${escapeHtml(module.name || "")}</td>
                                 <td>${escapeHtml(String(module.credits ?? ""))}</td>
-                                <td>${escapeHtml(module.status || "")}</td>
+                                <td>${escapeHtml(module.moduleStatus || "")}</td>
                                 <td class="row-actions">
                                     <a href="/module-edit.html?id=${escapeHtml(String(module.id))}">Edit</a>
                                     <a href="/module-versions.html?id=${escapeHtml(String(module.id))}">History</a>

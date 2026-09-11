@@ -21,7 +21,7 @@ public class Module {
     private String learningObjectives;
     private String prerequisites;
     private String level;
-    private String status;
+    private String moduleStatus;
     private String frequency;
     private String contents;
     private String literature;
@@ -37,7 +37,7 @@ public class Module {
     public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
             String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
             String coordinator, String applicability, String learningArea, String learningObjectives,
-            String prerequisites, String level, String status, String frequency, String examinationForm, String contents,
+            String prerequisites, String level, String moduleStatus, String frequency, String examinationForm, String contents,
             String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
             Instant updatedAt) {
         this.id = id;
@@ -56,7 +56,7 @@ public class Module {
         this.learningObjectives = learningObjectives;
         this.prerequisites = prerequisites;
         this.level = level;
-        this.status = status;
+        this.moduleStatus = moduleStatus;
         this.frequency = frequency;
         this.examinationForm = examinationForm;
         this.contents = contents;
@@ -195,12 +195,16 @@ public class Module {
         this.level = level;
     }
 
-    public String getStatus() {
-        return status;
+    public String getModuleStatus() {
+        return moduleStatus;
+    }
+
+    public void setModuleStatus(String moduleStatus) {
+        this.moduleStatus = moduleStatus;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.moduleStatus = status;
     }
 
     public String getFrequency() {

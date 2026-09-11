@@ -45,7 +45,7 @@ class PdfImportedModuleMapperTest {
         assertThat(module.getModuleNumber()).isEqualTo("B01");
         assertThat(module.getName()).isEqualTo("Test Module");
         assertThat(module.getCredits()).isEqualByComparingTo("5.0");
-        assertThat(module.getStatus()).isEqualTo("Pflichtmodul");
+        assertThat(module.getModuleType()).isEqualTo("Pflichtmodul");
         assertThat(module.getExaminationForm()).isEqualTo("100% Klausur (90 Minuten)");
         assertThat(module.getContents()).isEqualTo("Test contents");
         assertThat(module.getLearningObjectives()).isEqualTo("Test objectives");

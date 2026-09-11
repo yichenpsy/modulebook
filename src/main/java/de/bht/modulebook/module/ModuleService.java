@@ -110,8 +110,8 @@ public class ModuleService {
     }
 
     private void applyDefaultStatus(Module module) {
-        if (module.getStatus() == null || module.getStatus().isBlank()) {
-            module.setStatus(ACTIVE_STATUS);
+        if (module.getModuleStatus() == null || module.getModuleStatus().isBlank()) {
+            module.setModuleStatus(ACTIVE_STATUS);
         }
     }
 
@@ -215,7 +215,7 @@ public class ModuleService {
     @Transactional
     public void delete(Long id) {
         versionService.saveSnapshotInNewChangeSet(id, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
-        boolean deleted = moduleRepository.updateStatus(id, DELETED_STATUS);
+        boolean deleted = moduleRepository.updateModuleStatus(id, DELETED_STATUS);
 
         // The repository returns false when no row with this id exists.
         if (!deleted) {

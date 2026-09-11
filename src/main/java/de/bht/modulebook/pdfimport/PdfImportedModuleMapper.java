@@ -55,7 +55,7 @@ public class PdfImportedModuleMapper {
         module.setLearningObjectives(text(imported, "learning_objectives"));
         module.setPrerequisites(text(imported, "prerequisites"));
         module.setLevel(text(imported, "level"));
-        module.setStatus(text(imported, "status"));
+        module.setModuleType(text(imported, "status"));
         module.setFrequency(text(imported, "frequency"));
         module.setExaminationForm(text(imported, "exam_form"));
         module.setContents(text(imported, "contents"));

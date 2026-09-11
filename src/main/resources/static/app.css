@@ -75,6 +75,26 @@ th {
     max-width: 720px;
 }
 
+.import-report-ok,
+.import-report-warning {
+    margin-top: 12px;
+    padding: 10px;
+}
+
+.import-report-ok {
+    background: #f3fff4;
+    border: 1px solid #b7ddb9;
+}
+
+.import-report-warning {
+    background: #fff8e5;
+    border: 1px solid #e0c36a;
+}
+
+.import-report-warning table {
+    margin-top: 8px;
+}
+
 .snapshot-grid {
     display: grid;
     grid-template-columns: 160px minmax(220px, 1fr);
@@ -122,15 +142,26 @@ th {
     max-width: 980px;
 }
 
-.module-grid {
-    display: grid;
-    grid-template-columns: 140px minmax(220px, 1fr) 120px;
-    gap: 12px;
-}
-
 .module-card textarea {
     max-width: 100%;
     min-height: 90px;
+}
+
+.imported-module-details {
+    margin-top: 12px;
+}
+
+.imported-module-details summary {
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.imported-module-field-table {
+    margin-bottom: 12px;
+}
+
+.imported-module-field-table textarea {
+    max-width: none;
 }
 
 .form-actions {
@@ -314,10 +345,6 @@ th {
 
     .module-field-label {
         border-bottom: 0;
-    }
-
-    .module-grid {
-        grid-template-columns: 1fr;
     }
 
     .workload-row,

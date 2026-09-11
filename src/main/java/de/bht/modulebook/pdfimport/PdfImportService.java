@@ -150,7 +150,7 @@ public class PdfImportService {
                 Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
                 ModuleWorkload workload = importedModuleMapper.toWorkload(imported, teachingFormIdsByCode);
                 module.setStudyProgramId(studyProgram.getId());
-                module.setStatus(ModuleService.ACTIVE_STATUS);
+                module.setModuleStatus(ModuleService.ACTIVE_STATUS);
                 Module saved;
 
                 if (moduleId != null) {
@@ -198,13 +198,13 @@ public class PdfImportService {
     ) {
         for (Module existing : existingModules) {
             if (wasSeenInImport(existing, importedModuleIds, importedModuleNumbers)
-                    || MISSING_FROM_IMPORT_STATUS.equals(existing.getStatus())
-                    || ModuleService.DELETED_STATUS.equals(existing.getStatus())) {
+                    || MISSING_FROM_IMPORT_STATUS.equals(existing.getModuleStatus())
+                    || ModuleService.DELETED_STATUS.equals(existing.getModuleStatus())) {
                 continue;
             }
 
             Module missing = copyModule(existing);
-            missing.setStatus(MISSING_FROM_IMPORT_STATUS);
+            missing.setModuleStatus(MISSING_FROM_IMPORT_STATUS);
             moduleService.update(existing.getId(), missing, MISSING_FROM_IMPORT_VERSION_REASON, changeSetId);
         }
     }
@@ -236,7 +236,7 @@ public class PdfImportService {
                 source.getLearningObjectives(),
                 source.getPrerequisites(),
                 source.getLevel(),
-                source.getStatus(),
+                source.getModuleStatus(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),

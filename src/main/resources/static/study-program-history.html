@@ -180,7 +180,7 @@
                         ${group.rows.map(row => {
                             const snapshot = parseSnapshot(row.version.snapshotJson);
                             const moduleSnapshot = snapshot.module || snapshot;
-                            const moduleIsDeleted = row.moduleDeleted || row.module.status === "DELETED";
+                            const moduleIsDeleted = row.moduleDeleted || row.module.moduleStatus === "DELETED";
                             return `
                                 <tr>
                                     <td>

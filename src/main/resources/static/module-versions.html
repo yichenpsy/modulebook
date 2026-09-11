@@ -133,8 +133,8 @@
                     <dd>${escapeHtml(module.name || "")}</dd>
                     <dt>Credits</dt>
                     <dd>${escapeHtml(String(module.credits ?? ""))}</dd>
-                    <dt>Status</dt>
-                    <dd>${escapeHtml(module.status || "")}</dd>
+                    <dt>Module status</dt>
+                    <dd>${escapeHtml(module.moduleStatus || module.status || "")}</dd>
                     <dt>Coordinator</dt>
                     <dd>${escapeHtml(module.coordinator || "")}</dd>
                     <dt>Workload</dt>

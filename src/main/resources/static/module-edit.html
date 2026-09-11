@@ -45,6 +45,14 @@
                 </div>
 
                 <div class="module-field-row">
+                    <div class="module-field-label">Module id (debug)</div>
+                    <div class="module-field-control">
+                        <div id="moduleIdDisplay" class="readonly-value">Loading...</div>
+                        <input id="modulebookId" type="hidden">
+                    </div>
+                </div>
+
+                <div class="module-field-row">
                     <label class="module-field-label" for="moduleNumber">Module number</label>
                     <div class="module-field-control">
                         <input id="moduleNumber" required maxlength="50" placeholder="B01" oninput="updateModuleNumberWarning()">
@@ -104,13 +112,6 @@
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="modulebookId">Modulebook id</label>
-                    <div class="module-field-control">
-                        <input id="modulebookId" type="number">
-                    </div>
-                </div>
-
-                <div class="module-field-row">
                     <label class="module-field-label" for="moduleType">Module type</label>
                     <div class="module-field-control">
                         <input id="moduleType">
@@ -160,7 +161,7 @@
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="moduleStatus">Status</label>
+                    <label class="module-field-label" for="moduleStatus">Module status (debug)</label>
                     <div class="module-field-control">
                         <input id="moduleStatus">
                     </div>
@@ -265,6 +266,7 @@
             document.getElementById("versionsLink").hidden = true;
             document.getElementById("studyProgramId").value = studyProgramId;
             renderStudyProgramDisplay(studyProgramId);
+            renderModuleIdDisplay(null);
             document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
             fillWorkloadRows([]);
             renderModuleTeachingForms();
@@ -278,6 +280,8 @@
             document.getElementById("documentTitle").textContent = "Edit Module";
             document.getElementById("studyProgramId").value = module.studyProgramId ?? "";
             renderStudyProgramDisplay(module.studyProgramId);
+            renderModuleIdDisplay(module.id);
+            document.getElementById("modulebookId").value = module.modulebookId ?? "";
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
             document.getElementById("name").value = module.name || "";
             document.getElementById("credits").value = module.credits ?? "";
@@ -287,7 +291,6 @@
             setExtraTeachingForms(module);
             renderModuleTeachingForms();
             updateWorkloadPreview();
-            document.getElementById("modulebookId").value = module.modulebookId ?? "";
             document.getElementById("moduleType").value = module.moduleType || "";
             document.getElementById("coordinator").value = module.coordinator || "";
             document.getElementById("applicability").value = module.applicability || "";
@@ -295,7 +298,7 @@
             document.getElementById("learningObjectives").value = module.learningObjectives || "";
             document.getElementById("prerequisites").value = module.prerequisites || "";
             document.getElementById("level").value = module.level || "";
-            document.getElementById("moduleStatus").value = module.status || "";
+            document.getElementById("moduleStatus").value = module.moduleStatus || "";
             document.getElementById("frequency").value = module.frequency || "";
             document.getElementById("examinationForm").value = module.examinationForm || "";
             document.getElementById("contents").value = module.contents || "";
@@ -319,6 +322,10 @@
             document.getElementById("studyProgramDisplay").textContent = selectedProgram
                 ? `${selectedProgram.name} (${selectedProgram.year})`
                 : `Study program ${selectedStudyProgramId}`;
+        }
+
+        function renderModuleIdDisplay(id) {
+            document.getElementById("moduleIdDisplay").textContent = id ?? "New module";
         }
 
         function fillWorkloadRows(components) {
@@ -538,7 +545,7 @@
                 learningObjectives: document.getElementById("learningObjectives").value.trim(),
                 prerequisites: document.getElementById("prerequisites").value.trim(),
                 level: document.getElementById("level").value.trim(),
-                status: document.getElementById("moduleStatus").value.trim(),
+                moduleStatus: document.getElementById("moduleStatus").value.trim(),
                 frequency: document.getElementById("frequency").value.trim(),
                 examinationForm: document.getElementById("examinationForm").value.trim(),
                 contents: document.getElementById("contents").value.trim(),
@@ -595,7 +602,7 @@
                 changeMessagePart("learning objectives", oldModule.learningObjectives, request.learningObjectives),
                 changeMessagePart("prerequisites", oldModule.prerequisites, request.prerequisites),
                 changeMessagePart("level", oldModule.level, request.level),
-                changeMessagePart("status", oldModule.status, request.status),
+                changeMessagePart("module status", oldModule.moduleStatus, request.moduleStatus),
                 changeMessagePart("frequency", oldModule.frequency, request.frequency),
                 changeMessagePart("examination form", oldModule.examinationForm, request.examinationForm),
                 changeMessagePart("contents", oldModule.contents, request.contents),

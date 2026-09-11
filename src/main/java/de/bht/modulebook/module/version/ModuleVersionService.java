@@ -202,8 +202,8 @@ public class ModuleVersionService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Version does not contain a restorable module");
         }
 
-        if (ModuleService.DELETED_STATUS.equals(module.getStatus())) {
-            module.setStatus(ModuleService.ACTIVE_STATUS);
+        if (ModuleService.DELETED_STATUS.equals(module.getModuleStatus())) {
+            module.setModuleStatus(ModuleService.ACTIVE_STATUS);
         }
 
         return module;
