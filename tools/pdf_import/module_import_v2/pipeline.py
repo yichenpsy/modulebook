@@ -16,9 +16,15 @@ from tools.pdf_import.module_import_v2.extract_module_pages import (
     load_field_label_map,
     write_boundary_pages_csv,
 )
+from tools.pdf_import.module_import_v2.coordinator_extractor import (
+    add_coordinators_to_modules,
+    extract_coordinators_from_pages,
+)
 from tools.pdf_import.module_import_v2.module_splitter import split_modules_to_json
 from tools.pdf_import.module_import_v2.normalize_modules_from_md import (
     normalize_modules_file,
+    write_json,
+    write_jsonl,
 )
 from tools.pdf_import.module_import_v2.pdf_to_pages_markdown import (
     convert_pdf_to_pages_markdown,
@@ -291,6 +297,13 @@ def process_pdf(
         base_path=base_yaml,
         jsonl_output_path=normalized_jsonl,
     )
+    coordinators_by_module = extract_coordinators_from_pages(pages)
+    coordinator_count = add_coordinators_to_modules(
+        normalized_modules,
+        coordinators_by_module,
+    )
+    write_json(normalized_json, normalized_modules)
+    write_jsonl(normalized_jsonl, normalized_modules)
 
     required_fields = required_fields_for_v2(base_config)
     has_all_required_fields, missing_required_fields = required_field_summary(
@@ -311,6 +324,7 @@ def process_pdf(
         "first_module_page": first_page_number,
         "last_module_page": last_page_number,
         "detected_module_count": len(normalized_modules),
+        "coordinator_count": coordinator_count,
         "required_module_count": expected_module_counts.get(source_file),
         "has_all_required_fields": has_all_required_fields,
         "missing_required_fields": json.dumps(
@@ -337,6 +351,7 @@ def write_report(path: Path, rows: list[dict]) -> None:
         "first_module_page",
         "last_module_page",
         "detected_module_count",
+        "coordinator_count",
         "required_module_count",
         "has_all_required_fields",
         "missing_required_fields",

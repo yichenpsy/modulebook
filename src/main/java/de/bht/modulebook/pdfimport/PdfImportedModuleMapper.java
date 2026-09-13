@@ -50,6 +50,7 @@ public class PdfImportedModuleMapper {
         module.setDescription(buildDescription(imported, studyProgram, year));
         module.setTitleDe(text(imported, "title_de"));
         module.setTitleEn(text(imported, "title_en"));
+        module.setCoordinator(text(imported, "coordinator"));
         module.setApplicability(text(imported, "applicability"));
         module.setLearningArea(text(imported, "learning_area"));
         module.setLearningObjectives(text(imported, "learning_objectives"));
