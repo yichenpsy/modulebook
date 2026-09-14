@@ -16,7 +16,8 @@ import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.workload.PresenceHourComponent;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
-import de.bht.modulebook.module.version.ModuleVersionService;
+import de.bht.modulebook.module.version.ModuleChangeLogService;
+// import de.bht.modulebook.module.version.ModuleVersionService;
 import de.bht.modulebook.teachingform.TeachingForm;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 
@@ -33,23 +34,26 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository moduleTeachingFormRepository;
-    private final ModuleVersionService versionService;
+    //private final ModuleVersionService versionService;
     private final StudyProgramChangeSetService changeSetService;
+    private final ModuleChangeLogService changeLogService;
     
 
     public ModuleService(
         ModuleRepository moduleRepository,
         ModuleWorkloadRepository workloadRepository,
         ModuleTeachingFormRepository moduleTeachingFormRepository,
-        ModuleVersionService versionService,
-        StudyProgramChangeSetService changeSetService
+        // ModuleVersionService versionService,
+        StudyProgramChangeSetService changeSetService,
+        ModuleChangeLogService changeLogService
     ) {
         // The service needs the repository to access the database.
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
         this.moduleTeachingFormRepository = moduleTeachingFormRepository;
-        this.versionService = versionService;
+        //this.versionService = versionService;
         this.changeSetService = changeSetService;
+        this.changeLogService = changeLogService;
     }
 
     public Module create(Module module) {
@@ -105,7 +109,7 @@ public class ModuleService {
                 created.getId(),
                 mergeTeachingFormIds(teachingFormIds, workload)
         );
-        versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason), changeSetId);
+        //versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason), changeSetId);
         return getById(created.getId());
     }
 
@@ -133,7 +137,14 @@ public class ModuleService {
     }
       
     public Module update(Long id, Module module) {
-        versionService.saveSnapshotInNewChangeSet(id, "before update", StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        //var changeSet = versionService.saveSnapshotInNewChangeSet(id, "before update", StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        Module oldModule = getById(id);
+        var changeSet = changeSetService.create(
+            oldModule.getStudyProgramId(),
+            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            "update"
+        );
+        logModuleOnlyChanges(id, module, changeSet.getId());
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -145,7 +156,14 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, String versionReason) {
-        versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        //var changeSet = versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        Module oldModule = getById(id);
+        var changeSet = changeSetService.create(
+            oldModule.getStudyProgramId(),
+            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            normalizeVersionReason(versionReason)
+        );
+        logModuleOnlyChanges(id, module, changeSet.getId());
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -157,7 +175,8 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, String versionReason, Long changeSetId) {
-        versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
+        //versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
+        logModuleOnlyChanges(id, module, changeSetId);
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -182,17 +201,74 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason){
-        versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
-        return updateAfterSnapshot(id, module, workload, teachingFormIds);
+        //var changeSet = versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        Module oldModule = getById(id);
+        var changeSet = changeSetService.create(
+            oldModule.getStudyProgramId(),
+            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            normalizeVersionReason(versionReason)
+        );
+        logFullModuleChanges(id, module, workload, teachingFormIds, changeSet.getId());
+        return updateAfterChangeLog(id, module, workload, teachingFormIds);
     }
 
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason, Long changeSetId){
-        versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
-        return updateAfterSnapshot(id, module, workload, teachingFormIds);
+        // Old snapshot versioning:
+        // versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
+        logFullModuleChanges(id, module, workload, teachingFormIds, changeSetId);
+        return updateAfterChangeLog(id, module, workload, teachingFormIds);
     }
 
-    private Module updateAfterSnapshot(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds) {
+    private void logModuleOnlyChanges(Long id, Module module, Long changeSetId) {
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = moduleTeachingFormRepository.findByModuleId(id)
+                .stream()
+                .map(TeachingForm::getId)
+                .toList();
+
+        changeLogService.saveChanges(
+                changeSetId,
+                id,
+                getById(id),
+                module,
+                oldWorkload,
+                oldWorkload,
+                oldTeachingFormIds,
+                oldTeachingFormIds
+        );
+    }
+
+    private void logFullModuleChanges(
+            Long id,
+            Module module,
+            ModuleWorkload workload,
+            List<Long> teachingFormIds,
+            Long changeSetId
+    ) {
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = moduleTeachingFormRepository.findByModuleId(id)
+                .stream()
+                .map(TeachingForm::getId)
+                .toList();
+
+        if (workload != null) {
+            calculateWorkload(module, workload);
+        }
+
+        changeLogService.saveChanges(
+                changeSetId,
+                id,
+                getById(id),
+                module,
+                oldWorkload,
+                workload,
+                oldTeachingFormIds,
+                mergeTeachingFormIds(teachingFormIds, workload)
+        );
+    }
+
+    private Module updateAfterChangeLog(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds) {
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -214,13 +290,55 @@ public class ModuleService {
 
     @Transactional
     public void delete(Long id) {
-        versionService.saveSnapshotInNewChangeSet(id, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
+        Module oldModule = getById(id);
+        Module deletedModule = copyModule(oldModule);
+        deletedModule.setModuleStatus(DELETED_STATUS);
+
+        // Old snapshot versioning:
+        // versionService.saveSnapshotInNewChangeSet(id, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
+        var changeSet = changeSetService.create(
+                oldModule.getStudyProgramId(),
+                StudyProgramChangeSetService.SOURCE_DELETE,
+                "before delete"
+        );
+        logModuleOnlyChanges(id, deletedModule, changeSet.getId());
+
         boolean deleted = moduleRepository.updateModuleStatus(id, DELETED_STATUS);
 
         // The repository returns false when no row with this id exists.
         if (!deleted) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
         }
+    }
+
+    private Module copyModule(Module source) {
+        return new Module(
+                source.getId(),
+                source.getStudyProgramId(),
+                source.getModuleNumber(),
+                source.getName(),
+                source.getCredits(),
+                source.getDescription(),
+                source.getModulebookId(),
+                source.getModuleType(),
+                source.getTitleDe(),
+                source.getTitleEn(),
+                source.getCoordinator(),
+                source.getApplicability(),
+                source.getLearningArea(),
+                source.getLearningObjectives(),
+                source.getPrerequisites(),
+                source.getLevel(),
+                source.getModuleStatus(),
+                source.getFrequency(),
+                source.getExaminationForm(),
+                source.getContents(),
+                source.getLiterature(),
+                source.getAdditionalNotes(),
+                source.getModuleWeight(),
+                source.getCreatedAt(),
+                source.getUpdatedAt()
+        );
     }
 
     public Optional<ModuleWorkload> getWorkloadByModuleId(Long moduleId) {

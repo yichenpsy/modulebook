@@ -39,6 +39,18 @@ async function loadStudyProgramHistory(studyProgramId) {
     return requestJson(`/api/study-programs/${studyProgramId}/history`);
 }
 
+async function loadStudyProgramChangeSets(studyProgramId) {
+    return requestJson(`/api/study-programs/${studyProgramId}/change-sets`);
+}
+
+async function loadChangeSetFieldChanges(changeSetId) {
+    return requestJson(`/api/change-sets/${changeSetId}/field-changes`);
+}
+
+async function loadModuleFieldChanges(moduleId) {
+    return requestJson(`/api/modules/${moduleId}/field-changes`);
+}
+
 async function restoreModuleVersion(moduleId, versionNumber) {
     return requestJson(`/api/modules/${moduleId}/versions/${versionNumber}/restore`, {
         method: "POST"

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Study Program History</title>
+    <title>Study Program Change Log</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
         <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
-    <h1>Study Program History</h1>
+    <h1>Study Program Change Log</h1>
 
     <section>
         <div id="status" class="status">Loading history...</div>
@@ -25,16 +25,15 @@
         <div id="history">Loading...</div>
     </section>
 
-    <script src="/api.js?v=study-program-history-v2"></script>
+    <script src="/api.js?v=study-program-change-log"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const studyProgramId = params.get("id");
-        const selectedGroupKey = params.get("group");
-        const selectedCreatedAt = params.get("createdAt");
+        const selectedChangeSetId = params.get("changeSetId");
         let studyProgram = null;
         let modules = [];
-        let historyRows = [];
-        let historyGroups = [];
+        let changeSets = [];
+        let changesByChangeSetId = new Map();
 
         async function init() {
             if (!studyProgramId) {
@@ -47,47 +46,30 @@
             try {
                 const studyPrograms = await loadStudyPrograms();
                 studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
-                await loadHistoryRows();
-                buildHistoryGroups();
+                [modules, changeSets] = await Promise.all([
+                    loadModulesForStudyProgram(studyProgramId),
+                    loadStudyProgramChangeSets(studyProgramId)
+                ]);
+                await loadVisibleFieldChanges();
                 renderTitle();
                 renderHistory();
-                setStatus(`Loaded ${historyGroups.length} history changes.`);
+                setStatus(`Loaded ${changeSets.length} change sets.`);
             } catch (error) {
-                setStatus("Could not load study program history: " + error.message);
+                setStatus("Could not load study program change log: " + error.message);
             }
         }
 
-        async function loadHistoryRows() {
-            historyRows = await loadStudyProgramHistory(studyProgramId);
+        async function loadVisibleFieldChanges() {
+            const visibleChangeSets = selectedChangeSetId
+                ? changeSets.filter(changeSet => String(changeSet.id) === String(selectedChangeSetId))
+                : changeSets;
 
-            historyRows.sort((left, right) =>
-                new Date(right.version.createdAt || 0) - new Date(left.version.createdAt || 0)
-            );
-        }
+            const entries = await Promise.all(visibleChangeSets.map(async changeSet => [
+                Number(changeSet.id),
+                await loadChangeSetFieldChanges(changeSet.id)
+            ]));
 
-        function buildHistoryGroups() {
-            const groupsByKey = new Map();
-
-            historyRows.forEach(row => {
-                const createdSecond = createdAtSecond(row.version.createdAt);
-                const groupKey = row.version.changeSetId
-                    ? `change-set-${row.version.changeSetId}`
-                    : `created-at-${createdSecond}`;
-
-                if (!groupsByKey.has(groupKey)) {
-                    groupsByKey.set(groupKey, {
-                        key: groupKey,
-                        changeSetId: row.version.changeSetId || null,
-                        createdAt: createdSecond,
-                        rows: []
-                    });
-                }
-                groupsByKey.get(groupKey).rows.push(row);
-            });
-
-            historyGroups = Array.from(groupsByKey.values()).sort((left, right) =>
-                new Date(right.createdAt || 0) - new Date(left.createdAt || 0)
-            );
+            changesByChangeSetId = new Map(entries);
         }
 
         function renderTitle() {
@@ -104,104 +86,46 @@
         function renderHistory() {
             const container = document.getElementById("history");
 
-            if (historyRows.length === 0) {
-                container.textContent = "No module history exists for this study program yet.";
+            if (changeSets.length === 0) {
+                container.textContent = "No change log exists for this study program yet.";
                 return;
             }
 
-            if (selectedGroupKey || selectedCreatedAt) {
-                renderHistoryGroupDetail(container);
+            if (selectedChangeSetId) {
+                renderChangeSetDetail(container);
                 return;
             }
 
-            renderHistoryGroups(container);
+            renderChangeSetList(container);
         }
 
-        function renderHistoryGroups(container) {
+        function renderChangeSetList(container) {
             container.innerHTML = `
                 <table>
                     <thead>
                         <tr>
                             <th>Created</th>
                             <th>Change set</th>
-                            <th>Changed modules</th>
-                            <th>Reasons</th>
-                            <th>Modules</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${historyGroups.map(group => `
-                            <tr>
-                                <td>${escapeHtml(formatDate(group.createdAt))}</td>
-                                <td>${escapeHtml(group.changeSetId ? String(group.changeSetId) : "legacy")}</td>
-                                <td>${escapeHtml(String(group.rows.length))}</td>
-                                <td>${escapeHtml(uniqueReasons(group).join(", "))}</td>
-                                <td>${escapeHtml(moduleSummary(group))}</td>
-                                <td class="row-actions">
-                                    <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&group=${encodeURIComponent(group.key)}">Details</a>
-                                </td>
-                            </tr>
-                        `).join("")}
-                    </tbody>
-                </table>
-            `;
-        }
-
-        function renderHistoryGroupDetail(container) {
-            const group = selectedGroupKey
-                ? historyGroups.find(item => item.key === selectedGroupKey)
-                : historyGroups.find(item => item.createdAt === selectedCreatedAt);
-
-            if (!group) {
-                container.textContent = "No history entries found for this created time.";
-                return;
-            }
-
-            const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
-
-            container.innerHTML = `
-                <div class="form-actions">
-                    <a href="${backUrl}">Back to program history</a>
-                </div>
-                <h3>${escapeHtml(formatDate(group.createdAt))}</h3>
-                ${group.changeSetId ? `<p class="muted">Change set ${escapeHtml(String(group.changeSetId))}</p>` : ""}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Module</th>
-                            <th>Version</th>
+                            <th>Source</th>
                             <th>Reason</th>
-                            <th>Snapshot</th>
+                            <th>Changed modules</th>
+                            <th>Changed fields</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${group.rows.map(row => {
-                            const snapshot = parseSnapshot(row.version.snapshotJson);
-                            const moduleSnapshot = snapshot.module || snapshot;
-                            const moduleIsDeleted = row.moduleDeleted || row.module.moduleStatus === "DELETED";
+                        ${changeSets.map(changeSet => {
+                            const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
                             return `
                                 <tr>
-                                    <td>
-                                        <strong>${escapeHtml(row.module.moduleNumber || "")}</strong>
-                                        ${escapeHtml(row.module.name || "")}
-                                        ${moduleIsDeleted ? "<span class=\"muted\">deleted</span>" : ""}
-                                    </td>
-                                    <td>${escapeHtml(String(row.version.versionNumber))}</td>
-                                    <td>${escapeHtml(row.version.reason || "")}</td>
-                                    <td>
-                                        <strong>${escapeHtml(moduleSnapshot.moduleNumber || "")}</strong>
-                                        ${escapeHtml(moduleSnapshot.name || "")}
-                                    </td>
+                                    <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
+                                    <td>${escapeHtml(String(changeSet.id))}</td>
+                                    <td>${escapeHtml(changeSet.sourceType || "")}</td>
+                                    <td>${escapeHtml(changeSet.reason || "")}</td>
+                                    <td>${escapeHtml(moduleSummary(changes))}</td>
+                                    <td>${escapeHtml(String(changes.length))}</td>
                                     <td class="row-actions">
-                                        ${row.moduleDeleted ? `
-                                            <button class="link-button" type="button" onclick="restoreDeletedModule(${row.version.id})">Restore</button>
-                                        ` : `
-                                            <button class="link-button" type="button" onclick="restoreExistingModule(${row.module.id}, ${row.version.versionNumber})">Restore</button>
-                                            <a href="/module-versions.html?id=${escapeHtml(String(row.module.id))}">Module history</a>
-                                            <a href="/module-edit.html?id=${escapeHtml(String(row.module.id))}">Edit</a>
-                                        `}
+                                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
                                     </td>
                                 </tr>
                             `;
@@ -211,82 +135,104 @@
             `;
         }
 
-        async function restoreExistingModule(moduleId, versionNumber) {
-            const row = historyRows.find(item =>
-                item.module
-                && Number(item.module.id) === Number(moduleId)
-                && Number(item.version.versionNumber) === Number(versionNumber)
-            );
-            const label = row && row.module
-                ? `${row.module.moduleNumber || ""} ${row.module.name || ""}`.trim()
-                : `module ${moduleId}`;
-            const confirmed = confirm(
-                `Restore ${label} to version ${versionNumber}?\n\nThis will save the current module as a new version first.`
-            );
-
-            if (!confirmed) {
+        function renderChangeSetDetail(container) {
+            const changeSet = changeSets.find(item => String(item.id) === String(selectedChangeSetId));
+            if (!changeSet) {
+                container.textContent = "Change set not found.";
                 return;
             }
 
-            setStatus(`Restoring ${label}...`);
+            const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
+            const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
 
-            try {
-                await restoreModuleVersion(moduleId, versionNumber);
-                await loadHistoryRows();
-                buildHistoryGroups();
-                renderHistory();
-                setStatus(`Restored ${label} to version ${versionNumber}.`);
-            } catch (error) {
-                setStatus("Restore failed: " + error.message);
-            }
+            container.innerHTML = `
+                <div class="form-actions">
+                    <a href="${backUrl}">Back to program history</a>
+                </div>
+                <h3>Change set ${escapeHtml(String(changeSet.id))}</h3>
+                <p class="muted">
+                    ${escapeHtml(changeSet.sourceType || "")}
+                    ${escapeHtml(formatDate(changeSet.createdAt))}
+                    ${changeSet.reason ? `- ${escapeHtml(changeSet.reason)}` : ""}
+                </p>
+                ${changes.length === 0 ? `
+                    <p>No field changes were saved for this change set.</p>
+                ` : `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Module</th>
+                                <th>Field</th>
+                                <th>Old value</th>
+                                <th>New value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${changes.map(change => {
+                                const module = moduleById(change.moduleId);
+                                return `
+                                    <tr>
+                                        <td>${escapeHtml(moduleLabel(module, change.moduleId))}</td>
+                                        <td>${escapeHtml(readablePath(change.fieldPath))}</td>
+                                        <td class="diff-old">${escapeHtml(formatJsonValue(change.oldValue))}</td>
+                                        <td class="diff-new">${escapeHtml(formatJsonValue(change.newValue))}</td>
+                                        <td class="row-actions">
+                                            <a href="/module-versions.html?id=${escapeHtml(String(change.moduleId))}">Module log</a>
+                                            <a href="/module-edit.html?id=${escapeHtml(String(change.moduleId))}">Edit</a>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join("")}
+                        </tbody>
+                    </table>
+                `}
+            `;
         }
 
-        async function restoreDeletedModule(versionId) {
-            const row = historyRows.find(item => Number(item.version.id) === Number(versionId));
-            const label = row && row.module
-                ? `${row.module.moduleNumber || ""} ${row.module.name || ""}`.trim()
-                : `version ${versionId}`;
-            const confirmed = confirm(
-                `Restore ${label}?\n\nThis will create the module again from this saved snapshot.`
-            );
-
-            if (!confirmed) {
-                return;
-            }
-
-            setStatus(`Restoring ${label}...`);
-
-            try {
-                await restoreDeletedModuleVersion(versionId);
-                await loadHistoryRows();
-                buildHistoryGroups();
-                renderHistory();
-                setStatus(`Restored ${label}.`);
-            } catch (error) {
-                setStatus("Restore failed: " + error.message);
-            }
-        }
-
-        function uniqueReasons(group) {
-            return Array.from(new Set(
-                group.rows
-                    .map(row => row.version.reason || "")
-                    .filter(reason => reason.trim() !== "")
+        function moduleSummary(changes) {
+            const labels = Array.from(new Set(
+                changes.map(change => moduleLabel(moduleById(change.moduleId), change.moduleId))
             ));
+
+            return labels.length > 0 ? labels.join(", ") : "No field changes";
         }
 
-        function moduleSummary(group) {
-            return group.rows
-                .map(row => `${row.module.moduleNumber || row.module.id} ${row.module.name || ""}`.trim())
-                .join(", ");
+        function moduleById(moduleId) {
+            return modules.find(module => Number(module.id) === Number(moduleId));
         }
 
-        function parseSnapshot(snapshotJson) {
-            try {
-                return JSON.parse(snapshotJson);
-            } catch (error) {
-                return {};
+        function moduleLabel(module, moduleId) {
+            if (!module) {
+                return `Module ${moduleId}`;
             }
+
+            return `${module.moduleNumber || module.id} ${module.name || ""}`.trim();
+        }
+
+        function formatJsonValue(value) {
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            try {
+                const parsed = JSON.parse(value);
+                if (parsed === null) {
+                    return "";
+                }
+                if (typeof parsed === "string" || typeof parsed === "number" || typeof parsed === "boolean") {
+                    return String(parsed);
+                }
+                return JSON.stringify(parsed, null, 2);
+            } catch (error) {
+                return String(value);
+            }
+        }
+
+        function readablePath(path) {
+            return String(path || "")
+                .replace(/^module\./, "")
+                .replaceAll(".", " / ");
         }
 
         function formatDate(value) {
@@ -295,16 +241,6 @@
             }
 
             return new Date(value).toLocaleString();
-        }
-
-        function createdAtSecond(value) {
-            if (!value) {
-                return "";
-            }
-
-            const date = new Date(value);
-            date.setMilliseconds(0);
-            return date.toISOString();
         }
 
         function setStatus(message) {

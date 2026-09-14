@@ -97,8 +97,10 @@ public class ModuleVersionService {
     public List<ModuleVersion> getHistory(Long moduleId) {
         List<ModuleVersion> history = versionRepository.findByModuleId(moduleId);
         if (history.isEmpty()) {
-            saveSnapshot(moduleId, initialVersionReasonForExistingModule(moduleId));
-            return versionRepository.findByModuleId(moduleId);
+            // Old snapshot versioning:
+            // saveSnapshot(moduleId, initialVersionReasonForExistingModule(moduleId));
+            // return versionRepository.findByModuleId(moduleId);
+            return history;
         }
 
         if (repairInitialVersionReason(moduleId, history)) {
@@ -168,11 +170,12 @@ public class ModuleVersionService {
         ModuleVersion version = versionRepository.findByModuleIdAndVersionNumber(moduleId, versionNumber)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
 
-        saveSnapshotInNewChangeSet(
-                moduleId,
-                "before restore to version " + versionNumber,
-                StudyProgramChangeSetService.SOURCE_RESTORE
-        );
+        // Old snapshot versioning:
+        // saveSnapshotInNewChangeSet(
+        //         moduleId,
+        //         "before restore to version " + versionNumber,
+        //         StudyProgramChangeSetService.SOURCE_RESTORE
+        // );
 
         try {
             ModuleSnapshot snapshot = jsonMapper.readValue(version.getSnapshotJson(), ModuleSnapshot.class);
@@ -238,7 +241,8 @@ public class ModuleVersionService {
             if (oldModuleId != null) {
                 versionRepository.relinkDeletedModuleHistory(version.getStudyProgramId(), oldModuleId, restored.getId());
             }
-            saveSnapshot(restored.getId(), "restored deleted module from version " + version.getVersionNumber(), changeSet.getId());
+            // Old snapshot versioning:
+            // saveSnapshot(restored.getId(), "restored deleted module from version " + version.getVersionNumber(), changeSet.getId());
 
             return moduleRepository.findById(restored.getId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));

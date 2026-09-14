@@ -1,5 +1,7 @@
 package de.bht.modulebook.studyprogram.changeset;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,6 +28,13 @@ public class StudyProgramChangeSetService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Change set source type is required");
         }
         return repository.insert(studyProgramId, sourceType.trim(), normalizeReason(reason));
+    }
+
+    public List<StudyProgramChangeSet> getByStudyProgramId(Long studyProgramId) {
+        if (studyProgramId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Study program id is required");
+        }
+        return repository.findByStudyProgramId(studyProgramId);
     }
 
     private String normalizeReason(String reason) {

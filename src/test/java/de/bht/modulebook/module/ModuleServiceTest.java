@@ -16,7 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
-import de.bht.modulebook.module.version.ModuleVersionService;
+import de.bht.modulebook.module.version.ModuleChangeLogService;
+import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
@@ -34,10 +35,10 @@ class ModuleServiceTest {
     private ModuleTeachingFormRepository moduleTeachingFormRepository;
 
     @Mock
-    private ModuleVersionService versionService;
+    private StudyProgramChangeSetService changeSetService;
 
     @Mock
-    private StudyProgramChangeSetService changeSetService;
+    private ModuleChangeLogService changeLogService;
 
     private ModuleService service;
 
@@ -47,13 +48,13 @@ class ModuleServiceTest {
                 moduleRepository,
                 workloadRepository,
                 moduleTeachingFormRepository,
-                versionService,
-                changeSetService
+                changeSetService,
+                changeLogService
         );
     }
 
     @Test
-    void createSavesInitialVersionAfterModuleIsCreated() {
+    void createCreatesInitialChangeSetAfterModuleIsCreated() {
         Module request = new Module();
         request.setStudyProgramId(10L);
         request.setModuleNumber("B01");
@@ -77,15 +78,14 @@ class ModuleServiceTest {
         assertThat(result.getId()).isEqualTo(100L);
         assertThat(request.getModuleStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
 
-        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository);
         inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.MANUAL_INITIAL_VERSION_REASON);
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
-        inOrder.verify(versionService).saveSnapshot(100L, ModuleService.MANUAL_INITIAL_VERSION_REASON, 99L);
     }
 
     @Test
-    void createFromPdfImportSavesPdfImportVersionReason() {
+    void createFromPdfImportCreatesPdfImportChangeSetReason() {
         Module request = new Module();
         request.setStudyProgramId(10L);
         request.setModuleNumber("B01");
@@ -108,11 +108,10 @@ class ModuleServiceTest {
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository);
         inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON);
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
-        inOrder.verify(versionService).saveSnapshot(100L, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L);
     }
 
     @Test
@@ -139,21 +138,79 @@ class ModuleServiceTest {
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, versionService);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository);
         inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE, "created module manually");
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
-        inOrder.verify(versionService).saveSnapshot(100L, "created module manually", 99L);
     }
 
     @Test
-    void deleteSavesVersionBeforeMarkingModuleDeleted() {
+    void deleteRecordsStatusChangeBeforeMarkingModuleDeleted() {
+        Module oldModule = new Module();
+        oldModule.setId(100L);
+        oldModule.setStudyProgramId(10L);
+        oldModule.setModuleNumber("B01");
+        oldModule.setName("Old Module");
+        oldModule.setCredits(new BigDecimal("5.0"));
+        oldModule.setModuleStatus(ModuleService.ACTIVE_STATUS);
+
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule), Optional.of(oldModule));
+        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.empty());
+        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of());
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "before delete"))
+                .thenReturn(new StudyProgramChangeSet(77L, 10L, StudyProgramChangeSetService.SOURCE_DELETE, "before delete", null));
         when(moduleRepository.updateModuleStatus(100L, ModuleService.DELETED_STATUS)).thenReturn(true);
 
         service.delete(100L);
 
-        InOrder inOrder = inOrder(versionService, moduleRepository);
-        inOrder.verify(versionService).saveSnapshotInNewChangeSet(100L, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
+        InOrder inOrder = inOrder(changeSetService, changeLogService, moduleRepository);
+        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "before delete");
+        inOrder.verify(changeLogService).saveChanges(
+                org.mockito.Mockito.eq(77L),
+                org.mockito.Mockito.eq(100L),
+                org.mockito.Mockito.eq(oldModule),
+                org.mockito.Mockito.argThat(deletedModule -> ModuleService.DELETED_STATUS.equals(deletedModule.getModuleStatus())),
+                org.mockito.Mockito.isNull(),
+                org.mockito.Mockito.isNull(),
+                org.mockito.Mockito.eq(List.of()),
+                org.mockito.Mockito.eq(List.of())
+        );
         inOrder.verify(moduleRepository).updateModuleStatus(100L, ModuleService.DELETED_STATUS);
+    }
+
+    @Test
+    void updateRecordsFieldChangesBeforeUpdatingModule() {
+        Module oldModule = new Module();
+        oldModule.setId(100L);
+        oldModule.setStudyProgramId(10L);
+        oldModule.setModuleNumber("B01");
+        oldModule.setName("Old Module");
+        oldModule.setCredits(new BigDecimal("5.0"));
+
+        Module request = new Module();
+        request.setStudyProgramId(10L);
+        request.setModuleNumber("B01");
+        request.setName("Updated Module");
+        request.setCredits(new BigDecimal("6.0"));
+
+        ModuleWorkload oldWorkload = new ModuleWorkload();
+        ModuleWorkload newWorkload = new ModuleWorkload();
+
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule), Optional.of(oldModule), Optional.of(request));
+        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.of(oldWorkload));
+        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of());
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits"))
+                .thenReturn(new StudyProgramChangeSet(55L, 10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits", null));
+        when(moduleRepository.update(100L, request)).thenReturn(true);
+
+        Module result = service.update(100L, request, newWorkload, List.of(), "changed name and credits");
+
+        assertThat(result).isSameAs(request);
+
+        InOrder inOrder = inOrder(moduleRepository, changeSetService, changeLogService);
+        inOrder.verify(moduleRepository).findById(100L);
+        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits");
+        inOrder.verify(changeLogService).saveChanges(55L, 100L, oldModule, request, oldWorkload, newWorkload, List.of(), List.of());
+        inOrder.verify(moduleRepository).update(100L, request);
     }
 }

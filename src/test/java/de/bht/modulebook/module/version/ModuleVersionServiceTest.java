@@ -2,6 +2,7 @@ package de.bht.modulebook.module.version;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -59,39 +60,19 @@ class ModuleVersionServiceTest {
     }
 
     @Test
-    void getHistoryCreatesInitialVersionWhenModuleHasNoVersionsYet() {
-        Module module = new Module();
-        module.setId(528L);
-        module.setStudyProgramId(10L);
-        module.setModuleNumber("B01");
-        module.setName("New Module");
-        module.setCredits(new BigDecimal("5.0"));
-
-        ModuleVersion initialVersion = new ModuleVersion(
-                1L,
-                528L,
-                1,
-                "{\"module\":{\"id\":528}}",
-                ModuleService.MANUAL_INITIAL_VERSION_REASON,
-                Instant.parse("2026-08-25T10:20:00Z")
-        );
-
-        when(versionRepository.findByModuleId(528L)).thenReturn(List.of(), List.of(initialVersion));
-        when(moduleRepository.findById(528L)).thenReturn(Optional.of(module));
-        when(teachingFormRepository.findByModuleId(528L)).thenReturn(List.of());
-        when(workloadRepository.findByModuleId(528L)).thenReturn(Optional.empty());
-        when(versionRepository.nextVersionNumber(528L)).thenReturn(1);
+    void getHistoryDoesNotCreateInitialSnapshotWhenModuleHasNoVersionsYet() {
+        when(versionRepository.findByModuleId(528L)).thenReturn(List.of());
 
         List<ModuleVersion> history = service.getHistory(528L);
 
-        assertThat(history).containsExactly(initialVersion);
-        verify(versionRepository).insert(
-                org.mockito.ArgumentMatchers.eq(528L),
-                org.mockito.ArgumentMatchers.eq(10L),
-                org.mockito.ArgumentMatchers.isNull(),
-                org.mockito.ArgumentMatchers.eq(1),
+        assertThat(history).isEmpty();
+        verify(versionRepository, never()).insert(
+                org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.anyInt(),
                 org.mockito.ArgumentMatchers.anyString(),
-                org.mockito.ArgumentMatchers.eq(ModuleService.MANUAL_INITIAL_VERSION_REASON)
+                org.mockito.ArgumentMatchers.any()
         );
     }
 
@@ -154,19 +135,14 @@ class ModuleVersionServiceTest {
                 528L,
                 1,
                 """
-                {"module":{"id":528,"studyProgramId":10,"moduleNumber":"B01","name":"Deleted Module","credits":5.0,"status":"DELETED"}}
+                {"module":{"id":528,"studyProgramId":10,"moduleNumber":"B01","name":"Deleted Module","credits":5.0,"moduleStatus":"DELETED"}}
                 """,
                 "deleted snapshot",
                 Instant.parse("2026-08-25T10:20:00Z")
         );
 
         when(versionRepository.findByModuleIdAndVersionNumber(528L, 1)).thenReturn(Optional.of(deletedVersion));
-        when(moduleRepository.findById(528L)).thenReturn(Optional.of(currentModule), Optional.of(restoredModule));
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_RESTORE, "before restore to version 1"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_RESTORE, "before restore to version 1", null));
-        when(teachingFormRepository.findByModuleId(528L)).thenReturn(List.of());
-        when(workloadRepository.findByModuleId(528L)).thenReturn(Optional.empty());
-        when(versionRepository.nextVersionNumber(528L)).thenReturn(2);
+        when(moduleRepository.findById(528L)).thenReturn(Optional.of(restoredModule));
         when(moduleRepository.update(eq(528L), org.mockito.ArgumentMatchers.any(Module.class))).thenReturn(true);
 
         Module result = service.restore(528L, 1);

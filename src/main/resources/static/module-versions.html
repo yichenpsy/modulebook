@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module Versions</title>
+    <title>Module Change Log</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -11,32 +11,29 @@
         <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
-    <h1>Module Versions</h1>
+    <h1>Module Change Log</h1>
 
     <section>
-        <div id="status" class="status">Loading versions...</div>
+        <div id="status" class="status">Loading change log...</div>
         <div class="form-actions">
             <a id="editLink" href="/index.html">Back to module</a>
-            <a id="compareLink" href="/index.html" hidden>Compare versions</a>
+            <a id="compareLink" href="/index.html" hidden>Compare changes</a>
         </div>
     </section>
 
     <section>
         <h2 id="moduleTitle">History</h2>
-        <div id="versions">Loading...</div>
+        <div id="changes">Loading...</div>
     </section>
 
-    <section id="previewSection" hidden>
-        <h2>Snapshot Preview</h2>
-        <div id="preview" class="summary"></div>
-    </section>
-
-    <script src="/api.js?v=module-versions"></script>
+    <script src="/api.js?v=module-change-log"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const moduleId = params.get("id");
         let currentModule = null;
-        let versions = [];
+        let changeSets = [];
+        let fieldChanges = [];
+        let changeGroups = [];
 
         async function init() {
             if (!moduleId) {
@@ -48,17 +45,46 @@
             document.getElementById("compareLink").href = `/module-version-compare.html?id=${moduleId}`;
 
             try {
-                [currentModule, versions] = await Promise.all([
-                    loadModule(moduleId),
-                    loadModuleVersions(moduleId)
+                currentModule = await loadModule(moduleId);
+                [changeSets, fieldChanges] = await Promise.all([
+                    loadStudyProgramChangeSets(currentModule.studyProgramId),
+                    loadModuleFieldChanges(moduleId)
                 ]);
+                buildChangeGroups();
                 renderTitle();
-                renderVersions();
-                document.getElementById("compareLink").hidden = versions.length < 2;
-                setStatus(`Loaded ${versions.length} saved versions.`);
+                renderChanges();
+                document.getElementById("compareLink").hidden = changeGroups.length < 2;
+                setStatus(`Loaded ${changeGroups.length} change sets.`);
             } catch (error) {
-                setStatus("Could not load versions: " + error.message);
+                setStatus("Could not load change log: " + error.message);
             }
+        }
+
+        function buildChangeGroups() {
+            const changeSetById = new Map(changeSets.map(changeSet => [Number(changeSet.id), changeSet]));
+            const groupsById = new Map();
+
+            fieldChanges.forEach(change => {
+                const changeSetId = Number(change.changeSetId);
+                const changeSet = changeSetById.get(changeSetId) || {
+                    id: changeSetId,
+                    sourceType: "UNKNOWN",
+                    reason: "",
+                    createdAt: change.createdAt
+                };
+
+                if (!groupsById.has(changeSetId)) {
+                    groupsById.set(changeSetId, {
+                        changeSet,
+                        changes: []
+                    });
+                }
+                groupsById.get(changeSetId).changes.push(change);
+            });
+
+            changeGroups = Array.from(groupsById.values()).sort((left, right) =>
+                new Date(right.changeSet.createdAt || 0) - new Date(left.changeSet.createdAt || 0)
+            );
         }
 
         function renderTitle() {
@@ -67,11 +93,11 @@
             document.getElementById("moduleTitle").textContent = `${number} - ${name}`;
         }
 
-        function renderVersions() {
-            const container = document.getElementById("versions");
+        function renderChanges() {
+            const container = document.getElementById("changes");
 
-            if (versions.length === 0) {
-                container.textContent = "No versions saved yet.";
+            if (changeGroups.length === 0) {
+                container.textContent = "No field changes saved yet.";
                 return;
             }
 
@@ -79,110 +105,74 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Version</th>
                             <th>Created</th>
-                            <th>Change message</th>
-                            <th>Snapshot</th>
-                            <th>Actions</th>
+                            <th>Change set</th>
+                            <th>Source</th>
+                            <th>Reason</th>
+                            <th>Field changes</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${versions.map(version => {
-                            const snapshot = parseSnapshot(version.snapshotJson);
-                            const module = snapshot.module || snapshot;
-                            return `
-                                <tr>
-                                    <td>${escapeHtml(String(version.versionNumber))}</td>
-                                    <td>${escapeHtml(formatDate(version.createdAt))}</td>
-                                    <td>${escapeHtml(version.reason || "")}</td>
-                                    <td>
-                                        <strong>${escapeHtml(module.moduleNumber || "")}</strong>
-                                        ${escapeHtml(module.name || "")}
-                                    </td>
-                                    <td class="row-actions">
-                                        <button type="button" onclick="showPreview(${version.versionNumber})">Preview</button>
-                                        <button type="button" onclick="restoreVersion(${version.versionNumber})">Restore</button>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join("")}
+                        ${changeGroups.map(group => `
+                            <tr>
+                                <td>${escapeHtml(formatDate(group.changeSet.createdAt))}</td>
+                                <td>${escapeHtml(String(group.changeSet.id))}</td>
+                                <td>${escapeHtml(group.changeSet.sourceType || "")}</td>
+                                <td>${escapeHtml(group.changeSet.reason || "")}</td>
+                                <td>${renderFieldChangeList(group.changes)}</td>
+                            </tr>
+                        `).join("")}
                     </tbody>
                 </table>
             `;
         }
 
-        function showPreview(versionNumber) {
-            const version = versions.find(item => Number(item.versionNumber) === Number(versionNumber));
-            if (!version) {
-                return;
-            }
-
-            const snapshot = parseSnapshot(version.snapshotJson);
-            const module = snapshot.module || snapshot;
-            const workload = snapshot.workload;
-            const teachingFormIds = snapshot.teachingFormIds || [];
-
-            document.getElementById("previewSection").hidden = false;
-            document.getElementById("preview").innerHTML = `
-                <dl class="snapshot-grid">
-                    <dt>Version</dt>
-                    <dd>${escapeHtml(String(version.versionNumber))}</dd>
-                    <dt>Module number</dt>
-                    <dd>${escapeHtml(module.moduleNumber || "")}</dd>
-                    <dt>Name</dt>
-                    <dd>${escapeHtml(module.name || "")}</dd>
-                    <dt>Credits</dt>
-                    <dd>${escapeHtml(String(module.credits ?? ""))}</dd>
-                    <dt>Module status</dt>
-                    <dd>${escapeHtml(module.moduleStatus || module.status || "")}</dd>
-                    <dt>Coordinator</dt>
-                    <dd>${escapeHtml(module.coordinator || "")}</dd>
-                    <dt>Workload</dt>
-                    <dd>${escapeHtml(workloadSummary(workload))}</dd>
-                    <dt>Teaching form ids</dt>
-                    <dd>${escapeHtml(teachingFormIds.join(", "))}</dd>
-                    <dt>Contents</dt>
-                    <dd>${escapeHtml(module.contents || "")}</dd>
-                </dl>
+        function renderFieldChangeList(changes) {
+            return `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Old value</th>
+                            <th>New value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${changes.map(change => `
+                            <tr>
+                                <td>${escapeHtml(readablePath(change.fieldPath))}</td>
+                                <td class="diff-old">${escapeHtml(formatJsonValue(change.oldValue))}</td>
+                                <td class="diff-new">${escapeHtml(formatJsonValue(change.newValue))}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
             `;
         }
 
-        async function restoreVersion(versionNumber) {
-            const message = `Restore version ${versionNumber}? This will save the current module as a new version first.`;
-            if (!confirm(message)) {
-                return;
+        function formatJsonValue(value) {
+            if (value === null || value === undefined) {
+                return "";
             }
 
-            setStatus(`Restoring version ${versionNumber}...`);
-
             try {
-                currentModule = await restoreModuleVersion(moduleId, versionNumber);
-                versions = await loadModuleVersions(moduleId);
-                renderTitle();
-                renderVersions();
-                document.getElementById("compareLink").hidden = versions.length < 2;
-                document.getElementById("previewSection").hidden = true;
-                setStatus(`Restored version ${versionNumber}.`);
+                const parsed = JSON.parse(value);
+                if (parsed === null) {
+                    return "";
+                }
+                if (typeof parsed === "string" || typeof parsed === "number" || typeof parsed === "boolean") {
+                    return String(parsed);
+                }
+                return JSON.stringify(parsed, null, 2);
             } catch (error) {
-                setStatus("Restore failed: " + error.message);
+                return String(value);
             }
         }
 
-        function parseSnapshot(snapshotJson) {
-            try {
-                return JSON.parse(snapshotJson);
-            } catch (error) {
-                return {};
-            }
-        }
-
-        function workloadSummary(workload) {
-            if (!workload) {
-                return "No workload";
-            }
-
-            const componentCount = workload.components ? workload.components.length : 0;
-            return `${workload.presenceHours ?? ""} presence hours, ${workload.selfStudyHours ?? ""} self-study hours, ${componentCount} components`;
+        function readablePath(path) {
+            return String(path || "")
+                .replace(/^module\./, "")
+                .replaceAll(".", " / ");
         }
 
         function formatDate(value) {

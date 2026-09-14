@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Compare Module Versions</title>
+    <title>Compare Module Changes</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -11,10 +11,10 @@
         <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
-    <h1>Compare Module Versions</h1>
+    <h1>Compare Module Changes</h1>
 
     <section>
-        <div id="status" class="status">Loading versions...</div>
+        <div id="status" class="status">Loading changes...</div>
         <div class="form-actions">
             <a id="historyLink" href="/index.html">Back to history</a>
             <a id="editLink" href="/index.html">Edit module</a>
@@ -25,13 +25,13 @@
         <h2 id="moduleTitle">Module</h2>
         <div class="compare-controls">
             <label>
-                From version
-                <select id="fromVersion"></select>
+                From change set
+                <select id="fromChangeSet"></select>
             </label>
 
             <label>
-                To version
-                <select id="toVersion"></select>
+                To change set
+                <select id="toChangeSet"></select>
             </label>
 
             <button type="button" onclick="runCompare()">Compare</button>
@@ -40,17 +40,19 @@
 
     <section>
         <h2>Differences</h2>
-        <div id="diffResult">Choose two versions to compare.</div>
+        <div id="diffResult">Choose two change sets to compare.</div>
     </section>
 
-    <script src="/api.js?v=module-version-compare"></script>
+    <script src="/api.js?v=module-change-compare"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const moduleId = params.get("id");
         const initialFrom = params.get("from");
         const initialTo = params.get("to");
         let currentModule = null;
-        let versions = [];
+        let changeSets = [];
+        let fieldChanges = [];
+        let changeGroups = [];
 
         async function init() {
             if (!moduleId) {
@@ -62,20 +64,49 @@
             document.getElementById("editLink").href = `/module-edit.html?id=${moduleId}`;
 
             try {
-                [currentModule, versions] = await Promise.all([
-                    loadModule(moduleId),
-                    loadModuleVersions(moduleId)
+                currentModule = await loadModule(moduleId);
+                [changeSets, fieldChanges] = await Promise.all([
+                    loadStudyProgramChangeSets(currentModule.studyProgramId),
+                    loadModuleFieldChanges(moduleId)
                 ]);
+                buildChangeGroups();
                 renderTitle();
-                renderVersionSelects();
-                setStatus(`Loaded ${versions.length} versions.`);
+                renderChangeSetSelects();
+                setStatus(`Loaded ${changeGroups.length} change sets.`);
 
-                if (versions.length >= 2) {
-                    await runCompare();
+                if (changeGroups.length >= 2) {
+                    runCompare();
                 }
             } catch (error) {
                 setStatus("Could not load compare page: " + error.message);
             }
+        }
+
+        function buildChangeGroups() {
+            const changeSetById = new Map(changeSets.map(changeSet => [Number(changeSet.id), changeSet]));
+            const groupsById = new Map();
+
+            fieldChanges.forEach(change => {
+                const changeSetId = Number(change.changeSetId);
+                const changeSet = changeSetById.get(changeSetId) || {
+                    id: changeSetId,
+                    sourceType: "UNKNOWN",
+                    reason: "",
+                    createdAt: change.createdAt
+                };
+
+                if (!groupsById.has(changeSetId)) {
+                    groupsById.set(changeSetId, {
+                        changeSet,
+                        changes: []
+                    });
+                }
+                groupsById.get(changeSetId).changes.push(change);
+            });
+
+            changeGroups = Array.from(groupsById.values()).sort((left, right) =>
+                new Date(left.changeSet.createdAt || 0) - new Date(right.changeSet.createdAt || 0)
+            );
         }
 
         function renderTitle() {
@@ -84,54 +115,88 @@
             document.getElementById("moduleTitle").textContent = `${number} - ${name}`;
         }
 
-        function renderVersionSelects() {
-            const fromSelect = document.getElementById("fromVersion");
-            const toSelect = document.getElementById("toVersion");
+        function renderChangeSetSelects() {
+            const fromSelect = document.getElementById("fromChangeSet");
+            const toSelect = document.getElementById("toChangeSet");
 
-            if (versions.length < 2) {
+            if (changeGroups.length < 2) {
                 fromSelect.innerHTML = "";
                 toSelect.innerHTML = "";
                 document.getElementById("diffResult").textContent =
-                    "At least two saved versions are needed for comparison.";
+                    "At least two change sets are needed for comparison.";
                 return;
             }
 
-            const options = versions.map(version => `
-                <option value="${escapeHtml(String(version.versionNumber))}">
-                    Version ${escapeHtml(String(version.versionNumber))} - ${escapeHtml(formatDate(version.createdAt))}
-                </option>
-            `).join("");
+            const options = changeGroups.map(group => {
+                const changeSet = group.changeSet;
+                return `
+                    <option value="${escapeHtml(String(changeSet.id))}">
+                        ${escapeHtml(String(changeSet.id))} - ${escapeHtml(formatDate(changeSet.createdAt))}
+                    </option>
+                `;
+            }).join("");
 
             fromSelect.innerHTML = options;
             toSelect.innerHTML = options;
 
-            fromSelect.value = initialFrom || String(versions[1].versionNumber);
-            toSelect.value = initialTo || String(versions[0].versionNumber);
+            fromSelect.value = initialFrom || String(changeGroups[0].changeSet.id);
+            toSelect.value = initialTo || String(changeGroups[changeGroups.length - 1].changeSet.id);
         }
 
-        async function runCompare() {
-            const fromVersionNumber = document.getElementById("fromVersion").value;
-            const toVersionNumber = document.getElementById("toVersion").value;
+        function runCompare() {
+            const fromChangeSetId = document.getElementById("fromChangeSet").value;
+            const toChangeSetId = document.getElementById("toChangeSet").value;
 
-            if (!fromVersionNumber || !toVersionNumber) {
+            if (!fromChangeSetId || !toChangeSetId) {
                 return;
             }
 
-            setStatus(`Comparing version ${fromVersionNumber} to ${toVersionNumber}...`);
-
-            try {
-                const diff = await compareModuleVersions(moduleId, fromVersionNumber, toVersionNumber);
-                renderDiff(diff);
-                setStatus(`Found ${diff.changes.length} changed fields.`);
-            } catch (error) {
-                setStatus("Compare failed: " + error.message);
-            }
+            const diff = compareChangeRange(fromChangeSetId, toChangeSetId);
+            renderDiff(diff, fromChangeSetId, toChangeSetId);
+            setStatus(`Found ${diff.length} changed fields.`);
         }
 
-        function renderDiff(diff) {
+        function compareChangeRange(fromChangeSetId, toChangeSetId) {
+            const fromIndex = changeGroups.findIndex(group => String(group.changeSet.id) === String(fromChangeSetId));
+            const toIndex = changeGroups.findIndex(group => String(group.changeSet.id) === String(toChangeSetId));
+
+            if (fromIndex < 0 || toIndex < 0) {
+                return [];
+            }
+
+            const start = Math.min(fromIndex, toIndex);
+            const end = Math.max(fromIndex, toIndex);
+            const selectedChanges = changeGroups
+                .slice(start, end + 1)
+                .flatMap(group => group.changes)
+                .sort((left, right) =>
+                    new Date(left.createdAt || 0) - new Date(right.createdAt || 0)
+                    || Number(left.id) - Number(right.id)
+                );
+            const byField = new Map();
+
+            selectedChanges.forEach(change => {
+                const existing = byField.get(change.fieldPath);
+                if (!existing) {
+                    byField.set(change.fieldPath, {
+                        path: change.fieldPath,
+                        oldValue: change.oldValue,
+                        newValue: change.newValue
+                    });
+                    return;
+                }
+                existing.newValue = change.newValue;
+            });
+
+            return Array.from(byField.values()).sort((left, right) =>
+                left.path.localeCompare(right.path)
+            );
+        }
+
+        function renderDiff(changes, fromChangeSetId, toChangeSetId) {
             const container = document.getElementById("diffResult");
 
-            if (diff.changes.length === 0) {
+            if (changes.length === 0) {
                 container.textContent = "No differences found.";
                 return;
             }
@@ -141,21 +206,40 @@
                     <thead>
                         <tr>
                             <th>Field</th>
-                            <th>Version ${escapeHtml(String(diff.fromVersionNumber))}</th>
-                            <th>Version ${escapeHtml(String(diff.toVersionNumber))}</th>
+                            <th>Change set ${escapeHtml(String(fromChangeSetId))}</th>
+                            <th>Change set ${escapeHtml(String(toChangeSetId))}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${diff.changes.map(change => `
+                        ${changes.map(change => `
                             <tr>
                                 <td>${escapeHtml(readablePath(change.path))}</td>
-                                <td class="diff-old">${highlightOldValue(change.oldValue, change.newValue)}</td>
-                                <td class="diff-new">${highlightNewValue(change.oldValue, change.newValue)}</td>
+                                <td class="diff-old">${highlightOldValue(formatJsonValue(change.oldValue), formatJsonValue(change.newValue))}</td>
+                                <td class="diff-new">${highlightNewValue(formatJsonValue(change.oldValue), formatJsonValue(change.newValue))}</td>
                             </tr>
                         `).join("")}
                     </tbody>
                 </table>
             `;
+        }
+
+        function formatJsonValue(value) {
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            try {
+                const parsed = JSON.parse(value);
+                if (parsed === null) {
+                    return "";
+                }
+                if (typeof parsed === "string" || typeof parsed === "number" || typeof parsed === "boolean") {
+                    return String(parsed);
+                }
+                return JSON.stringify(parsed, null, 2);
+            } catch (error) {
+                return String(value);
+            }
         }
 
         function highlightOldValue(oldValue, newValue) {
@@ -253,7 +337,7 @@
         }
 
         function readablePath(path) {
-            return path
+            return String(path || "")
                 .replace(/^module\./, "")
                 .replaceAll(".", " / ");
         }

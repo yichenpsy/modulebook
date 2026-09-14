@@ -48,6 +48,19 @@ public class StudyProgramChangeSetRepository {
         return changeSets.stream().findFirst().orElseThrow();
     }
 
+    public List<StudyProgramChangeSet> findByStudyProgramId(Long studyProgramId) {
+        return jdbcTemplate.query(
+                """
+                SELECT id, study_program_id, source_type, reason, created_at
+                FROM study_program_change_sets
+                WHERE study_program_id = ?
+                ORDER BY created_at DESC, id DESC
+                """,
+                rowMapper,
+                studyProgramId
+        );
+    }
+
     private static class StudyProgramChangeSetRowMapper implements RowMapper<StudyProgramChangeSet> {
         @Override
         public StudyProgramChangeSet mapRow(ResultSet rs, int rowNum) throws SQLException {
