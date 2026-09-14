@@ -290,25 +290,32 @@ public class ModuleService {
 
     @Transactional
     public void delete(Long id) {
-        Module oldModule = getById(id);
-        Module deletedModule = copyModule(oldModule);
-        deletedModule.setModuleStatus(DELETED_STATUS);
-
-        // Old snapshot versioning:
-        // versionService.saveSnapshotInNewChangeSet(id, "before delete", StudyProgramChangeSetService.SOURCE_DELETE);
-        var changeSet = changeSetService.create(
-                oldModule.getStudyProgramId(),
+        Module module = getById(id);
+        changeSetService.create(
+                module.getStudyProgramId(),
                 StudyProgramChangeSetService.SOURCE_DELETE,
-                "before delete"
+                deleteReason(module)
         );
-        logModuleOnlyChanges(id, deletedModule, changeSet.getId());
-
-        boolean deleted = moduleRepository.updateModuleStatus(id, DELETED_STATUS);
+        boolean deleted = moduleRepository.delete(id);
 
         // The repository returns false when no row with this id exists.
         if (!deleted) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
         }
+    }
+
+    private String deleteReason(Module module) {
+        String label = moduleLabel(module);
+        if (label.isBlank()) {
+            return "deleted module " + module.getId();
+        }
+        return "deleted module " + label;
+    }
+
+    private String moduleLabel(Module module) {
+        String moduleNumber = module.getModuleNumber() == null ? "" : module.getModuleNumber().trim();
+        String name = module.getName() == null ? "" : module.getName().trim();
+        return (moduleNumber + " " + name).trim();
     }
 
     private Module copyModule(Module source) {

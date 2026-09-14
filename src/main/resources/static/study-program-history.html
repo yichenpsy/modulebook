@@ -122,7 +122,7 @@
                                     <td>${escapeHtml(String(changeSet.id))}</td>
                                     <td>${escapeHtml(changeSet.sourceType || "")}</td>
                                     <td>${escapeHtml(changeSet.reason || "")}</td>
-                                    <td>${escapeHtml(moduleSummary(changes))}</td>
+                                    <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
                                     <td>${escapeHtml(String(changes.length))}</td>
                                     <td class="row-actions">
                                         <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
@@ -156,7 +156,7 @@
                     ${changeSet.reason ? `- ${escapeHtml(changeSet.reason)}` : ""}
                 </p>
                 ${changes.length === 0 ? `
-                    <p>No field changes were saved for this change set.</p>
+                    <p>${escapeHtml(emptyChangeSetMessage(changeSet))}</p>
                 ` : `
                     <table>
                         <thead>
@@ -196,6 +196,22 @@
             ));
 
             return labels.length > 0 ? labels.join(", ") : "No field changes";
+        }
+
+        function changeSetModuleSummary(changeSet, changes) {
+            if (changeSet.sourceType === "DELETE" && changes.length === 0) {
+                return changeSet.reason || "Deleted module";
+            }
+
+            return moduleSummary(changes);
+        }
+
+        function emptyChangeSetMessage(changeSet) {
+            if (changeSet.sourceType === "DELETE") {
+                return changeSet.reason || "Deleted module";
+            }
+
+            return "No field changes were saved for this change set.";
         }
 
         function moduleById(moduleId) {

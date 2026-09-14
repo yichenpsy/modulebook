@@ -182,7 +182,7 @@
                 ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
                 : `module ${moduleId}`;
             const confirmed = confirm(
-                `Delete ${label}?\n\nThis will mark the module as DELETED. The module record and history will stay saved.`
+                `Permanently delete ${label}?\n\nThis will delete the module and all related records, including history. This cannot be undone.`
             );
 
             if (!confirmed) {
@@ -195,7 +195,7 @@
                 await deleteModule(moduleId);
                 modules = await loadModulesForStudyProgram(currentStudyProgram.id);
                 renderModules();
-                setStatus(`Marked ${label} as DELETED. Loaded ${modules.length} modules.`);
+                setStatus(`Deleted ${label}. Loaded ${modules.length} modules.`);
             } catch (error) {
                 setStatus("Could not delete module: " + error.message);
             }

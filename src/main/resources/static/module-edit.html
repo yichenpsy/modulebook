@@ -682,11 +682,11 @@
                 return;
             }
 
-            if (!confirm(`Delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis will mark the module as DELETED. The module record and history will stay saved.`)) {
+            if (!confirm(`Permanently delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis will delete the module and all related records, including history. This cannot be undone.`)) {
                 return;
             }
 
-            setStatus("Marking module as DELETED...");
+            setStatus("Deleting module permanently...");
 
             try {
                 await deleteModule(moduleId);

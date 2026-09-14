@@ -2,6 +2,7 @@ package de.bht.modulebook.module;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -145,7 +146,7 @@ class ModuleServiceTest {
     }
 
     @Test
-    void deleteRecordsStatusChangeBeforeMarkingModuleDeleted() {
+    void deleteRecordsStudyProgramChangeSetThenPhysicallyRemovesModule() {
         Module oldModule = new Module();
         oldModule.setId(100L);
         oldModule.setStudyProgramId(10L);
@@ -154,28 +155,18 @@ class ModuleServiceTest {
         oldModule.setCredits(new BigDecimal("5.0"));
         oldModule.setModuleStatus(ModuleService.ACTIVE_STATUS);
 
-        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule), Optional.of(oldModule));
-        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.empty());
-        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of());
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "before delete"))
-                .thenReturn(new StudyProgramChangeSet(77L, 10L, StudyProgramChangeSetService.SOURCE_DELETE, "before delete", null));
-        when(moduleRepository.updateModuleStatus(100L, ModuleService.DELETED_STATUS)).thenReturn(true);
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module"))
+                .thenReturn(new StudyProgramChangeSet(77L, 10L, StudyProgramChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module", null));
+        when(moduleRepository.delete(100L)).thenReturn(true);
 
         service.delete(100L);
 
-        InOrder inOrder = inOrder(changeSetService, changeLogService, moduleRepository);
-        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "before delete");
-        inOrder.verify(changeLogService).saveChanges(
-                org.mockito.Mockito.eq(77L),
-                org.mockito.Mockito.eq(100L),
-                org.mockito.Mockito.eq(oldModule),
-                org.mockito.Mockito.argThat(deletedModule -> ModuleService.DELETED_STATUS.equals(deletedModule.getModuleStatus())),
-                org.mockito.Mockito.isNull(),
-                org.mockito.Mockito.isNull(),
-                org.mockito.Mockito.eq(List.of()),
-                org.mockito.Mockito.eq(List.of())
-        );
-        inOrder.verify(moduleRepository).updateModuleStatus(100L, ModuleService.DELETED_STATUS);
+        InOrder inOrder = inOrder(moduleRepository, changeSetService);
+        inOrder.verify(moduleRepository).findById(100L);
+        inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module");
+        inOrder.verify(moduleRepository).delete(100L);
+        verifyNoInteractions(changeLogService);
     }
 
     @Test
