@@ -123,7 +123,7 @@
                                     <td>${escapeHtml(changeSet.sourceType || "")}</td>
                                     <td>${escapeHtml(changeSet.reason || "")}</td>
                                     <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
-                                    <td>${escapeHtml(String(changes.length))}</td>
+                                    <td>${escapeHtml(changeSetChangedFieldsSummary(changeSet, changes))}</td>
                                     <td class="row-actions">
                                         <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
                                     </td>
@@ -199,11 +199,23 @@
         }
 
         function changeSetModuleSummary(changeSet, changes) {
+            if (changeSet.sourceType === "PDF_IMPORT") {
+                return "--";
+            }
+
             if (changeSet.sourceType === "DELETE" && changes.length === 0) {
                 return changeSet.reason || "Deleted module";
             }
 
             return moduleSummary(changes);
+        }
+
+        function changeSetChangedFieldsSummary(changeSet, changes) {
+            if (changeSet.sourceType === "PDF_IMPORT") {
+                return "--";
+            }
+
+            return String(changes.length);
         }
 
         function emptyChangeSetMessage(changeSet) {

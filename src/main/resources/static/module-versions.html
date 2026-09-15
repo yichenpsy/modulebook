@@ -17,6 +17,7 @@
         <div id="status" class="status">Loading change log...</div>
         <div class="form-actions">
             <a id="editLink" href="/index.html">Back to module</a>
+            <a id="studyProgramsLink" href="/index.html">Back to study programs</a>
             <a id="compareLink" href="/index.html" hidden>Compare changes</a>
         </div>
     </section>
@@ -46,6 +47,8 @@
 
             try {
                 currentModule = await loadModule(moduleId);
+                document.getElementById("studyProgramsLink").href =
+                    `/index.html?studyProgramId=${encodeURIComponent(currentModule.studyProgramId)}`;
                 [changeSets, fieldChanges] = await Promise.all([
                     loadStudyProgramChangeSets(currentModule.studyProgramId),
                     loadModuleFieldChanges(moduleId)
