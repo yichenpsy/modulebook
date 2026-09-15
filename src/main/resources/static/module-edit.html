@@ -86,13 +86,13 @@
                             <div class="workload-summary">
                                 <label>
                                     Präsenzstunden
-                                    <input id="workloadPresenceHours" type="number" step="1" readonly>
+                                    <input id="workloadPresenceHours" type="number" step="1" oninput="updateWorkloadPreview()">
                                     <span id="workloadPresenceHint" class="field-hint"></span>
                                 </label>
 
                                 <label>
                                     Selbststudium
-                                    <input id="workloadSelfStudyHours" type="number" step="1" readonly>
+                                    <input id="workloadSelfStudyHours" type="number" step="1" oninput="updateWorkloadPreview()">
                                     <span id="workloadSelfStudyHint" class="field-hint"></span>
                                 </label>
                             </div>
@@ -473,17 +473,19 @@
         function updateWorkloadPreview() {
             const credits = numberOrNull(document.getElementById("credits").value);
             const components = collectWorkloadComponents();
-            const presenceHours = components.reduce(
+            const calculatedPresenceHours = components.reduce(
                 (sum, component) => sum + component.swsAmount * weeksPerSemester,
                 0
             );
+            const presenceHours = numberOrNull(document.getElementById("workloadPresenceHours").value);
+            const selfStudyHours = numberOrNull(document.getElementById("workloadSelfStudyHours").value);
             const totalWorkload = credits === null ? null : credits * hoursPerCredit;
-            const selfStudyHours = totalWorkload === null ? null : totalWorkload - presenceHours;
+            const calculatedSelfStudyHours = totalWorkload === null ? null : totalWorkload - calculatedPresenceHours;
 
             document.getElementById("workloadPresenceHint").textContent =
-                `Hinweis: ${formatNumber(presenceHours)} Stunden nach SWS`;
+                `Hinweis: ${formatNumber(calculatedPresenceHours)} Stunden nach SWS`;
             document.getElementById("workloadSelfStudyHint").textContent =
-                selfStudyHours === null ? "" : `Hinweis: ${formatNumber(selfStudyHours)} Stunden nach CP und Präsenz`;
+                calculatedSelfStudyHours === null ? "" : `Hinweis: ${formatNumber(calculatedSelfStudyHours)} Stunden nach CP und Präsenz`;
             document.getElementById("workloadPreview").textContent = workloadPreviewText(
                 components,
                 presenceHours,
@@ -498,8 +500,9 @@
             });
 
             const workloadPart = parts.length > 0 ? ` (${parts.join(" + ")})` : "";
+            const presencePart = presenceHours === null ? "" : `${formatNumber(presenceHours)} Stunden Präsenz`;
             const selfStudyPart = selfStudyHours === null ? "" : `, ${formatNumber(selfStudyHours)} Stunden Selbststudium`;
-            return `${formatNumber(presenceHours)} Stunden Präsenz${workloadPart}${selfStudyPart}`;
+            return `${presencePart}${workloadPart}${selfStudyPart}`.trim();
         }
 
         function teachingFormLabel(teachingForm) {
@@ -522,8 +525,9 @@
 
             const moduleNumber = document.getElementById("moduleNumber").value.trim();
             const name = document.getElementById("name").value.trim();
+            const workloadRequest = buildWorkloadRequest();
 
-            return {
+            const request = {
                 studyProgramId: numberOrNull(document.getElementById("studyProgramId").value),
                 moduleNumber: moduleNumber,
                 name: name,
@@ -531,11 +535,8 @@
                 titleEn: currentModule?.titleEn || "",
                 credits: numberOrNull(document.getElementById("credits").value),
                 teachingFormIds: collectModuleTeachingFormIds(),
-                workload: {
-                    components: collectWorkloadComponents(),
-                    rawText: ""
-                },
-                description: document.getElementById("description").value.trim(),
+                workload: workloadRequest,
+                description: document.getElementById("description").value,
 
                 modulebookId: numberOrNull(document.getElementById("modulebookId").value),
                 moduleType: document.getElementById("moduleType").value.trim(),
@@ -553,6 +554,70 @@
                 additionalNotes: document.getElementById("additionalNotes").value.trim(),
                 moduleWeight: numberOrNull(document.getElementById("moduleWeight").value)
             };
+
+            if (!isCreateMode) {
+                request.changedFieldPaths = changedFieldPathsForRequest(request);
+                if (!request.changedFieldPaths.includes("workload")) {
+                    delete request.workload;
+                }
+                if (!request.changedFieldPaths.includes("teachingFormIds")) {
+                    delete request.teachingFormIds;
+                }
+            }
+
+            return request;
+        }
+
+        function buildWorkloadRequest() {
+            return {
+                components: collectWorkloadComponents(),
+                presenceHours: numberOrNull(document.getElementById("workloadPresenceHours").value),
+                selfStudyHours: numberOrNull(document.getElementById("workloadSelfStudyHours").value),
+                rawText: currentModule?.workload?.rawText || ""
+            };
+        }
+
+        function changedFieldPathsForRequest(request) {
+            if (!currentModule) {
+                return [];
+            }
+
+            const fieldMappings = [
+                ["module.moduleNumber", currentModule.moduleNumber, request.moduleNumber],
+                ["module.name", currentModule.name, request.name],
+                ["module.credits", currentModule.credits, request.credits],
+                ["module.description", currentModule.description, request.description],
+                ["module.moduleType", currentModule.moduleType, request.moduleType],
+                ["module.titleDe", currentModule.titleDe, request.titleDe],
+                ["module.titleEn", currentModule.titleEn, request.titleEn],
+                ["module.coordinator", currentModule.coordinator, request.coordinator],
+                ["module.applicability", currentModule.applicability, request.applicability],
+                ["module.learningArea", currentModule.learningArea, request.learningArea],
+                ["module.learningObjectives", currentModule.learningObjectives, request.learningObjectives],
+                ["module.prerequisites", currentModule.prerequisites, request.prerequisites],
+                ["module.level", currentModule.level, request.level],
+                ["module.moduleStatus", currentModule.moduleStatus, request.moduleStatus],
+                ["module.frequency", currentModule.frequency, request.frequency],
+                ["module.examinationForm", currentModule.examinationForm, request.examinationForm],
+                ["module.contents", currentModule.contents, request.contents],
+                ["module.literature", currentModule.literature, request.literature],
+                ["module.additionalNotes", currentModule.additionalNotes, request.additionalNotes],
+                ["module.moduleWeight", currentModule.moduleWeight, request.moduleWeight]
+            ];
+
+            const changedPaths = fieldMappings
+                .filter(([, oldValue, newValue]) => comparableText(oldValue) !== comparableText(newValue))
+                .map(([fieldPath]) => fieldPath);
+
+            if (comparableText(workloadComparableValue(currentModule.workload)) !== comparableText(workloadComparableValue(request.workload))) {
+                changedPaths.push("workload");
+            }
+
+            if (comparableText(teachingFormIdsForModule(currentModule)) !== comparableText(request.teachingFormIds)) {
+                changedPaths.push("teachingFormIds");
+            }
+
+            return changedPaths;
         }
 
         async function confirmSaveModule() {
@@ -591,41 +656,50 @@
         }
 
         function buildChangeMessage(oldModule, request) {
+            const changedPaths = new Set(request.changedFieldPaths || []);
             const changes = [
-                changeMessagePart("module number", oldModule.moduleNumber, request.moduleNumber),
-                changeMessagePart("title", oldModule.name, request.name),
-                changeMessagePart("credits", oldModule.credits, request.credits),
-                changeMessagePart("module type", oldModule.moduleType, request.moduleType),
-                changeMessagePart("coordinator", oldModule.coordinator, request.coordinator),
-                changeMessagePart("applicability", oldModule.applicability, request.applicability),
-                changeMessagePart("learning area", oldModule.learningArea, request.learningArea),
-                changeMessagePart("learning objectives", oldModule.learningObjectives, request.learningObjectives),
-                changeMessagePart("prerequisites", oldModule.prerequisites, request.prerequisites),
-                changeMessagePart("level", oldModule.level, request.level),
-                changeMessagePart("module status", oldModule.moduleStatus, request.moduleStatus),
-                changeMessagePart("frequency", oldModule.frequency, request.frequency),
-                changeMessagePart("examination form", oldModule.examinationForm, request.examinationForm),
-                changeMessagePart("contents", oldModule.contents, request.contents),
-                changeMessagePart("literature", oldModule.literature, request.literature),
-                changeMessagePart("additional notes", oldModule.additionalNotes, request.additionalNotes),
-                changeMessagePart("module weight", oldModule.moduleWeight, request.moduleWeight),
-                changeMessagePart("description", oldModule.description, request.description),
+                changeMessagePart("module number", oldModule.moduleNumber, request.moduleNumber, "module.moduleNumber", changedPaths),
+                changeMessagePart("title", oldModule.name, request.name, "module.name", changedPaths),
+                changeMessagePart("credits", oldModule.credits, request.credits, "module.credits", changedPaths),
+                changeMessagePart("module type", oldModule.moduleType, request.moduleType, "module.moduleType", changedPaths),
+                changeMessagePart("coordinator", oldModule.coordinator, request.coordinator, "module.coordinator", changedPaths),
+                changeMessagePart("applicability", oldModule.applicability, request.applicability, "module.applicability", changedPaths),
+                changeMessagePart("learning area", oldModule.learningArea, request.learningArea, "module.learningArea", changedPaths),
+                changeMessagePart("learning objectives", oldModule.learningObjectives, request.learningObjectives, "module.learningObjectives", changedPaths),
+                changeMessagePart("prerequisites", oldModule.prerequisites, request.prerequisites, "module.prerequisites", changedPaths),
+                changeMessagePart("level", oldModule.level, request.level, "module.level", changedPaths),
+                changeMessagePart("module status", oldModule.moduleStatus, request.moduleStatus, "module.moduleStatus", changedPaths),
+                changeMessagePart("frequency", oldModule.frequency, request.frequency, "module.frequency", changedPaths),
+                changeMessagePart("examination form", oldModule.examinationForm, request.examinationForm, "module.examinationForm", changedPaths),
+                changeMessagePart("contents", oldModule.contents, request.contents, "module.contents", changedPaths),
+                changeMessagePart("literature", oldModule.literature, request.literature, "module.literature", changedPaths),
+                changeMessagePart("additional notes", oldModule.additionalNotes, request.additionalNotes, "module.additionalNotes", changedPaths),
+                changeMessagePart("module weight", oldModule.moduleWeight, request.moduleWeight, "module.moduleWeight", changedPaths),
+                changeMessagePart("description", oldModule.description, request.description, "module.description", changedPaths),
                 changeMessagePart(
                     "teaching forms",
                     teachingFormIdsForModule(oldModule),
-                    request.teachingFormIds
+                    request.teachingFormIds,
+                    "teachingFormIds",
+                    changedPaths
                 ),
                 changeMessagePart(
                     "workload",
                     workloadComparableValue(oldModule.workload),
-                    workloadComparableValue(request.workload)
+                    workloadComparableValue(request.workload),
+                    "workload",
+                    changedPaths
                 )
             ].filter(Boolean);
 
             return changes.length > 0 ? changes.join("; ") : "updated module without field changes";
         }
 
-        function changeMessagePart(label, oldValue, newValue) {
+        function changeMessagePart(label, oldValue, newValue, fieldPath, changedPaths) {
+            if (changedPaths && !changedPaths.has(fieldPath)) {
+                return "";
+            }
+
             const oldText = comparableText(oldValue);
             const newText = comparableText(newValue);
 
@@ -710,6 +784,9 @@
         }
 
         function formatNumber(value) {
+            if (value === null || value === undefined || value === "") {
+                return "";
+            }
             return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(2)));
         }
 

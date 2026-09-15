@@ -21,6 +21,14 @@ public class PdfImportedModuleMapper {
             "(\\d+(?:[,.]\\d+)?)\\s*SWS\\s*([\\p{L}]+)",
             Pattern.CASE_INSENSITIVE
     );
+    private static final Pattern PRESENCE_HOURS_PATTERN = Pattern.compile(
+            "(\\d+(?:[,.]\\d+)?)\\s*Stunden\\s*Pr[äa]senz",
+            Pattern.CASE_INSENSITIVE
+    );
+    private static final Pattern SELF_STUDY_HOURS_PATTERN = Pattern.compile(
+            "(\\d+(?:[,.]\\d+)?)\\s*Stunden\\s*Selbststudium",
+            Pattern.CASE_INSENSITIVE
+    );
 
     public Module toModule(JsonNode imported, String studyProgram, Integer year) {
         if (imported == null || imported.isNull()) {
@@ -74,6 +82,8 @@ public class PdfImportedModuleMapper {
 
         ModuleWorkload workload = new ModuleWorkload();
         workload.setRawText(rawText);
+        workload.setPresenceHours(decimalFromPattern(rawText, PRESENCE_HOURS_PATTERN));
+        workload.setSelfStudyHours(decimalFromPattern(rawText, SELF_STUDY_HOURS_PATTERN));
 
         List<PresenceHourComponent> components = new ArrayList<>();
         Matcher matcher = SWS_COMPONENT_PATTERN.matcher(rawText);
@@ -92,6 +102,14 @@ public class PdfImportedModuleMapper {
 
         workload.setComponents(components);
         return workload;
+    }
+
+    private BigDecimal decimalFromPattern(String text, Pattern pattern) {
+        Matcher matcher = pattern.matcher(text);
+        if (!matcher.find()) {
+            return null;
+        }
+        return new BigDecimal(matcher.group(1).replace(",", "."));
     }
 
     public String moduleNumber(JsonNode imported) {

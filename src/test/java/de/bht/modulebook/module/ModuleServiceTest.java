@@ -22,6 +22,7 @@ import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
+import de.bht.modulebook.teachingform.TeachingForm;
 
 @ExtendWith(MockitoExtension.class)
 class ModuleServiceTest {
@@ -170,7 +171,7 @@ class ModuleServiceTest {
     }
 
     @Test
-    void updateRecordsFieldChangesBeforeUpdatingModule() {
+    void updateRecordsFieldChangesWithSavedDatabaseState() {
         Module oldModule = new Module();
         oldModule.setId(100L);
         oldModule.setStudyProgramId(10L);
@@ -185,23 +186,28 @@ class ModuleServiceTest {
         request.setCredits(new BigDecimal("6.0"));
 
         ModuleWorkload oldWorkload = new ModuleWorkload();
-        ModuleWorkload newWorkload = new ModuleWorkload();
+        ModuleWorkload requestWorkload = new ModuleWorkload();
+        ModuleWorkload savedWorkload = new ModuleWorkload();
+        savedWorkload.setId(252L);
+        savedWorkload.setModuleId(100L);
+        TeachingForm savedTeachingForm = new TeachingForm();
+        savedTeachingForm.setId(1L);
 
-        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule), Optional.of(oldModule), Optional.of(request));
-        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.of(oldWorkload));
-        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of());
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule), Optional.of(request));
+        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.of(oldWorkload), Optional.of(savedWorkload));
+        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of(), List.of(savedTeachingForm));
         when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits"))
                 .thenReturn(new StudyProgramChangeSet(55L, 10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits", null));
         when(moduleRepository.update(100L, request)).thenReturn(true);
 
-        Module result = service.update(100L, request, newWorkload, List.of(), "changed name and credits");
+        Module result = service.update(100L, request, requestWorkload, List.of(), "changed name and credits");
 
         assertThat(result).isSameAs(request);
 
         InOrder inOrder = inOrder(moduleRepository, changeSetService, changeLogService);
         inOrder.verify(moduleRepository).findById(100L);
         inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits");
-        inOrder.verify(changeLogService).saveChanges(55L, 100L, oldModule, request, oldWorkload, newWorkload, List.of(), List.of());
         inOrder.verify(moduleRepository).update(100L, request);
+        inOrder.verify(changeLogService).saveChanges(55L, 100L, oldModule, request, oldWorkload, savedWorkload, List.of(), List.of(1L));
     }
 }

@@ -88,6 +88,8 @@ class PdfImportedModuleMapperTest {
 
         assertThat(workload).isNotNull();
         assertThat(workload.getRawText()).contains("102 Stunden Präsenz");
+        assertThat(workload.getPresenceHours()).isEqualByComparingTo("102");
+        assertThat(workload.getSelfStudyHours()).isEqualByComparingTo("48");
         assertThat(workload.getComponents()).hasSize(2);
         assertThat(workload.getComponents().get(0).getTeachingFormId()).isEqualTo(1L);
         assertThat(workload.getComponents().get(0).getSwsAmount()).isEqualByComparingTo("4");

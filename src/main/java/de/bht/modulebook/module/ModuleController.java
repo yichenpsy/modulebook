@@ -67,7 +67,8 @@ public class ModuleController {
             ModuleMapper.toEntity(request),
             ModuleWorkloadMapper.toEntity(request.workload()),
             request.teachingFormIds(),
-            request.versionReason()
+            request.versionReason(),
+            request.changedFieldPaths()
         );
         return ModuleMapper.toResponse(
             updated,

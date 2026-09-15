@@ -1,7 +1,7 @@
 package de.bht.modulebook.module;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +24,6 @@ import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 // logic layer, checkes things like "module not found", calls repository
 @Service
 public class ModuleService {
-    private static final BigDecimal WEEKS_PER_SEMESTER = BigDecimal.valueOf(17);
-    private static final BigDecimal HOURS_PER_CREDIT = BigDecimal.valueOf(30);
     public static final String ACTIVE_STATUS = "ACTIVE";
     public static final String DELETED_STATUS = "DELETED";
     public static final String MANUAL_INITIAL_VERSION_REASON = "created manually";
@@ -102,7 +100,6 @@ public class ModuleService {
         applyDefaultStatus(module);
         Module created = moduleRepository.insert(module);
         if (workload != null) {
-            calculateWorkload(created, workload);
             workloadRepository.upsert(created.getId(), workload);
         }
         moduleTeachingFormRepository.replaceForModule(
@@ -137,53 +134,96 @@ public class ModuleService {
     }
       
     public Module update(Long id, Module module) {
-        //var changeSet = versionService.saveSnapshotInNewChangeSet(id, "before update", StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
         Module oldModule = getById(id);
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
             "update"
         );
-        logModuleOnlyChanges(id, module, changeSet.getId());
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
         }
 
-        return getById(id);
+        Module savedModule = getById(id);
+        ModuleWorkload savedWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> savedTeachingFormIds = teachingFormIdsByModuleId(id);
+        changeLogService.saveChanges(
+                changeSet.getId(),
+                id,
+                oldModule,
+                savedModule,
+                oldWorkload,
+                savedWorkload,
+                oldTeachingFormIds,
+                savedTeachingFormIds
+        );
+
+        return savedModule;
     }
 
     @Transactional
     public Module update(Long id, Module module, String versionReason) {
-        //var changeSet = versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
         Module oldModule = getById(id);
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
             normalizeVersionReason(versionReason)
         );
-        logModuleOnlyChanges(id, module, changeSet.getId());
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
         }
 
-        return getById(id);
+        Module savedModule = getById(id);
+        ModuleWorkload savedWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> savedTeachingFormIds = teachingFormIdsByModuleId(id);
+        changeLogService.saveChanges(
+                changeSet.getId(),
+                id,
+                oldModule,
+                savedModule,
+                oldWorkload,
+                savedWorkload,
+                oldTeachingFormIds,
+                savedTeachingFormIds
+        );
+
+        return savedModule;
     }
 
     @Transactional
     public Module update(Long id, Module module, String versionReason, Long changeSetId) {
-        //versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
-        logModuleOnlyChanges(id, module, changeSetId);
+        Module oldModule = getById(id);
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
         }
 
-        return getById(id);
+        Module savedModule = getById(id);
+        ModuleWorkload savedWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> savedTeachingFormIds = teachingFormIdsByModuleId(id);
+        changeLogService.saveChanges(
+                changeSetId,
+                id,
+                oldModule,
+                savedModule,
+                oldWorkload,
+                savedWorkload,
+                oldTeachingFormIds,
+                savedTeachingFormIds
+        );
+
+        return savedModule;
     }
 
     public Module update(Long id, Module module, ModuleWorkload workload) {
@@ -201,74 +241,186 @@ public class ModuleService {
 
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason){
-        //var changeSet = versionService.saveSnapshotInNewChangeSet(id, normalizeVersionReason(versionReason), StudyProgramChangeSetService.SOURCE_MANUAL_EDIT);
+        return update(id, module, workload, teachingFormIds, versionReason, (List<String>) null);
+    }
+
+    @Transactional
+    public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason, List<String> changedFieldPaths){
         Module oldModule = getById(id);
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
             normalizeVersionReason(versionReason)
         );
-        logFullModuleChanges(id, module, workload, teachingFormIds, changeSet.getId());
-        return updateAfterChangeLog(id, module, workload, teachingFormIds);
+        preserveUnchangedModuleFields(module, oldModule, changedFieldPaths);
+        return updateAndLogSavedState(
+                id,
+                module,
+                workload,
+                teachingFormIds,
+                changeSet.getId(),
+                oldModule,
+                oldWorkload,
+                oldTeachingFormIds,
+                changedFieldPaths
+        );
     }
 
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason, Long changeSetId){
-        // Old snapshot versioning:
-        // versionService.saveSnapshot(id, normalizeVersionReason(versionReason), changeSetId);
-        logFullModuleChanges(id, module, workload, teachingFormIds, changeSetId);
-        return updateAfterChangeLog(id, module, workload, teachingFormIds);
-    }
-
-    private void logModuleOnlyChanges(Long id, Module module, Long changeSetId) {
+        Module oldModule = getById(id);
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
-        List<Long> oldTeachingFormIds = moduleTeachingFormRepository.findByModuleId(id)
-                .stream()
-                .map(TeachingForm::getId)
-                .toList();
-
-        changeLogService.saveChanges(
-                changeSetId,
+        List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
+        return updateAndLogSavedState(
                 id,
-                getById(id),
                 module,
-                oldWorkload,
+                workload,
+                teachingFormIds,
+                changeSetId,
+                oldModule,
                 oldWorkload,
                 oldTeachingFormIds,
-                oldTeachingFormIds
+                null
         );
     }
 
-    private void logFullModuleChanges(
+    private Module updateAndLogSavedState(
             Long id,
             Module module,
             ModuleWorkload workload,
             List<Long> teachingFormIds,
-            Long changeSetId
+            Long changeSetId,
+            Module oldModule,
+            ModuleWorkload oldWorkload,
+            List<Long> oldTeachingFormIds
     ) {
-        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
-        List<Long> oldTeachingFormIds = moduleTeachingFormRepository.findByModuleId(id)
-                .stream()
-                .map(TeachingForm::getId)
-                .toList();
-
-        if (workload != null) {
-            calculateWorkload(module, workload);
-        }
-
-        changeLogService.saveChanges(
-                changeSetId,
+        return updateAndLogSavedState(
                 id,
-                getById(id),
                 module,
-                oldWorkload,
                 workload,
+                teachingFormIds,
+                changeSetId,
+                oldModule,
+                oldWorkload,
                 oldTeachingFormIds,
-                mergeTeachingFormIds(teachingFormIds, workload)
+                null
         );
     }
 
-    private Module updateAfterChangeLog(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds) {
+    private Module updateAndLogSavedState(
+            Long id,
+            Module module,
+            ModuleWorkload workload,
+            List<Long> teachingFormIds,
+            Long changeSetId,
+            Module oldModule,
+            ModuleWorkload oldWorkload,
+            List<Long> oldTeachingFormIds,
+            List<String> changedFieldPaths
+    ) {
+        Module savedModule = saveModuleState(id, module, workload, teachingFormIds);
+        ModuleWorkload savedWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> savedTeachingFormIds = teachingFormIdsByModuleId(id);
+
+        if (changedFieldPaths == null) {
+            changeLogService.saveChanges(
+                    changeSetId,
+                    id,
+                    oldModule,
+                    savedModule,
+                    oldWorkload,
+                    savedWorkload,
+                    oldTeachingFormIds,
+                    savedTeachingFormIds
+            );
+        } else {
+            changeLogService.saveChanges(
+                    changeSetId,
+                    id,
+                    oldModule,
+                    savedModule,
+                    oldWorkload,
+                    savedWorkload,
+                    oldTeachingFormIds,
+                    savedTeachingFormIds,
+                    changedFieldPaths
+            );
+        }
+
+        return savedModule;
+    }
+
+    private void preserveUnchangedModuleFields(Module module, Module oldModule, List<String> changedFieldPaths) {
+        if (changedFieldPaths == null) {
+            return;
+        }
+
+        Set<String> changedPaths = new HashSet<>(changedFieldPaths);
+        if (!changedPaths.contains("module.moduleNumber")) {
+            module.setModuleNumber(oldModule.getModuleNumber());
+        }
+        if (!changedPaths.contains("module.name")) {
+            module.setName(oldModule.getName());
+        }
+        if (!changedPaths.contains("module.credits")) {
+            module.setCredits(oldModule.getCredits());
+        }
+        if (!changedPaths.contains("module.description")) {
+            module.setDescription(oldModule.getDescription());
+        }
+        if (!changedPaths.contains("module.moduleType")) {
+            module.setModuleType(oldModule.getModuleType());
+        }
+        if (!changedPaths.contains("module.titleDe")) {
+            module.setTitleDe(oldModule.getTitleDe());
+        }
+        if (!changedPaths.contains("module.titleEn")) {
+            module.setTitleEn(oldModule.getTitleEn());
+        }
+        if (!changedPaths.contains("module.coordinator")) {
+            module.setCoordinator(oldModule.getCoordinator());
+        }
+        if (!changedPaths.contains("module.applicability")) {
+            module.setApplicability(oldModule.getApplicability());
+        }
+        if (!changedPaths.contains("module.learningArea")) {
+            module.setLearningArea(oldModule.getLearningArea());
+        }
+        if (!changedPaths.contains("module.learningObjectives")) {
+            module.setLearningObjectives(oldModule.getLearningObjectives());
+        }
+        if (!changedPaths.contains("module.prerequisites")) {
+            module.setPrerequisites(oldModule.getPrerequisites());
+        }
+        if (!changedPaths.contains("module.level")) {
+            module.setLevel(oldModule.getLevel());
+        }
+        if (!changedPaths.contains("module.moduleStatus")) {
+            module.setModuleStatus(oldModule.getModuleStatus());
+        }
+        if (!changedPaths.contains("module.frequency")) {
+            module.setFrequency(oldModule.getFrequency());
+        }
+        if (!changedPaths.contains("module.examinationForm")) {
+            module.setExaminationForm(oldModule.getExaminationForm());
+        }
+        if (!changedPaths.contains("module.contents")) {
+            module.setContents(oldModule.getContents());
+        }
+        if (!changedPaths.contains("module.literature")) {
+            module.setLiterature(oldModule.getLiterature());
+        }
+        if (!changedPaths.contains("module.additionalNotes")) {
+            module.setAdditionalNotes(oldModule.getAdditionalNotes());
+        }
+        if (!changedPaths.contains("module.moduleWeight")) {
+            module.setModuleWeight(oldModule.getModuleWeight());
+        }
+    }
+
+    private Module saveModuleState(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds) {
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -276,13 +428,14 @@ public class ModuleService {
         }
 
         if (workload != null) {
-           calculateWorkload(module, workload);
            workloadRepository.upsert(id, workload); 
         }
-        moduleTeachingFormRepository.replaceForModule(
-                id,
-                mergeTeachingFormIds(teachingFormIds, workload)
-        );
+        if (workload != null || teachingFormIds != null) {
+            moduleTeachingFormRepository.replaceForModule(
+                    id,
+                    mergeTeachingFormIds(teachingFormIds, workload)
+            );
+        }
 
         return getById(id);
     }
@@ -356,17 +509,11 @@ public class ModuleService {
         return moduleTeachingFormRepository.findByModuleId(moduleId);
     }
 
-    private void calculateWorkload(Module module, ModuleWorkload workload) {
-        BigDecimal totalPresenceHours = workload.getComponents().stream()
-                .filter(component -> component.getSwsAmount() != null)
-                .map(component -> component.getSwsAmount().multiply(WEEKS_PER_SEMESTER))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal totalWorkloadHours = module.getCredits().multiply(HOURS_PER_CREDIT);
-        BigDecimal selfStudyHours = totalWorkloadHours.subtract(totalPresenceHours);
-
-        workload.setPresenceHours(totalPresenceHours);
-        workload.setSelfStudyHours(selfStudyHours);
+    private List<Long> teachingFormIdsByModuleId(Long moduleId) {
+        return moduleTeachingFormRepository.findByModuleId(moduleId)
+                .stream()
+                .map(TeachingForm::getId)
+                .toList();
     }
 
     private List<Long> mergeTeachingFormIds(List<Long> teachingFormIds, ModuleWorkload workload) {

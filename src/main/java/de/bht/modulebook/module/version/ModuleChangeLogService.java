@@ -2,8 +2,10 @@ package de.bht.modulebook.module.version;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,32 +37,55 @@ public class ModuleChangeLogService {
             List<Long> oldTeachingFormIds,
             List<Long> newTeachingFormIds
     ) {
-        addIfChanged(changeSetId, moduleId, "module.moduleNumber", oldModule.getModuleNumber(), newModule.getModuleNumber());
-        addIfChanged(changeSetId, moduleId, "module.name", oldModule.getName(), newModule.getName());
-        addIfChanged(changeSetId, moduleId, "module.credits", oldModule.getCredits(), newModule.getCredits());
-        addIfChanged(changeSetId, moduleId, "module.description", oldModule.getDescription(), newModule.getDescription());
-        addIfChanged(changeSetId, moduleId, "module.moduleType", oldModule.getModuleType(), newModule.getModuleType());
-        addIfChanged(changeSetId, moduleId, "module.titleDe", oldModule.getTitleDe(), newModule.getTitleDe());
-        addIfChanged(changeSetId, moduleId, "module.titleEn", oldModule.getTitleEn(), newModule.getTitleEn());
-        addIfChanged(changeSetId, moduleId, "module.coordinator", oldModule.getCoordinator(), newModule.getCoordinator());
-        addIfChanged(changeSetId, moduleId, "module.applicability", oldModule.getApplicability(), newModule.getApplicability());
-        addIfChanged(changeSetId, moduleId, "module.learningArea", oldModule.getLearningArea(), newModule.getLearningArea());
-        addIfChanged(changeSetId, moduleId, "module.learningObjectives", oldModule.getLearningObjectives(), newModule.getLearningObjectives());
-        addIfChanged(changeSetId, moduleId, "module.prerequisites", oldModule.getPrerequisites(), newModule.getPrerequisites());
-        addIfChanged(changeSetId, moduleId, "module.level", oldModule.getLevel(), newModule.getLevel());
-        addIfChanged(changeSetId, moduleId, "module.moduleStatus", oldModule.getModuleStatus(), newModule.getModuleStatus());
-        addIfChanged(changeSetId, moduleId, "module.frequency", oldModule.getFrequency(), newModule.getFrequency());
-        addIfChanged(changeSetId, moduleId, "module.examinationForm", oldModule.getExaminationForm(), newModule.getExaminationForm());
-        addIfChanged(changeSetId, moduleId, "module.contents", oldModule.getContents(), newModule.getContents());
-        addIfChanged(changeSetId, moduleId, "module.literature", oldModule.getLiterature(), newModule.getLiterature());
-        addIfChanged(changeSetId, moduleId, "module.additionalNotes", oldModule.getAdditionalNotes(), newModule.getAdditionalNotes());
-        addIfChanged(changeSetId, moduleId, "module.moduleWeight", oldModule.getModuleWeight(), newModule.getModuleWeight());
+        saveChanges(changeSetId, moduleId, oldModule, newModule, oldWorkload, newWorkload,
+                oldTeachingFormIds, newTeachingFormIds, null);
+    }
 
-        addIfChanged(changeSetId, moduleId, "workload", oldWorkload, newWorkload);
-        addIfChanged(changeSetId, moduleId, "teachingFormIds", oldTeachingFormIds, newTeachingFormIds);
+    public void saveChanges(
+            Long changeSetId,
+            Long moduleId,
+            Module oldModule,
+            Module newModule,
+            ModuleWorkload oldWorkload,
+            ModuleWorkload newWorkload,
+            List<Long> oldTeachingFormIds,
+            List<Long> newTeachingFormIds,
+            List<String> changedFieldPaths
+    ) {
+        Set<String> allowedPaths = changedFieldPaths == null ? null : new HashSet<>(changedFieldPaths);
+        addIfChanged(changeSetId, moduleId, "module.moduleNumber", oldModule.getModuleNumber(), newModule.getModuleNumber(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.name", oldModule.getName(), newModule.getName(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.credits", oldModule.getCredits(), newModule.getCredits(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.description", oldModule.getDescription(), newModule.getDescription(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.moduleType", oldModule.getModuleType(), newModule.getModuleType(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.titleDe", oldModule.getTitleDe(), newModule.getTitleDe(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.titleEn", oldModule.getTitleEn(), newModule.getTitleEn(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.coordinator", oldModule.getCoordinator(), newModule.getCoordinator(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.applicability", oldModule.getApplicability(), newModule.getApplicability(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.learningArea", oldModule.getLearningArea(), newModule.getLearningArea(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.learningObjectives", oldModule.getLearningObjectives(), newModule.getLearningObjectives(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.prerequisites", oldModule.getPrerequisites(), newModule.getPrerequisites(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.level", oldModule.getLevel(), newModule.getLevel(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.moduleStatus", oldModule.getModuleStatus(), newModule.getModuleStatus(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.frequency", oldModule.getFrequency(), newModule.getFrequency(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.examinationForm", oldModule.getExaminationForm(), newModule.getExaminationForm(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.contents", oldModule.getContents(), newModule.getContents(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.literature", oldModule.getLiterature(), newModule.getLiterature(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.additionalNotes", oldModule.getAdditionalNotes(), newModule.getAdditionalNotes(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.moduleWeight", oldModule.getModuleWeight(), newModule.getModuleWeight(), allowedPaths);
+
+        addIfChanged(changeSetId, moduleId, "workload", oldWorkload, newWorkload, allowedPaths);
+        addIfChanged(changeSetId, moduleId, "teachingFormIds", oldTeachingFormIds, newTeachingFormIds, allowedPaths);
     }
 
     private void addIfChanged(Long changeSetId, Long moduleId, String fieldPath, Object oldValue, Object newValue) {
+        addIfChanged(changeSetId, moduleId, fieldPath, oldValue, newValue, null);
+    }
+
+    private void addIfChanged(Long changeSetId, Long moduleId, String fieldPath, Object oldValue, Object newValue, Set<String> allowedPaths) {
+        if (allowedPaths != null && !allowedPaths.contains(fieldPath)) {
+            return;
+        }
         if (sameValue(oldValue, newValue)) {
             return;
         }

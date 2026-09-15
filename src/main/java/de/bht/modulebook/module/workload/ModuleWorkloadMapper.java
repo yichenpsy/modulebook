@@ -13,6 +13,8 @@ public class ModuleWorkloadMapper {
         }
 
         ModuleWorkload workload = new ModuleWorkload();
+        workload.setPresenceHours(request.presenceHours());
+        workload.setSelfStudyHours(request.selfStudyHours());
         workload.setRawText(request.rawText());
         workload.setComponents(
                 request.components() == null

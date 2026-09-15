@@ -41,6 +41,7 @@ public record ModuleRequest(
     List<Long> teachingFormIds,
     ModuleWorkloadRequest workload,
     String examinationForm,
-    String versionReason
+    String versionReason,
+    List<String> changedFieldPaths
 ){
 }

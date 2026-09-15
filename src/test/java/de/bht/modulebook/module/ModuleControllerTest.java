@@ -88,7 +88,8 @@ class ModuleControllerTest {
                 List.of(),
                 null,
                 "Klausur",
-                "created module manually"
+                "created module manually",
+                List.of()
         );
 
         when(moduleService.create(any(Module.class), any(), eq(List.of()), eq("created module manually")))
