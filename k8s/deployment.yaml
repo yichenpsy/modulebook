@@ -22,8 +22,15 @@ spec: # what this manager should do
           ports:
             - containerPort: 8081 # The app inside the container is expected to listen on port 8081.
           env:
-            - name: OTEL_SERVICE_NAME
+            - name: DATABASE_URL
+              value: jdbc:postgresql://modulebook-postgres:5432/modulebook
+            - name: DATABASE_USERNAME
               value: modulebook
+            - name: DATABASE_PASSWORD
+              value: modulebook
+
+            - name: OTEL_SERVICE_NAME
+              value: modulebook  
             - name: OTEL_EXPORTER_OTLP_ENDPOINT # tells OpenTelemetry, send data to where
               value: http://hudson-otel-collector.ris-lab.svc.cluster.local:4317 
             - name: OTEL_EXPORTER_OTLP_PROTOCOL # tells OpenTelemetry, send data with which protocol

@@ -1,0 +1,48 @@
+# Git and local metadata
+.git
+.github
+.gitignore
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE/editor files
+.idea
+.vscode
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings
+
+# Build outputs and caches
+target
+build
+.gradle
+*.class
+*.log
+*.tmp
+*.temp
+hs_err_pid*
+replay_pid*
+
+# Local environments and secrets
+.venv
+.env
+tools/pdf_import/.env
+
+# Python cache files
+__pycache__
+**/__pycache__
+*.pyc
+
+# PDF import generated or bulky data
+tools/pdf_import/data/input
+tools/pdf_import/data/output
+tools/pdf_import/data/work
+tools/pdf_import/data/work_v2
+tools/pdf_import/data/import_jobs
+tools/pdf_import/data/review
+tools/pdf_import/archive
