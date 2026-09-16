@@ -1,20 +1,20 @@
 package de.bht.modulebook.pdfimport;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientException;
 
 import de.bht.modulebook.config.PdfImportProperties;
 import tools.jackson.databind.JsonNode;
@@ -27,12 +27,12 @@ public class PythonPdfImportRunner {
 
     private final PdfImportProperties properties;
     private final ObjectMapper objectMapper;
-    private final RestClient restClient;
+    private final HttpClient httpClient;
 
     public PythonPdfImportRunner(PdfImportProperties properties, ObjectMapper objectMapper) {
         this.properties = properties;
         this.objectMapper = objectMapper;
-        this.restClient = RestClient.create();
+        this.httpClient = HttpClient.newHttpClient();
     }
 
     public ImportRunResult run(
@@ -108,45 +108,77 @@ public class PythonPdfImportRunner {
             Path outputJson,
             Path reportJson,
             String sourceFile
-    ) throws IOException {
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new FileSystemResource(inputPdf));
-        if (sourceFile != null && !sourceFile.isBlank()) {
-            body.add("sourceFile", sourceFile);
-        }
+    ) throws IOException, InterruptedException {
+        String boundary = "modulebook-" + UUID.randomUUID();
+        byte[] body = multipartBody(inputPdf, sourceFile, boundary);
 
-        try {
-            JsonNode response = restClient
-                    .post()
-                    .uri(properties.getServiceUrl())
-                    .contentType(MediaType.MULTIPART_FORM_DATA)
-                    .body(body)
-                    .retrieve()
-                    .body(JsonNode.class);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(properties.getServiceUrl()))
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .POST(HttpRequest.BodyPublishers.ofByteArray(body))
+                .build();
 
-            if (response == null) {
-                throw new RuntimeException("PDF import service returned an empty response");
-            }
+        HttpResponse<String> httpResponse = httpClient.send(
+                request,
+                HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)
+        );
 
-            JsonNode normalizedModules = response.get("normalizedModules");
-            JsonNode report = response.get("report");
-
-            if (normalizedModules == null || report == null) {
-                throw new RuntimeException("PDF import service response must contain normalizedModules and report");
-            }
-
-            objectMapper.writeValue(outputJson.toFile(), normalizedModules);
-            objectMapper.writeValue(reportJson.toFile(), report);
-
-            return new ImportRunResult(
-                    0,
-                    outputJson,
-                    reportJson,
-                    response.toString(),
-                    ""
+        if (httpResponse.statusCode() < 200 || httpResponse.statusCode() >= 300) {
+            throw new RuntimeException(
+                    "PDF import service request failed: HTTP "
+                            + httpResponse.statusCode()
+                            + ": "
+                            + httpResponse.body()
             );
-        } catch (RestClientException exception) {
-            throw new RuntimeException("PDF import service request failed: " + exception.getMessage(), exception);
         }
+
+        JsonNode response = objectMapper.readTree(httpResponse.body());
+        if (response == null) {
+            throw new RuntimeException("PDF import service returned an empty response");
+        }
+
+        JsonNode normalizedModules = response.get("normalizedModules");
+        JsonNode report = response.get("report");
+
+        if (normalizedModules == null || report == null) {
+            throw new RuntimeException("PDF import service response must contain normalizedModules and report");
+        }
+
+        objectMapper.writeValue(outputJson.toFile(), normalizedModules);
+        objectMapper.writeValue(reportJson.toFile(), report);
+
+        return new ImportRunResult(
+                0,
+                outputJson,
+                reportJson,
+                response.toString(),
+                ""
+        );
+    }
+
+    private byte[] multipartBody(Path inputPdf, String sourceFile, String boundary) throws IOException {
+        ByteArrayOutputStream body = new ByteArrayOutputStream();
+        String filename = sourceFile;
+        if (filename == null || filename.isBlank()) {
+            filename = inputPdf.getFileName().toString();
+        }
+
+        writeText(body, "--" + boundary + "\r\n");
+        writeText(body, "Content-Disposition: form-data; name=\"file\"; filename=\"" + filename + "\"\r\n");
+        writeText(body, "Content-Type: application/pdf\r\n\r\n");
+        body.write(Files.readAllBytes(inputPdf));
+        writeText(body, "\r\n");
+
+        writeText(body, "--" + boundary + "\r\n");
+        writeText(body, "Content-Disposition: form-data; name=\"sourceFile\"\r\n\r\n");
+        writeText(body, filename);
+        writeText(body, "\r\n");
+
+        writeText(body, "--" + boundary + "--\r\n");
+        return body.toByteArray();
+    }
+
+    private void writeText(ByteArrayOutputStream outputStream, String value) throws IOException {
+        outputStream.write(value.getBytes(StandardCharsets.UTF_8));
     }
 }
