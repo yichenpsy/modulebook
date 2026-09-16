@@ -6,6 +6,7 @@ stages:
 # image repository path
 variables:
   IMAGE_NAME: "$CI_REGISTRY_IMAGE/modulebook-image"
+  PDF_IMPORT_IMAGE_NAME: "$CI_REGISTRY_IMAGE/pdf-import-service-image"
 
 build-and-test:
   stage: test
@@ -43,6 +44,12 @@ build-and-push-image:
         --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
         --destination "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" \
         --destination "$IMAGE_NAME:latest"
+    - |
+      /kaniko/executor \
+        --context "$CI_PROJECT_DIR" \
+        --dockerfile "$CI_PROJECT_DIR/Dockerfile.pdf-import-service" \
+        --destination "$PDF_IMPORT_IMAGE_NAME:$CI_COMMIT_SHORT_SHA" \
+        --destination "$PDF_IMPORT_IMAGE_NAME:latest"
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
     - if: '$CI_COMMIT_BRANCH == "feature/pdf-import-pipeline"'
@@ -60,10 +67,13 @@ deploy-to-kubernetes:
     - build-and-push-image
   script:
     - kubectl apply -f k8s/postgres.yaml
+    - kubectl apply -f k8s/pdf-import-service.yaml
     - kubectl apply -f k8s/deployment.yaml # apply: create or update the service in the file
     - kubectl apply -f k8s/service.yaml
     - kubectl apply -f k8s/ingress.yaml
+    - kubectl set image deployment/pdf-import-service pdf-import-service-container="$PDF_IMPORT_IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
     - kubectl set image deployment/modulebook-deployment modulebook-container="$IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
+    - kubectl rollout status deployment/pdf-import-service
     - kubectl rollout status deployment/modulebook-deployment
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"

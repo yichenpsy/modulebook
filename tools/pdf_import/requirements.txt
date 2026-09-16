@@ -1,4 +1,5 @@
 pymupdf
+pymupdf4llm
 pydantic
 PyYAML
 pandas
@@ -6,3 +7,6 @@ jsonschema
 
 requests
 python-dotenv
+fastapi
+uvicorn[standard]
+python-multipart

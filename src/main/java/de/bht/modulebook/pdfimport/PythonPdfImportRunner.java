@@ -8,9 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import de.bht.modulebook.config.PdfImportProperties;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 // builds and runs this command:
 // python -m tools.pdf_import.module_import_v2.pipeline_single ...
@@ -18,9 +26,13 @@ import de.bht.modulebook.config.PdfImportProperties;
 public class PythonPdfImportRunner {
 
     private final PdfImportProperties properties;
+    private final ObjectMapper objectMapper;
+    private final RestClient restClient;
 
-    public PythonPdfImportRunner(PdfImportProperties properties) {
+    public PythonPdfImportRunner(PdfImportProperties properties, ObjectMapper objectMapper) {
         this.properties = properties;
+        this.objectMapper = objectMapper;
+        this.restClient = RestClient.create();
     }
 
     public ImportRunResult run(
@@ -32,6 +44,10 @@ public class PythonPdfImportRunner {
     ) throws IOException, InterruptedException {
 
         Files.createDirectories(workDir);
+
+        if (hasPdfImportServiceUrl()) {
+            return runViaHttpService(inputPdf, outputJson, reportJson, sourceFile);
+        }
 
         List<String> command = new ArrayList<>();
         command.add(properties.getPythonExecutable());
@@ -81,5 +97,57 @@ public class PythonPdfImportRunner {
             stdout,
             stderr
         );
+    }
+
+    private boolean hasPdfImportServiceUrl() {
+        return properties.getServiceUrl() != null && !properties.getServiceUrl().isBlank();
+    }
+
+    private ImportRunResult runViaHttpService(
+            Path inputPdf,
+            Path outputJson,
+            Path reportJson,
+            String sourceFile
+    ) throws IOException {
+        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
+        bodyBuilder.part("file", new FileSystemResource(inputPdf));
+        if (sourceFile != null && !sourceFile.isBlank()) {
+            bodyBuilder.part("sourceFile", sourceFile);
+        }
+        MultiValueMap<String, org.springframework.http.HttpEntity<?>> body = bodyBuilder.build();
+
+        try {
+            JsonNode response = restClient
+                    .post()
+                    .uri(properties.getServiceUrl())
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .body(body)
+                    .retrieve()
+                    .body(JsonNode.class);
+
+            if (response == null) {
+                throw new RuntimeException("PDF import service returned an empty response");
+            }
+
+            JsonNode normalizedModules = response.get("normalizedModules");
+            JsonNode report = response.get("report");
+
+            if (normalizedModules == null || report == null) {
+                throw new RuntimeException("PDF import service response must contain normalizedModules and report");
+            }
+
+            objectMapper.writeValue(outputJson.toFile(), normalizedModules);
+            objectMapper.writeValue(reportJson.toFile(), report);
+
+            return new ImportRunResult(
+                    0,
+                    outputJson,
+                    reportJson,
+                    response.toString(),
+                    ""
+            );
+        } catch (RestClientException exception) {
+            throw new RuntimeException("PDF import service request failed: " + exception.getMessage(), exception);
+        }
     }
 }

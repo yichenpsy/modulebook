@@ -8,7 +8,6 @@ from pathlib import Path
 
 import yaml
 
-from tools.pdf_import.archive.module_import.config import PDF_IMPORT_ROOT
 from tools.pdf_import.module_import_v2.extract_module_pages import (
     build_label_to_field_map,
     find_first_module_page,
@@ -31,6 +30,7 @@ from tools.pdf_import.module_import_v2.pdf_to_pages_markdown import (
 )
 
 
+PDF_IMPORT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT_DIR = PDF_IMPORT_ROOT / "data" / "input"
 DEFAULT_WORK_ROOT = PDF_IMPORT_ROOT / "data" / "work_v2"
 DEFAULT_OUTPUT_REPORT = PDF_IMPORT_ROOT / "data" / "output" / "v2_import_report.csv"

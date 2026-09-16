@@ -28,6 +28,8 @@ spec: # what this manager should do
               value: modulebook
             - name: DATABASE_PASSWORD
               value: modulebook
+            - name: PDF_IMPORT_SERVICE_URL
+              value: http://pdf-import-service:8000/import
 
             - name: OTEL_SERVICE_NAME
               value: modulebook  

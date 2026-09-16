@@ -74,6 +74,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+__pycache__/
+*.py[cod]
 
 # PDF to DB
 .venv/

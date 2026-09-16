@@ -6,12 +6,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 // pythonExecutable -> pdf-import.python-executable
 @ConfigurationProperties(prefix = "pdf-import")
 public class PdfImportProperties {
+    private String serviceUrl;
     private String pythonExecutable;
     private String repoRoot;
     private String jobRoot;
     private String baseYaml;
     private String importManifest;
     private long timeoutSeconds = 300;
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
 
     public String getPythonExecutable() {
         return pythonExecutable;
