@@ -12,6 +12,16 @@ build-and-test:
   tags:
     - modulebook
   image: maven:3.9-eclipse-temurin-21
+  services:
+    - name: postgres:16
+      alias: postgres
+  variables:
+    POSTGRES_DB: modulebook
+    POSTGRES_USER: modulebook
+    POSTGRES_PASSWORD: modulebook
+    DATABASE_URL: jdbc:postgresql://postgres:5432/modulebook
+    DATABASE_USERNAME: modulebook
+    DATABASE_PASSWORD: modulebook
   script:
     - mvn clean test
 
