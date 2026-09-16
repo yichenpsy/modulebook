@@ -114,6 +114,7 @@ public class PythonPdfImportRunner {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(properties.getServiceUrl()))
+                .version(HttpClient.Version.HTTP_1_1)
                 .header("Content-Type", "multipart/form-data; boundary=" + boundary)
                 .POST(HttpRequest.BodyPublishers.ofByteArray(body))
                 .build();
