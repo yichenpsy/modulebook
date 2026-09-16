@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -109,12 +109,11 @@ public class PythonPdfImportRunner {
             Path reportJson,
             String sourceFile
     ) throws IOException {
-        MultipartBodyBuilder bodyBuilder = new MultipartBodyBuilder();
-        bodyBuilder.part("file", new FileSystemResource(inputPdf));
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", new FileSystemResource(inputPdf));
         if (sourceFile != null && !sourceFile.isBlank()) {
-            bodyBuilder.part("sourceFile", sourceFile);
+            body.add("sourceFile", sourceFile);
         }
-        MultiValueMap<String, org.springframework.http.HttpEntity<?>> body = bodyBuilder.build();
 
         try {
             JsonNode response = restClient
