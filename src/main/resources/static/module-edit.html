@@ -209,12 +209,6 @@
                     </div>
                 </div>
 
-                <div class="module-field-row">
-                    <label class="module-field-label" for="description">Description</label>
-                    <div class="module-field-control">
-                        <textarea id="description" rows="10"></textarea>
-                    </div>
-                </div>
             </div>
         </form>
     </section>
@@ -305,7 +299,6 @@
             document.getElementById("literature").value = module.literature || "";
             document.getElementById("additionalNotes").value = module.additionalNotes || "";
             document.getElementById("moduleWeight").value = module.moduleWeight ?? "";
-            document.getElementById("description").value = module.description || "";
 
             if (module.studyProgramId) {
                 document.getElementById("backLink").href = `/index.html?studyProgramId=${module.studyProgramId}`;
@@ -536,7 +529,7 @@
                 credits: numberOrNull(document.getElementById("credits").value),
                 teachingFormIds: collectModuleTeachingFormIds(),
                 workload: workloadRequest,
-                description: document.getElementById("description").value,
+                description: currentModule?.description || "",
 
                 modulebookId: numberOrNull(document.getElementById("modulebookId").value),
                 moduleType: document.getElementById("moduleType").value.trim(),
@@ -586,7 +579,6 @@
                 ["module.moduleNumber", currentModule.moduleNumber, request.moduleNumber],
                 ["module.name", currentModule.name, request.name],
                 ["module.credits", currentModule.credits, request.credits],
-                ["module.description", currentModule.description, request.description],
                 ["module.moduleType", currentModule.moduleType, request.moduleType],
                 ["module.titleDe", currentModule.titleDe, request.titleDe],
                 ["module.titleEn", currentModule.titleEn, request.titleEn],
@@ -675,7 +667,6 @@
                 changeMessagePart("literature", oldModule.literature, request.literature, "module.literature", changedPaths),
                 changeMessagePart("additional notes", oldModule.additionalNotes, request.additionalNotes, "module.additionalNotes", changedPaths),
                 changeMessagePart("module weight", oldModule.moduleWeight, request.moduleWeight, "module.moduleWeight", changedPaths),
-                changeMessagePart("description", oldModule.description, request.description, "module.description", changedPaths),
                 changeMessagePart(
                     "teaching forms",
                     teachingFormIdsForModule(oldModule),

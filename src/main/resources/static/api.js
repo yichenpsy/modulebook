@@ -43,6 +43,24 @@ async function loadStudyProgramChangeSets(studyProgramId) {
     return requestJson(`/api/study-programs/${studyProgramId}/change-sets`);
 }
 
+async function loadModulebookTags(studyProgramId) {
+    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-tags`);
+}
+
+async function loadModulebookTag(tagId) {
+    return requestJson(`/api/modulebook-tags/${tagId}`);
+}
+
+async function createModulebookTag(studyProgramId, request) {
+    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-tags`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+    });
+}
+
 async function loadChangeSetFieldChanges(changeSetId) {
     return requestJson(`/api/change-sets/${changeSetId}/field-changes`);
 }

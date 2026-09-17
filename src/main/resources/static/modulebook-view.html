@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="documentTitle">View Modulebook</title>
+    <link rel="stylesheet" href="/app.css?v=modulebook-view">
+</head>
+<body class="modulebook-view-body">
+    <nav class="screen-only">
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <section class="screen-only">
+        <div id="status" class="status">Loading modulebook...</div>
+        <div class="form-actions">
+            <a id="backLink" href="/index.html">Back to study program</a>
+            <button id="tagButton" type="button" onclick="showTagPanel()">Tag current version</button>
+            <button type="button" onclick="window.print()">Print</button>
+        </div>
+
+        <section id="tagPanel" class="commit-message-panel" hidden>
+            <label>
+                Tag message
+                <textarea id="tagMessage" rows="3" maxlength="500"></textarea>
+            </label>
+            <div class="form-actions">
+                <button type="button" onclick="saveModulebookTag()">Save tag</button>
+                <button type="button" onclick="hideTagPanel()">Cancel</button>
+            </div>
+        </section>
+    </section>
+
+    <main id="modulebook" class="modulebook-document" hidden></main>
+
+    <script src="/api.js?v=modulebook-tags"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const studyProgramId = params.get("studyProgramId");
+        const tagId = params.get("tagId");
+        let studyProgram = null;
+        let activeModules = [];
+        let currentTag = null;
+
+        const moduleRows = [
+            ["Modulnummer", module => module.moduleNumber],
+            ["Titel", module => module.name],
+            ["Koordinator/in", module => module.coordinator],
+            ["Leistungspunkte", module => creditsText(module.credits)],
+            ["Workload", module => workloadText(module.workload)],
+            ["Verwendbarkeit", module => module.applicability],
+            ["Lerngebiet", module => module.learningArea],
+            ["Lernziele / Kompetenzen", module => module.learningObjectives],
+            ["Voraussetzungen", module => module.prerequisites],
+            ["Niveaustufe", module => module.level],
+            ["Lernform", module => teachingFormsText(module.teachingForms)],
+            ["Status", module => module.moduleStatus],
+            ["Häufigkeit des Angebotes", module => module.frequency],
+            ["Prüfungsform", module => module.examinationForm],
+            ["Inhalte", module => module.contents],
+            ["Literatur", module => module.literature],
+            ["Weitere Hinweise", module => module.additionalNotes],
+            ["Modulgewicht", module => module.moduleWeight]
+        ];
+
+        async function init() {
+            if (!studyProgramId && !tagId) {
+                setStatus("Missing study program id or tag id in URL. Example: /modulebook-view.html?studyProgramId=19");
+                return;
+            }
+
+            try {
+                if (tagId) {
+                    await loadTaggedModulebook();
+                } else {
+                    await loadCurrentModulebook();
+                }
+
+                renderModulebook();
+                setStatus(statusText());
+            } catch (error) {
+                setStatus("Could not load modulebook: " + error.message);
+            }
+        }
+
+        async function loadCurrentModulebook() {
+            document.getElementById("backLink").href =
+                `/index.html?studyProgramId=${encodeURIComponent(studyProgramId)}`;
+
+            const [studyPrograms, modules] = await Promise.all([
+                loadStudyPrograms(),
+                loadModulesForStudyProgram(studyProgramId)
+            ]);
+
+            studyProgram = studyPrograms.find(program =>
+                String(program.id) === String(studyProgramId)
+            );
+
+            if (!studyProgram) {
+                throw new Error(`Could not find study program ${studyProgramId}.`);
+            }
+
+            activeModules = modules
+                .filter(module => isActiveModule(module))
+                .sort(compareModules);
+        }
+
+        async function loadTaggedModulebook() {
+            currentTag = await loadModulebookTag(tagId);
+            const snapshot = JSON.parse(currentTag.snapshotJson);
+            studyProgram = snapshot.studyProgram;
+            activeModules = snapshot.modules || [];
+            document.getElementById("tagButton").hidden = true;
+            document.getElementById("backLink").href =
+                `/study-program-history.html?id=${encodeURIComponent(currentTag.studyProgramId)}`;
+        }
+
+        function renderModulebook() {
+            const documentTitle = `Modulebook - ${studyProgram.name} ${studyProgram.year ?? ""}`.trim();
+            document.getElementById("documentTitle").textContent = documentTitle;
+
+            const container = document.getElementById("modulebook");
+            container.innerHTML = `
+                ${renderCover()}
+                ${currentTag ? renderTagPage() : ""}
+                ${activeModules.map(renderModulePage).join("")}
+            `;
+            container.hidden = false;
+        }
+
+        function renderCover() {
+            const programName = studyProgram.name || "Study program";
+            const year = studyProgram.year ? String(studyProgram.year) : "";
+
+            return `
+                <article class="modulebook-page modulebook-cover">
+                    <header class="modulebook-page-header">
+                        <div>Study program ${escapeHtml(programName)}</div>
+                        <div>Modulebook</div>
+                    </header>
+
+                    <div class="modulebook-cover-title">
+                        <h1>Modulhandbuch</h1>
+                        <p>für den</p>
+                        <h2>${escapeHtml(programName)}</h2>
+                        <p>an der Berliner Hochschule für Technik</p>
+                    </div>
+
+                    <div class="modulebook-cover-meta">
+                        <p>Studiengang: ${escapeHtml(programName)}</p>
+                        ${year ? `<p>Jahr: ${escapeHtml(year)}</p>` : ""}
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderTagPage() {
+            return `
+                <article class="modulebook-page modulebook-tag-page">
+                    <header class="modulebook-page-header">
+                        <div>${escapeHtml(studyProgram.name || "")}</div>
+                        <div>Tagged modulebook</div>
+                    </header>
+
+                    <div class="modulebook-tag-summary">
+                        <h1>Modulebook tag</h1>
+                        <p><strong>Tag message:</strong></p>
+                        <p>${escapeHtml(currentTag.tagMessage || "")}</p>
+                        <p><strong>Created:</strong> ${escapeHtml(formatDate(currentTag.createdAt))}</p>
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderModulePage(module, index) {
+            const number = module.moduleNumber || "";
+            const title = module.name || "Untitled module";
+            const pageNumber = currentTag ? index + 3 : index + 2;
+
+            return `
+                <article class="modulebook-page modulebook-module-page">
+                    <header class="modulebook-page-header">
+                        <div>${escapeHtml(studyProgram.name || "")}</div>
+                        <div>Anlage 3 | Seite ${pageNumber}</div>
+                    </header>
+
+                    <table class="modulebook-module-table">
+                        <thead>
+                            <tr>
+                                <th>Datenfeld</th>
+                                <th>Erklärung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${moduleRows.map(([label, valueReader]) =>
+                                renderModuleRow(label, valueReader(module))
+                            ).join("")}
+                        </tbody>
+                    </table>
+                </article>
+            `;
+        }
+
+        function renderModuleRow(label, value) {
+            const formattedValue = formatValue(value);
+
+            if (!formattedValue) {
+                return "";
+            }
+
+            return `
+                <tr>
+                    <td>${escapeHtml(label)}</td>
+                    <td>${escapeHtml(formattedValue)}</td>
+                </tr>
+            `;
+        }
+
+        function isActiveModule(module) {
+            return String(module.moduleStatus || "").toUpperCase() === "ACTIVE";
+        }
+
+        function compareModules(left, right) {
+            return String(left.moduleNumber || "").localeCompare(
+                String(right.moduleNumber || ""),
+                undefined,
+                { numeric: true, sensitivity: "base" }
+            );
+        }
+
+        function creditsText(credits) {
+            return credits === null || credits === undefined ? "" : `${credits} Cr`;
+        }
+
+        function teachingFormsText(teachingForms) {
+            if (!teachingForms || teachingForms.length === 0) {
+                return "";
+            }
+
+            return teachingForms
+                .map(teachingForm => {
+                    const label = teachingForm.labelDe || teachingForm.labelEn || "";
+                    return label || teachingForm.code || "";
+                })
+                .filter(Boolean)
+                .join("\n");
+        }
+
+        function workloadText(workload) {
+            if (!workload) {
+                return "";
+            }
+
+            const components = (workload.components || [])
+                .map(component => `${formatValue(component.swsAmount)} SWS ${component.teachingFormCode || ""}`.trim())
+                .filter(Boolean)
+                .join(" + ");
+
+            const parts = [];
+
+            if (workload.presenceHours !== null && workload.presenceHours !== undefined) {
+                parts.push(`${workload.presenceHours} Stunden Präsenz${components ? ` (${components})` : ""}`);
+            }
+
+            if (workload.selfStudyHours !== null && workload.selfStudyHours !== undefined) {
+                parts.push(`${workload.selfStudyHours} Stunden Selbststudium`);
+            }
+
+            if (parts.length > 0) {
+                return parts.join(",\n");
+            }
+
+            return workload.rawText || "";
+        }
+
+        function showTagPanel() {
+            document.getElementById("tagPanel").hidden = false;
+            document.getElementById("tagMessage").focus();
+        }
+
+        function hideTagPanel() {
+            document.getElementById("tagPanel").hidden = true;
+            document.getElementById("tagMessage").value = "";
+        }
+
+        async function saveModulebookTag() {
+            const message = document.getElementById("tagMessage").value.trim();
+
+            if (!message) {
+                setStatus("Tag message is required.");
+                document.getElementById("tagMessage").focus();
+                return;
+            }
+
+            setStatus("Saving modulebook tag...");
+
+            try {
+                const tag = await createModulebookTag(studyProgramId, {
+                    tagMessage: message
+                });
+                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}&modulebookTagId=${encodeURIComponent(tag.id)}`;
+            } catch (error) {
+                setStatus("Could not save modulebook tag: " + error.message);
+            }
+        }
+
+        function statusText() {
+            if (currentTag) {
+                return `Loaded tagged modulebook ${currentTag.id} with ${activeModules.length} active modules.`;
+            }
+
+            return `Loaded ${activeModules.length} active modules.`;
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(value).toLocaleString();
+        }
+
+        function formatValue(value) {
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value).trim();
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>

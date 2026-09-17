@@ -119,6 +119,10 @@ th {
     margin-left: 16px;
 }
 
+.row-actions .link-button + a {
+    margin-left: 16px;
+}
+
 .row-actions .link-button {
     background: none;
     border: 0;
@@ -335,6 +339,111 @@ th {
     margin: 0;
 }
 
+.modulebook-view-body {
+    background: #eeeeee;
+}
+
+.modulebook-document {
+    max-width: 210mm;
+    margin: 24px auto;
+}
+
+.modulebook-page {
+    box-sizing: border-box;
+    min-height: 297mm;
+    padding: 16mm 20mm;
+    margin-bottom: 20px;
+    background: #ffffff;
+    color: #111111;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    page-break-after: always;
+    break-after: page;
+}
+
+.modulebook-page-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: 0.9rem;
+}
+
+.modulebook-cover {
+    display: flex;
+    flex-direction: column;
+}
+
+.modulebook-cover-title {
+    margin-top: 152mm;
+}
+
+.modulebook-cover-title h1,
+.modulebook-cover-title h2,
+.modulebook-cover-title p,
+.modulebook-cover-meta p {
+    margin: 0;
+}
+
+.modulebook-cover-title h1 {
+    font-size: 1.75rem;
+    line-height: 1.1;
+}
+
+.modulebook-cover-title h2 {
+    font-size: 1.65rem;
+    line-height: 1.15;
+}
+
+.modulebook-cover-title p {
+    font-size: 1.25rem;
+}
+
+.modulebook-cover-meta {
+    margin-top: 26mm;
+    font-size: 1.05rem;
+}
+
+.modulebook-tag-summary {
+    margin-top: 96mm;
+    max-width: 140mm;
+}
+
+.modulebook-tag-summary h1 {
+    margin: 0 0 14mm;
+    font-size: 1.75rem;
+}
+
+.modulebook-tag-summary p {
+    margin: 0 0 8mm;
+    font-size: 1.05rem;
+    white-space: pre-wrap;
+}
+
+.modulebook-module-table {
+    margin-top: 28px;
+    font-size: 0.92rem;
+    line-height: 1.28;
+}
+
+.modulebook-module-table th,
+.modulebook-module-table td {
+    border: 1px solid #9f9f9f;
+    padding: 6px 8px;
+}
+
+.modulebook-module-table th {
+    background: #ffffff;
+    font-weight: bold;
+}
+
+.modulebook-module-table td:first-child,
+.modulebook-module-table th:first-child {
+    width: 32%;
+}
+
+.modulebook-module-table td {
+    white-space: pre-wrap;
+}
+
 @media (max-width: 720px) {
     .module-field-table {
         display: block;
@@ -360,5 +469,32 @@ th {
     .snapshot-grid,
     .compare-controls {
         grid-template-columns: 1fr;
+    }
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
+        background: #ffffff;
+    }
+
+    .screen-only {
+        display: none !important;
+    }
+
+    .modulebook-document {
+        max-width: none;
+        margin: 0;
+    }
+
+    .modulebook-page {
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
     }
 }

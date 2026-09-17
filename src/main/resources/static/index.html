@@ -69,8 +69,9 @@
                                 <td class="row-actions">
                                     <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
-                                    <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
+                                    <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
+                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View/ Export modulebook</a>
                                 </td>
                             </tr>
                         `).join("")}

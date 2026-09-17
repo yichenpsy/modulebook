@@ -25,14 +25,16 @@
         <div id="history">Loading...</div>
     </section>
 
-    <script src="/api.js?v=study-program-change-log"></script>
+    <script src="/api.js?v=modulebook-tags"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const studyProgramId = params.get("id");
         const selectedChangeSetId = params.get("changeSetId");
+        const selectedModulebookTagId = params.get("modulebookTagId");
         let studyProgram = null;
         let modules = [];
         let changeSets = [];
+        let modulebookTags = [];
         let changesByChangeSetId = new Map();
 
         async function init() {
@@ -46,14 +48,15 @@
             try {
                 const studyPrograms = await loadStudyPrograms();
                 studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
-                [modules, changeSets] = await Promise.all([
+                [modules, changeSets, modulebookTags] = await Promise.all([
                     loadModulesForStudyProgram(studyProgramId),
-                    loadStudyProgramChangeSets(studyProgramId)
+                    loadStudyProgramChangeSets(studyProgramId),
+                    loadModulebookTags(studyProgramId)
                 ]);
                 await loadVisibleFieldChanges();
                 renderTitle();
                 renderHistory();
-                setStatus(`Loaded ${changeSets.length} change sets.`);
+                setStatus(`Loaded ${changeSets.length} change sets and ${modulebookTags.length} modulebook tags.`);
             } catch (error) {
                 setStatus("Could not load study program change log: " + error.message);
             }
@@ -96,11 +99,17 @@
                 return;
             }
 
+            if (selectedModulebookTagId) {
+                renderModulebookTagDetail(container);
+                return;
+            }
+
             renderChangeSetList(container);
         }
 
         function renderChangeSetList(container) {
             container.innerHTML = `
+                ${renderModulebookTagList()}
                 <table>
                     <thead>
                         <tr>
@@ -130,6 +139,93 @@
                                 </tr>
                             `;
                         }).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function renderModulebookTagList() {
+            if (modulebookTags.length === 0) {
+                return `
+                    <section>
+                        <h3>Modulebook tags</h3>
+                        <p>No modulebook tags saved yet.</p>
+                    </section>
+                `;
+            }
+
+            return `
+                <section>
+                    <h3>Modulebook tags</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Created</th>
+                                <th>Tag</th>
+                                <th>Active modules</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${modulebookTags.map(tag => {
+                                const snapshot = parseSnapshot(tag);
+                                const moduleCount = snapshot?.modules?.length ?? "";
+                                return `
+                                    <tr>
+                                        <td>${escapeHtml(formatDate(tag.createdAt))}</td>
+                                        <td>${escapeHtml(tag.tagMessage || "")}</td>
+                                        <td>${escapeHtml(String(moduleCount))}</td>
+                                        <td class="row-actions">
+                                            <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
+                                            <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join("")}
+                        </tbody>
+                    </table>
+                </section>
+            `;
+        }
+
+        function renderModulebookTagDetail(container) {
+            const tag = modulebookTags.find(item => String(item.id) === String(selectedModulebookTagId));
+            if (!tag) {
+                container.textContent = "Modulebook tag not found.";
+                return;
+            }
+
+            const snapshot = parseSnapshot(tag);
+            const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+
+            container.innerHTML = `
+                <div class="form-actions">
+                    <a href="${backUrl}">Back to program history</a>
+                    <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print modulebook</a>
+                </div>
+                <h3>Modulebook tag ${escapeHtml(String(tag.id))}</h3>
+                <p class="muted">
+                    ${escapeHtml(formatDate(tag.createdAt))}
+                    ${tag.tagMessage ? `- ${escapeHtml(tag.tagMessage)}` : ""}
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Module number</th>
+                            <th>Name</th>
+                            <th>Credits</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(snapshot?.modules || []).map(module => `
+                            <tr>
+                                <td>${escapeHtml(module.moduleNumber || "")}</td>
+                                <td>${escapeHtml(module.name || "")}</td>
+                                <td>${escapeHtml(String(module.credits ?? ""))}</td>
+                                <td>${escapeHtml(module.moduleStatus || "")}</td>
+                            </tr>
+                        `).join("")}
                     </tbody>
                 </table>
             `;
@@ -269,6 +365,14 @@
             }
 
             return new Date(value).toLocaleString();
+        }
+
+        function parseSnapshot(tag) {
+            try {
+                return JSON.parse(tag.snapshotJson);
+            } catch (error) {
+                return null;
+            }
         }
 
         function setStatus(message) {
