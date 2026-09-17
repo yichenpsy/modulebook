@@ -164,6 +164,7 @@ th {
     max-width: none;
 }
 
+.form-actions {
     display: flex;
     gap: 24px;
     margin-top: 16px;
@@ -227,6 +228,12 @@ th {
     min-height: 37px;
     display: flex;
     align-items: center;
+}
+
+.multiline-value {
+    display: block;
+    min-height: 0;
+    white-space: pre-wrap;
 }
 
 .workload-editor,

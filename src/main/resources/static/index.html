@@ -165,6 +165,7 @@
                                 <td>${escapeHtml(String(module.credits ?? ""))}</td>
                                 <td>${escapeHtml(module.moduleStatus || "")}</td>
                                 <td class="row-actions">
+                                    <a href="/module-view.html?id=${escapeHtml(String(module.id))}">View</a>
                                     <a href="/module-edit.html?id=${escapeHtml(String(module.id))}">Edit</a>
                                     <a href="/module-versions.html?id=${escapeHtml(String(module.id))}">History</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteModule(${module.id})">Delete</button>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="documentTitle">View Module</title>
+    <link rel="stylesheet" href="/app.css?v=module-view">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <h1 id="pageTitle">View Module</h1>
+
+    <section>
+        <div id="status" class="status">Loading module...</div>
+        <div class="form-actions">
+            <a id="editLink" href="/index.html">Edit module</a>
+            <a id="versionsLink" href="/index.html">History</a>
+            <a id="backLink" href="/index.html">Back to study program</a>
+        </div>
+    </section>
+
+    <section>
+        <div id="moduleDetails" class="module-field-table" hidden></div>
+    </section>
+
+    <script src="/api.js?v=module-view"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const moduleId = params.get("id");
+        let currentModule = null;
+        let studyPrograms = [];
+
+        const moduleFields = [
+            ["Study program", module => studyProgramLabel(module.studyProgramId)],
+            ["Module id", module => module.id],
+            ["Module number", module => module.moduleNumber],
+            ["Title", module => module.name],
+            ["Credits", module => module.credits],
+            ["Workload", module => workloadText(module.workload)],
+            ["Teaching forms", module => teachingFormsText(module.teachingForms)],
+            ["Module type", module => module.moduleType],
+            ["Coordinator", module => module.coordinator],
+            ["Applicability", module => module.applicability],
+            ["Learning area", module => module.learningArea],
+            ["Learning objectives", module => module.learningObjectives],
+            ["Prerequisites", module => module.prerequisites],
+            ["Level", module => module.level],
+            ["Module status", module => module.moduleStatus],
+            ["Frequency", module => module.frequency],
+            ["Examination form", module => module.examinationForm],
+            ["Contents", module => module.contents],
+            ["Literature", module => module.literature],
+            ["Additional notes", module => module.additionalNotes],
+            ["Module weight", module => module.moduleWeight],
+            ["Description", module => module.description]
+        ];
+
+        async function init() {
+            if (!moduleId) {
+                setStatus("Missing module id in URL. Example: /module-view.html?id=12");
+                return;
+            }
+
+            document.getElementById("editLink").href = `/module-edit.html?id=${encodeURIComponent(moduleId)}`;
+            document.getElementById("versionsLink").href = `/module-versions.html?id=${encodeURIComponent(moduleId)}`;
+
+            try {
+                [currentModule, studyPrograms] = await Promise.all([
+                    loadModule(moduleId),
+                    loadStudyPrograms()
+                ]);
+                renderTitle();
+                renderLinks();
+                renderModuleDetails();
+                setStatus(`Loaded module ${currentModule.id}.`);
+            } catch (error) {
+                setStatus("Could not load module: " + error.message);
+            }
+        }
+
+        function renderTitle() {
+            const number = currentModule.moduleNumber || currentModule.id;
+            const name = currentModule.name || "Untitled module";
+            const title = `${number} - ${name}`;
+            document.getElementById("pageTitle").textContent = title;
+            document.getElementById("documentTitle").textContent = title;
+        }
+
+        function renderLinks() {
+            if (currentModule.studyProgramId) {
+                document.getElementById("backLink").href =
+                    `/index.html?studyProgramId=${encodeURIComponent(currentModule.studyProgramId)}`;
+            }
+        }
+
+        function renderModuleDetails() {
+            const container = document.getElementById("moduleDetails");
+            container.innerHTML = moduleFields.map(([label, valueReader]) => `
+                <div class="module-field-row">
+                    <div class="module-field-label">${escapeHtml(label)}</div>
+                    <div class="module-field-control">
+                        <div class="readonly-value multiline-value">${escapeHtml(formatValue(valueReader(currentModule)))}</div>
+                    </div>
+                </div>
+            `).join("");
+            container.hidden = false;
+        }
+
+        function studyProgramLabel(studyProgramId) {
+            const selectedProgram = studyPrograms.find(program =>
+                String(program.id) === String(studyProgramId)
+            );
+
+            return selectedProgram
+                ? `${selectedProgram.name} (${selectedProgram.year})`
+                : `Study program ${studyProgramId}`;
+        }
+
+        function teachingFormsText(teachingForms) {
+            if (!teachingForms || teachingForms.length === 0) {
+                return "";
+            }
+
+            return teachingForms
+                .map(teachingForm => {
+                    const label = teachingForm.labelDe || teachingForm.labelEn || "";
+                    return label ? `${teachingForm.code} - ${label}` : teachingForm.code;
+                })
+                .join("\n");
+        }
+
+        function workloadText(workload) {
+            if (!workload) {
+                return "";
+            }
+
+            const parts = [];
+
+            if (workload.rawText) {
+                parts.push(workload.rawText);
+            }
+
+            if (workload.presenceHours !== null && workload.presenceHours !== undefined) {
+                parts.push(`${workload.presenceHours} Stunden Präsenz`);
+            }
+
+            if (workload.selfStudyHours !== null && workload.selfStudyHours !== undefined) {
+                parts.push(`${workload.selfStudyHours} Stunden Selbststudium`);
+            }
+
+            if (workload.components && workload.components.length > 0) {
+                const components = workload.components
+                    .map(component => {
+                        const teachingForm = component.teachingFormCode || component.teachingFormLabel || component.teachingFormId;
+                        return `${component.swsAmount ?? ""} SWS ${teachingForm ?? ""}`.trim();
+                    })
+                    .filter(Boolean)
+                    .join("\n");
+                parts.push(components);
+            }
+
+            return parts.filter(Boolean).join("\n");
+        }
+
+        function formatValue(value) {
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value);
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>
