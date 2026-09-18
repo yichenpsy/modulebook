@@ -69,8 +69,40 @@ public class StudyProgramRepository {
 
     public List<StudyProgram> findAll() {
         return jdbcTemplate.query(
-                "SELECT id, name, year, created_at, updated_at FROM study_programs ORDER BY name, year",
+                "SELECT id, name, year, created_at, updated_at FROM study_programs WHERE hidden_at IS NULL ORDER BY name, year",
                 studyProgramRowMapper
+        );
+    }
+
+    public void unhide(Long id) {
+        jdbcTemplate.update(
+                """
+                UPDATE study_programs
+                SET hidden_at = NULL,
+                    hidden_by_change_set_id = NULL,
+                    updated_at = now()
+                WHERE id = ?
+                """,
+                id
+        );
+    }
+
+    public void hideIfNoModules(Long id, Long hiddenByChangeSetId) {
+        jdbcTemplate.update(
+                """
+                UPDATE study_programs
+                SET hidden_at = now(),
+                    hidden_by_change_set_id = ?,
+                    updated_at = now()
+                WHERE id = ?
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM modules
+                      WHERE modules.study_program_id = study_programs.id
+                  )
+                """,
+                hiddenByChangeSetId,
+                id
         );
     }
 

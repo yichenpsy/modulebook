@@ -25,6 +25,7 @@ import de.bht.modulebook.config.PdfImportProperties;
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.workload.ModuleWorkload;
+import de.bht.modulebook.modulebook.ModulebookTagService;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
 import de.bht.modulebook.studyprogram.StudyProgram;
@@ -67,6 +68,9 @@ class PdfImportServiceTest {
     @Mock
     private TeachingFormRepository teachingFormRepository;
 
+    @Mock
+    private ModulebookTagService modulebookTagService;
+
     private PdfImportService service;
 
     @BeforeEach
@@ -80,7 +84,8 @@ class PdfImportServiceTest {
                 importedModuleMapper,
                 studyProgramService,
                 changeSetService,
-                teachingFormRepository
+                teachingFormRepository,
+                modulebookTagService
         );
     }
 

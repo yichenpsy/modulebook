@@ -61,8 +61,32 @@ async function createModulebookTag(studyProgramId, request) {
     });
 }
 
+async function deleteModulebookTag(tagId) {
+    await requestJson(`/api/modulebook-tags/${tagId}`, {
+        method: "DELETE"
+    });
+}
+
+async function restoreModulebookTag(tagId) {
+    return requestJson(`/api/modulebook-tags/${tagId}/restore`, {
+        method: "POST"
+    });
+}
+
 async function loadChangeSetFieldChanges(changeSetId) {
     return requestJson(`/api/change-sets/${changeSetId}/field-changes`);
+}
+
+async function restoreBeforeChangeSet(changeSetId, force = false) {
+    return requestJson(`/api/change-sets/${changeSetId}/restore-before?force=${force ? "true" : "false"}`, {
+        method: "POST"
+    });
+}
+
+async function resetToInitialImport(changeSetId) {
+    return requestJson(`/api/change-sets/${changeSetId}/reset-to-initial-import`, {
+        method: "POST"
+    });
 }
 
 async function loadModuleFieldChanges(moduleId) {

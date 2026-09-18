@@ -17,6 +17,7 @@
         <div id="status" class="status">Loading history...</div>
         <div class="form-actions">
             <a id="backLink" href="/index.html">Back to study program</a>
+            <a id="compareVersionLink" href="/index.html">Compare Version</a>
         </div>
     </section>
 
@@ -37,6 +38,8 @@
         let changeSets = [];
         let modulebookTags = [];
         let changesByChangeSetId = new Map();
+        let versionsByChangeSetId = new Map();
+        let versionsByModulebookTagId = new Map();
 
         async function init() {
             if (!studyProgramId) {
@@ -45,6 +48,8 @@
             }
 
             document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
+            document.getElementById("compareVersionLink").href =
+                `/study-program-version-compare.html?id=${encodeURIComponent(studyProgramId)}`;
 
             try {
                 const studyPrograms = await loadStudyPrograms();
@@ -56,6 +61,7 @@
                     loadTeachingForms()
                 ]);
                 await loadVisibleFieldChanges();
+                calculateHistoryVersions();
                 renderTitle();
                 renderHistory();
                 setStatus(`Loaded ${changeSets.length} change sets and ${modulebookTags.length} modulebook tags.`);
@@ -91,7 +97,7 @@
         function renderHistory() {
             const container = document.getElementById("history");
 
-            if (changeSets.length === 0) {
+            if (changeSets.length === 0 && modulebookTags.length === 0) {
                 container.textContent = "No change log exists for this study program yet.";
                 return;
             }
@@ -112,9 +118,11 @@
         function renderChangeSetList(container) {
             container.innerHTML = `
                 ${renderModulebookTagList()}
+                <h3>Complete change log</h3>
                 <table>
                     <thead>
                         <tr>
+                            <th>Version</th>
                             <th>Created</th>
                             <th>Change set</th>
                             <th>Source</th>
@@ -125,22 +133,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        ${changeSets.map(changeSet => {
-                            const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
-                            return `
-                                <tr>
-                                    <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
-                                    <td>${escapeHtml(String(changeSet.id))}</td>
-                                    <td>${escapeHtml(changeSet.sourceType || "")}</td>
-                                    <td>${escapeHtml(changeSet.reason || "")}</td>
-                                    <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
-                                    <td>${escapeHtml(changeSetChangedFieldsSummary(changeSet, changes))}</td>
-                                    <td class="row-actions">
-                                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join("")}
+                        ${historyRowsDescending().map(renderHistoryRow).join("")}
                     </tbody>
                 </table>
             `;
@@ -162,6 +155,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Version</th>
                                 <th>Created</th>
                                 <th>Tag</th>
                                 <th>Active modules</th>
@@ -169,24 +163,67 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${modulebookTags.map(tag => {
-                                const snapshot = parseSnapshot(tag);
-                                const moduleCount = snapshot?.modules?.length ?? "";
-                                return `
-                                    <tr>
-                                        <td>${escapeHtml(formatDate(tag.createdAt))}</td>
-                                        <td>${escapeHtml(tag.tagMessage || "")}</td>
-                                        <td>${escapeHtml(String(moduleCount))}</td>
-                                        <td class="row-actions">
-                                            <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
-                                            <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
-                                        </td>
-                                    </tr>
-                                `;
-                            }).join("")}
+                            ${modulebookTags.map(tag => `
+                                <tr>
+                                    <td class="version-cell">${escapeHtml(versionForModulebookTag(tag))}</td>
+                                    <td>${escapeHtml(formatDate(tag.createdAt))}</td>
+                                    <td>${escapeHtml(tag.tagMessage || "")}</td>
+                                    <td>${escapeHtml(String(modulebookTagActiveModuleCount(tag)))}</td>
+                                    <td class="row-actions">
+                                        <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
+                                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
+                                        ${modulebookTagActionHtml(tag)}
+                                    </td>
+                                </tr>
+                            `).join("")}
                         </tbody>
                     </table>
                 </section>
+            `;
+        }
+
+        function renderHistoryRow(row) {
+            if (row.type === "modulebookTag") {
+                return renderModulebookTagRow(row.value);
+            }
+
+            return renderChangeSetRow(row.value);
+        }
+
+        function renderChangeSetRow(changeSet) {
+            const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
+            return `
+                <tr class="${changeSet.discardedAt ? "discarded-change-set-row" : ""}">
+                    <td class="version-cell">${escapeHtml(versionForChangeSet(changeSet))}</td>
+                    <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
+                    <td>${escapeHtml(String(changeSet.id))}</td>
+                    <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
+                    <td>${escapeHtml(changeSet.reason || "")}</td>
+                    <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
+                    <td>${escapeHtml(changeSetChangedFieldsSummary(changeSet, changes))}</td>
+                    <td class="row-actions">
+                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
+                        ${restoreActionHtml(changeSet)}
+                    </td>
+                </tr>
+            `;
+        }
+
+        function renderModulebookTagRow(tag) {
+            return `
+                <tr class="modulebook-tag-row">
+                    <td class="version-cell">${escapeHtml(versionForModulebookTag(tag))}</td>
+                    <td>${escapeHtml(formatDate(tag.createdAt))}</td>
+                    <td>Tag ${escapeHtml(String(tag.id))}</td>
+                    <td>MODULEBOOK_TAG</td>
+                    <td>${escapeHtml(tag.tagMessage || "")}</td>
+                    <td>${escapeHtml(String(modulebookTagActiveModuleCount(tag)))}</td>
+                    <td>--</td>
+                    <td class="row-actions">
+                        <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
+                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
+                    </td>
+                </tr>
             `;
         }
 
@@ -207,6 +244,7 @@
                 </div>
                 <h3>Modulebook tag ${escapeHtml(String(tag.id))}</h3>
                 <p class="muted">
+                    Version ${escapeHtml(versionForModulebookTag(tag))}
                     ${escapeHtml(formatDate(tag.createdAt))}
                     ${tag.tagMessage ? `- ${escapeHtml(tag.tagMessage)}` : ""}
                 </p>
@@ -246,10 +284,12 @@
             container.innerHTML = `
                 <div class="form-actions">
                     <a href="${backUrl}">Back to program history</a>
+                    ${restoreActionHtml(changeSet)}
                 </div>
                 <h3>Change set ${escapeHtml(String(changeSet.id))}</h3>
                 <p class="muted">
-                    ${escapeHtml(changeSet.sourceType || "")}
+                    Version ${escapeHtml(versionForChangeSet(changeSet))}
+                    ${escapeHtml(changeSetSourceLabel(changeSet))}
                     ${escapeHtml(formatDate(changeSet.createdAt))}
                     ${changeSet.reason ? `- ${escapeHtml(changeSet.reason)}` : ""}
                 </p>
@@ -297,6 +337,10 @@
         }
 
         function changeSetModuleSummary(changeSet, changes) {
+            if (changeSet.sourceType === "RESTORE_BEFORE") {
+                return "Study program reset";
+            }
+
             if (changeSet.sourceType === "PDF_IMPORT") {
                 return "--";
             }
@@ -309,6 +353,10 @@
         }
 
         function changeSetChangedFieldsSummary(changeSet, changes) {
+            if (changeSet.sourceType === "RESTORE_BEFORE" && changes.length === 0) {
+                return "Reset only";
+            }
+
             if (changeSet.sourceType === "PDF_IMPORT") {
                 return "--";
             }
@@ -317,11 +365,244 @@
         }
 
         function emptyChangeSetMessage(changeSet) {
+            if (changeSet.sourceType === "RESTORE_BEFORE") {
+                return changeSet.reason || "Study program was restored to an earlier point.";
+            }
+
             if (changeSet.sourceType === "DELETE") {
                 return changeSet.reason || "Deleted module";
             }
 
             return "No field changes were saved for this change set.";
+        }
+
+        function changeSetSourceLabel(changeSet) {
+            const sourceType = changeSet.sourceType || "";
+            if (!changeSet.discardedAt) {
+                return sourceType;
+            }
+
+            return `${sourceType} (discarded by ${changeSet.discardedByChangeSetId || "restore"})`;
+        }
+
+        function restoreActionHtml(changeSet) {
+            if (!canRestoreBefore(changeSet)) {
+                return "";
+            }
+
+            return `
+                <button type="button" data-restore-before="${escapeHtml(String(changeSet.id))}">
+                    Restore before
+                </button>
+            `;
+        }
+
+        function resetToInitialImportActionHtml(changeSet) {
+            if (!canResetToInitialImport(changeSet)) {
+                return "";
+            }
+
+            return `
+                <button type="button" data-reset-to-initial-import="${escapeHtml(String(changeSet.id))}">
+                    Back to initial import
+                </button>
+            `;
+        }
+
+        function modulebookTagActionHtml(tag) {
+            if (tag.sourceType === "INITIAL_IMPORT") {
+                return `
+                    <button type="button" data-reset-to-initial-import="${escapeHtml(String(tag.sourceChangeSetId || initialPdfImportChangeSetId() || ""))}">
+                        Back to initial import
+                    </button>
+                `;
+            }
+
+            return `
+                <button type="button" data-restore-modulebook-tag="${escapeHtml(String(tag.id))}">
+                    Back to this version
+                </button>
+                ${modulebookTagDeleteActionHtml(tag)}
+            `;
+        }
+
+        function modulebookTagDeleteActionHtml(tag) {
+            if (tag.sourceType === "INITIAL_IMPORT") {
+                return "";
+            }
+
+            return `
+                <button type="button" data-delete-modulebook-tag="${escapeHtml(String(tag.id))}">
+                    Delete this version
+                </button>
+            `;
+        }
+
+        function canRestoreBefore(changeSet) {
+            return !changeSet.discardedAt
+                && changeSet.sourceType !== "DELETE"
+                && changeSet.sourceType !== "PDF_IMPORT"
+                && changeSet.sourceType !== "RESTORE_BEFORE"
+                && changeSet.sourceType !== "RESTORE_TAG";
+        }
+
+        function canResetToInitialImport(changeSet) {
+            return changeSet.sourceType === "PDF_IMPORT"
+                && String(changeSet.id) === String(initialPdfImportChangeSetId());
+        }
+
+        function initialPdfImportChangeSetId() {
+            const initialImport = changeSets
+                .filter(changeSet => changeSet.sourceType === "PDF_IMPORT")
+                .slice()
+                .sort((left, right) =>
+                    eventTime(left) - eventTime(right) || Number(left.id) - Number(right.id)
+                )[0];
+
+            return initialImport?.id ?? null;
+        }
+
+        function historyRowsDescending() {
+            return historyEvents()
+                .slice()
+                .sort((left, right) => compareHistoryEvents(right, left));
+        }
+
+        function historyEvents() {
+            return [
+                ...changeSets.map(changeSet => ({
+                    type: "changeSet",
+                    createdAt: changeSet.createdAt,
+                    id: Number(changeSet.id),
+                    value: changeSet
+                })),
+                ...modulebookTags.map(tag => ({
+                    type: "modulebookTag",
+                    createdAt: tag.createdAt,
+                    id: Number(tag.id),
+                    value: tag
+                }))
+            ];
+        }
+
+        function calculateHistoryVersions() {
+            versionsByChangeSetId = new Map();
+            versionsByModulebookTagId = new Map();
+
+            const versionBeforeChangeSetId = new Map();
+            const events = historyEvents().sort(compareHistoryEvents);
+
+            let major = 1;
+            let minor = 0;
+            let hasVersion = false;
+
+            for (const event of events) {
+                if (event.type === "modulebookTag") {
+                    if (isInitialImportTag(event.value)) {
+                        hasVersion = true;
+                    } else if (hasVersion) {
+                        major += 1;
+                        minor = 0;
+                    } else {
+                        hasVersion = true;
+                    }
+                    versionsByModulebookTagId.set(Number(event.value.id), formatVersion(major, minor));
+                    continue;
+                }
+
+                const changeSet = event.value;
+                const changeSetId = Number(changeSet.id);
+                versionBeforeChangeSetId.set(changeSetId, hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
+
+                if (changeSet.sourceType === "RESTORE_BEFORE") {
+                    const targetChangeSetId = restoreTargetChangeSetId(changeSet);
+                    const restoredVersion = versionBeforeChangeSetId.get(targetChangeSetId)
+                        || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
+                    const parsedVersion = parseVersion(restoredVersion);
+                    major = parsedVersion.major;
+                    minor = parsedVersion.minor;
+                    hasVersion = true;
+                    versionsByChangeSetId.set(changeSetId, restoredVersion);
+                    continue;
+                }
+
+                if (changeSet.sourceType === "RESTORE_TAG") {
+                    const targetTagId = restoreTargetModulebookTagId(changeSet);
+                    const restoredVersion = versionsByModulebookTagId.get(targetTagId)
+                        || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
+                    const parsedVersion = parseVersion(restoredVersion);
+                    major = parsedVersion.major;
+                    minor = parsedVersion.minor;
+                    hasVersion = true;
+                    versionsByChangeSetId.set(changeSetId, restoredVersion);
+                    continue;
+                }
+
+                if (!hasVersion) {
+                    hasVersion = true;
+                } else {
+                    minor += 1;
+                }
+
+                versionsByChangeSetId.set(changeSetId, formatVersion(major, minor));
+            }
+        }
+
+        function compareHistoryEvents(left, right) {
+            const timeComparison = eventTime(left) - eventTime(right);
+            if (timeComparison !== 0) {
+                return timeComparison;
+            }
+
+            if (left.type !== right.type) {
+                return left.type === "changeSet" ? -1 : 1;
+            }
+
+            return left.id - right.id;
+        }
+
+        function eventTime(event) {
+            const timestamp = new Date(event.createdAt).getTime();
+            return Number.isFinite(timestamp) ? timestamp : 0;
+        }
+
+        function versionForChangeSet(changeSet) {
+            return versionsByChangeSetId.get(Number(changeSet.id)) || "";
+        }
+
+        function versionForModulebookTag(tag) {
+            return versionsByModulebookTagId.get(Number(tag.id)) || "";
+        }
+
+        function isInitialImportTag(tag) {
+            return tag.sourceType === "INITIAL_IMPORT";
+        }
+
+        function modulebookTagActiveModuleCount(tag) {
+            const snapshot = parseSnapshot(tag);
+            return snapshot?.modules?.length ?? "";
+        }
+
+        function restoreTargetChangeSetId(changeSet) {
+            const match = String(changeSet.reason || "").match(/change set\s+(\d+)/i);
+            return match ? Number(match[1]) : null;
+        }
+
+        function restoreTargetModulebookTagId(changeSet) {
+            const match = String(changeSet.reason || "").match(/modulebook tag\s+(\d+)/i);
+            return match ? Number(match[1]) : null;
+        }
+
+        function formatVersion(major, minor) {
+            return `${major}.${minor}`;
+        }
+
+        function parseVersion(version) {
+            const [major, minor] = String(version || "1.0").split(".").map(Number);
+            return {
+                major: Number.isFinite(major) ? major : 1,
+                minor: Number.isFinite(minor) ? minor : 0
+            };
         }
 
         function moduleById(moduleId) {
@@ -330,7 +611,7 @@
 
         function moduleLabel(module, moduleId) {
             if (!module) {
-                return `Module ${moduleId}`;
+                return moduleId ? `Module ${moduleId}` : "Deleted module";
             }
 
             return `${module.moduleNumber || module.id} ${module.name || ""}`.trim();
@@ -422,6 +703,117 @@
 
         function setStatus(message) {
             document.getElementById("status").textContent = message;
+        }
+
+        document.addEventListener("click", async event => {
+            const button = event.target.closest("[data-restore-before]");
+            if (button) {
+                const changeSetId = button.getAttribute("data-restore-before");
+                await handleRestoreBefore(changeSetId);
+                return;
+            }
+
+            const resetButton = event.target.closest("[data-reset-to-initial-import]");
+            if (resetButton) {
+                const changeSetId = resetButton.getAttribute("data-reset-to-initial-import");
+                await handleResetToInitialImport(changeSetId);
+                return;
+            }
+
+            const restoreTagButton = event.target.closest("[data-restore-modulebook-tag]");
+            if (restoreTagButton) {
+                const tagId = restoreTagButton.getAttribute("data-restore-modulebook-tag");
+                await handleRestoreModulebookTag(tagId);
+                return;
+            }
+
+            const deleteTagButton = event.target.closest("[data-delete-modulebook-tag]");
+            if (deleteTagButton) {
+                const tagId = deleteTagButton.getAttribute("data-delete-modulebook-tag");
+                await handleDeleteModulebookTag(tagId);
+            }
+        });
+
+        async function handleRestoreBefore(changeSetId) {
+            const confirmed = window.confirm(
+                "This will reset the study program to before this change set. Later changes will be discarded and cannot be restored. Continue?"
+            );
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                setStatus(`Restoring to before change set ${changeSetId}...`);
+                await restoreBeforeChangeSet(changeSetId, false);
+                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+            } catch (error) {
+                const force = window.confirm(
+                    `${error.message}\n\nContinue anyway? Created modules listed above will be deleted.`
+                );
+                if (!force) {
+                    setStatus("Restore cancelled.");
+                    return;
+                }
+
+                try {
+                    setStatus(`Restoring to before change set ${changeSetId} with confirmation...`);
+                    await restoreBeforeChangeSet(changeSetId, true);
+                    window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                } catch (forceError) {
+                    setStatus("Restore failed: " + forceError.message);
+                }
+            }
+        }
+
+        async function handleResetToInitialImport(changeSetId) {
+            const confirmed = window.confirm(
+                "This will reset the study program to the initial PDF import and permanently delete all later change logs and modulebook tags. Continue?"
+            );
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                setStatus("Resetting to initial PDF import and cleaning history...");
+                await resetToInitialImport(changeSetId);
+                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+            } catch (error) {
+                setStatus("Reset to initial import failed: " + error.message);
+            }
+        }
+
+        async function handleRestoreModulebookTag(tagId) {
+            const confirmed = window.confirm(
+                "This will change the current study program back to this modulebook tag version. The tag itself will stay saved. Continue?"
+            );
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                setStatus(`Restoring modulebook tag ${tagId}...`);
+                await restoreModulebookTag(tagId);
+                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+            } catch (error) {
+                setStatus("Back to this version failed: " + error.message);
+            }
+        }
+
+        async function handleDeleteModulebookTag(tagId) {
+            const confirmed = window.confirm(
+                "This will delete this saved modulebook tag version. The current study program will not change. Continue?"
+            );
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                setStatus(`Deleting modulebook tag ${tagId}...`);
+                await deleteModulebookTag(tagId);
+                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+            } catch (error) {
+                setStatus("Delete this version failed: " + error.message);
+            }
         }
 
         init();

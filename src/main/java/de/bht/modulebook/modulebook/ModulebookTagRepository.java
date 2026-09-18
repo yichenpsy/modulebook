@@ -21,16 +21,34 @@ public class ModulebookTagRepository {
     }
 
     public ModulebookTag insert(Long studyProgramId, String tagMessage, String snapshotJson) {
+        return insert(studyProgramId, tagMessage, snapshotJson, "MANUAL", null);
+    }
+
+    public ModulebookTag insert(
+            Long studyProgramId,
+            String tagMessage,
+            String snapshotJson,
+            String sourceType,
+            Long sourceChangeSetId
+    ) {
         Long id = jdbcTemplate.queryForObject(
                 """
-                INSERT INTO modulebook_tags (study_program_id, tag_message, snapshot_json)
-                VALUES (?, ?, CAST(? AS jsonb))
+                INSERT INTO modulebook_tags (
+                    study_program_id,
+                    tag_message,
+                    snapshot_json,
+                    source_type,
+                    source_change_set_id
+                )
+                VALUES (?, ?, CAST(? AS jsonb), ?, ?)
                 RETURNING id
                 """,
                 Long.class,
                 studyProgramId,
                 tagMessage,
-                snapshotJson
+                snapshotJson,
+                sourceType,
+                sourceChangeSetId
         );
         return findById(id).orElseThrow();
     }
@@ -38,7 +56,8 @@ public class ModulebookTagRepository {
     public Optional<ModulebookTag> findById(Long id) {
         return jdbcTemplate.query(
                         """
-                        SELECT id, study_program_id, tag_message, snapshot_json::text AS snapshot_json, created_at
+                        SELECT id, study_program_id, tag_message, snapshot_json::text AS snapshot_json,
+                               created_at, source_type, source_change_set_id
                         FROM modulebook_tags
                         WHERE id = ?
                         """,
@@ -52,7 +71,8 @@ public class ModulebookTagRepository {
     public List<ModulebookTag> findByStudyProgramId(Long studyProgramId) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, tag_message, snapshot_json::text AS snapshot_json, created_at
+                SELECT id, study_program_id, tag_message, snapshot_json::text AS snapshot_json,
+                       created_at, source_type, source_change_set_id
                 FROM modulebook_tags
                 WHERE study_program_id = ?
                 ORDER BY created_at DESC, id DESC
@@ -60,6 +80,21 @@ public class ModulebookTagRepository {
                 rowMapper,
                 studyProgramId
         );
+    }
+
+    public void deleteByStudyProgramId(Long studyProgramId) {
+        jdbcTemplate.update(
+                "DELETE FROM modulebook_tags WHERE study_program_id = ?",
+                studyProgramId
+        );
+    }
+
+    public boolean delete(Long id) {
+        int rowsDeleted = jdbcTemplate.update(
+                "DELETE FROM modulebook_tags WHERE id = ?",
+                id
+        );
+        return rowsDeleted == 1;
     }
 
     private static class ModulebookTagRowMapper implements RowMapper<ModulebookTag> {
@@ -73,9 +108,15 @@ public class ModulebookTagRepository {
                     rs.getLong("study_program_id"),
                     rs.getString("tag_message"),
                     rs.getString("snapshot_json"),
-                    createdAtInstant
+                    createdAtInstant,
+                    rs.getString("source_type"),
+                    getLongOrNull(rs, "source_change_set_id")
             );
+        }
+
+        private Long getLongOrNull(ResultSet rs, String columnName) throws SQLException {
+            long value = rs.getLong(columnName);
+            return rs.wasNull() ? null : value;
         }
     }
 }
-

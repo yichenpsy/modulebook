@@ -28,9 +28,11 @@ public class StudyProgramService {
     public StudyProgram findOrCreate(String name, Integer year) {
         // Import sends name/year, not id. So first look up the matching program.
         validateNameAndYear(name, year);
-        return studyProgramRepository.findByNameAndYear(name, year)
+        StudyProgram studyProgram = studyProgramRepository.findByNameAndYear(name, year)
                 // If it does not exist yet, create it once and reuse that id for modules.
                 .orElseGet(() -> create(new StudyProgram(null, name, year, null, null)));
+        studyProgramRepository.unhide(studyProgram.getId());
+        return studyProgram;
     }
 
     public StudyProgram getById(Long id) {

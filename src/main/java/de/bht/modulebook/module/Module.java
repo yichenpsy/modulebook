@@ -30,6 +30,7 @@ public class Module {
     private Instant createdAt;
     private Instant updatedAt;
     private String examinationForm;
+    private Long createdChangeSetId;
 
     public Module() {
     }
@@ -40,6 +41,18 @@ public class Module {
             String prerequisites, String level, String moduleStatus, String frequency, String examinationForm, String contents,
             String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
             Instant updatedAt) {
+        this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
+                titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
+                moduleStatus, frequency, examinationForm, contents, literature, additionalNotes, moduleWeight,
+                createdAt, updatedAt, null);
+    }
+
+    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
+            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+            String coordinator, String applicability, String learningArea, String learningObjectives,
+            String prerequisites, String level, String moduleStatus, String frequency, String examinationForm, String contents,
+            String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
+            Instant updatedAt, Long createdChangeSetId) {
         this.id = id;
         this.studyProgramId = studyProgramId;
         this.moduleNumber = moduleNumber;
@@ -65,6 +78,7 @@ public class Module {
         this.moduleWeight = moduleWeight;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.createdChangeSetId = createdChangeSetId;
     }
 
     public Long getId() {
@@ -269,6 +283,14 @@ public class Module {
 
     public void setExaminationForm(String examinationForm) {
         this.examinationForm = examinationForm;
+    }
+
+    public Long getCreatedChangeSetId() {
+        return createdChangeSetId;
+    }
+
+    public void setCreatedChangeSetId(Long createdChangeSetId) {
+        this.createdChangeSetId = createdChangeSetId;
     }
 
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Collections;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -42,16 +43,46 @@ public class ModuleFieldChangeRepository {
     public List<ModuleFieldChange> findByChangeSetId(Long changeSetId) {
         return jdbcTemplate.query(
                 """
-                SELECT id, change_set_id, module_id, field_path,
-                       old_value::text AS old_value,
-                       new_value::text AS new_value,
-                       created_at
+                SELECT module_field_changes.id,
+                       module_field_changes.change_set_id,
+                       module_field_changes.module_id,
+                       module_field_changes.field_path,
+                       module_field_changes.old_value::text AS old_value,
+                       module_field_changes.new_value::text AS new_value,
+                       module_field_changes.created_at
                 FROM module_field_changes
                 WHERE change_set_id = ?
                 ORDER BY id
                 """,
                 rowMapper,
                 changeSetId
+        );
+    }
+
+    public List<ModuleFieldChange> findByChangeSetIds(List<Long> changeSetIds) {
+        if (changeSetIds.isEmpty()) {
+            return List.of();
+        }
+
+        String placeholders = String.join(",", Collections.nCopies(changeSetIds.size(), "?"));
+        return jdbcTemplate.query(
+                """
+                SELECT module_field_changes.id,
+                       module_field_changes.change_set_id,
+                       module_field_changes.module_id,
+                       module_field_changes.field_path,
+                       module_field_changes.old_value::text AS old_value,
+                       module_field_changes.new_value::text AS new_value,
+                       module_field_changes.created_at
+                FROM module_field_changes
+                JOIN study_program_change_sets ON study_program_change_sets.id = module_field_changes.change_set_id
+                WHERE module_field_changes.change_set_id IN (
+                """ + placeholders + """
+                )
+                ORDER BY study_program_change_sets.created_at, study_program_change_sets.id, module_field_changes.id
+                """,
+                rowMapper,
+                changeSetIds.toArray()
         );
     }
 
@@ -80,12 +111,17 @@ public class ModuleFieldChangeRepository {
             return new ModuleFieldChange(
                     rs.getLong("id"),
                     rs.getLong("change_set_id"),
-                    rs.getLong("module_id"),
+                    getLongOrNull(rs, "module_id"),
                     rs.getString("field_path"),
                     rs.getString("old_value"),
                     rs.getString("new_value"),
                     createdAtInstant
             );
+        }
+
+        private Long getLongOrNull(ResultSet rs, String columnName) throws SQLException {
+            long value = rs.getLong(columnName);
+            return rs.wasNull() ? null : value;
         }
     }
 }

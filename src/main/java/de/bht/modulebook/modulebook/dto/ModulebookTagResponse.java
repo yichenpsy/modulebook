@@ -7,7 +7,8 @@ public record ModulebookTagResponse(
         Long studyProgramId,
         String tagMessage,
         String snapshotJson,
-        Instant createdAt
+        Instant createdAt,
+        String sourceType,
+        Long sourceChangeSetId
 ) {
 }
-

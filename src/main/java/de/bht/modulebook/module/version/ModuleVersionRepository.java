@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,6 +132,18 @@ public class ModuleVersionRepository {
                 versionNumber
         );
         return versions.stream().findFirst();
+    }
+
+    public void deleteByChangeSetIds(List<Long> changeSetIds) {
+        if (changeSetIds.isEmpty()) {
+            return;
+        }
+
+        String placeholders = String.join(",", Collections.nCopies(changeSetIds.size(), "?"));
+        jdbcTemplate.update(
+                "DELETE FROM module_versions WHERE change_set_id IN (" + placeholders + ")",
+                changeSetIds.toArray()
+        );
     }
 
     private static class ModuleVersionRowMapper implements RowMapper<ModuleVersion> {

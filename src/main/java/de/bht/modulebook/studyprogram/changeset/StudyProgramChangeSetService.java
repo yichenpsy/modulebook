@@ -11,6 +11,8 @@ public class StudyProgramChangeSetService {
     public static final String SOURCE_MANUAL_EDIT = "MANUAL_EDIT";
     public static final String SOURCE_PDF_IMPORT = "PDF_IMPORT";
     public static final String SOURCE_RESTORE = "RESTORE";
+    public static final String SOURCE_RESTORE_BEFORE = "RESTORE_BEFORE";
+    public static final String SOURCE_RESTORE_TAG = "RESTORE_TAG";
     public static final String SOURCE_DELETE = "DELETE";
     public static final String SOURCE_INITIAL_MODULE = "INITIAL_MODULE";
 
@@ -35,6 +37,16 @@ public class StudyProgramChangeSetService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Study program id is required");
         }
         return repository.findByStudyProgramId(studyProgramId);
+    }
+
+    public boolean isFirstSourceChangeSet(Long studyProgramId, String sourceType, Long changeSetId) {
+        if (studyProgramId == null || sourceType == null || changeSetId == null) {
+            return false;
+        }
+
+        return repository.findFirstByStudyProgramIdAndSourceType(studyProgramId, sourceType)
+                .map(changeSet -> changeSetId.equals(changeSet.getId()))
+                .orElse(false);
     }
 
     private String normalizeReason(String reason) {

@@ -9,8 +9,9 @@ public class ModulebookTagMapper {
                 tag.getStudyProgramId(),
                 tag.getTagMessage(),
                 tag.getSnapshotJson(),
-                tag.getCreatedAt()
+                tag.getCreatedAt(),
+                tag.getSourceType(),
+                tag.getSourceChangeSetId()
         );
     }
 }
-

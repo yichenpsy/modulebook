@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Collections;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,7 +24,8 @@ public class ModuleRepository {
             id, study_program_id, module_number, name, credits, description,
             modulebook_id, module_type, title_de, title_en, coordinator, applicability,
             learning_area, learning_objectives, prerequisites, level, module_status, frequency,
-            examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at
+            examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at,
+            created_change_set_id
             """;
 
     // JdbcTemplate is Spring's helper class for running SQL.
@@ -63,7 +65,8 @@ public class ModuleRepository {
                         "contents",
                         "literature",
                         "additional_notes",
-                        "module_weight")
+                        "module_weight",
+                        "created_change_set_id")
                 .usingGeneratedKeyColumns("id");
     }
 
@@ -94,6 +97,7 @@ public class ModuleRepository {
         values.put("literature", module.getLiterature());
         values.put("additional_notes", module.getAdditionalNotes());
         values.put("module_weight", decimalToText(module.getModuleWeight()));
+        values.put("created_change_set_id", module.getCreatedChangeSetId());
 
         // PostgreSQL creates the id, so SimpleJdbcInsert returns the generated key.
         Number newId = insertModule.executeAndReturnKey(values);
@@ -126,6 +130,19 @@ public class ModuleRepository {
                 "SELECT " + SELECT_COLUMNS + " FROM modules WHERE study_program_id = ? ORDER BY module_number",
                 moduleRowMapper,
                 studyProgramId);
+    }
+
+    public List<Module> findByCreatedChangeSetIds(List<Long> changeSetIds) {
+        if (changeSetIds.isEmpty()) {
+            return List.of();
+        }
+
+        String placeholders = String.join(",", Collections.nCopies(changeSetIds.size(), "?"));
+        return jdbcTemplate.query(
+                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE created_change_set_id IN (" + placeholders + ") ORDER BY module_number",
+                moduleRowMapper,
+                changeSetIds.toArray()
+        );
     }
 
     // Updates editable fields and returns false when no row with this id exists.
@@ -247,7 +264,8 @@ public class ModuleRepository {
                     rs.getString("additional_notes"),
                     getBigDecimalOrNull(rs, "module_weight"),
                     toInstantOrNull(rs, "created_at"),
-                    toInstantOrNull(rs, "updated_at"));
+                    toInstantOrNull(rs, "updated_at"),
+                    getLongOrNull(rs, "created_change_set_id"));
         }
 
         private Long getLongOrNull(ResultSet rs, String columnName) throws SQLException {

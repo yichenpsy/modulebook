@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.bht.modulebook.module.version.ModuleFieldChange;
@@ -15,15 +17,18 @@ public class StudyProgramChangeSetController {
     private final StudyProgramChangeSetService changeSetService;
     private final StudyProgramService studyProgramService;
     private final ModuleFieldChangeRepository fieldChangeRepository;
+    private final ChangeSetRestoreService restoreService;
 
     public StudyProgramChangeSetController(
             StudyProgramChangeSetService changeSetService,
             StudyProgramService studyProgramService,
-            ModuleFieldChangeRepository fieldChangeRepository
+            ModuleFieldChangeRepository fieldChangeRepository,
+            ChangeSetRestoreService restoreService
     ) {
         this.changeSetService = changeSetService;
         this.studyProgramService = studyProgramService;
         this.fieldChangeRepository = fieldChangeRepository;
+        this.restoreService = restoreService;
     }
 
     @GetMapping("/api/study-programs/{studyProgramId}/change-sets")
@@ -40,5 +45,18 @@ public class StudyProgramChangeSetController {
     @GetMapping("/api/modules/{moduleId}/field-changes")
     public List<ModuleFieldChange> getModuleFieldChanges(@PathVariable Long moduleId) {
         return fieldChangeRepository.findByModuleId(moduleId);
+    }
+
+    @PostMapping("/api/change-sets/{changeSetId}/restore-before")
+    public StudyProgramChangeSet restoreBefore(
+            @PathVariable Long changeSetId,
+            @RequestParam(defaultValue = "false") boolean force
+    ) {
+        return restoreService.restoreBefore(changeSetId, force);
+    }
+
+    @PostMapping("/api/change-sets/{changeSetId}/reset-to-initial-import")
+    public StudyProgramChangeSet resetToInitialImport(@PathVariable Long changeSetId) {
+        return restoreService.resetToInitialImport(changeSetId);
     }
 }

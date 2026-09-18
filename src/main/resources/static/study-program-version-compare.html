@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Study Program Versions</title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Study programs</a>
+        <a href="/study-program-import.html">Import PDF</a>
+    </nav>
+
+    <h1>Compare Study Program Versions</h1>
+
+    <section>
+        <div id="status" class="status">Loading versions...</div>
+        <div class="form-actions">
+            <a id="historyLink" href="/index.html">Back to change log</a>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="studyProgramTitle">Study program</h2>
+        <div class="compare-controls">
+            <label>
+                From version
+                <select id="fromVersion"></select>
+            </label>
+
+            <label>
+                To version
+                <select id="toVersion"></select>
+            </label>
+
+            <button type="button" onclick="runCompare()">Compare</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Differences</h2>
+        <div id="diffResult">Choose two versions to compare.</div>
+    </section>
+
+    <script src="/api.js?v=study-program-version-compare"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const studyProgramId = params.get("id");
+        const initialFrom = params.get("from");
+        const initialTo = params.get("to");
+
+        let studyProgram = null;
+        let modules = [];
+        let teachingForms = [];
+        let changeSets = [];
+        let modulebookTags = [];
+        let changesByChangeSetId = new Map();
+        let versionPoints = [];
+
+        async function init() {
+            if (!studyProgramId) {
+                setStatus("Missing study program id in URL. Example: /study-program-version-compare.html?id=3");
+                return;
+            }
+
+            document.getElementById("historyLink").href =
+                `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+
+            try {
+                const studyPrograms = await loadStudyPrograms();
+                studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
+                [modules, changeSets, modulebookTags, teachingForms] = await Promise.all([
+                    loadModulesForStudyProgram(studyProgramId),
+                    loadStudyProgramChangeSets(studyProgramId),
+                    loadModulebookTags(studyProgramId),
+                    loadTeachingForms()
+                ]);
+                await loadAllFieldChanges();
+                buildVersionPoints();
+                renderTitle();
+                renderVersionSelects();
+                setStatus(`Loaded ${versionPoints.length} versions.`);
+
+                if (versionPoints.length >= 2) {
+                    runCompare();
+                }
+            } catch (error) {
+                setStatus("Could not load version compare page: " + error.message);
+            }
+        }
+
+        async function loadAllFieldChanges() {
+            const entries = await Promise.all(changeSets.map(async changeSet => [
+                Number(changeSet.id),
+                await loadChangeSetFieldChanges(changeSet.id)
+            ]));
+
+            changesByChangeSetId = new Map(entries);
+        }
+
+        function buildVersionPoints() {
+            const versionBeforeChangeSetId = new Map();
+            const versionByModulebookTagId = new Map();
+            const events = historyEvents();
+            const latestPointByVersion = new Map();
+            let major = 1;
+            let minor = 0;
+            let hasVersion = false;
+
+            versionPoints = [];
+
+            events.forEach((event, index) => {
+                if (event.type === "modulebookTag") {
+                    if (isInitialImportTag(event.value)) {
+                        hasVersion = true;
+                    } else if (hasVersion) {
+                        major += 1;
+                        minor = 0;
+                    } else {
+                        hasVersion = true;
+                    }
+
+                    const version = formatVersion(major, minor);
+                    versionByModulebookTagId.set(Number(event.value.id), version);
+                    latestPointByVersion.set(version, {
+                        key: `tag:${event.value.id}`,
+                        index,
+                        version,
+                        label: `Tag ${event.value.id}`,
+                        detail: event.value.tagMessage || "",
+                        createdAt: event.value.createdAt
+                    });
+                    return;
+                }
+
+                const changeSet = event.value;
+                const changeSetId = Number(changeSet.id);
+                versionBeforeChangeSetId.set(changeSetId, hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
+
+                if (changeSet.sourceType === "RESTORE_BEFORE") {
+                    const targetChangeSetId = restoreTargetChangeSetId(changeSet);
+                    const restoredVersion = versionBeforeChangeSetId.get(targetChangeSetId)
+                        || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
+                    const parsedVersion = parseVersion(restoredVersion);
+                    major = parsedVersion.major;
+                    minor = parsedVersion.minor;
+                    hasVersion = true;
+                    latestPointByVersion.set(restoredVersion, changeSetVersionPoint(changeSet, index, restoredVersion));
+                    return;
+                }
+
+                if (changeSet.sourceType === "RESTORE_TAG") {
+                    const targetTagId = restoreTargetModulebookTagId(changeSet);
+                    const restoredVersion = versionByModulebookTagId.get(targetTagId)
+                        || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
+                    const parsedVersion = parseVersion(restoredVersion);
+                    major = parsedVersion.major;
+                    minor = parsedVersion.minor;
+                    hasVersion = true;
+                    latestPointByVersion.set(restoredVersion, changeSetVersionPoint(changeSet, index, restoredVersion));
+                    return;
+                }
+
+                if (!hasVersion) {
+                    hasVersion = true;
+                } else {
+                    minor += 1;
+                }
+
+                if (!changeSet.discardedAt) {
+                    const version = formatVersion(major, minor);
+                    latestPointByVersion.set(version, changeSetVersionPoint(changeSet, index, version));
+                }
+            });
+
+            versionPoints = Array.from(latestPointByVersion.values())
+                .sort((left, right) => compareVersions(left.version, right.version) || left.index - right.index);
+        }
+
+        function changeSetVersionPoint(changeSet, index, version) {
+            return {
+                key: `changeSet:${changeSet.id}`,
+                index,
+                version,
+                label: `Change set ${changeSet.id}`,
+                detail: changeSet.reason || changeSet.sourceType || "",
+                createdAt: changeSet.createdAt
+            };
+        }
+
+        function renderTitle() {
+            if (!studyProgram) {
+                document.getElementById("studyProgramTitle").textContent =
+                    `Study program ${studyProgramId}`;
+                return;
+            }
+
+            document.getElementById("studyProgramTitle").textContent =
+                `${studyProgram.name} (${studyProgram.year})`;
+        }
+
+        function renderVersionSelects() {
+            const fromSelect = document.getElementById("fromVersion");
+            const toSelect = document.getElementById("toVersion");
+
+            if (versionPoints.length < 2) {
+                fromSelect.innerHTML = "";
+                toSelect.innerHTML = "";
+                document.getElementById("diffResult").textContent =
+                    "At least two versions are needed for comparison.";
+                return;
+            }
+
+            const options = versionPoints.map(point => `
+                <option value="${escapeHtml(point.key)}">
+                    ${escapeHtml(versionPointLabel(point))}
+                </option>
+            `).join("");
+
+            fromSelect.innerHTML = options;
+            toSelect.innerHTML = options;
+            fromSelect.value = selectableVersionKey(initialFrom, versionPoints[0].key);
+            toSelect.value = selectableVersionKey(initialTo, versionPoints[versionPoints.length - 1].key);
+        }
+
+        function selectableVersionKey(requestedKey, fallbackKey) {
+            return versionPoints.some(point => point.key === requestedKey) ? requestedKey : fallbackKey;
+        }
+
+        function versionPointLabel(point) {
+            const detail = point.detail ? ` - ${point.detail}` : "";
+            return `${point.version} - ${point.label} - ${formatDate(point.createdAt)}${detail}`;
+        }
+
+        function runCompare() {
+            const fromKey = document.getElementById("fromVersion").value;
+            const toKey = document.getElementById("toVersion").value;
+
+            if (!fromKey || !toKey) {
+                return;
+            }
+
+            const fromPoint = versionPoints.find(point => point.key === fromKey);
+            const toPoint = versionPoints.find(point => point.key === toKey);
+            const diff = compareVersionPoints(fromPoint, toPoint);
+            renderDiff(diff, fromPoint, toPoint);
+            setStatus(`Found ${diff.length} changed fields.`);
+        }
+
+        function compareVersionPoints(fromPoint, toPoint) {
+            if (!fromPoint || !toPoint || fromPoint.key === toPoint.key) {
+                return [];
+            }
+
+            const reverse = fromPoint.index > toPoint.index;
+            const startIndex = Math.min(fromPoint.index, toPoint.index);
+            const endIndex = Math.max(fromPoint.index, toPoint.index);
+            const selectedChanges = historyEvents()
+                .filter(event => event.type === "changeSet" && event.index > startIndex && event.index <= endIndex)
+                .flatMap(event => changesByChangeSetId.get(Number(event.value.id)) || [])
+                .sort(compareFieldChanges);
+            const byField = new Map();
+
+            selectedChanges.forEach(change => {
+                const fieldKey = `${change.moduleId || "studyProgram"}:${change.fieldPath}`;
+                const existing = byField.get(fieldKey);
+                if (!existing) {
+                    byField.set(fieldKey, {
+                        moduleId: change.moduleId,
+                        path: change.fieldPath,
+                        oldValue: change.oldValue,
+                        newValue: change.newValue
+                    });
+                    return;
+                }
+                existing.newValue = change.newValue;
+            });
+
+            return Array.from(byField.values())
+                .map(change => reverse ? {
+                    moduleId: change.moduleId,
+                    path: change.path,
+                    oldValue: change.newValue,
+                    newValue: change.oldValue
+                } : change)
+                .filter(change => !valuesEqual(change.oldValue, change.newValue))
+                .sort((left, right) =>
+                    moduleLabel(moduleById(left.moduleId), left.moduleId).localeCompare(
+                        moduleLabel(moduleById(right.moduleId), right.moduleId)
+                    ) || String(left.path || "").localeCompare(String(right.path || ""))
+                );
+        }
+
+        function renderDiff(changes, fromPoint, toPoint) {
+            const container = document.getElementById("diffResult");
+
+            if (changes.length === 0) {
+                container.textContent = "No differences found.";
+                return;
+            }
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Module</th>
+                            <th>Field</th>
+                            <th>${escapeHtml(fromPoint.version)}</th>
+                            <th>${escapeHtml(toPoint.version)}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${changes.map(change => {
+                            const oldValue = formatFieldChangeValue(change.path, change.oldValue);
+                            const newValue = formatFieldChangeValue(change.path, change.newValue);
+                            return `
+                                <tr>
+                                    <td>${escapeHtml(moduleLabel(moduleById(change.moduleId), change.moduleId))}</td>
+                                    <td>${escapeHtml(readablePath(change.path))}</td>
+                                    <td class="diff-old">${highlightOldValue(oldValue, newValue)}</td>
+                                    <td class="diff-new">${highlightNewValue(oldValue, newValue)}</td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function historyEvents() {
+            return [
+                ...changeSets.map(changeSet => ({
+                    type: "changeSet",
+                    createdAt: changeSet.createdAt,
+                    id: Number(changeSet.id),
+                    value: changeSet
+                })),
+                ...modulebookTags.map(tag => ({
+                    type: "modulebookTag",
+                    createdAt: tag.createdAt,
+                    id: Number(tag.id),
+                    value: tag
+                }))
+            ].sort(compareHistoryEvents).map((event, index) => ({ ...event, index }));
+        }
+
+        function compareHistoryEvents(left, right) {
+            const timeComparison = eventTime(left) - eventTime(right);
+            if (timeComparison !== 0) {
+                return timeComparison;
+            }
+
+            if (left.type !== right.type) {
+                return left.type === "changeSet" ? -1 : 1;
+            }
+
+            return left.id - right.id;
+        }
+
+        function compareFieldChanges(left, right) {
+            return new Date(left.createdAt || 0) - new Date(right.createdAt || 0)
+                || Number(left.changeSetId) - Number(right.changeSetId)
+                || Number(left.id) - Number(right.id);
+        }
+
+        function eventTime(event) {
+            const timestamp = new Date(event.createdAt).getTime();
+            return Number.isFinite(timestamp) ? timestamp : 0;
+        }
+
+        function moduleById(moduleId) {
+            return modules.find(module => Number(module.id) === Number(moduleId));
+        }
+
+        function moduleLabel(module, moduleId) {
+            if (!moduleId) {
+                return "Study program";
+            }
+
+            if (!module) {
+                return `Module ${moduleId}`;
+            }
+
+            return `${module.moduleNumber || module.id} ${module.name || ""}`.trim();
+        }
+
+        function restoreTargetChangeSetId(changeSet) {
+            const match = String(changeSet.reason || "").match(/change set\s+(\d+)/i);
+            return match ? Number(match[1]) : null;
+        }
+
+        function restoreTargetModulebookTagId(changeSet) {
+            const match = String(changeSet.reason || "").match(/modulebook tag\s+(\d+)/i);
+            return match ? Number(match[1]) : null;
+        }
+
+        function isInitialImportTag(tag) {
+            return tag.sourceType === "INITIAL_IMPORT";
+        }
+
+        function formatVersion(major, minor) {
+            return `${major}.${minor}`;
+        }
+
+        function parseVersion(version) {
+            const [major, minor] = String(version || "1.0").split(".").map(Number);
+            return {
+                major: Number.isFinite(major) ? major : 1,
+                minor: Number.isFinite(minor) ? minor : 0
+            };
+        }
+
+        function compareVersions(left, right) {
+            const leftVersion = parseVersion(left);
+            const rightVersion = parseVersion(right);
+            return leftVersion.major - rightVersion.major || leftVersion.minor - rightVersion.minor;
+        }
+
+        function valuesEqual(left, right) {
+            return JSON.stringify(parseJsonValue(left)) === JSON.stringify(parseJsonValue(right));
+        }
+
+        function formatJsonValue(value) {
+            const parsed = parseJsonValue(value);
+            if (parsed === null || parsed === undefined) {
+                return "";
+            }
+            if (typeof parsed === "string" || typeof parsed === "number" || typeof parsed === "boolean") {
+                return String(parsed);
+            }
+            return JSON.stringify(parsed, null, 2);
+        }
+
+        function formatFieldChangeValue(fieldPath, value) {
+            if (fieldPath === "teachingFormIds") {
+                return teachingFormLabelsForJsonValue(value);
+            }
+
+            return formatJsonValue(value);
+        }
+
+        function teachingFormLabelsForJsonValue(value) {
+            const parsed = parseJsonValue(value);
+            const ids = Array.isArray(parsed) ? parsed : [];
+            return normalizedTeachingFormIds(ids)
+                .map(id => {
+                    const teachingForm = teachingForms.find(option => Number(option.id) === id);
+                    return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+                })
+                .join(", ");
+        }
+
+        function parseJsonValue(value) {
+            if (value === null || value === undefined) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(value);
+            } catch (error) {
+                return value;
+            }
+        }
+
+        function normalizedTeachingFormIds(ids) {
+            return (ids || [])
+                .map(Number)
+                .filter(Number.isFinite)
+                .sort((left, right) => left - right);
+        }
+
+        function teachingFormLabel(teachingForm) {
+            const label = teachingForm.labelDe || teachingForm.labelEn || "";
+            return label ? `${teachingForm.code} - ${label}` : teachingForm.code;
+        }
+
+        function highlightOldValue(oldValue, newValue) {
+            const diffParts = diffText(String(oldValue ?? ""), String(newValue ?? ""));
+            return diffParts
+                .filter(part => part.type !== "added")
+                .map(part => part.type === "removed"
+                    ? `<mark class="diff-removed">${escapeHtml(part.text)}</mark>`
+                    : escapeHtml(part.text)
+                )
+                .join("");
+        }
+
+        function highlightNewValue(oldValue, newValue) {
+            const diffParts = diffText(String(oldValue ?? ""), String(newValue ?? ""));
+            return diffParts
+                .filter(part => part.type !== "removed")
+                .map(part => part.type === "added"
+                    ? `<mark class="diff-added">${escapeHtml(part.text)}</mark>`
+                    : escapeHtml(part.text)
+                )
+                .join("");
+        }
+
+        function diffText(oldText, newText) {
+            if (oldText === newText) {
+                return [{ type: "same", text: oldText }];
+            }
+
+            const oldTokens = tokenize(oldText);
+            const newTokens = tokenize(newText);
+            const table = buildLcsTable(oldTokens, newTokens);
+            const parts = [];
+            let oldIndex = 0;
+            let newIndex = 0;
+
+            while (oldIndex < oldTokens.length && newIndex < newTokens.length) {
+                if (oldTokens[oldIndex] === newTokens[newIndex]) {
+                    parts.push({ type: "same", text: oldTokens[oldIndex] });
+                    oldIndex++;
+                    newIndex++;
+                } else if (table[oldIndex + 1][newIndex] >= table[oldIndex][newIndex + 1]) {
+                    parts.push({ type: "removed", text: oldTokens[oldIndex] });
+                    oldIndex++;
+                } else {
+                    parts.push({ type: "added", text: newTokens[newIndex] });
+                    newIndex++;
+                }
+            }
+
+            while (oldIndex < oldTokens.length) {
+                parts.push({ type: "removed", text: oldTokens[oldIndex] });
+                oldIndex++;
+            }
+
+            while (newIndex < newTokens.length) {
+                parts.push({ type: "added", text: newTokens[newIndex] });
+                newIndex++;
+            }
+
+            return mergeAdjacentParts(parts);
+        }
+
+        function tokenize(text) {
+            return text.match(/(\s+|[A-Za-z0-9_]+|[^\sA-Za-z0-9_])/g) || [];
+        }
+
+        function buildLcsTable(oldTokens, newTokens) {
+            const table = Array.from(
+                { length: oldTokens.length + 1 },
+                () => Array(newTokens.length + 1).fill(0)
+            );
+
+            for (let oldIndex = oldTokens.length - 1; oldIndex >= 0; oldIndex--) {
+                for (let newIndex = newTokens.length - 1; newIndex >= 0; newIndex--) {
+                    table[oldIndex][newIndex] = oldTokens[oldIndex] === newTokens[newIndex]
+                        ? table[oldIndex + 1][newIndex + 1] + 1
+                        : Math.max(table[oldIndex + 1][newIndex], table[oldIndex][newIndex + 1]);
+                }
+            }
+
+            return table;
+        }
+
+        function mergeAdjacentParts(parts) {
+            return parts.reduce((merged, part) => {
+                const previous = merged[merged.length - 1];
+                if (previous && previous.type === part.type) {
+                    previous.text += part.text;
+                } else {
+                    merged.push({ ...part });
+                }
+                return merged;
+            }, []);
+        }
+
+        function readablePath(path) {
+            return String(path || "")
+                .replace(/^module\./, "")
+                .replaceAll(".", " / ");
+        }
+
+        function formatDate(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(value).toLocaleString();
+        }
+
+        function setStatus(message) {
+            document.getElementById("status").textContent = message;
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -98,6 +98,7 @@ public class ModuleService {
             Long changeSetId
     ) {
         applyDefaultStatus(module);
+        module.setCreatedChangeSetId(changeSetId);
         Module created = moduleRepository.insert(module);
         if (workload != null) {
             workloadRepository.upsert(created.getId(), workload);
