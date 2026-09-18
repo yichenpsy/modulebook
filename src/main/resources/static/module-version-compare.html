@@ -50,6 +50,7 @@
         const initialFrom = params.get("from");
         const initialTo = params.get("to");
         let currentModule = null;
+        let teachingForms = [];
         let changeSets = [];
         let fieldChanges = [];
         let changeGroups = [];
@@ -65,9 +66,10 @@
 
             try {
                 currentModule = await loadModule(moduleId);
-                [changeSets, fieldChanges] = await Promise.all([
+                [changeSets, fieldChanges, teachingForms] = await Promise.all([
                     loadStudyProgramChangeSets(currentModule.studyProgramId),
-                    loadModuleFieldChanges(moduleId)
+                    loadModuleFieldChanges(moduleId),
+                    loadTeachingForms()
                 ]);
                 buildChangeGroups();
                 renderTitle();
@@ -214,8 +216,8 @@
                         ${changes.map(change => `
                             <tr>
                                 <td>${escapeHtml(readablePath(change.path))}</td>
-                                <td class="diff-old">${highlightOldValue(formatJsonValue(change.oldValue), formatJsonValue(change.newValue))}</td>
-                                <td class="diff-new">${highlightNewValue(formatJsonValue(change.oldValue), formatJsonValue(change.newValue))}</td>
+                                <td class="diff-old">${highlightOldValue(formatFieldChangeValue(change.path, change.oldValue), formatFieldChangeValue(change.path, change.newValue))}</td>
+                                <td class="diff-new">${highlightNewValue(formatFieldChangeValue(change.path, change.oldValue), formatFieldChangeValue(change.path, change.newValue))}</td>
                             </tr>
                         `).join("")}
                     </tbody>
@@ -240,6 +242,49 @@
             } catch (error) {
                 return String(value);
             }
+        }
+
+        function formatFieldChangeValue(fieldPath, value) {
+            if (fieldPath === "teachingFormIds") {
+                return teachingFormLabelsForJsonValue(value);
+            }
+
+            return formatJsonValue(value);
+        }
+
+        function teachingFormLabelsForJsonValue(value) {
+            const parsed = parseJsonValue(value);
+            const ids = Array.isArray(parsed) ? parsed : [];
+            return normalizedTeachingFormIds(ids)
+                .map(id => {
+                    const teachingForm = teachingForms.find(option => Number(option.id) === id);
+                    return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+                })
+                .join(", ");
+        }
+
+        function parseJsonValue(value) {
+            if (value === null || value === undefined) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(value);
+            } catch (error) {
+                return value;
+            }
+        }
+
+        function normalizedTeachingFormIds(ids) {
+            return (ids || [])
+                .map(Number)
+                .filter(Number.isFinite)
+                .sort((left, right) => left - right);
+        }
+
+        function teachingFormLabel(teachingForm) {
+            const label = teachingForm.labelDe || teachingForm.labelEn || "";
+            return label ? `${teachingForm.code} - ${label}` : teachingForm.code;
         }
 
         function highlightOldValue(oldValue, newValue) {

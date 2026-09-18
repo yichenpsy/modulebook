@@ -33,6 +33,7 @@
         const selectedModulebookTagId = params.get("modulebookTagId");
         let studyProgram = null;
         let modules = [];
+        let teachingForms = [];
         let changeSets = [];
         let modulebookTags = [];
         let changesByChangeSetId = new Map();
@@ -48,10 +49,11 @@
             try {
                 const studyPrograms = await loadStudyPrograms();
                 studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
-                [modules, changeSets, modulebookTags] = await Promise.all([
+                [modules, changeSets, modulebookTags, teachingForms] = await Promise.all([
                     loadModulesForStudyProgram(studyProgramId),
                     loadStudyProgramChangeSets(studyProgramId),
-                    loadModulebookTags(studyProgramId)
+                    loadModulebookTags(studyProgramId),
+                    loadTeachingForms()
                 ]);
                 await loadVisibleFieldChanges();
                 renderTitle();
@@ -271,8 +273,8 @@
                                     <tr>
                                         <td>${escapeHtml(moduleLabel(module, change.moduleId))}</td>
                                         <td>${escapeHtml(readablePath(change.fieldPath))}</td>
-                                        <td class="diff-old">${escapeHtml(formatJsonValue(change.oldValue))}</td>
-                                        <td class="diff-new">${escapeHtml(formatJsonValue(change.newValue))}</td>
+                                        <td class="diff-old">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.oldValue))}</td>
+                                        <td class="diff-new">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.newValue))}</td>
                                         <td class="row-actions">
                                             <a href="/module-versions.html?id=${escapeHtml(String(change.moduleId))}">Module log</a>
                                             <a href="/module-edit.html?id=${escapeHtml(String(change.moduleId))}">Edit</a>
@@ -351,6 +353,49 @@
             } catch (error) {
                 return String(value);
             }
+        }
+
+        function formatFieldChangeValue(fieldPath, value) {
+            if (fieldPath === "teachingFormIds") {
+                return teachingFormLabelsForJsonValue(value);
+            }
+
+            return formatJsonValue(value);
+        }
+
+        function teachingFormLabelsForJsonValue(value) {
+            const parsed = parseJsonValue(value);
+            const ids = Array.isArray(parsed) ? parsed : [];
+            return normalizedTeachingFormIds(ids)
+                .map(id => {
+                    const teachingForm = teachingForms.find(option => Number(option.id) === id);
+                    return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+                })
+                .join(", ");
+        }
+
+        function parseJsonValue(value) {
+            if (value === null || value === undefined) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(value);
+            } catch (error) {
+                return value;
+            }
+        }
+
+        function normalizedTeachingFormIds(ids) {
+            return (ids || [])
+                .map(Number)
+                .filter(Number.isFinite)
+                .sort((left, right) => left - right);
+        }
+
+        function teachingFormLabel(teachingForm) {
+            const label = teachingForm.labelDe || teachingForm.labelEn || "";
+            return label ? `${teachingForm.code} - ${label}` : teachingForm.code;
         }
 
         function readablePath(path) {

@@ -527,7 +527,7 @@
                 titleDe: currentModule?.titleDe || "",
                 titleEn: currentModule?.titleEn || "",
                 credits: numberOrNull(document.getElementById("credits").value),
-                teachingFormIds: collectModuleTeachingFormIds(),
+                teachingFormIds: normalizedTeachingFormIds(collectModuleTeachingFormIds()),
                 workload: workloadRequest,
                 description: currentModule?.description || "",
 
@@ -605,7 +605,7 @@
                 changedPaths.push("workload");
             }
 
-            if (comparableText(teachingFormIdsForModule(currentModule)) !== comparableText(request.teachingFormIds)) {
+            if (comparableText(teachingFormIdsForModule(currentModule)) !== comparableText(normalizedTeachingFormIds(request.teachingFormIds))) {
                 changedPaths.push("teachingFormIds");
             }
 
@@ -667,10 +667,10 @@
                 changeMessagePart("literature", oldModule.literature, request.literature, "module.literature", changedPaths),
                 changeMessagePart("additional notes", oldModule.additionalNotes, request.additionalNotes, "module.additionalNotes", changedPaths),
                 changeMessagePart("module weight", oldModule.moduleWeight, request.moduleWeight, "module.moduleWeight", changedPaths),
-                changeMessagePart(
+                teachingFormsChangeMessagePart(
                     "teaching forms",
                     teachingFormIdsForModule(oldModule),
-                    request.teachingFormIds,
+                    normalizedTeachingFormIds(request.teachingFormIds),
                     "teachingFormIds",
                     changedPaths
                 ),
@@ -701,11 +701,40 @@
             return `changed ${label} from ${displayValue(oldText)} to ${displayValue(newText)}`;
         }
 
+        function teachingFormsChangeMessagePart(label, oldIds, newIds, fieldPath, changedPaths) {
+            if (changedPaths && !changedPaths.has(fieldPath)) {
+                return "";
+            }
+
+            const normalizedOldIds = normalizedTeachingFormIds(oldIds);
+            const normalizedNewIds = normalizedTeachingFormIds(newIds);
+
+            if (comparableText(normalizedOldIds) === comparableText(normalizedNewIds)) {
+                return "";
+            }
+
+            return `changed ${label} from ${displayValue(teachingFormLabelsForIds(normalizedOldIds))} to ${displayValue(teachingFormLabelsForIds(normalizedNewIds))}`;
+        }
+
         function teachingFormIdsForModule(module) {
-            return (module.teachingForms || [])
+            return normalizedTeachingFormIds((module.teachingForms || [])
                 .map(teachingForm => Number(teachingForm.id))
+            );
+        }
+
+        function normalizedTeachingFormIds(ids) {
+            return (ids || [])
+                .map(Number)
                 .filter(Number.isFinite)
                 .sort((left, right) => left - right);
+        }
+
+        function teachingFormLabelsForIds(ids) {
+            const labels = normalizedTeachingFormIds(ids).map(id => {
+                const teachingForm = teachingForms.find(option => Number(option.id) === id);
+                return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+            });
+            return labels.join(", ");
         }
 
         function workloadComparableValue(workload) {
