@@ -8,7 +8,6 @@
 <body>
     <nav>
         <a href="/index.html">Study programs</a>
-        <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
     <h1 id="pageTitle">View Module</h1>
@@ -114,8 +113,23 @@
             );
 
             return selectedProgram
-                ? `${selectedProgram.name} (${selectedProgram.year})`
+                ? studyProgramDisplayLabel(selectedProgram)
                 : `Study program ${studyProgramId}`;
+        }
+
+        function studyProgramDisplayLabel(program) {
+            const suffix = degreeTypeShortLabel(program.degreeType);
+            return suffix ? `${program.name || ""} (${suffix})` : (program.name || "");
+        }
+
+        function degreeTypeShortLabel(degreeType) {
+            if (degreeType === "BACHELOR") {
+                return "B.Sc.";
+            }
+            if (degreeType === "MASTER") {
+                return "M.Sc.";
+            }
+            return "";
         }
 
         function teachingFormsText(teachingForms) {

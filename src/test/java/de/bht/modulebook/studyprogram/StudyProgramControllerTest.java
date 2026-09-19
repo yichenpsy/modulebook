@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,9 @@ class StudyProgramControllerTest {
         StudyProgram studyProgram = new StudyProgram(
                 10L,
                 "Architektur",
-                2021,
+                "BACHELOR",
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
@@ -52,7 +55,7 @@ class StudyProgramControllerTest {
         assertThat(response).hasSize(1);
         assertThat(response.get(0).id()).isEqualTo(10L);
         assertThat(response.get(0).name()).isEqualTo("Architektur");
-        assertThat(response.get(0).year()).isEqualTo(2021);
+        assertThat(response.get(0).degreeType()).isEqualTo("BACHELOR");
     }
 
     @Test
@@ -60,22 +63,24 @@ class StudyProgramControllerTest {
         StudyProgram created = new StudyProgram(
                 10L,
                 "Architektur",
-                2021,
+                "BACHELOR",
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
         when(studyProgramService.create(org.mockito.ArgumentMatchers.any(StudyProgram.class))).thenReturn(created);
 
-        StudyProgramResponse response = controller.create(new StudyProgramRequest("Architektur", 2021));
+        StudyProgramResponse response = controller.create(new StudyProgramRequest("Architektur", "BACHELOR"));
 
         assertThat(response.id()).isEqualTo(10L);
         assertThat(response.name()).isEqualTo("Architektur");
-        assertThat(response.year()).isEqualTo(2021);
+        assertThat(response.degreeType()).isEqualTo("BACHELOR");
     }
 
     @Test
     void getModulesLoadsModulesForSelectedStudyProgram() {
-        StudyProgram studyProgram = new StudyProgram(10L, "Architektur", 2021, null, null);
+        StudyProgram studyProgram = new StudyProgram(10L, "Architektur", "BACHELOR", null, null, null, null);
         Module module = new Module(
                 100L,
                 10L,

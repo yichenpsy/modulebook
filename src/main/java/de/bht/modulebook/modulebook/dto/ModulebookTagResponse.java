@@ -1,6 +1,7 @@
 package de.bht.modulebook.modulebook.dto;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public record ModulebookTagResponse(
         Long id,
@@ -9,6 +10,8 @@ public record ModulebookTagResponse(
         String snapshotJson,
         Instant createdAt,
         String sourceType,
-        Long sourceChangeSetId
+        Long sourceChangeSetId,
+        LocalDate modulebookReleaseDate,
+        LocalDate studyExaminationRegulationsDate
 ) {
 }

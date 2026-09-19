@@ -30,7 +30,12 @@ public class ModulebookTagController {
             @RequestBody ModulebookTagRequest request
     ) {
         return ModulebookTagMapper.toResponse(
-                service.create(studyProgramId, request.tagMessage())
+                service.create(
+                        studyProgramId,
+                        request.tagMessage(),
+                        request.modulebookReleaseDate(),
+                        request.studyExaminationRegulationsDate()
+                )
         );
     }
 

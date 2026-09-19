@@ -11,7 +11,9 @@ public class ModulebookTagMapper {
                 tag.getSnapshotJson(),
                 tag.getCreatedAt(),
                 tag.getSourceType(),
-                tag.getSourceChangeSetId()
+                tag.getSourceChangeSetId(),
+                tag.getModulebookReleaseDate(),
+                tag.getStudyExaminationRegulationsDate()
         );
     }
 }

@@ -1,6 +1,7 @@
 package de.bht.modulebook.modulebook;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class ModulebookTag {
     private final Long id;
@@ -10,9 +11,11 @@ public class ModulebookTag {
     private final Instant createdAt;
     private final String sourceType;
     private final Long sourceChangeSetId;
+    private final LocalDate modulebookReleaseDate;
+    private final LocalDate studyExaminationRegulationsDate;
 
     public ModulebookTag(Long id, Long studyProgramId, String tagMessage, String snapshotJson, Instant createdAt) {
-        this(id, studyProgramId, tagMessage, snapshotJson, createdAt, "MANUAL", null);
+        this(id, studyProgramId, tagMessage, snapshotJson, createdAt, "MANUAL", null, null, null);
     }
 
     public ModulebookTag(
@@ -22,7 +25,9 @@ public class ModulebookTag {
             String snapshotJson,
             Instant createdAt,
             String sourceType,
-            Long sourceChangeSetId
+            Long sourceChangeSetId,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate
     ) {
         this.id = id;
         this.studyProgramId = studyProgramId;
@@ -31,6 +36,8 @@ public class ModulebookTag {
         this.createdAt = createdAt;
         this.sourceType = sourceType;
         this.sourceChangeSetId = sourceChangeSetId;
+        this.modulebookReleaseDate = modulebookReleaseDate;
+        this.studyExaminationRegulationsDate = studyExaminationRegulationsDate;
     }
 
     public Long getId() {
@@ -59,5 +66,13 @@ public class ModulebookTag {
 
     public Long getSourceChangeSetId() {
         return sourceChangeSetId;
+    }
+
+    public LocalDate getModulebookReleaseDate() {
+        return modulebookReleaseDate;
+    }
+
+    public LocalDate getStudyExaminationRegulationsDate() {
+        return studyExaminationRegulationsDate;
     }
 }

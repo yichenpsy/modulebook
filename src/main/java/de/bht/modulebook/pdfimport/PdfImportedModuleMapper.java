@@ -30,7 +30,7 @@ public class PdfImportedModuleMapper {
             Pattern.CASE_INSENSITIVE
     );
 
-    public Module toModule(JsonNode imported, String studyProgram, Integer year) {
+    public Module toModule(JsonNode imported, String studyProgram, String degreeType) {
         if (imported == null || imported.isNull()) {
             throw new IllegalArgumentException("Missing imported module");
         }
@@ -55,7 +55,7 @@ public class PdfImportedModuleMapper {
         module.setModuleNumber(moduleNumber);
         module.setName(title);
         module.setCredits(credits);
-        module.setDescription(buildDescription(imported, studyProgram, year));
+        module.setDescription(buildDescription(imported, studyProgram, degreeType));
         module.setTitleDe(text(imported, "title_de"));
         module.setTitleEn(text(imported, "title_en"));
         module.setCoordinator(text(imported, "coordinator"));
@@ -129,10 +129,10 @@ public class PdfImportedModuleMapper {
         return value.asLong();
     }
 
-    private String buildDescription(JsonNode imported, String studyProgram, Integer year) {
+    private String buildDescription(JsonNode imported, String studyProgram, String degreeType) {
         return """
                 Study program: %s
-                Year: %s
+                Degree type: %s
 
                 Contents:
                 %s
@@ -156,7 +156,7 @@ public class PdfImportedModuleMapper {
                 %s
                 """.formatted(
                 studyProgram,
-                year,
+                degreeType,
                 text(imported, "contents"),
                 text(imported, "learning_objectives"),
                 text(imported, "prerequisites"),

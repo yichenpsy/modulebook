@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -144,23 +145,26 @@ class PdfImportServiceTest {
         StudyProgram studyProgram = new StudyProgram(
                 10L,
                 "Architektur",
-                2021,
+                "BACHELOR",
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
-        when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(studyProgram);
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF", null));
+        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of(teachingForm(1L, "SU"), teachingForm(2L, "UE")));
-        when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
+        when(importedModuleMapper.toModule(imported, "Architektur", "BACHELOR")).thenReturn(mapped);
         when(importedModuleMapper.toWorkload(imported, java.util.Map.of("SU", 1L, "UE", 2L))).thenReturn(workload);
         when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
         when(moduleService.create(mapped, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L)).thenReturn(created);
 
         // This is the request body shape sent to POST /api/pdf-import/modules.
         SaveImportedModulesRequest request = new SaveImportedModulesRequest(
-                "Architektur",
-                2021,
+                10L,
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 List.of(imported)
         );
 
@@ -202,23 +206,26 @@ class PdfImportServiceTest {
         StudyProgram studyProgram = new StudyProgram(
                 10L,
                 "Architektur",
-                2021,
+                "BACHELOR",
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
-        when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(studyProgram);
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF", null));
+        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
-        when(importedModuleMapper.toModule(imported, "Architektur", 2021)).thenReturn(mapped);
+        when(importedModuleMapper.toModule(imported, "Architektur", "BACHELOR")).thenReturn(mapped);
         when(importedModuleMapper.toWorkload(imported, java.util.Map.of())).thenReturn(null);
         when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
         when(moduleService.create(mapped, null, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L))
                 .thenThrow(new IllegalArgumentException("Duplicate module code"));
 
         SaveImportedModulesRequest request = new SaveImportedModulesRequest(
-                "Architektur",
-                2021,
+                10L,
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 List.of(imported)
         );
 
@@ -266,22 +273,24 @@ class PdfImportServiceTest {
         StudyProgram studyProgram = new StudyProgram(
                 10L,
                 "Architektur",
-                2021,
+                "BACHELOR",
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
 
-        when(studyProgramService.findOrCreate("Architektur", 2021)).thenReturn(studyProgram);
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur 2021 PDF", null));
+        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
+                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
         when(moduleService.getByStudyProgramId(10L)).thenReturn(List.of(existingB01, existingB02, existingB03, existingB04));
         when(importedModuleMapper.moduleNumber(importedB01)).thenReturn("B01");
         when(importedModuleMapper.moduleNumber(importedB03)).thenReturn("B03");
         when(importedModuleMapper.moduleId(importedB01)).thenReturn(null);
         when(importedModuleMapper.moduleId(importedB03)).thenReturn(null);
-        when(importedModuleMapper.toModule(importedB01, "Architektur", 2021)).thenReturn(mappedB01);
-        when(importedModuleMapper.toModule(importedB03, "Architektur", 2021)).thenReturn(mappedB03);
+        when(importedModuleMapper.toModule(importedB01, "Architektur", "BACHELOR")).thenReturn(mappedB01);
+        when(importedModuleMapper.toModule(importedB03, "Architektur", "BACHELOR")).thenReturn(mappedB03);
         when(importedModuleMapper.toWorkload(importedB01, java.util.Map.of())).thenReturn(null);
         when(importedModuleMapper.toWorkload(importedB03, java.util.Map.of())).thenReturn(null);
         when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.of(existingB01));
@@ -292,8 +301,9 @@ class PdfImportServiceTest {
                 .thenReturn(savedB02);
 
         SaveImportedModulesResponse response = service.saveImportedModules(new SaveImportedModulesRequest(
-                "Architektur",
-                2021,
+                10L,
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 List.of(importedB01, importedB03)
         ));
 
@@ -314,8 +324,9 @@ class PdfImportServiceTest {
     void rejectsEmptyModuleList() {
         // Arrange: saving nothing is a bad request because there is no work to perform.
         SaveImportedModulesRequest request = new SaveImportedModulesRequest(
-                "Architektur",
-                2021,
+                10L,
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
                 List.of()
         );
 

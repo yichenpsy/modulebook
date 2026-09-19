@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,12 @@ public class StudyProgramRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.insertStudyProgram = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("study_programs")
-                .usingColumns("name", "year")
+                .usingColumns(
+                        "name",
+                        "degree_type",
+                        "modulebook_release_date",
+                        "study_examination_regulations_date"
+                )
                 .usingGeneratedKeyColumns("id");
     }
 
@@ -39,7 +45,9 @@ public class StudyProgramRepository {
 
         // Map Java field names to database column names.
         values.put("name", studyProgram.getName());
-        values.put("year", studyProgram.getYear());
+        values.put("degree_type", studyProgram.getDegreeType());
+        values.put("modulebook_release_date", studyProgram.getModulebookReleaseDate());
+        values.put("study_examination_regulations_date", studyProgram.getStudyExaminationRegulationsDate());
 
         // PostgreSQL creates id because study_programs.id is BIGSERIAL.
         Number newId = insertStudyProgram.executeAndReturnKey(values);
@@ -49,27 +57,59 @@ public class StudyProgramRepository {
 
     public Optional<StudyProgram> findById(Long id) {
         List<StudyProgram> studyPrograms = jdbcTemplate.query(
-                "SELECT id, name, year, created_at, updated_at FROM study_programs WHERE id = ?",
+                """
+                SELECT id, name, degree_type, modulebook_release_date,
+                       study_examination_regulations_date, created_at, updated_at
+                FROM study_programs
+                WHERE id = ?
+                """,
                 studyProgramRowMapper,
                 id
         );
         return studyPrograms.stream().findFirst();
     }
 
-    public Optional<StudyProgram> findByNameAndYear(String name, Integer year) {
-        // name + year is unique in the database, so this returns zero or one row.
+    public Optional<StudyProgram> findByNameAndDegreeType(String name, String degreeType) {
+        // name + degree type is unique in the database, so this returns zero or one row.
         List<StudyProgram> studyPrograms = jdbcTemplate.query(
-                "SELECT id, name, year, created_at, updated_at FROM study_programs WHERE name = ? AND year = ?",
+                """
+                SELECT id, name, degree_type, modulebook_release_date,
+                       study_examination_regulations_date, created_at, updated_at
+                FROM study_programs
+                WHERE name = ? AND degree_type = ?
+                """,
                 studyProgramRowMapper,
                 name,
-                year
+                degreeType
         );
         return studyPrograms.stream().findFirst();
     }
 
+    public StudyProgram updateMetadata(StudyProgram studyProgram) {
+        jdbcTemplate.update(
+                """
+                UPDATE study_programs
+                SET modulebook_release_date = ?,
+                    study_examination_regulations_date = ?,
+                    updated_at = now()
+                WHERE id = ?
+                """,
+                studyProgram.getModulebookReleaseDate(),
+                studyProgram.getStudyExaminationRegulationsDate(),
+                studyProgram.getId()
+        );
+        return findById(studyProgram.getId()).orElseThrow();
+    }
+
     public List<StudyProgram> findAll() {
         return jdbcTemplate.query(
-                "SELECT id, name, year, created_at, updated_at FROM study_programs WHERE hidden_at IS NULL ORDER BY name, year",
+                """
+                SELECT id, name, degree_type, modulebook_release_date,
+                       study_examination_regulations_date, created_at, updated_at
+                FROM study_programs
+                WHERE hidden_at IS NULL
+                ORDER BY name, degree_type
+                """,
                 studyProgramRowMapper
         );
     }
@@ -140,10 +180,16 @@ public class StudyProgramRepository {
             return new StudyProgram(
                     rs.getLong("id"),
                     rs.getString("name"),
-                    rs.getInt("year"),
+                    rs.getString("degree_type"),
+                    toLocalDateOrNull(rs, "modulebook_release_date"),
+                    toLocalDateOrNull(rs, "study_examination_regulations_date"),
                     toInstantOrNull(rs, "created_at"),
                     toInstantOrNull(rs, "updated_at")
             );
+        }
+
+        private LocalDate toLocalDateOrNull(ResultSet rs, String columnName) throws SQLException {
+            return rs.getObject(columnName, LocalDate.class);
         }
 
         private Instant toInstantOrNull(ResultSet rs, String columnName) throws SQLException {

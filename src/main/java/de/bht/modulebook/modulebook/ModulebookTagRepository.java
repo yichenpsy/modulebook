@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class ModulebookTagRepository {
     }
 
     public ModulebookTag insert(Long studyProgramId, String tagMessage, String snapshotJson) {
-        return insert(studyProgramId, tagMessage, snapshotJson, "MANUAL", null);
+        return insert(studyProgramId, tagMessage, snapshotJson, "MANUAL", null, null, null);
     }
 
     public ModulebookTag insert(
@@ -29,7 +30,9 @@ public class ModulebookTagRepository {
             String tagMessage,
             String snapshotJson,
             String sourceType,
-            Long sourceChangeSetId
+            Long sourceChangeSetId,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate
     ) {
         Long id = jdbcTemplate.queryForObject(
                 """
@@ -38,9 +41,11 @@ public class ModulebookTagRepository {
                     tag_message,
                     snapshot_json,
                     source_type,
-                    source_change_set_id
+                    source_change_set_id,
+                    modulebook_release_date,
+                    study_examination_regulations_date
                 )
-                VALUES (?, ?, CAST(? AS jsonb), ?, ?)
+                VALUES (?, ?, CAST(? AS jsonb), ?, ?, ?, ?)
                 RETURNING id
                 """,
                 Long.class,
@@ -48,7 +53,9 @@ public class ModulebookTagRepository {
                 tagMessage,
                 snapshotJson,
                 sourceType,
-                sourceChangeSetId
+                sourceChangeSetId,
+                modulebookReleaseDate,
+                studyExaminationRegulationsDate
         );
         return findById(id).orElseThrow();
     }
@@ -57,7 +64,8 @@ public class ModulebookTagRepository {
         return jdbcTemplate.query(
                         """
                         SELECT id, study_program_id, tag_message, snapshot_json::text AS snapshot_json,
-                               created_at, source_type, source_change_set_id
+                               created_at, source_type, source_change_set_id,
+                               modulebook_release_date, study_examination_regulations_date
                         FROM modulebook_tags
                         WHERE id = ?
                         """,
@@ -72,7 +80,8 @@ public class ModulebookTagRepository {
         return jdbcTemplate.query(
                 """
                 SELECT id, study_program_id, tag_message, snapshot_json::text AS snapshot_json,
-                       created_at, source_type, source_change_set_id
+                       created_at, source_type, source_change_set_id,
+                       modulebook_release_date, study_examination_regulations_date
                 FROM modulebook_tags
                 WHERE study_program_id = ?
                 ORDER BY created_at DESC, id DESC
@@ -110,7 +119,9 @@ public class ModulebookTagRepository {
                     rs.getString("snapshot_json"),
                     createdAtInstant,
                     rs.getString("source_type"),
-                    getLongOrNull(rs, "source_change_set_id")
+                    getLongOrNull(rs, "source_change_set_id"),
+                    rs.getObject("modulebook_release_date", LocalDate.class),
+                    rs.getObject("study_examination_regulations_date", LocalDate.class)
             );
         }
 

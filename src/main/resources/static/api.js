@@ -13,6 +13,16 @@ async function loadStudyPrograms() {
     return requestJson("/api/study-programs");
 }
 
+async function createStudyProgram(request) {
+    return requestJson("/api/study-programs", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+    });
+}
+
 async function deleteStudyProgram(studyProgramId) {
     await requestJson(`/api/study-programs/${studyProgramId}`, {
         method: "DELETE"

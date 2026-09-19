@@ -8,7 +8,6 @@
 <body>
     <nav>
         <a href="/index.html">Study programs</a>
-        <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
     <h1>Study Program Change Log</h1>
@@ -91,7 +90,7 @@
             }
 
             document.getElementById("studyProgramTitle").textContent =
-                `${studyProgram.name} (${studyProgram.year})`;
+                studyProgramLabel(studyProgram);
         }
 
         function renderHistory() {
@@ -158,16 +157,20 @@
                                 <th>Version</th>
                                 <th>Created</th>
                                 <th>Tag</th>
+                                <th>Modulebook release date</th>
+                                <th>Study and Examination Regulations</th>
                                 <th>Active modules</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${modulebookTags.map(tag => `
-                                <tr>
+                                <tr class="modulebook-tag-row">
                                     <td class="version-cell">${escapeHtml(versionForModulebookTag(tag))}</td>
                                     <td>${escapeHtml(formatDate(tag.createdAt))}</td>
                                     <td>${escapeHtml(tag.tagMessage || "")}</td>
+                                    <td>${escapeHtml(formatDateOnly(tag.modulebookReleaseDate))}</td>
+                                    <td>${escapeHtml(formatDateOnly(tag.studyExaminationRegulationsDate))}</td>
                                     <td>${escapeHtml(String(modulebookTagActiveModuleCount(tag)))}</td>
                                     <td class="row-actions">
                                         <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
@@ -212,7 +215,10 @@
         function renderModulebookTagRow(tag) {
             return `
                 <tr class="modulebook-tag-row">
-                    <td class="version-cell">${escapeHtml(versionForModulebookTag(tag))}</td>
+                    <td class="version-cell">
+                        ${escapeHtml(versionForModulebookTag(tag))}
+                        ${renderModulebookTagVersionMeta(tag)}
+                    </td>
                     <td>${escapeHtml(formatDate(tag.createdAt))}</td>
                     <td>Tag ${escapeHtml(String(tag.id))}</td>
                     <td>MODULEBOOK_TAG</td>
@@ -224,6 +230,28 @@
                         <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
                     </td>
                 </tr>
+            `;
+        }
+
+        function renderModulebookTagVersionMeta(tag) {
+            const releaseDate = formatDateOnly(tag.modulebookReleaseDate);
+            const regulationsDate = formatDateOnly(tag.studyExaminationRegulationsDate);
+            const rows = [];
+
+            if (releaseDate) {
+                rows.push(`Release: ${releaseDate}`);
+            }
+            if (regulationsDate) {
+                rows.push(`Regulations: ${regulationsDate}`);
+            }
+            if (rows.length === 0) {
+                return "";
+            }
+
+            return `
+                <div class="version-meta">
+                    ${rows.map(row => `<div>${escapeHtml(row)}</div>`).join("")}
+                </div>
             `;
         }
 
@@ -247,6 +275,10 @@
                     Version ${escapeHtml(versionForModulebookTag(tag))}
                     ${escapeHtml(formatDate(tag.createdAt))}
                     ${tag.tagMessage ? `- ${escapeHtml(tag.tagMessage)}` : ""}
+                </p>
+                <p class="muted">
+                    ${tag.modulebookReleaseDate ? `Modulebook release date: ${escapeHtml(formatDateOnly(tag.modulebookReleaseDate))}` : ""}
+                    ${tag.studyExaminationRegulationsDate ? ` Study and Examination Regulations: ${escapeHtml(formatDateOnly(tag.studyExaminationRegulationsDate))}` : ""}
                 </p>
                 <table>
                     <thead>
@@ -691,6 +723,29 @@
             }
 
             return new Date(value).toLocaleString();
+        }
+
+        function formatDateOnly(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(`${value}T00:00:00`).toLocaleDateString("de-DE");
+        }
+
+        function studyProgramLabel(program) {
+            const suffix = degreeTypeShortLabel(program?.degreeType);
+            return suffix ? `${program.name || ""} (${suffix})` : (program?.name || "");
+        }
+
+        function degreeTypeShortLabel(degreeType) {
+            if (degreeType === "BACHELOR") {
+                return "B.Sc.";
+            }
+            if (degreeType === "MASTER") {
+                return "M.Sc.";
+            }
+            return "";
         }
 
         function parseSnapshot(tag) {

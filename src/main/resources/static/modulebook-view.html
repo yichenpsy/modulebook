@@ -8,7 +8,6 @@
 <body class="modulebook-view-body">
     <nav class="screen-only">
         <a href="/index.html">Study programs</a>
-        <a href="/study-program-import.html">Import PDF</a>
     </nav>
 
     <section class="screen-only">
@@ -23,6 +22,14 @@
             <label>
                 Tag message
                 <textarea id="tagMessage" rows="3" maxlength="500"></textarea>
+            </label>
+            <label>
+                Modulebook release date
+                <input id="tagModulebookReleaseDate" type="date">
+            </label>
+            <label>
+                Study and Examination Regulations
+                <input id="tagStudyExaminationRegulationsDate" type="date">
             </label>
             <div class="form-actions">
                 <button type="button" onclick="saveModulebookTag()">Save tag</button>
@@ -116,7 +123,7 @@
         }
 
         function renderModulebook() {
-            const documentTitle = `Modulebook - ${studyProgram.name} ${studyProgram.year ?? ""}`.trim();
+            const documentTitle = `Modulebook - ${studyProgramLabel(studyProgram)}`.trim();
             document.getElementById("documentTitle").textContent = documentTitle;
 
             const container = document.getElementById("modulebook");
@@ -130,7 +137,6 @@
 
         function renderCover() {
             const programName = studyProgram.name || "Study program";
-            const year = studyProgram.year ? String(studyProgram.year) : "";
 
             return `
                 <article class="modulebook-page modulebook-cover">
@@ -147,8 +153,7 @@
                     </div>
 
                     <div class="modulebook-cover-meta">
-                        <p>Studiengang: ${escapeHtml(programName)}</p>
-                        ${year ? `<p>Jahr: ${escapeHtml(year)}</p>` : ""}
+                        <p>Studiengang: ${escapeHtml(studyProgramLabel(studyProgram))}</p>
                     </div>
                 </article>
             `;
@@ -167,6 +172,8 @@
                         <p><strong>Tag message:</strong></p>
                         <p>${escapeHtml(currentTag.tagMessage || "")}</p>
                         <p><strong>Created:</strong> ${escapeHtml(formatDate(currentTag.createdAt))}</p>
+                        ${currentTag.modulebookReleaseDate ? `<p><strong>Modulebook release date:</strong> ${escapeHtml(formatDateOnly(currentTag.modulebookReleaseDate))}</p>` : ""}
+                        ${currentTag.studyExaminationRegulationsDate ? `<p><strong>Study and Examination Regulations:</strong> ${escapeHtml(formatDateOnly(currentTag.studyExaminationRegulationsDate))}</p>` : ""}
                     </div>
                 </article>
             `;
@@ -281,6 +288,8 @@
         function hideTagPanel() {
             document.getElementById("tagPanel").hidden = true;
             document.getElementById("tagMessage").value = "";
+            document.getElementById("tagModulebookReleaseDate").value = "";
+            document.getElementById("tagStudyExaminationRegulationsDate").value = "";
         }
 
         async function saveModulebookTag() {
@@ -296,7 +305,10 @@
 
             try {
                 const tag = await createModulebookTag(studyProgramId, {
-                    tagMessage: message
+                    tagMessage: message,
+                    modulebookReleaseDate: document.getElementById("tagModulebookReleaseDate").value || null,
+                    studyExaminationRegulationsDate:
+                        document.getElementById("tagStudyExaminationRegulationsDate").value || null
                 });
                 window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}&modulebookTagId=${encodeURIComponent(tag.id)}`;
             } catch (error) {
@@ -318,6 +330,29 @@
             }
 
             return new Date(value).toLocaleString();
+        }
+
+        function formatDateOnly(value) {
+            if (!value) {
+                return "";
+            }
+
+            return new Date(`${value}T00:00:00`).toLocaleDateString("de-DE");
+        }
+
+        function studyProgramLabel(program) {
+            const suffix = degreeTypeShortLabel(program?.degreeType);
+            return suffix ? `${program.name || ""} (${suffix})` : (program?.name || "");
+        }
+
+        function degreeTypeShortLabel(degreeType) {
+            if (degreeType === "BACHELOR") {
+                return "B.Sc.";
+            }
+            if (degreeType === "MASTER") {
+                return "M.Sc.";
+            }
+            return "";
         }
 
         function formatValue(value) {

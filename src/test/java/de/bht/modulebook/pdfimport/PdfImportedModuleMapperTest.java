@@ -39,7 +39,7 @@ class PdfImportedModuleMapperTest {
                 """);
 
         // Act: convert the imported JSON into the existing Module model.
-        Module module = mapper.toModule(imported, "Architektur", 2021);
+        Module module = mapper.toModule(imported, "Architektur", "BACHELOR");
 
         // Assert: required fields are mapped to the database-facing Module fields.
         assertThat(module.getModuleNumber()).isEqualTo("B01");
@@ -68,7 +68,7 @@ class PdfImportedModuleMapperTest {
                 """);
 
         // Assert: invalid import data should fail with a clear validation message.
-        assertThatThrownBy(() -> mapper.toModule(imported, "Architektur", 2021))
+        assertThatThrownBy(() -> mapper.toModule(imported, "Architektur", "BACHELOR"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Missing module_number");
     }

@@ -1,5 +1,6 @@
 package de.bht.modulebook.pdfimport;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +24,17 @@ public class PdfImportController {
     // upload a PDF and runs Python
     @PostMapping("/api/pdf-import/normalize")
     public Map<String, JsonNode> normalize(
-        @RequestParam("studyProgram") String studyProgram,
-        @RequestParam("year") Integer year,
+        @RequestParam("studyProgramId") Long studyProgramId,
+        @RequestParam(value = "modulebookReleaseDate", required = false) LocalDate modulebookReleaseDate,
+        @RequestParam(value = "studyExaminationRegulationsDate", required = false) LocalDate studyExaminationRegulationsDate,
         @RequestParam("file") MultipartFile file
     ) throws Exception {
-        return pdfImportService.importPdf(studyProgram, year, file);
+        return pdfImportService.importPdf(
+                studyProgramId,
+                modulebookReleaseDate,
+                studyExaminationRegulationsDate,
+                file
+        );
     }
 
     // saves imported modules into a database

@@ -9,7 +9,7 @@ public class StudyProgramMapper {
     public static StudyProgram toEntity(StudyProgramRequest request) {
         StudyProgram studyProgram = new StudyProgram();
         studyProgram.setName(request.name());
-        studyProgram.setYear(request.year());
+        studyProgram.setDegreeType(request.degreeType());
         return studyProgram;
     }
 
@@ -18,7 +18,7 @@ public class StudyProgramMapper {
         return new StudyProgramResponse(
                 studyProgram.getId(),
                 studyProgram.getName(),
-                studyProgram.getYear(),
+                studyProgram.getDegreeType(),
                 studyProgram.getCreatedAt(),
                 studyProgram.getUpdatedAt()
         );

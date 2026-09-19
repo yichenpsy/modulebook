@@ -1,22 +1,35 @@
 package de.bht.modulebook.studyprogram;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class StudyProgram {
 
     private Long id;
     private String name;
-    private Integer year;
+    private String degreeType;
+    private LocalDate modulebookReleaseDate;
+    private LocalDate studyExaminationRegulationsDate;
     private Instant createdAt;
     private Instant updatedAt;
 
     public StudyProgram() {
     }
 
-    public StudyProgram(Long id, String name, Integer year, Instant createdAt, Instant updatedAt) {
+    public StudyProgram(
+            Long id,
+            String name,
+            String degreeType,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate,
+            Instant createdAt,
+            Instant updatedAt
+    ) {
         this.id = id;
         this.name = name;
-        this.year = year;
+        this.degreeType = degreeType;
+        this.modulebookReleaseDate = modulebookReleaseDate;
+        this.studyExaminationRegulationsDate = studyExaminationRegulationsDate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -37,12 +50,28 @@ public class StudyProgram {
         this.name = name;
     }
 
-    public Integer getYear() {
-        return year;
+    public String getDegreeType() {
+        return degreeType;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setDegreeType(String degreeType) {
+        this.degreeType = degreeType;
+    }
+
+    public LocalDate getModulebookReleaseDate() {
+        return modulebookReleaseDate;
+    }
+
+    public void setModulebookReleaseDate(LocalDate modulebookReleaseDate) {
+        this.modulebookReleaseDate = modulebookReleaseDate;
+    }
+
+    public LocalDate getStudyExaminationRegulationsDate() {
+        return studyExaminationRegulationsDate;
+    }
+
+    public void setStudyExaminationRegulationsDate(LocalDate studyExaminationRegulationsDate) {
+        this.studyExaminationRegulationsDate = studyExaminationRegulationsDate;
     }
 
     public Instant getCreatedAt() {

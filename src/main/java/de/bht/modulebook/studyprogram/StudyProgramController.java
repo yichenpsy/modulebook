@@ -36,7 +36,7 @@ public class StudyProgramController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public StudyProgramResponse create(@RequestBody StudyProgramRequest request) {
-        // request.name/request.year come from JSON sent by the frontend.
+        // Request values come from JSON sent by the frontend create/import forms.
         StudyProgram created = studyProgramService.create(StudyProgramMapper.toEntity(request));
         return StudyProgramMapper.toResponse(created);
     }

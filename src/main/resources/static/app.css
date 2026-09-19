@@ -86,6 +86,15 @@ th {
     white-space: nowrap;
 }
 
+.version-meta {
+    color: #666;
+    font-size: 0.85rem;
+    font-weight: normal;
+    line-height: 1.35;
+    margin-top: 4px;
+    white-space: normal;
+}
+
 .status {
     margin: 12px 0;
     padding: 10px;

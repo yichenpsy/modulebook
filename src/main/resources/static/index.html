@@ -8,10 +8,29 @@
 <body>
     <nav>
         <a href="/index.html">Study programs</a>
-        <a href="/study-program-import.html">Import PDF</a>
+        <button type="button" onclick="showCreateStudyProgramPanel()">Create new study program</button>
     </nav>
 
     <h1>Study Programs</h1>
+
+    <section id="createStudyProgramPanel" class="commit-message-panel" hidden>
+        <h2>Create new study program</h2>
+        <label>
+            Study program name
+            <input id="newStudyProgramName">
+        </label>
+        <label>
+            Degree type
+            <select id="newDegreeType">
+                <option value="BACHELOR">Bachelor</option>
+                <option value="MASTER">Master</option>
+            </select>
+        </label>
+        <div class="form-actions">
+            <button type="button" onclick="createNewStudyProgram()">Create</button>
+            <button type="button" onclick="hideCreateStudyProgramPanel()">Cancel</button>
+        </div>
+    </section>
 
     <section>
         <div id="status" class="status">Loading study programs...</div>
@@ -57,17 +76,18 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Year</th>
+                            <th>Degree</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${studyPrograms.map(program => `
                             <tr>
-                                <td>${escapeHtml(program.name || "")}</td>
-                                <td>${escapeHtml(String(program.year ?? ""))}</td>
+                                <td>${escapeHtml(studyProgramLabel(program))}</td>
+                                <td>${escapeHtml(degreeTypeLabel(program.degreeType))}</td>
                                 <td class="row-actions">
                                     <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
+                                    <a href="/study-program-import.html?studyProgramId=${escapeHtml(String(program.id))}">Import PDF</a>
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
                                     <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
@@ -82,7 +102,7 @@
 
         async function confirmDeleteStudyProgram(programId) {
             const program = studyPrograms.find(item => Number(item.id) === Number(programId));
-            const label = program ? `${program.name} (${program.year})` : `study program ${programId}`;
+            const label = program ? studyProgramLabel(program) : `study program ${programId}`;
             const confirmed = confirm(
                 `Delete ${label}?\n\nThis will delete the study program and all related records, including modules and history.`
             );
@@ -127,7 +147,7 @@
             }
 
             document.getElementById("modulesTitle").textContent =
-                `${selectedProgram.name} (${selectedProgram.year}) modules`;
+                `${studyProgramLabel(selectedProgram)} modules`;
             setStatus("Loading modules...");
 
             try {
@@ -205,6 +225,69 @@
 
         function setStatus(message) {
             document.getElementById("status").textContent = message;
+        }
+
+        function showCreateStudyProgramPanel() {
+            document.getElementById("createStudyProgramPanel").hidden = false;
+            document.getElementById("newStudyProgramName").focus();
+        }
+
+        function hideCreateStudyProgramPanel() {
+            document.getElementById("createStudyProgramPanel").hidden = true;
+            document.getElementById("newStudyProgramName").value = "";
+            document.getElementById("newDegreeType").value = "BACHELOR";
+        }
+
+        async function createNewStudyProgram() {
+            const request = {
+                name: document.getElementById("newStudyProgramName").value.trim(),
+                degreeType: document.getElementById("newDegreeType").value
+            };
+
+            if (!request.name) {
+                setStatus("Please enter a study program name.");
+                document.getElementById("newStudyProgramName").focus();
+                return;
+            }
+
+            setStatus("Creating study program...");
+
+            try {
+                const created = await createStudyProgram(request);
+                studyPrograms = await loadStudyPrograms();
+                renderStudyPrograms();
+                hideCreateStudyProgramPanel();
+                setStatus(`Created ${studyProgramLabel(created)}.`);
+                window.history.replaceState(null, "", `/index.html?studyProgramId=${encodeURIComponent(created.id)}`);
+                await loadSelectedStudyProgramModules(created.id);
+            } catch (error) {
+                setStatus("Could not create study program: " + error.message);
+            }
+        }
+
+        function studyProgramLabel(program) {
+            const suffix = degreeTypeShortLabel(program.degreeType);
+            return suffix ? `${program.name || ""} (${suffix})` : (program.name || "");
+        }
+
+        function degreeTypeShortLabel(degreeType) {
+            if (degreeType === "BACHELOR") {
+                return "B.Sc.";
+            }
+            if (degreeType === "MASTER") {
+                return "M.Sc.";
+            }
+            return "";
+        }
+
+        function degreeTypeLabel(degreeType) {
+            if (degreeType === "BACHELOR") {
+                return "Bachelor";
+            }
+            if (degreeType === "MASTER") {
+                return "Master";
+            }
+            return degreeType || "";
         }
 
         init();

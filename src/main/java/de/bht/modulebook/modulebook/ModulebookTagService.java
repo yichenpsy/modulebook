@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.time.LocalDate;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -69,21 +70,39 @@ public class ModulebookTagService {
     }
 
     @Transactional
-    public ModulebookTag create(Long studyProgramId, String tagMessage) {
+    public ModulebookTag create(
+            Long studyProgramId,
+            String tagMessage,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate
+    ) {
         String normalizedMessage = normalizeTagMessage(tagMessage);
         StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
         ModulebookSnapshot snapshot = buildSnapshot(studyProgram);
 
         try {
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
-            return repository.insert(studyProgramId, normalizedMessage, snapshotJson, SOURCE_MANUAL, null);
+            return repository.insert(
+                    studyProgramId,
+                    normalizedMessage,
+                    snapshotJson,
+                    SOURCE_MANUAL,
+                    null,
+                    modulebookReleaseDate,
+                    studyExaminationRegulationsDate
+            );
         } catch (JacksonException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create modulebook tag");
         }
     }
 
     @Transactional
-    public ModulebookTag createInitialImportTag(Long studyProgramId, Long sourceChangeSetId) {
+    public ModulebookTag createInitialImportTag(
+            Long studyProgramId,
+            Long sourceChangeSetId,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate
+    ) {
         StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
         ModulebookSnapshot snapshot = buildSnapshot(studyProgram);
 
@@ -94,7 +113,9 @@ public class ModulebookTagService {
                     INITIAL_IMPORT_TAG_MESSAGE,
                     snapshotJson,
                     SOURCE_INITIAL_IMPORT,
-                    sourceChangeSetId
+                    sourceChangeSetId,
+                    modulebookReleaseDate,
+                    studyExaminationRegulationsDate
             );
         } catch (JacksonException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create initial import tag");

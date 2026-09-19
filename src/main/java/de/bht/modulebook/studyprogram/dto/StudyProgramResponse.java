@@ -5,7 +5,7 @@ import java.time.Instant;
 public record StudyProgramResponse(
         Long id,
         String name,
-        Integer year,
+        String degreeType,
         Instant createdAt,
         Instant updatedAt
 ) {

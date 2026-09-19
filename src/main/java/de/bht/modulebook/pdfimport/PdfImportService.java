@@ -2,7 +2,9 @@ package de.bht.modulebook.pdfimport;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +73,14 @@ public class PdfImportService {
         this.modulebookTagService = modulebookTagService;
     }
 
-    public Map<String, JsonNode> importPdf(String studyProgram, Integer year, MultipartFile file) throws Exception {
+    public Map<String, JsonNode> importPdf(
+            Long studyProgramId,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate,
+            MultipartFile file
+    ) throws Exception {
+        StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
+
         // check empty file
         if (file.isEmpty()){
             throw new IllegalArgumentException("PDF file is empty");
@@ -106,12 +115,15 @@ public class PdfImportService {
         JsonNode normalizedModules = objectMapper.readTree(outputJson.toFile());
         JsonNode report = objectMapper.readTree(reportJson.toFile());
 
-        return Map.of(
-            "studyProgram", objectMapper.valueToTree(studyProgram),
-            "year", objectMapper.valueToTree(year),
-            "report", report,
-            "normalizedModules", normalizedModules
-        );
+        Map<String, JsonNode> response = new HashMap<>();
+        response.put("studyProgramId", objectMapper.valueToTree(studyProgram.getId()));
+        response.put("studyProgram", objectMapper.valueToTree(studyProgram.getName()));
+        response.put("degreeType", objectMapper.valueToTree(studyProgram.getDegreeType()));
+        response.put("modulebookReleaseDate", objectMapper.valueToTree(modulebookReleaseDate));
+        response.put("studyExaminationRegulationsDate", objectMapper.valueToTree(studyExaminationRegulationsDate));
+        response.put("report", report);
+        response.put("normalizedModules", normalizedModules);
+        return response;
     }
 
     public SaveImportedModulesResponse saveImportedModules(SaveImportedModulesRequest request) {
@@ -121,8 +133,8 @@ public class PdfImportService {
 
         List<ModuleResponse> createdModules = new ArrayList<>();
         List<SaveImportedModuleError> errors = new ArrayList<>();
-        StudyProgram studyProgram = studyProgramService.findOrCreate(request.studyProgram(), request.year());
-        String changeSetReason = "Re-import " + studyProgram.getName() + " " + studyProgram.getYear() + " PDF";
+        StudyProgram studyProgram = studyProgramService.getById(request.studyProgramId());
+        String changeSetReason = "Re-import " + studyProgram.getName() + " " + studyProgram.getDegreeType() + " PDF";
         StudyProgramChangeSet changeSet = changeSetService.create(
                 studyProgram.getId(),
                 StudyProgramChangeSetService.SOURCE_PDF_IMPORT,
@@ -151,7 +163,7 @@ public class PdfImportService {
             }
 
             try {
-                Module module = importedModuleMapper.toModule(imported, request.studyProgram(), request.year());
+                Module module = importedModuleMapper.toModule(imported, studyProgram.getName(), studyProgram.getDegreeType());
                 ModuleWorkload workload = importedModuleMapper.toWorkload(imported, teachingFormIdsByCode);
                 module.setStudyProgramId(studyProgram.getId());
                 module.setModuleStatus(ModuleService.ACTIVE_STATUS);
@@ -183,7 +195,12 @@ public class PdfImportService {
             }
         }
         markModulesMissingFromImport(existingModules, importedModuleIds, importedModuleNumbers, changeSet.getId());
-        createInitialImportTagIfNeeded(studyProgram.getId(), changeSet.getId());
+        createInitialImportTagIfNeeded(
+                studyProgram.getId(),
+                changeSet.getId(),
+                request.modulebookReleaseDate(),
+                request.studyExaminationRegulationsDate()
+        );
 
         return new SaveImportedModulesResponse(
             request.modules().size(),
@@ -195,13 +212,23 @@ public class PdfImportService {
         );
     }
 
-    private void createInitialImportTagIfNeeded(Long studyProgramId, Long changeSetId) {
+    private void createInitialImportTagIfNeeded(
+            Long studyProgramId,
+            Long changeSetId,
+            LocalDate modulebookReleaseDate,
+            LocalDate studyExaminationRegulationsDate
+    ) {
         if (changeSetService.isFirstSourceChangeSet(
                 studyProgramId,
                 StudyProgramChangeSetService.SOURCE_PDF_IMPORT,
                 changeSetId
         )) {
-            modulebookTagService.createInitialImportTag(studyProgramId, changeSetId);
+            modulebookTagService.createInitialImportTag(
+                    studyProgramId,
+                    changeSetId,
+                    modulebookReleaseDate,
+                    studyExaminationRegulationsDate
+            );
         }
     }
 
