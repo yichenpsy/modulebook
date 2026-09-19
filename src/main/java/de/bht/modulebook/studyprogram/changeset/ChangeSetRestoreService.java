@@ -20,7 +20,6 @@ import de.bht.modulebook.module.ModuleRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
 import de.bht.modulebook.module.version.ModuleFieldChange;
 import de.bht.modulebook.module.version.ModuleFieldChangeRepository;
-import de.bht.modulebook.module.version.ModuleVersionRepository;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
@@ -40,7 +39,6 @@ public class ChangeSetRestoreService {
     private final ModuleTeachingFormRepository teachingFormRepository;
     private final ModuleChangeLogService changeLogService;
     private final StudyProgramRepository studyProgramRepository;
-    private final ModuleVersionRepository moduleVersionRepository;
     private final JsonMapper jsonMapper;
 
     public ChangeSetRestoreService(
@@ -52,7 +50,6 @@ public class ChangeSetRestoreService {
             ModuleTeachingFormRepository teachingFormRepository,
             ModuleChangeLogService changeLogService,
             StudyProgramRepository studyProgramRepository,
-            ModuleVersionRepository moduleVersionRepository,
             JsonMapper jsonMapper
     ) {
         this.changeSetRepository = changeSetRepository;
@@ -63,7 +60,6 @@ public class ChangeSetRestoreService {
         this.teachingFormRepository = teachingFormRepository;
         this.changeLogService = changeLogService;
         this.studyProgramRepository = studyProgramRepository;
-        this.moduleVersionRepository = moduleVersionRepository;
         this.jsonMapper = jsonMapper;
     }
 
@@ -121,7 +117,6 @@ public class ChangeSetRestoreService {
 
         restoreFields(laterChangeSetIds, moduleIdsToDelete, null);
         deleteCreatedModules(modulesToDelete);
-        moduleVersionRepository.deleteByChangeSetIds(laterChangeSetIds);
         changeSetRepository.deleteByIds(laterChangeSetIds);
         studyProgramRepository.unhide(target.getStudyProgramId());
 

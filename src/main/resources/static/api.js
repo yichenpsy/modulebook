@@ -31,14 +31,6 @@ async function loadModule(moduleId) {
     return requestJson(`/api/modules/${moduleId}`);
 }
 
-async function loadModuleVersions(moduleId) {
-    return requestJson(`/api/modules/${moduleId}/versions`);
-}
-
-async function loadStudyProgramHistory(studyProgramId) {
-    return requestJson(`/api/study-programs/${studyProgramId}/history`);
-}
-
 async function loadStudyProgramChangeSets(studyProgramId) {
     return requestJson(`/api/study-programs/${studyProgramId}/change-sets`);
 }
@@ -91,24 +83,6 @@ async function resetToInitialImport(changeSetId) {
 
 async function loadModuleFieldChanges(moduleId) {
     return requestJson(`/api/modules/${moduleId}/field-changes`);
-}
-
-async function restoreModuleVersion(moduleId, versionNumber) {
-    return requestJson(`/api/modules/${moduleId}/versions/${versionNumber}/restore`, {
-        method: "POST"
-    });
-}
-
-async function restoreDeletedModuleVersion(versionId) {
-    return requestJson(`/api/module-versions/${versionId}/restore-deleted`, {
-        method: "POST"
-    });
-}
-
-async function compareModuleVersions(moduleId, fromVersionNumber, toVersionNumber) {
-    return requestJson(
-        `/api/modules/${moduleId}/versions/compare?from=${fromVersionNumber}&to=${toVersionNumber}`
-    );
 }
 
 async function loadTeachingForms() {

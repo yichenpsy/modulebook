@@ -17,7 +17,6 @@ import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.workload.PresenceHourComponent;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
-// import de.bht.modulebook.module.version.ModuleVersionService;
 import de.bht.modulebook.teachingform.TeachingForm;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 
@@ -32,7 +31,6 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository moduleTeachingFormRepository;
-    //private final ModuleVersionService versionService;
     private final StudyProgramChangeSetService changeSetService;
     private final ModuleChangeLogService changeLogService;
     
@@ -41,7 +39,6 @@ public class ModuleService {
         ModuleRepository moduleRepository,
         ModuleWorkloadRepository workloadRepository,
         ModuleTeachingFormRepository moduleTeachingFormRepository,
-        // ModuleVersionService versionService,
         StudyProgramChangeSetService changeSetService,
         ModuleChangeLogService changeLogService
     ) {
@@ -49,7 +46,6 @@ public class ModuleService {
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
         this.moduleTeachingFormRepository = moduleTeachingFormRepository;
-        //this.versionService = versionService;
         this.changeSetService = changeSetService;
         this.changeLogService = changeLogService;
     }
@@ -107,7 +103,6 @@ public class ModuleService {
                 created.getId(),
                 mergeTeachingFormIds(teachingFormIds, workload)
         );
-        //versionService.saveSnapshot(created.getId(), normalizeInitialVersionReason(initialVersionReason), changeSetId);
         return getById(created.getId());
     }
 

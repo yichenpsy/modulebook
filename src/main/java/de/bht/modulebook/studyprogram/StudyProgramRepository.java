@@ -107,9 +107,6 @@ public class StudyProgramRepository {
     }
 
     public boolean delete(Long id) {
-        // Version/history rows belong to the study program too.
-        // Delete them explicitly so this operation does not depend on FK cascade order.
-        jdbcTemplate.update("DELETE FROM module_versions WHERE study_program_id = ?", id);
         jdbcTemplate.update("DELETE FROM study_program_change_sets WHERE study_program_id = ?", id);
 
         // modules.study_program_id comes from this study program.

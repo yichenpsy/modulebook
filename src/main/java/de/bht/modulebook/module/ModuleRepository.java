@@ -221,12 +221,9 @@ public class ModuleRepository {
         return rowsUpdated == 1;
     }
 
-    // Physically deletes one module and its module version history.
+    // Physically deletes one module.
     // Other child rows are removed by ON DELETE CASCADE constraints on modules.id.
     public boolean delete(Long id) {
-        jdbcTemplate.update(
-                "DELETE FROM module_versions WHERE module_id = ?",
-                id);
         int rowsDeleted = jdbcTemplate.update(
                 "DELETE FROM modules WHERE id = ?",
                 id);
