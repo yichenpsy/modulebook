@@ -8,7 +8,7 @@
 <body>
     <nav>
         <a href="/index.html">Study programs</a>
-        <button type="button" onclick="showCreateStudyProgramPanel()">Create new study program</button>
+        <a href="#createStudyProgramPanel" onclick="showCreateStudyProgramPanel()">Create new study program</a>
     </nav>
 
     <h1>Study Programs</h1>
@@ -46,6 +46,7 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const initialStudyProgramId = params.get("studyProgramId");
+        let selectedStudyProgramId = initialStudyProgramId;
         let studyPrograms = [];
         let modules = [];
 
@@ -86,12 +87,12 @@
                                 <td>${escapeHtml(studyProgramLabel(program))}</td>
                                 <td>${escapeHtml(degreeTypeLabel(program.degreeType))}</td>
                                 <td class="row-actions">
-                                    <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
                                     <a href="/study-program-import.html?studyProgramId=${escapeHtml(String(program.id))}">Import PDF</a>
+                                    <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
                                     <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
-                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View/ Export modulebook</a>
+                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View/ Export/ Tag modulebook</a>
                                 </td>
                             </tr>
                         `).join("")}
@@ -140,12 +141,14 @@
             const selectedProgram = studyPrograms.find(program => String(program.id) === String(programId));
 
             if (!selectedProgram) {
+                selectedStudyProgramId = null;
                 modules = [];
                 document.getElementById("modulesTitle").textContent = "Modules";
                 document.getElementById("modules").textContent = "Open a study program to see its modules.";
                 return;
             }
 
+            selectedStudyProgramId = String(programId);
             document.getElementById("modulesTitle").textContent =
                 `${studyProgramLabel(selectedProgram)} modules`;
             setStatus("Loading modules...");
@@ -176,6 +179,7 @@
                             <th>Credits</th>
                             <th>Module status</th>
                             <th>Actions</th>
+                            <th>Module note</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -189,13 +193,46 @@
                                     <a href="/module-view.html?id=${escapeHtml(String(module.id))}">View</a>
                                     <a href="/module-edit.html?id=${escapeHtml(String(module.id))}">Edit</a>
                                     <a href="/module-versions.html?id=${escapeHtml(String(module.id))}">History</a>
+                                    <button class="link-button" type="button" onclick="toggleModuleActive(${module.id})">${escapeHtml(moduleStatusActionLabel(module))}</button>
                                     <button class="link-button" type="button" onclick="confirmDeleteModule(${module.id})">Delete</button>
                                 </td>
+                                <td>${escapeHtml(module.moduleNote || "")}</td>
                             </tr>
                         `).join("")}
                     </tbody>
                 </table>
             `;
+        }
+
+        function moduleStatusActionLabel(module) {
+            return isActiveModule(module) ? "Deactivate" : "Activate";
+        }
+
+        function nextModuleStatus(module) {
+            return isActiveModule(module) ? "DEACTIVE" : "ACTIVE";
+        }
+
+        function isActiveModule(module) {
+            return String(module.moduleStatus || "").toUpperCase() === "ACTIVE";
+        }
+
+        async function toggleModuleActive(moduleId) {
+            const module = modules.find(item => Number(item.id) === Number(moduleId));
+            const targetStatus = nextModuleStatus(module || {});
+            const label = module
+                ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
+                : `module ${moduleId}`;
+
+            setStatus(`${moduleStatusActionLabel(module || {})} ${label}...`);
+
+            try {
+                await updateModuleStatus(moduleId, targetStatus);
+                modules = await loadModulesForStudyProgram(selectedStudyProgramId);
+                renderModules();
+                setStatus(`${label} is now ${targetStatus}.`);
+            } catch (error) {
+                setStatus("Could not update module status: " + error.message);
+            }
         }
 
         async function confirmDeleteModule(moduleId) {
@@ -215,7 +252,7 @@
 
             try {
                 await deleteModule(moduleId);
-                modules = await loadModulesForStudyProgram(currentStudyProgram.id);
+                modules = await loadModulesForStudyProgram(selectedStudyProgramId);
                 renderModules();
                 setStatus(`Deleted ${label}. Loaded ${modules.length} modules.`);
             } catch (error) {

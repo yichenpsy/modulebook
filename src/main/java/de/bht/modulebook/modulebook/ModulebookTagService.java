@@ -247,7 +247,7 @@ public class ModulebookTagService {
             }
 
             Module desiredModule = copyModule(module);
-            desiredModule.setModuleStatus(ModuleService.DELETED_STATUS);
+            desiredModule.setModuleStatus(ModuleService.DEACTIVE_STATUS);
             updateModuleToTagState(
                     module,
                     desiredModule,
@@ -277,6 +277,7 @@ public class ModulebookTagService {
                 response.prerequisites(),
                 response.level(),
                 response.moduleStatus(),
+                response.moduleNote(),
                 response.frequency(),
                 response.examinationForm(),
                 response.contents(),
@@ -349,6 +350,7 @@ public class ModulebookTagService {
                 source.getPrerequisites(),
                 source.getLevel(),
                 source.getModuleStatus(),
+                source.getModuleNote(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),

@@ -109,6 +109,16 @@ async function updateModule(moduleId, request) {
     });
 }
 
+async function updateModuleStatus(moduleId, moduleStatus) {
+    return requestJson(`/api/modules/${moduleId}/status`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ moduleStatus })
+    });
+}
+
 async function createModule(request) {
     return requestJson("/api/modules", {
         method: "POST",

@@ -80,6 +80,7 @@ class ModuleControllerTest {
                 "",
                 "",
                 "DRAFT",
+                null,
                 "Wintersemester",
                 "contents",
                 "",

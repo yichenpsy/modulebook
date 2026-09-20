@@ -77,9 +77,22 @@ public class ModuleController {
         );
     }
 
+    @PatchMapping("/{id}/status")
+    public ModuleResponse updateStatus(@PathVariable Long id, @RequestBody ModuleStatusRequest request) {
+        Module updated = moduleService.updateModuleStatus(id, request.moduleStatus());
+        return ModuleMapper.toResponse(
+            updated,
+            moduleService.getWorkloadByModuleId(id).orElse(null),
+            moduleService.getTeachingFormsByModuleId(id)
+        );
+    }
+
     @DeleteMapping("/{id}") // DELETE /api/modules/1
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         moduleService.delete(id);
+    }
+
+    public record ModuleStatusRequest(String moduleStatus) {
     }
 }

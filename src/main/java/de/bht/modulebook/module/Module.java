@@ -22,6 +22,7 @@ public class Module {
     private String prerequisites;
     private String level;
     private String moduleStatus;
+    private String moduleNote;
     private String frequency;
     private String contents;
     private String literature;
@@ -43,8 +44,20 @@ public class Module {
             Instant updatedAt) {
         this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
                 titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
-                moduleStatus, frequency, examinationForm, contents, literature, additionalNotes, moduleWeight,
+                moduleStatus, null, frequency, examinationForm, contents, literature, additionalNotes, moduleWeight,
                 createdAt, updatedAt, null);
+    }
+
+    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
+            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+            String coordinator, String applicability, String learningArea, String learningObjectives,
+            String prerequisites, String level, String moduleStatus, String moduleNote, String frequency,
+            String examinationForm, String contents, String literature, String additionalNotes,
+            BigDecimal moduleWeight, Instant createdAt, Instant updatedAt) {
+        this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
+                titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
+                moduleStatus, moduleNote, frequency, examinationForm, contents, literature, additionalNotes,
+                moduleWeight, createdAt, updatedAt, null);
     }
 
     public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
@@ -53,6 +66,18 @@ public class Module {
             String prerequisites, String level, String moduleStatus, String frequency, String examinationForm, String contents,
             String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
             Instant updatedAt, Long createdChangeSetId) {
+        this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
+                titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
+                moduleStatus, null, frequency, examinationForm, contents, literature, additionalNotes, moduleWeight,
+                createdAt, updatedAt, createdChangeSetId);
+    }
+
+    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
+            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+            String coordinator, String applicability, String learningArea, String learningObjectives,
+            String prerequisites, String level, String moduleStatus, String moduleNote, String frequency,
+            String examinationForm, String contents, String literature, String additionalNotes,
+            BigDecimal moduleWeight, Instant createdAt, Instant updatedAt, Long createdChangeSetId) {
         this.id = id;
         this.studyProgramId = studyProgramId;
         this.moduleNumber = moduleNumber;
@@ -70,6 +95,7 @@ public class Module {
         this.prerequisites = prerequisites;
         this.level = level;
         this.moduleStatus = moduleStatus;
+        this.moduleNote = moduleNote;
         this.frequency = frequency;
         this.examinationForm = examinationForm;
         this.contents = contents;
@@ -215,6 +241,14 @@ public class Module {
 
     public void setModuleStatus(String moduleStatus) {
         this.moduleStatus = moduleStatus;
+    }
+
+    public String getModuleNote() {
+        return moduleNote;
+    }
+
+    public void setModuleNote(String moduleNote) {
+        this.moduleNote = moduleNote;
     }
 
     public void setStatus(String status) {

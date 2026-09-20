@@ -264,7 +264,7 @@ class PdfImportServiceTest {
         Module existingB01 = module(1L, "B01", "Old B01", "ACTIVE");
         Module existingB02 = module(2L, "B02", "Old B02", "ACTIVE");
         Module existingB03 = module(3L, "B03", "Old B03", "ACTIVE");
-        Module existingB04 = module(4L, "B04", "Deleted B04", ModuleService.DELETED_STATUS);
+        Module existingB04 = module(4L, "B04", "Deactive B04", ModuleService.DEACTIVE_STATUS);
         Module mappedB01 = module(null, "B01", "Module B01", "Pflichtmodul");
         Module mappedB03 = module(null, "B03", "Module B03", "Pflichtmodul");
         Module savedB01 = module(1L, "B01", "Module B01", "ACTIVE");
@@ -316,8 +316,14 @@ class PdfImportServiceTest {
         ArgumentCaptor<Module> missingModule = ArgumentCaptor.forClass(Module.class);
         verify(moduleService).update(eq(2L), missingModule.capture(), eq("before marking missing from PDF re-import"), eq(99L));
         assertThat(missingModule.getValue().getModuleNumber()).isEqualTo("B02");
-        assertThat(missingModule.getValue().getModuleStatus()).isEqualTo("MISSING_FROM_IMPORT");
-        verify(moduleService, never()).update(eq(4L), org.mockito.ArgumentMatchers.any(Module.class), eq("before marking missing from PDF re-import"), eq(99L));
+        assertThat(missingModule.getValue().getModuleStatus()).isEqualTo("ACTIVE");
+        assertThat(missingModule.getValue().getModuleNote()).isEqualTo("MISSING_FROM_IMPORT");
+
+        ArgumentCaptor<Module> missingDeactiveModule = ArgumentCaptor.forClass(Module.class);
+        verify(moduleService).update(eq(4L), missingDeactiveModule.capture(), eq("before marking missing from PDF re-import"), eq(99L));
+        assertThat(missingDeactiveModule.getValue().getModuleNumber()).isEqualTo("B04");
+        assertThat(missingDeactiveModule.getValue().getModuleStatus()).isEqualTo("DEACTIVE");
+        assertThat(missingDeactiveModule.getValue().getModuleNote()).isEqualTo("MISSING_FROM_IMPORT");
     }
 
     @Test

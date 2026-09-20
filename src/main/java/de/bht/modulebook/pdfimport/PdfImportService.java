@@ -38,7 +38,7 @@ import tools.jackson.databind.ObjectMapper;
 @Service
 public class PdfImportService {
     private static final String PDF_REIMPORT_VERSION_REASON = "before PDF re-import";
-    private static final String MISSING_FROM_IMPORT_STATUS = "MISSING_FROM_IMPORT";
+    private static final String MISSING_FROM_IMPORT_NOTE = "MISSING_FROM_IMPORT";
     private static final String MISSING_FROM_IMPORT_VERSION_REASON = "before marking missing from PDF re-import";
 
     private final PythonPdfImportRunner runner;
@@ -167,9 +167,12 @@ public class PdfImportService {
                 ModuleWorkload workload = importedModuleMapper.toWorkload(imported, teachingFormIdsByCode);
                 module.setStudyProgramId(studyProgram.getId());
                 module.setModuleStatus(ModuleService.ACTIVE_STATUS);
+                module.setModuleNote(null);
                 Module saved;
 
                 if (moduleId != null) {
+                    Module existing = moduleService.getById(moduleId);
+                    module.setModuleStatus(existing.getModuleStatus());
                     saved = moduleService.update(moduleId, module, workload, List.of(), PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                 } else if (module.getModuleNumber() != null && !module.getModuleNumber().isBlank()) {
                     Module existing = moduleService
@@ -179,6 +182,7 @@ public class PdfImportService {
                     if (existing == null) {
                         saved = moduleService.create(module, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, changeSet.getId());
                     } else {
+                        module.setModuleStatus(existing.getModuleStatus());
                         saved = moduleService.update(existing.getId(), module, workload, List.of(), PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                     }
                 } else {
@@ -240,13 +244,12 @@ public class PdfImportService {
     ) {
         for (Module existing : existingModules) {
             if (wasSeenInImport(existing, importedModuleIds, importedModuleNumbers)
-                    || MISSING_FROM_IMPORT_STATUS.equals(existing.getModuleStatus())
-                    || ModuleService.DELETED_STATUS.equals(existing.getModuleStatus())) {
+                    || MISSING_FROM_IMPORT_NOTE.equals(existing.getModuleNote())) {
                 continue;
             }
 
             Module missing = copyModule(existing);
-            missing.setModuleStatus(MISSING_FROM_IMPORT_STATUS);
+            missing.setModuleNote(MISSING_FROM_IMPORT_NOTE);
             moduleService.update(existing.getId(), missing, MISSING_FROM_IMPORT_VERSION_REASON, changeSetId);
         }
     }
@@ -279,6 +282,7 @@ public class PdfImportService {
                 source.getPrerequisites(),
                 source.getLevel(),
                 source.getModuleStatus(),
+                source.getModuleNote(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),
@@ -286,7 +290,8 @@ public class PdfImportService {
                 source.getAdditionalNotes(),
                 source.getModuleWeight(),
                 source.getCreatedAt(),
-                source.getUpdatedAt()
+                source.getUpdatedAt(),
+                source.getCreatedChangeSetId()
         );
     }
 

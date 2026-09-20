@@ -31,6 +31,7 @@ public class ModuleMapper {
         module.setPrerequisites(request.prerequisites());
         module.setLevel(request.level());
         module.setModuleStatus(request.moduleStatus());
+        module.setModuleNote(request.moduleNote());
         module.setFrequency(request.frequency());
         module.setContents(request.contents());
         module.setLiterature(request.literature());
@@ -73,6 +74,7 @@ public class ModuleMapper {
             module.getPrerequisites(),
             module.getLevel(),
             module.getModuleStatus(),
+            module.getModuleNote(),
             module.getFrequency(),
             module.getExaminationForm(),
             module.getContents(),

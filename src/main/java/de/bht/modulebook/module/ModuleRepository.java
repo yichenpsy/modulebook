@@ -23,7 +23,7 @@ public class ModuleRepository {
     private static final String SELECT_COLUMNS = """
             id, study_program_id, module_number, name, credits, description,
             modulebook_id, module_type, title_de, title_en, coordinator, applicability,
-            learning_area, learning_objectives, prerequisites, level, module_status, frequency,
+            learning_area, learning_objectives, prerequisites, level, module_status, module_note, frequency,
             examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at,
             created_change_set_id
             """;
@@ -60,6 +60,7 @@ public class ModuleRepository {
                         "prerequisites",
                         "level",
                         "module_status",
+                        "module_note",
                         "frequency",
                         "examination_form",
                         "contents",
@@ -91,6 +92,7 @@ public class ModuleRepository {
         values.put("prerequisites", module.getPrerequisites());
         values.put("level", module.getLevel());
         values.put("module_status", module.getModuleStatus());
+        values.put("module_note", module.getModuleNote());
         values.put("frequency", module.getFrequency());
         values.put("examination_form", module.getExaminationForm());
         values.put("contents", module.getContents());
@@ -166,6 +168,7 @@ public class ModuleRepository {
                             prerequisites = ?,
                             level = ?,
                             module_status = ?,
+                            module_note = ?,
                             frequency = ?,
                             examination_form = ?,
                             contents = ?,
@@ -193,6 +196,7 @@ public class ModuleRepository {
                 module.getPrerequisites(),
                 module.getLevel(),
                 module.getModuleStatus(),
+                module.getModuleNote(),
                 module.getFrequency(),
                 module.getExaminationForm(),
                 module.getContents(),
@@ -254,6 +258,7 @@ public class ModuleRepository {
                     rs.getString("prerequisites"),
                     rs.getString("level"),
                     rs.getString("module_status"),
+                    rs.getString("module_note"),
                     rs.getString("frequency"),
                     rs.getString("examination_form"),
                     rs.getString("contents"),

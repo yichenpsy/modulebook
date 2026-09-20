@@ -33,6 +33,7 @@ public record ModuleRequest(
     String prerequisites,
     String level,
     String moduleStatus,
+    String moduleNote,
     String frequency,
     String contents,
     String literature,

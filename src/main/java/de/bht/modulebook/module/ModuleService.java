@@ -24,6 +24,7 @@ import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 @Service
 public class ModuleService {
     public static final String ACTIVE_STATUS = "ACTIVE";
+    public static final String DEACTIVE_STATUS = "DEACTIVE";
     public static final String DELETED_STATUS = "DELETED";
     public static final String MANUAL_INITIAL_VERSION_REASON = "created manually";
     public static final String PDF_IMPORT_INITIAL_VERSION_REASON = "created from PDF import";
@@ -127,6 +128,32 @@ public class ModuleService {
 
     public List<Module> getByStudyProgramId(Long studyProgramId) {
         return moduleRepository.findByStudyProgramId(studyProgramId);
+    }
+
+    @Transactional
+    public Module updateModuleStatus(Long id, String targetStatus) {
+        String normalizedStatus = normalizeActiveStatus(targetStatus);
+        Module oldModule = getById(id);
+        ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
+        List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
+        var changeSet = changeSetService.create(
+            oldModule.getStudyProgramId(),
+            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            "changed module status to " + normalizedStatus
+        );
+        Module desiredModule = copyModule(oldModule);
+        desiredModule.setModuleStatus(normalizedStatus);
+        return updateAndLogSavedState(
+                id,
+                desiredModule,
+                oldWorkload,
+                oldTeachingFormIds,
+                changeSet.getId(),
+                oldModule,
+                oldWorkload,
+                oldTeachingFormIds,
+                List.of("module.moduleStatus")
+        );
     }
       
     public Module update(Long id, Module module) {
@@ -396,6 +423,9 @@ public class ModuleService {
         if (!changedPaths.contains("module.moduleStatus")) {
             module.setModuleStatus(oldModule.getModuleStatus());
         }
+        if (!changedPaths.contains("module.moduleNote")) {
+            module.setModuleNote(oldModule.getModuleNote());
+        }
         if (!changedPaths.contains("module.frequency")) {
             module.setFrequency(oldModule.getFrequency());
         }
@@ -486,6 +516,7 @@ public class ModuleService {
                 source.getPrerequisites(),
                 source.getLevel(),
                 source.getModuleStatus(),
+                source.getModuleNote(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),
@@ -538,6 +569,18 @@ public class ModuleService {
             return MANUAL_INITIAL_VERSION_REASON;
         }
         return initialVersionReason.trim();
+    }
+
+    private String normalizeActiveStatus(String status) {
+        if (status == null || status.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module status is required");
+        }
+
+        String normalized = status.trim().toUpperCase();
+        if (!ACTIVE_STATUS.equals(normalized) && !DEACTIVE_STATUS.equals(normalized)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Module status must be ACTIVE or DEACTIVE");
+        }
+        return normalized;
     }
 
     private Long createChangeSet(Long studyProgramId, String reason, String sourceType) {
