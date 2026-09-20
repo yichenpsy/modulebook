@@ -76,8 +76,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Degree</th>
+                            <th>Study Program name</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -85,14 +84,13 @@
                         ${studyPrograms.map(program => `
                             <tr>
                                 <td>${escapeHtml(studyProgramLabel(program))}</td>
-                                <td>${escapeHtml(degreeTypeLabel(program.degreeType))}</td>
                                 <td class="row-actions">
                                     <a href="/study-program-import.html?studyProgramId=${escapeHtml(String(program.id))}">Import PDF</a>
                                     <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Show Modules</a>
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
-                                    <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
-                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View/ Export/ Tag modulebook</a>
+                                    <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History & Version</a>
+                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View, Export & Tag modulebook</a>
                                 </td>
                             </tr>
                         `).join("")}

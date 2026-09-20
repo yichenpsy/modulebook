@@ -444,17 +444,9 @@
         }
 
         function modulebookTagActionHtml(tag) {
-            if (tag.sourceType === "INITIAL_IMPORT") {
-                return `
-                    <button type="button" data-reset-to-initial-import="${escapeHtml(String(tag.sourceChangeSetId || initialPdfImportChangeSetId() || ""))}">
-                        Back to initial import
-                    </button>
-                `;
-            }
-
             return `
                 <button type="button" data-restore-modulebook-tag="${escapeHtml(String(tag.id))}">
-                    Back to this version
+                    Back to this Version
                 </button>
                 ${modulebookTagDeleteActionHtml(tag)}
             `;
