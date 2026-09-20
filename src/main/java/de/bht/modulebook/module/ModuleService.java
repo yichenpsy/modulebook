@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -82,6 +84,7 @@ public class ModuleService {
             String initialVersionReason
     ) {
         String normalizedReason = normalizeInitialVersionReason(initialVersionReason);
+        normalizeAndValidateUniqueModuleNumberForCreate(module);
         Long changeSetId = createChangeSet(module.getStudyProgramId(), normalizedReason, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE);
         return create(module, workload, teachingFormIds, normalizedReason, changeSetId);
     }
@@ -94,6 +97,7 @@ public class ModuleService {
             String initialVersionReason,
             Long changeSetId
     ) {
+        normalizeAndValidateUniqueModuleNumberForCreate(module);
         applyDefaultStatus(module);
         module.setCreatedChangeSetId(changeSetId);
         Module created = moduleRepository.insert(module);
@@ -119,7 +123,7 @@ public class ModuleService {
     }
 
     public Optional<Module> findByStudyProgramIdAndModuleNumber(Long studyProgramId, String moduleNumber) {
-        return moduleRepository.findByStudyProgramIdAndModuleNumber(studyProgramId, moduleNumber);
+        return findExistingModuleNumber(studyProgramId, normalizeModuleNumber(moduleNumber));
     }
 
     public List<Module> getAll() {
@@ -160,6 +164,7 @@ public class ModuleService {
         Module oldModule = getById(id);
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
+        normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
@@ -193,6 +198,7 @@ public class ModuleService {
         Module oldModule = getById(id);
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
+        normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
@@ -226,6 +232,7 @@ public class ModuleService {
         Module oldModule = getById(id);
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
+        normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -275,12 +282,13 @@ public class ModuleService {
         }
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
+        preserveUnchangedModuleFields(module, oldModule, changedFieldPaths);
+        normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
             normalizeVersionReason(versionReason)
         );
-        preserveUnchangedModuleFields(module, oldModule, changedFieldPaths);
         return updateAndLogSavedState(
                 id,
                 module,
@@ -346,6 +354,7 @@ public class ModuleService {
             List<Long> oldTeachingFormIds,
             List<String> changedFieldPaths
     ) {
+        normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         Module savedModule = saveModuleState(id, module, workload, teachingFormIds);
         ModuleWorkload savedWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> savedTeachingFormIds = teachingFormIdsByModuleId(id);
@@ -469,9 +478,71 @@ public class ModuleService {
         return getById(id);
     }
 
+    private void normalizeAndValidateUniqueModuleNumberForCreate(Module module) {
+        module.setModuleNumber(normalizeModuleNumber(module.getModuleNumber()));
+        findExistingModuleNumber(module.getStudyProgramId(), module.getModuleNumber())
+                .ifPresent(existing -> {
+                    throw duplicateModuleNumber(module.getModuleNumber());
+                });
+    }
+
+    private void normalizeAndValidateUniqueModuleNumberForUpdate(Long moduleId, Module module, Module oldModule) {
+        String normalizedModuleNumber = normalizeModuleNumber(module.getModuleNumber());
+        boolean sameStudyProgram = Objects.equals(module.getStudyProgramId(), oldModule.getStudyProgramId());
+        boolean sameModuleNumber = Objects.equals(
+                moduleNumberKey(normalizedModuleNumber),
+                moduleNumberKey(oldModule.getModuleNumber())
+        );
+
+        if (sameStudyProgram && sameModuleNumber) {
+            module.setModuleNumber(oldModule.getModuleNumber());
+            return;
+        }
+
+        module.setModuleNumber(normalizedModuleNumber);
+        findExistingModuleNumber(module.getStudyProgramId(), module.getModuleNumber())
+                .filter(existing -> !Objects.equals(existing.getId(), moduleId))
+                .ifPresent(existing -> {
+                    throw duplicateModuleNumber(module.getModuleNumber());
+                });
+    }
+
+    private Optional<Module> findExistingModuleNumber(Long studyProgramId, String moduleNumber) {
+        if (studyProgramId == null || moduleNumber == null || moduleNumber.isBlank()) {
+            return Optional.empty();
+        }
+
+        Optional<Module> existing = moduleRepository.findByStudyProgramIdAndModuleNumber(studyProgramId, moduleNumber);
+        return existing == null ? Optional.empty() : existing;
+    }
+
+    private String normalizeModuleNumber(String moduleNumber) {
+        if (moduleNumber == null) {
+            return null;
+        }
+
+        return moduleNumber.trim();
+    }
+
+    private String moduleNumberKey(String moduleNumber) {
+        String normalized = normalizeModuleNumber(moduleNumber);
+        return normalized == null ? null : normalized.toLowerCase(Locale.ROOT);
+    }
+
+    private ResponseStatusException duplicateModuleNumber(String moduleNumber) {
+        return new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Module number " + moduleNumber + " already exists in this study program"
+        );
+    }
+
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, String confirmation) {
+        if (!"DELETE".equals(confirmation)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Type DELETE to delete this module");
+        }
+
         Module module = getById(id);
         changeSetService.create(
                 module.getStudyProgramId(),
@@ -480,7 +551,6 @@ public class ModuleService {
         );
         boolean deleted = moduleRepository.delete(id);
 
-        // The repository returns false when no row with this id exists.
         if (!deleted) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found");
         }

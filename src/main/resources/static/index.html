@@ -238,18 +238,19 @@
             const label = module
                 ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
                 : `module ${moduleId}`;
-            const confirmed = confirm(
-                `Permanently delete ${label}?\n\nThis will delete the module and all related records, including history. This cannot be undone.`
+            const confirmation = prompt(
+                `Permanently delete ${label}?\n\nThis cannot be restored from the change log. If a saved modulebook tag contains this module, restoring that tag can recreate it.\n\nType DELETE to confirm.`
             );
 
-            if (!confirmed) {
+            if (confirmation !== "DELETE") {
+                setStatus("Delete cancelled. Type DELETE exactly to delete a module.");
                 return;
             }
 
             setStatus(`Deleting ${label}...`);
 
             try {
-                await deleteModule(moduleId);
+                await deleteModule(moduleId, confirmation);
                 modules = await loadModulesForStudyProgram(selectedStudyProgramId);
                 renderModules();
                 setStatus(`Deleted ${label}. Loaded ${modules.length} modules.`);

@@ -70,13 +70,14 @@ public class StudyProgramRepository {
     }
 
     public Optional<StudyProgram> findByNameAndDegreeType(String name, String degreeType) {
-        // name + degree type is unique in the database, so this returns zero or one row.
+        // Only visible study programs should block creating another program with the same name/type.
+        // Hidden rows are old restore/import bookkeeping and are not shown to the user.
         List<StudyProgram> studyPrograms = jdbcTemplate.query(
                 """
                 SELECT id, name, degree_type, modulebook_release_date,
                        study_examination_regulations_date, created_at, updated_at
                 FROM study_programs
-                WHERE name = ? AND degree_type = ?
+                WHERE name = ? AND degree_type = ? AND hidden_at IS NULL
                 """,
                 studyProgramRowMapper,
                 name,

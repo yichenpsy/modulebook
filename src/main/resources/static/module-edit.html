@@ -1045,14 +1045,18 @@
                 return;
             }
 
-            if (!confirm(`Permanently delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis will delete the module and all related records, including history. This cannot be undone.`)) {
+            const confirmation = prompt(
+                `Permanently delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis cannot be restored from the change log. If a saved modulebook tag contains this module, restoring that tag can recreate it.\n\nType DELETE to confirm.`
+            );
+            if (confirmation !== "DELETE") {
+                setStatus("Delete cancelled. Type DELETE exactly to delete a module.");
                 return;
             }
 
-            setStatus("Deleting module permanently...");
+            setStatus("Deleting module...");
 
             try {
-                await deleteModule(moduleId);
+                await deleteModule(moduleId, confirmation);
                 window.location.href = currentModule.studyProgramId
                     ? `/index.html?studyProgramId=${currentModule.studyProgramId}`
                     : "/index.html";

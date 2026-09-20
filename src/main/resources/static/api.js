@@ -129,8 +129,8 @@ async function createModule(request) {
     });
 }
 
-async function deleteModule(moduleId) {
-    await requestJson(`/api/modules/${moduleId}`, {
+async function deleteModule(moduleId, confirmation) {
+    await requestJson(`/api/modules/${moduleId}?confirmation=${encodeURIComponent(confirmation)}`, {
         method: "DELETE"
     });
 }

@@ -1,8 +1,12 @@
 package de.bht.modulebook.module;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -16,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
@@ -148,7 +154,80 @@ class ModuleServiceTest {
     }
 
     @Test
-    void deleteRecordsStudyProgramChangeSetThenPhysicallyRemovesModule() {
+    void createRejectsDuplicateModuleNumberInSameStudyProgram() {
+        Module request = new Module();
+        request.setStudyProgramId(10L);
+        request.setModuleNumber("B01");
+        request.setName("New Module");
+        request.setCredits(new BigDecimal("5.0"));
+
+        Module existing = new Module();
+        existing.setId(200L);
+        existing.setStudyProgramId(10L);
+        existing.setModuleNumber("B01");
+
+        when(moduleRepository.findByStudyProgramIdAndModuleNumber(10L, "B01"))
+                .thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> service.create(request, null, List.of()))
+                .isInstanceOf(ResponseStatusException.class)
+                .satisfies(exception -> assertThat(((ResponseStatusException) exception).getStatusCode())
+                        .isEqualTo(HttpStatus.CONFLICT))
+                .hasMessageContaining("Module number B01 already exists");
+
+        verify(moduleRepository, never()).insert(any(Module.class));
+        verifyNoInteractions(changeSetService, moduleTeachingFormRepository, changeLogService);
+    }
+
+    @Test
+    void updateRejectsChangingModuleNumberToExistingNumberInSameStudyProgram() {
+        Module oldModule = new Module();
+        oldModule.setId(100L);
+        oldModule.setStudyProgramId(10L);
+        oldModule.setModuleNumber("B01");
+        oldModule.setName("Old Module");
+        oldModule.setCredits(new BigDecimal("5.0"));
+
+        Module request = new Module();
+        request.setStudyProgramId(10L);
+        request.setModuleNumber("B02");
+        request.setName("Old Module");
+        request.setCredits(new BigDecimal("5.0"));
+
+        Module existing = new Module();
+        existing.setId(200L);
+        existing.setStudyProgramId(10L);
+        existing.setModuleNumber("B02");
+
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));
+        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.empty());
+        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of());
+        when(moduleRepository.findByStudyProgramIdAndModuleNumber(10L, "B02"))
+                .thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> service.update(100L, request, null, List.of(), "renumber module"))
+                .isInstanceOf(ResponseStatusException.class)
+                .satisfies(exception -> assertThat(((ResponseStatusException) exception).getStatusCode())
+                        .isEqualTo(HttpStatus.CONFLICT))
+                .hasMessageContaining("Module number B02 already exists");
+
+        verify(moduleRepository, never()).update(eq(100L), any(Module.class));
+        verifyNoInteractions(changeSetService, changeLogService);
+    }
+
+    @Test
+    void deleteRejectsMissingDeleteConfirmation() {
+        assertThatThrownBy(() -> service.delete(100L, "delete"))
+                .isInstanceOf(ResponseStatusException.class)
+                .satisfies(exception -> assertThat(((ResponseStatusException) exception).getStatusCode())
+                        .isEqualTo(HttpStatus.BAD_REQUEST))
+                .hasMessageContaining("Type DELETE");
+
+        verifyNoInteractions(moduleRepository, changeSetService, changeLogService);
+    }
+
+    @Test
+    void deleteRecordsStudyProgramChangeSetThenPhysicallyDeletesModule() {
         Module oldModule = new Module();
         oldModule.setId(100L);
         oldModule.setStudyProgramId(10L);
@@ -157,12 +236,12 @@ class ModuleServiceTest {
         oldModule.setCredits(new BigDecimal("5.0"));
         oldModule.setModuleStatus(ModuleService.ACTIVE_STATUS);
 
-        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));
         when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module"))
                 .thenReturn(new StudyProgramChangeSet(77L, 10L, StudyProgramChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module", null));
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));
         when(moduleRepository.delete(100L)).thenReturn(true);
 
-        service.delete(100L);
+        service.delete(100L, "DELETE");
 
         InOrder inOrder = inOrder(moduleRepository, changeSetService);
         inOrder.verify(moduleRepository).findById(100L);

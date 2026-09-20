@@ -89,8 +89,11 @@ public class ModuleController {
 
     @DeleteMapping("/{id}") // DELETE /api/modules/1
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        moduleService.delete(id);
+    public void delete(
+            @PathVariable Long id,
+            @RequestParam String confirmation
+    ) {
+        moduleService.delete(id, confirmation);
     }
 
     public record ModuleStatusRequest(String moduleStatus) {

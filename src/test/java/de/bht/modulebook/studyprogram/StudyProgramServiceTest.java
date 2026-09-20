@@ -2,6 +2,7 @@ package de.bht.modulebook.studyprogram;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -54,6 +56,47 @@ class StudyProgramServiceTest {
                     assertThat(responseException.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
                 })
                 .hasMessageContaining("Study program name is required");
+    }
+
+    @Test
+    void createRejectsDuplicateNameAndDegreeType() {
+        StudyProgram request = new StudyProgram();
+        request.setName(" Architektur ");
+        request.setDegreeType("bachelor");
+        StudyProgram existing = new StudyProgram(10L, "Architektur", "BACHELOR", null, null, null, null);
+
+        when(studyProgramRepository.findByNameAndDegreeType("Architektur", "BACHELOR"))
+                .thenReturn(Optional.of(existing));
+
+        assertThatThrownBy(() -> service.create(request))
+                .isInstanceOf(ResponseStatusException.class)
+                .satisfies(exception -> {
+                    ResponseStatusException responseException = (ResponseStatusException) exception;
+                    assertThat(responseException.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+                })
+                .hasMessageContaining("Study program Architektur BACHELOR already exists");
+
+        verify(studyProgramRepository, never()).insert(request);
+    }
+
+    @Test
+    void createConvertsDatabaseDuplicateToConflict() {
+        StudyProgram request = new StudyProgram();
+        request.setName("Architektur");
+        request.setDegreeType("BACHELOR");
+
+        when(studyProgramRepository.findByNameAndDegreeType("Architektur", "BACHELOR"))
+                .thenReturn(Optional.empty());
+        when(studyProgramRepository.insert(request))
+                .thenThrow(new DuplicateKeyException("duplicate"));
+
+        assertThatThrownBy(() -> service.create(request))
+                .isInstanceOf(ResponseStatusException.class)
+                .satisfies(exception -> {
+                    ResponseStatusException responseException = (ResponseStatusException) exception;
+                    assertThat(responseException.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+                })
+                .hasMessageContaining("Study program Architektur BACHELOR already exists");
     }
 
     @Test

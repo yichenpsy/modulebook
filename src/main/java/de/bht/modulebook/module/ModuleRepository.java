@@ -296,7 +296,7 @@ public class ModuleRepository {
 
     public Optional<Module> findByStudyProgramIdAndModuleNumber(Long studyProgramId, String moduleNumber) {
         List<Module> modules = jdbcTemplate.query(
-                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE study_program_id = ? AND module_number = ?",
+                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE study_program_id = ? AND lower(module_number) = lower(?) ORDER BY id",
                 moduleRowMapper,
                 studyProgramId,
                 moduleNumber);
