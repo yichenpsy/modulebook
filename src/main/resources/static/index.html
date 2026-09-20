@@ -88,7 +88,7 @@
                                 <td>${escapeHtml(degreeTypeLabel(program.degreeType))}</td>
                                 <td class="row-actions">
                                     <a href="/study-program-import.html?studyProgramId=${escapeHtml(String(program.id))}">Import PDF</a>
-                                    <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Modules</a>
+                                    <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Show Modules</a>
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
                                     <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History</a>
@@ -179,7 +179,7 @@
                             <th>Credits</th>
                             <th>Module status</th>
                             <th>Actions</th>
-                            <th>Module note</th>
+	                            <th>Module comments</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -196,7 +196,7 @@
                                     <button class="link-button" type="button" onclick="toggleModuleActive(${module.id})">${escapeHtml(moduleStatusActionLabel(module))}</button>
                                     <button class="link-button" type="button" onclick="confirmDeleteModule(${module.id})">Delete</button>
                                 </td>
-                                <td>${escapeHtml(module.moduleNote || "")}</td>
+                                <td>${escapeHtml(module.moduleComments || "")}</td>
                             </tr>
                         `).join("")}
                     </tbody>

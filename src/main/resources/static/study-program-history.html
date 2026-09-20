@@ -287,7 +287,7 @@
                             <th>Name</th>
                             <th>Credits</th>
                             <th>Status</th>
-                            <th>Note</th>
+	                            <th>Module comments</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -297,7 +297,7 @@
                                 <td>${escapeHtml(module.name || "")}</td>
                                 <td>${escapeHtml(String(module.credits ?? ""))}</td>
                                 <td>${escapeHtml(module.moduleStatus || "")}</td>
-                                <td>${escapeHtml(module.moduleNote || "")}</td>
+                                <td>${escapeHtml(module.moduleComments || "")}</td>
                             </tr>
                         `).join("")}
                     </tbody>

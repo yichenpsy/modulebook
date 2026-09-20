@@ -317,13 +317,13 @@ class PdfImportServiceTest {
         verify(moduleService).update(eq(2L), missingModule.capture(), eq("before marking missing from PDF re-import"), eq(99L));
         assertThat(missingModule.getValue().getModuleNumber()).isEqualTo("B02");
         assertThat(missingModule.getValue().getModuleStatus()).isEqualTo("ACTIVE");
-        assertThat(missingModule.getValue().getModuleNote()).isEqualTo("MISSING_FROM_IMPORT");
+        assertThat(missingModule.getValue().getModuleComments()).isEqualTo("MISSING_FROM_IMPORT");
 
         ArgumentCaptor<Module> missingDeactiveModule = ArgumentCaptor.forClass(Module.class);
         verify(moduleService).update(eq(4L), missingDeactiveModule.capture(), eq("before marking missing from PDF re-import"), eq(99L));
         assertThat(missingDeactiveModule.getValue().getModuleNumber()).isEqualTo("B04");
         assertThat(missingDeactiveModule.getValue().getModuleStatus()).isEqualTo("DEACTIVE");
-        assertThat(missingDeactiveModule.getValue().getModuleNote()).isEqualTo("MISSING_FROM_IMPORT");
+        assertThat(missingDeactiveModule.getValue().getModuleComments()).isEqualTo("MISSING_FROM_IMPORT");
     }
 
     @Test

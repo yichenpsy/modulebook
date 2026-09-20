@@ -38,6 +38,8 @@
         </section>
     </section>
 
+    <aside id="floatingToc" class="modulebook-floating-toc screen-only" hidden></aside>
+
     <main id="modulebook" class="modulebook-document" hidden></main>
 
     <script src="/api.js?v=modulebook-tags"></script>
@@ -130,16 +132,18 @@
             container.innerHTML = `
                 ${renderCover()}
                 ${currentTag ? renderTagPage() : ""}
+                ${renderTableOfContents()}
                 ${activeModules.map(renderModulePage).join("")}
             `;
             container.hidden = false;
+            renderFloatingTableOfContents();
         }
 
         function renderCover() {
             const programName = studyProgram.name || "Study program";
 
             return `
-                <article class="modulebook-page modulebook-cover">
+                <article id="modulebook-cover" class="modulebook-page modulebook-cover">
                     <header class="modulebook-page-header">
                         <div>Study program ${escapeHtml(programName)}</div>
                         <div>Modulebook</div>
@@ -179,13 +183,56 @@
             `;
         }
 
+        function renderTableOfContents() {
+            return `
+                <article id="modulebook-toc" class="modulebook-page modulebook-toc-page">
+                    <header class="modulebook-page-header">
+                        <div>${escapeHtml(studyProgram.name || "")}</div>
+                        <div>Anlage 3 | Seite ${tableOfContentsPageNumber()}</div>
+                    </header>
+
+                    <h1>Inhaltsverzeichnis</h1>
+                    <table class="modulebook-toc-table">
+                        <thead>
+                            <tr>
+                                <th>Modul</th>
+                                <th>Titel</th>
+                                <th>Seite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${activeModules.map((module, index) => `
+                                <tr>
+                                    <td>${escapeHtml(module.moduleNumber || "")}</td>
+                                    <td>
+                                        <a href="#${moduleAnchorId(module, index)}">${escapeHtml(module.name || "Untitled module")}</a>
+                                    </td>
+                                    <td>${modulePageNumber(index)}</td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                </article>
+            `;
+        }
+
+        function renderFloatingTableOfContents() {
+            const container = document.getElementById("floatingToc");
+
+            container.innerHTML = `
+                <div class="modulebook-floating-toc-shortcuts">
+                    <a href="#modulebook-cover">Back to cover</a>
+                    <a href="#modulebook-toc">Back to contents</a>
+                </div>
+            `;
+            container.hidden = false;
+        }
+
         function renderModulePage(module, index) {
-            const number = module.moduleNumber || "";
-            const title = module.name || "Untitled module";
-            const pageNumber = currentTag ? index + 3 : index + 2;
+            const pageNumber = modulePageNumber(index);
 
             return `
-                <article class="modulebook-page modulebook-module-page">
+                <article id="${moduleAnchorId(module, index)}" class="modulebook-page modulebook-module-page">
                     <header class="modulebook-page-header">
                         <div>${escapeHtml(studyProgram.name || "")}</div>
                         <div>Anlage 3 | Seite ${pageNumber}</div>
@@ -208,6 +255,18 @@
             `;
         }
 
+        function tableOfContentsPageNumber() {
+            return currentTag ? 3 : 2;
+        }
+
+        function modulePageNumber(index) {
+            return tableOfContentsPageNumber() + index + 1;
+        }
+
+        function moduleAnchorId(module, index) {
+            return `module-${module.id || index + 1}`;
+        }
+
         function renderModuleRow(label, value) {
             const formattedValue = formatValue(value);
 
@@ -218,9 +277,96 @@
             return `
                 <tr>
                     <td>${escapeHtml(label)}</td>
-                    <td>${escapeHtml(formattedValue)}</td>
+                    <td>${formatFieldHtml(label, formattedValue)}</td>
                 </tr>
             `;
+        }
+
+        function formatFieldHtml(label, value) {
+            const text = formatValue(value);
+            if (!["Lernziele / Kompetenzen", "Prüfungsform", "Inhalte", "Literatur"].includes(label)) {
+                return escapeHtml(text);
+            }
+
+            const bulletHtml = formatBulletListHtml(text);
+            if (bulletHtml) {
+                return bulletHtml;
+            }
+
+            return escapeHtml(formatReadableText(text));
+        }
+
+        function formatBulletListHtml(text) {
+            const normalizedText = text
+                .replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .replace(/[ \t]+/g, " ")
+                .trim();
+
+            if (!normalizedText.includes(" - ")) {
+                return "";
+            }
+
+            const parts = normalizedText
+                .replace(/^-\s*/, "")
+                .split(/\s+-\s+/)
+                .map(part => part.trim())
+                .filter(Boolean);
+
+            if (parts.length < 2) {
+                return "";
+            }
+
+            let html = '<ul class="readable-list">';
+            let sectionOpen = false;
+
+            parts.forEach((part, index) => {
+                const startsNewSection = index === 0 || isTopLevelBullet(part);
+
+                if (startsNewSection) {
+                    if (sectionOpen) {
+                        html += "</ul></li>";
+                        sectionOpen = false;
+                    }
+
+                    if (part.endsWith(":")) {
+                        html += `<li>${escapeHtml(part)}<ul>`;
+                        sectionOpen = true;
+                    } else {
+                        html += `<li>${escapeHtml(part)}</li>`;
+                    }
+                    return;
+                }
+
+                html += `<li>${escapeHtml(part)}</li>`;
+            });
+
+            if (sectionOpen) {
+                html += "</ul></li>";
+            }
+
+            return `${html}</ul>`;
+        }
+
+        function isTopLevelBullet(part) {
+            return part.endsWith(":")
+                || /^(Grundlagen|Kompositorische|Fächerübergreifende)\b/.test(part);
+        }
+
+        function formatReadableText(text) {
+            if (!text.trim()) {
+                return "";
+            }
+
+            return text
+                .replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .replace(/[ \t]+/g, " ")
+                .replace(/\s*;\s*/g, ";\n")
+                .replace(/([.!?])\s+(?=[A-ZÄÖÜ0-9])/g, "$1\n")
+                .replace(/\s+(\d+[.)]\s+)/g, "\n$1")
+                .replace(/\n{3,}/g, "\n\n")
+                .trim();
         }
 
         function isActiveModule(module) {

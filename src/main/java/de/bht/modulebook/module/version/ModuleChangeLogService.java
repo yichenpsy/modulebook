@@ -67,7 +67,7 @@ public class ModuleChangeLogService {
         addIfChanged(changeSetId, moduleId, "module.prerequisites", oldModule.getPrerequisites(), newModule.getPrerequisites(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.level", oldModule.getLevel(), newModule.getLevel(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.moduleStatus", oldModule.getModuleStatus(), newModule.getModuleStatus(), allowedPaths);
-        addIfChanged(changeSetId, moduleId, "module.moduleNote", oldModule.getModuleNote(), newModule.getModuleNote(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.moduleComments", oldModule.getModuleComments(), newModule.getModuleComments(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.frequency", oldModule.getFrequency(), newModule.getFrequency(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.examinationForm", oldModule.getExaminationForm(), newModule.getExaminationForm(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.contents", oldModule.getContents(), newModule.getContents(), allowedPaths);

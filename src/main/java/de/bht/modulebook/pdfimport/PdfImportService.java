@@ -167,7 +167,7 @@ public class PdfImportService {
                 ModuleWorkload workload = importedModuleMapper.toWorkload(imported, teachingFormIdsByCode);
                 module.setStudyProgramId(studyProgram.getId());
                 module.setModuleStatus(ModuleService.ACTIVE_STATUS);
-                module.setModuleNote(null);
+                module.setModuleComments(null);
                 Module saved;
 
                 if (moduleId != null) {
@@ -244,12 +244,12 @@ public class PdfImportService {
     ) {
         for (Module existing : existingModules) {
             if (wasSeenInImport(existing, importedModuleIds, importedModuleNumbers)
-                    || MISSING_FROM_IMPORT_NOTE.equals(existing.getModuleNote())) {
+                    || MISSING_FROM_IMPORT_NOTE.equals(existing.getModuleComments())) {
                 continue;
             }
 
             Module missing = copyModule(existing);
-            missing.setModuleNote(MISSING_FROM_IMPORT_NOTE);
+            missing.setModuleComments(MISSING_FROM_IMPORT_NOTE);
             moduleService.update(existing.getId(), missing, MISSING_FROM_IMPORT_VERSION_REASON, changeSetId);
         }
     }
@@ -282,7 +282,7 @@ public class PdfImportService {
                 source.getPrerequisites(),
                 source.getLevel(),
                 source.getModuleStatus(),
-                source.getModuleNote(),
+                source.getModuleComments(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),

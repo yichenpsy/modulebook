@@ -272,7 +272,7 @@ public class ChangeSetRestoreService {
             case "module.prerequisites" -> module.setPrerequisites(textOrNull(value));
             case "module.level" -> module.setLevel(textOrNull(value));
             case "module.moduleStatus" -> module.setModuleStatus(textOrNull(value));
-            case "module.moduleNote" -> module.setModuleNote(textOrNull(value));
+            case "module.moduleComments" -> module.setModuleComments(textOrNull(value));
             case "module.frequency" -> module.setFrequency(textOrNull(value));
             case "module.examinationForm" -> module.setExaminationForm(textOrNull(value));
             case "module.contents" -> module.setContents(textOrNull(value));
@@ -369,7 +369,7 @@ public class ChangeSetRestoreService {
                 source.getPrerequisites(),
                 source.getLevel(),
                 source.getModuleStatus(),
-                source.getModuleNote(),
+                source.getModuleComments(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),

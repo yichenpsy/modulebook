@@ -2,6 +2,7 @@ package de.bht.modulebook.module;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -209,5 +210,29 @@ class ModuleServiceTest {
         inOrder.verify(changeSetService).create(10L, StudyProgramChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits");
         inOrder.verify(moduleRepository).update(100L, request);
         inOrder.verify(changeLogService).saveChanges(55L, 100L, oldModule, request, oldWorkload, savedWorkload, List.of(), List.of(1L));
+    }
+
+    @Test
+    void updateWithEmptyChangedFieldPathsDoesNotCreateChangeSetOrLog() {
+        Module oldModule = new Module();
+        oldModule.setId(100L);
+        oldModule.setStudyProgramId(10L);
+        oldModule.setModuleNumber("B01");
+        oldModule.setName("Old Module");
+        oldModule.setCredits(new BigDecimal("5.0"));
+
+        Module request = new Module();
+        request.setStudyProgramId(10L);
+        request.setModuleNumber("B01");
+        request.setName("Old Module");
+        request.setCredits(new BigDecimal("5.0"));
+
+        when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));
+
+        Module result = service.update(100L, request, null, null, "updated module without field changes", List.of());
+
+        assertThat(result).isSameAs(oldModule);
+        verify(moduleRepository).findById(100L);
+        verifyNoInteractions(workloadRepository, moduleTeachingFormRepository, changeSetService, changeLogService);
     }
 }

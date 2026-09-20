@@ -25,7 +25,7 @@ public record ModuleResponse(
     String prerequisites,
     String level,
     String moduleStatus,
-    String moduleNote,
+    String moduleComments,
     String frequency,
     String examinationForm,
     String contents,

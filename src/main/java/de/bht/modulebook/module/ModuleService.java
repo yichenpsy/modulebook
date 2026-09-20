@@ -270,6 +270,9 @@ public class ModuleService {
     @Transactional
     public Module update(Long id, Module module, ModuleWorkload workload, List<Long> teachingFormIds, String versionReason, List<String> changedFieldPaths){
         Module oldModule = getById(id);
+        if (changedFieldPaths != null && changedFieldPaths.isEmpty()) {
+            return oldModule;
+        }
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         var changeSet = changeSetService.create(
@@ -423,8 +426,8 @@ public class ModuleService {
         if (!changedPaths.contains("module.moduleStatus")) {
             module.setModuleStatus(oldModule.getModuleStatus());
         }
-        if (!changedPaths.contains("module.moduleNote")) {
-            module.setModuleNote(oldModule.getModuleNote());
+        if (!changedPaths.contains("module.moduleComments")) {
+            module.setModuleComments(oldModule.getModuleComments());
         }
         if (!changedPaths.contains("module.frequency")) {
             module.setFrequency(oldModule.getFrequency());
@@ -516,7 +519,7 @@ public class ModuleService {
                 source.getPrerequisites(),
                 source.getLevel(),
                 source.getModuleStatus(),
-                source.getModuleNote(),
+                source.getModuleComments(),
                 source.getFrequency(),
                 source.getExaminationForm(),
                 source.getContents(),

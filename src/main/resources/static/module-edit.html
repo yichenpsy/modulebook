@@ -18,10 +18,11 @@
         <form id="moduleForm" onsubmit="saveModule(event)" hidden>
             <div class="form-actions">
                 <button type="submit">Save</button>
-                <button id="deleteButton" type="button" onclick="deleteCurrentModule()">Delete</button>
-                <a id="versionsLink" href="/index.html">History</a>
-                <a id="backLink" href="/index.html">Back to study program</a>
-            </div>
+	                <button id="deleteButton" type="button" onclick="deleteCurrentModule()">Delete</button>
+	                <a id="versionsLink" href="/index.html">History</a>
+	                <a id="viewLink" href="/index.html">View module</a>
+	                <a id="backLink" href="/index.html">Back to study program</a>
+	            </div>
 
             <section id="commitMessagePanel" class="commit-message-panel" hidden>
                 <label>
@@ -35,8 +36,13 @@
             </section>
 
             <div class="module-field-table">
+                <div class="module-field-row module-field-header-row">
+                    <div class="module-field-label">Datenfeld</div>
+                    <div class="module-field-control">Erklärung</div>
+                </div>
+
                 <div class="module-field-row">
-                    <div class="module-field-label">Study program</div>
+                    <div class="module-field-label">Studiengang</div>
                     <div class="module-field-control">
                         <div id="studyProgramDisplay" class="readonly-value">Loading...</div>
                         <input id="studyProgramId" type="hidden">
@@ -46,13 +52,14 @@
                 <div class="module-field-row">
                     <div class="module-field-label">Module id (debug)</div>
                     <div class="module-field-control">
-                        <div id="moduleIdDisplay" class="readonly-value">Loading...</div>
-                        <input id="modulebookId" type="hidden">
-                    </div>
-                </div>
+	                        <div id="moduleIdDisplay" class="readonly-value">Loading...</div>
+	                        <input id="modulebookId" type="hidden">
+	                        <input id="moduleStatus" type="hidden">
+	                    </div>
+	                </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="moduleNumber">Module number</label>
+                    <label class="module-field-label" for="moduleNumber">Modulnummer <span class="required-marker">*</span></label>
                     <div class="module-field-control">
                         <input id="moduleNumber" required maxlength="50" placeholder="B01" oninput="updateModuleNumberWarning()">
                         <span id="moduleNumberWarning" class="field-warning" hidden>
@@ -62,23 +69,37 @@
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="name">Title</label>
+                    <label class="module-field-label" for="name">Titel <span class="required-marker">*</span></label>
                     <div class="module-field-control">
                         <input id="name" required maxlength="255" placeholder="Einführung in die Informatik">
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="credits">Credits</label>
+                    <label class="module-field-label" for="credits">Leistungspunkte <span class="required-marker">*</span></label>
                     <div class="module-field-control">
                         <input id="credits" type="number" step="0.5" required oninput="updateWorkloadPreview()">
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <div class="module-field-label">Workload</div>
+                    <div class="module-field-label">
+                        Workload
+                        <button class="help-button" type="button" onclick="toggleHelp('workloadHelp')" aria-expanded="false" title="Workload help">?</button>
+                    </div>
                     <div class="module-field-control">
                         <section class="workload-editor">
+                            <div id="workloadHelp" class="field-help" hidden>
+                                <ul>
+                                    <li>1 Leistungspunkt (LP) = 30 Stunden</li>
+                                    <li>Gesetzlicher Rahmen: 25-30 Stunden pro LP. BHT hält derzeit 30 fest; Abweichungen können zu Kritikpunkten führen.</li>
+                                    <li>1 SWS = 45 Minuten</li>
+                                    <li>Berechnungsgrundlage: 17 Wochen pro Semester</li>
+                                    <li>SWS ist die führende Eingabe</li>
+                                    <li>Präsenzstunden werden daraus abgeleitet</li>
+                                    <li>Selbststudium = Gesamt-LP-Stunden minus Präsenzstunden</li>
+                                </ul>
+                            </div>
                             <div id="workloadComponents"></div>
                             <button type="button" onclick="addWorkloadRow()">+ Lehrveranstaltung hinzufügen</button>
 
@@ -102,107 +123,125 @@
                 </div>
 
                 <div class="module-field-row">
-                    <div class="module-field-label">Teaching forms</div>
+                    <div class="module-field-label">
+                        Lernform
+                        <button class="help-button" type="button" onclick="toggleHelp('teachingFormsHelp')" aria-expanded="false" title="Capacity help">?</button>
+                    </div>
                     <div class="module-field-control">
                         <section class="module-teaching-forms">
+                            <div id="teachingFormsHelp" class="field-help" hidden>
+                                Capacity planning depends on the selected teaching and learning forms. See
+                                <a href="https://gesetze.berlin.de/bsbe/document/jlr-KapVBE1994rahmen" target="_blank" rel="noopener">KapVO Berlin</a>
+                                and the local K12/capacity rules used by BHT.
+                            </div>
                             <div id="moduleTeachingForms" class="checkbox-list"></div>
                         </section>
                     </div>
                 </div>
 
-                <div class="module-field-row">
-                    <label class="module-field-label" for="moduleType">Module type</label>
-                    <div class="module-field-control">
-                        <input id="moduleType">
-                    </div>
-                </div>
+	                <div class="module-field-row">
+	                    <label class="module-field-label" for="moduleType">Modultyp</label>
+	                    <div class="module-field-control">
+	                        <div id="moduleTypeOptions" class="checkbox-list"></div>
+	                    </div>
+	                </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="coordinator">Coordinator</label>
+                    <label class="module-field-label" for="coordinator">Koordinator/in</label>
                     <div class="module-field-control">
                         <input id="coordinator">
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="applicability">Applicability</label>
+                    <label class="module-field-label" for="applicability">Verwendbarkeit</label>
                     <div class="module-field-control">
                         <textarea id="applicability" rows="4"></textarea>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="learningArea">Learning area</label>
+                    <label class="module-field-label" for="learningArea">Lerngebiet</label>
                     <div class="module-field-control">
                         <input id="learningArea">
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="learningObjectives">Learning objectives</label>
+                    <label class="module-field-label" for="learningObjectives">
+                        Lernziele / Kompetenzen
+                        <button class="help-button" type="button" onclick="toggleHelp('learningObjectivesHelp')" aria-expanded="false" title="Qualification framework help">?</button>
+                    </label>
                     <div class="module-field-control">
+                        <div id="learningObjectivesHelp" class="field-help" hidden>
+                            Bachelor and Master modules should describe competences at the matching qualification level.
+                            <a href="https://www.dqr.de/dqr/de/der-dqr/dqr-niveaus/dqr-niveaus_node.html" target="_blank" rel="noopener">DQR levels</a>
+                            and
+                            <a href="https://www.hrk.de/fileadmin/redaktion/hrk/02-Dokumente/02-03-Studium/02-03-02-Qualifikationsrahmen/2017_Qualifikationsrahmen_HQR.pdf" target="_blank" rel="noopener">HQR qualification framework</a>.
+                        </div>
                         <textarea id="learningObjectives" rows="6"></textarea>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="prerequisites">Prerequisites</label>
+                    <label class="module-field-label" for="prerequisites">Voraussetzungen</label>
                     <div class="module-field-control">
                         <textarea id="prerequisites" rows="4"></textarea>
+                        <div class="module-reference-adder">
+                            <label>
+                                Add module reference
+                                <input id="moduleReferenceInput" list="moduleReferenceOptions" placeholder="B01 Module title">
+                            </label>
+                            <button type="button" onclick="insertModuleReference()">Add reference</button>
+                        </div>
+                        <datalist id="moduleReferenceOptions"></datalist>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="level">Level</label>
+                    <label class="module-field-label" for="level">Niveaustufe</label>
                     <div class="module-field-control">
-                        <input id="level">
+                        <select id="level"></select>
                     </div>
                 </div>
 
-                <div class="module-field-row">
-                    <label class="module-field-label" for="moduleStatus">Module status (debug)</label>
-                    <div class="module-field-control">
-                        <input id="moduleStatus">
-                    </div>
-                </div>
+	                <div class="module-field-row">
+	                    <label class="module-field-label" for="frequency">Häufigkeit des Angebotes</label>
+	                    <div class="module-field-control">
+	                        <select id="frequency"></select>
+	                    </div>
+	                </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="frequency">Frequency</label>
-                    <div class="module-field-control">
-                        <input id="frequency">
-                    </div>
-                </div>
-
-                <div class="module-field-row">
-                    <label class="module-field-label" for="examinationForm">Examination form</label>
+                    <label class="module-field-label" for="examinationForm">Prüfungsform</label>
                     <div class="module-field-control">
                         <textarea id="examinationForm" rows="5"></textarea>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="contents">Contents</label>
+                    <label class="module-field-label" for="contents">Inhalte</label>
                     <div class="module-field-control">
                         <textarea id="contents" rows="8"></textarea>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="literature">Literature</label>
+                    <label class="module-field-label" for="literature">Literatur</label>
                     <div class="module-field-control">
                         <textarea id="literature" rows="6"></textarea>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="additionalNotes">Additional notes</label>
+                    <label class="module-field-label" for="additionalNotes">Weitere Hinweise</label>
                     <div class="module-field-control">
                         <textarea id="additionalNotes" rows="4"></textarea>
                     </div>
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="moduleWeight">Module weight</label>
+                    <label class="module-field-label" for="moduleWeight">Modulgewicht</label>
                     <div class="module-field-control">
                         <input id="moduleWeight" type="number" step="0.01">
                     </div>
@@ -222,6 +261,7 @@
         const hoursPerCredit = 30;
         let currentModule = null;
         let studyPrograms = [];
+        let studyProgramModules = [];
         let teachingForms = [];
         let extraTeachingFormIds = new Set();
         let excludedWorkloadTeachingFormIds = new Set();
@@ -240,9 +280,11 @@
                 ]);
 
                 if (isCreateMode) {
+                    studyProgramModules = await loadModulesForStudyProgram(studyProgramId);
                     prepareCreateForm();
                 } else {
                     currentModule = await loadModule(moduleId);
+                    studyProgramModules = await loadModulesForStudyProgram(currentModule.studyProgramId);
                     fillForm(currentModule);
                 }
 
@@ -257,10 +299,15 @@
             document.getElementById("documentTitle").textContent = "Add New Module";
             document.getElementById("deleteButton").hidden = true;
             document.getElementById("versionsLink").hidden = true;
+            document.getElementById("viewLink").hidden = true;
             document.getElementById("studyProgramId").value = studyProgramId;
             renderStudyProgramDisplay(studyProgramId);
             renderModuleIdDisplay(null);
             document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
+            renderLevelOptions("");
+            renderFrequencyOptions("");
+            renderModuleTypeOptions("");
+            renderModuleReferenceOptions();
             fillWorkloadRows([]);
             renderModuleTeachingForms();
             updateWorkloadPreview();
@@ -284,18 +331,19 @@
             setExtraTeachingForms(module);
             renderModuleTeachingForms();
             updateWorkloadPreview();
-            document.getElementById("moduleType").value = module.moduleType || "";
+            renderModuleTypeOptions(module.moduleType || "");
             document.getElementById("coordinator").value = module.coordinator || "";
             document.getElementById("applicability").value = module.applicability || "";
             document.getElementById("learningArea").value = module.learningArea || "";
-            document.getElementById("learningObjectives").value = module.learningObjectives || "";
+            document.getElementById("learningObjectives").value = formatEditableReadableText(module.learningObjectives || "");
             document.getElementById("prerequisites").value = module.prerequisites || "";
-            document.getElementById("level").value = module.level || "";
+            renderLevelOptions(module.level || "");
+            renderModuleReferenceOptions();
             document.getElementById("moduleStatus").value = module.moduleStatus || "";
-            document.getElementById("frequency").value = module.frequency || "";
-            document.getElementById("examinationForm").value = module.examinationForm || "";
-            document.getElementById("contents").value = module.contents || "";
-            document.getElementById("literature").value = module.literature || "";
+            renderFrequencyOptions(module.frequency || "");
+            document.getElementById("examinationForm").value = formatEditableReadableText(module.examinationForm || "");
+            document.getElementById("contents").value = formatEditableReadableText(module.contents || "");
+            document.getElementById("literature").value = formatEditableReadableText(module.literature || "");
             document.getElementById("additionalNotes").value = module.additionalNotes || "";
             document.getElementById("moduleWeight").value = module.moduleWeight ?? "";
 
@@ -303,6 +351,7 @@
                 document.getElementById("backLink").href = `/index.html?studyProgramId=${module.studyProgramId}`;
             }
             document.getElementById("versionsLink").href = `/module-versions.html?id=${module.id}`;
+            document.getElementById("viewLink").href = `/module-view.html?id=${module.id}`;
             setStatus(`Loaded module ${module.id}.`);
         }
 
@@ -329,6 +378,89 @@
                 return "M.Sc.";
             }
             return "";
+        }
+
+        function selectedStudyProgram() {
+            const selectedStudyProgramId = document.getElementById("studyProgramId").value;
+            return studyPrograms.find(program => String(program.id) === String(selectedStudyProgramId));
+        }
+
+        function selectedDegreeType() {
+            return selectedStudyProgram()?.degreeType || "";
+        }
+
+        function renderLevelOptions(currentValue) {
+            const level = document.getElementById("level");
+            const options = levelOptionsForDegree(selectedDegreeType());
+            const normalizedCurrentValue = currentValue || "";
+            const hasCurrentValue = normalizedCurrentValue && options.includes(normalizedCurrentValue);
+            const finalOptions = hasCurrentValue || !normalizedCurrentValue
+                ? options
+                : [...options, normalizedCurrentValue];
+
+            level.innerHTML = [
+                `<option value="">Bitte wählen</option>`,
+                ...finalOptions.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+            ].join("");
+            level.value = normalizedCurrentValue;
+        }
+
+        function levelOptionsForDegree(degreeType) {
+            const maxSemester = degreeType === "MASTER" ? 4 : 8;
+            return Array.from({ length: maxSemester }, (_, index) => `${index + 1}. Semester`);
+        }
+
+        function renderFrequencyOptions(currentValue) {
+            const frequency = document.getElementById("frequency");
+            const options = ["Wintersemester", "Sommersemester", "Jedes Semester"];
+            const normalizedCurrentValue = currentValue || "";
+            const hasCurrentValue = normalizedCurrentValue && options.includes(normalizedCurrentValue);
+            const finalOptions = hasCurrentValue || !normalizedCurrentValue
+                ? options
+                : [...options, normalizedCurrentValue];
+
+            frequency.innerHTML = [
+                `<option value="">Bitte wählen</option>`,
+                ...finalOptions.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+            ].join("");
+            frequency.value = normalizedCurrentValue;
+        }
+
+        function renderModuleTypeOptions(currentValue) {
+            const container = document.getElementById("moduleTypeOptions");
+            const baseOptions = ["Pflichtmodul", "Wahlpflichtmodul", "Wahlmodul"];
+            const selectedValues = moduleTypeValuesFromText(currentValue);
+            const extraOptions = selectedValues.filter(value => !baseOptions.includes(value));
+            const options = [...baseOptions, ...extraOptions];
+
+            container.innerHTML = options.map(option => {
+                const checkedAttribute = selectedValues.includes(option) ? "checked" : "";
+                return `
+                    <label>
+                        <input
+                            type="checkbox"
+                            class="moduleTypeOption"
+                            value="${escapeHtml(option)}"
+                            ${checkedAttribute}
+                        >
+                        ${escapeHtml(option)}
+                    </label>
+                `;
+            }).join("");
+        }
+
+        function moduleTypeValuesFromText(value) {
+            return String(value || "")
+                .split(",")
+                .map(part => part.trim())
+                .filter(Boolean);
+        }
+
+        function collectModuleType() {
+            return Array.from(document.querySelectorAll(".moduleTypeOption"))
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value)
+                .join(", ");
         }
 
         function renderModuleIdDisplay(id) {
@@ -489,10 +621,18 @@
             const totalWorkload = credits === null ? null : credits * hoursPerCredit;
             const calculatedSelfStudyHours = totalWorkload === null ? null : totalWorkload - calculatedPresenceHours;
 
-            document.getElementById("workloadPresenceHint").textContent =
-                `Hinweis: ${formatNumber(calculatedPresenceHours)} Stunden nach SWS`;
-            document.getElementById("workloadSelfStudyHint").textContent =
-                calculatedSelfStudyHours === null ? "" : `Hinweis: ${formatNumber(calculatedSelfStudyHours)} Stunden nach CP und Präsenz`;
+            const presenceHint = document.getElementById("workloadPresenceHint");
+            const selfStudyHint = document.getElementById("workloadSelfStudyHint");
+            const presenceMatches = presenceHours === null || nearlyEqual(presenceHours, calculatedPresenceHours);
+            const selfStudyMatches = selfStudyHours === null
+                || calculatedSelfStudyHours === null
+                || nearlyEqual(selfStudyHours, calculatedSelfStudyHours);
+
+            presenceHint.textContent = `Hinweis: ${formatNumber(calculatedPresenceHours)} Stunden nach SWS`;
+            presenceHint.classList.toggle("field-warning", !presenceMatches);
+            selfStudyHint.textContent =
+                calculatedSelfStudyHours === null ? "" : `Hinweis: ${formatNumber(calculatedSelfStudyHours)} Stunden nach LP und Präsenz`;
+            selfStudyHint.classList.toggle("field-warning", !selfStudyMatches);
             document.getElementById("workloadPreview").textContent = workloadPreviewText(
                 components,
                 presenceHours,
@@ -517,9 +657,57 @@
             return label ? `${teachingForm.code} - ${label}` : teachingForm.code;
         }
 
+        function renderModuleReferenceOptions() {
+            const options = document.getElementById("moduleReferenceOptions");
+            options.innerHTML = studyProgramModules
+                .filter(module => !currentModule || Number(module.id) !== Number(currentModule.id))
+                .map(module => `<option value="${escapeHtml(moduleReferenceText(module))}"></option>`)
+                .join("");
+        }
+
+        function insertModuleReference() {
+            const input = document.getElementById("moduleReferenceInput");
+            const value = input.value.trim();
+            if (!value) {
+                input.focus();
+                return;
+            }
+
+            const module = moduleFromReferenceInput(value);
+            const reference = module
+                ? moduleReferenceText(module)
+                : value.replace(/^@/, "");
+            const prerequisites = document.getElementById("prerequisites");
+            const separator = prerequisites.value.trim() ? " " : "";
+            prerequisites.value = `${prerequisites.value}${separator}${reference}`;
+            input.value = "";
+            prerequisites.focus();
+        }
+
+        function moduleFromReferenceInput(value) {
+            const normalizedValue = value.replace(/^@/, "").trim().toLowerCase();
+            return studyProgramModules.find(module =>
+                String(module.moduleNumber || "").toLowerCase() === normalizedValue
+                || String(module.name || "").toLowerCase() === normalizedValue
+                || `${module.moduleNumber || ""} ${module.name || ""}`.trim().toLowerCase() === normalizedValue
+                || moduleReferenceText(module).replace(/^@/, "").toLowerCase() === normalizedValue
+            );
+        }
+
+        function moduleReferenceText(module) {
+            return `${module.moduleNumber || ""} ${module.name || ""}`.trim();
+        }
+
         async function saveModule(event) {
             event.preventDefault();
             pendingModuleRequest = buildModuleRequest();
+            if (!isCreateMode && pendingModuleRequest.changedFieldPaths.length === 0) {
+                pendingModuleRequest = null;
+                document.getElementById("commitMessagePanel").hidden = true;
+                setStatus("No changes to save.");
+                return;
+            }
+
             document.getElementById("versionReason").value = isCreateMode
                 ? "created module manually"
                 : buildChangeMessage(currentModule, pendingModuleRequest);
@@ -546,7 +734,7 @@
                 description: currentModule?.description || "",
 
                 modulebookId: numberOrNull(document.getElementById("modulebookId").value),
-                moduleType: document.getElementById("moduleType").value.trim(),
+                moduleType: collectModuleType(),
                 coordinator: document.getElementById("coordinator").value.trim(),
                 applicability: document.getElementById("applicability").value.trim(),
                 learningArea: document.getElementById("learningArea").value.trim(),
@@ -612,7 +800,7 @@
             ];
 
             const changedPaths = fieldMappings
-                .filter(([, oldValue, newValue]) => comparableText(oldValue) !== comparableText(newValue))
+                .filter(([fieldPath, oldValue, newValue]) => comparableFieldText(fieldPath, oldValue) !== comparableFieldText(fieldPath, newValue))
                 .map(([fieldPath]) => fieldPath);
 
             if (comparableText(workloadComparableValue(currentModule.workload)) !== comparableText(workloadComparableValue(request.workload))) {
@@ -697,7 +885,7 @@
                 )
             ].filter(Boolean);
 
-            return changes.length > 0 ? changes.join("; ") : "updated module without field changes";
+            return changes.join("; ");
         }
 
         function changeMessagePart(label, oldValue, newValue, fieldPath, changedPaths) {
@@ -753,19 +941,27 @@
 
         function workloadComparableValue(workload) {
             if (!workload) {
-                return [];
+                return {
+                    components: [],
+                    presenceHours: null,
+                    selfStudyHours: null
+                };
             }
 
-            return (workload.components || [])
-                .map(component => ({
-                    teachingFormId: component.teachingFormId,
-                    swsAmount: component.swsAmount
-                }))
-                .sort((left, right) => {
-                    const leftId = Number(left.teachingFormId) || 0;
-                    const rightId = Number(right.teachingFormId) || 0;
-                    return leftId - rightId;
-                });
+            return {
+                components: (workload.components || [])
+                    .map(component => ({
+                        teachingFormId: component.teachingFormId,
+                        swsAmount: component.swsAmount
+                    }))
+                    .sort((left, right) => {
+                        const leftId = Number(left.teachingFormId) || 0;
+                        const rightId = Number(right.teachingFormId) || 0;
+                        return leftId - rightId;
+                    }),
+                presenceHours: workload.presenceHours ?? null,
+                selfStudyHours: workload.selfStudyHours ?? null
+            };
         }
 
         function comparableText(value) {
@@ -774,6 +970,65 @@
             }
 
             return String(value ?? "").trim();
+        }
+
+        function comparableFieldText(fieldPath, value) {
+            const textFieldsWithReadableFormatting = [
+                "module.learningObjectives",
+                "module.examinationForm",
+                "module.contents",
+                "module.literature"
+            ];
+
+            if (textFieldsWithReadableFormatting.includes(fieldPath)) {
+                return comparableText(formatEditableReadableText(value));
+            }
+
+            return comparableText(value);
+        }
+
+        function formatEditableReadableText(value) {
+            const text = String(value ?? "")
+                .replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .replace(/[ \t]+/g, " ")
+                .trim();
+
+            if (!text.includes(" - ")) {
+                return text;
+            }
+
+            const parts = text
+                .replace(/^-\s*/, "")
+                .split(/\s+-\s+/)
+                .map(part => part.trim())
+                .filter(Boolean);
+
+            if (parts.length < 2) {
+                return text;
+            }
+
+            const lines = [];
+            let sectionOpen = false;
+
+            parts.forEach((part, index) => {
+                const startsNewSection = index === 0 || isTopLevelReadableBullet(part);
+
+                if (startsNewSection) {
+                    lines.push(`- ${part}`);
+                    sectionOpen = part.endsWith(":");
+                    return;
+                }
+
+                lines.push(`${sectionOpen ? "    " : ""}- ${part}`);
+            });
+
+            return lines.join("\n");
+        }
+
+        function isTopLevelReadableBullet(part) {
+            return part.endsWith(":")
+                || /^(Grundlagen|Kompositorische|Fächerübergreifende)\b/.test(part);
         }
 
         function displayValue(value) {
@@ -810,6 +1065,15 @@
             document.getElementById("status").textContent = message;
         }
 
+        function toggleHelp(helpId) {
+            const help = document.getElementById(helpId);
+            const button = document.querySelector(`[onclick="toggleHelp('${helpId}')"]`);
+            help.hidden = !help.hidden;
+            if (button) {
+                button.setAttribute("aria-expanded", String(!help.hidden));
+            }
+        }
+
         function updateModuleNumberWarning() {
             const value = document.getElementById("moduleNumber").value.trim();
 
@@ -822,6 +1086,10 @@
                 return "";
             }
             return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(2)));
+        }
+
+        function nearlyEqual(left, right) {
+            return Math.abs(Number(left) - Number(right)) < 0.01;
         }
 
         init();
