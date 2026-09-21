@@ -14,26 +14,26 @@
         <div id="status" class="status">Loading modulebook...</div>
         <div class="form-actions">
             <a id="backLink" href="/index.html">Back to study program</a>
-            <button id="tagButton" type="button" onclick="showTagPanel()">Tag current version</button>
+            <button id="versionButton" type="button" onclick="showVersionPanel()">Save current version</button>
             <button type="button" onclick="window.print()">Print</button>
         </div>
 
-        <section id="tagPanel" class="commit-message-panel" hidden>
+        <section id="versionPanel" class="commit-message-panel" hidden>
             <label>
-                Tag message
-                <textarea id="tagMessage" rows="3" maxlength="500"></textarea>
+                Version message
+                <textarea id="versionMessage" rows="3" maxlength="500"></textarea>
             </label>
             <label>
                 Modulebook release date
-                <input id="tagModulebookReleaseDate" type="date">
+                <input id="versionModulebookReleaseDate" type="date">
             </label>
             <label>
                 Study and Examination Regulations
-                <input id="tagStudyExaminationRegulationsDate" type="date">
+                <input id="versionStudyExaminationRegulationsDate" type="date">
             </label>
             <div class="form-actions">
-                <button type="button" onclick="saveModulebookTag()">Save tag</button>
-                <button type="button" onclick="hideTagPanel()">Cancel</button>
+                <button type="button" onclick="saveModulebookVersion()">Save version</button>
+                <button type="button" onclick="hideVersionPanel()">Cancel</button>
             </div>
         </section>
     </section>
@@ -42,14 +42,14 @@
 
     <main id="modulebook" class="modulebook-document" hidden></main>
 
-    <script src="/api.js?v=modulebook-tags"></script>
+    <script src="/api.js?v=modulebook-versions"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const studyProgramId = params.get("studyProgramId");
-        const tagId = params.get("tagId");
+        const versionId = params.get("versionId") || params.get("tagId");
         let studyProgram = null;
         let activeModules = [];
-        let currentTag = null;
+        let currentVersion = null;
 
         const moduleRows = [
             ["Modulnummer", module => module.moduleNumber],
@@ -73,14 +73,14 @@
         ];
 
         async function init() {
-            if (!studyProgramId && !tagId) {
-                setStatus("Missing study program id or tag id in URL. Example: /modulebook-view.html?studyProgramId=19");
+            if (!studyProgramId && !versionId) {
+                setStatus("Missing study program id or version id in URL. Example: /modulebook-view.html?studyProgramId=19");
                 return;
             }
 
             try {
-                if (tagId) {
-                    await loadTaggedModulebook();
+                if (versionId) {
+                    await loadSavedModulebookVersion();
                 } else {
                     await loadCurrentModulebook();
                 }
@@ -114,14 +114,14 @@
                 .sort(compareModules);
         }
 
-        async function loadTaggedModulebook() {
-            currentTag = await loadModulebookTag(tagId);
-            const snapshot = JSON.parse(currentTag.snapshotJson);
+        async function loadSavedModulebookVersion() {
+            currentVersion = await loadModulebookVersion(versionId);
+            const snapshot = JSON.parse(currentVersion.snapshotJson);
             studyProgram = snapshot.studyProgram;
             activeModules = snapshot.modules || [];
-            document.getElementById("tagButton").hidden = true;
+            document.getElementById("versionButton").hidden = true;
             document.getElementById("backLink").href =
-                `/study-program-history.html?id=${encodeURIComponent(currentTag.studyProgramId)}`;
+                `/study-program-history.html?id=${encodeURIComponent(currentVersion.studyProgramId)}`;
         }
 
         function renderModulebook() {
@@ -131,7 +131,7 @@
             const container = document.getElementById("modulebook");
             container.innerHTML = `
                 ${renderCover()}
-                ${currentTag ? renderTagPage() : ""}
+                ${currentVersion ? renderVersionPage() : ""}
                 ${renderTableOfContents()}
                 ${activeModules.map(renderModulePage).join("")}
             `;
@@ -163,21 +163,21 @@
             `;
         }
 
-        function renderTagPage() {
+        function renderVersionPage() {
             return `
-                <article class="modulebook-page modulebook-tag-page">
+                <article class="modulebook-page modulebook-version-page">
                     <header class="modulebook-page-header">
                         <div>${escapeHtml(studyProgram.name || "")}</div>
-                        <div>Tagged modulebook</div>
+                        <div>Saved modulebook version</div>
                     </header>
 
-                    <div class="modulebook-tag-summary">
-                        <h1>Modulebook tag</h1>
-                        <p><strong>Tag message:</strong></p>
-                        <p>${escapeHtml(currentTag.tagMessage || "")}</p>
-                        <p><strong>Created:</strong> ${escapeHtml(formatDate(currentTag.createdAt))}</p>
-                        ${currentTag.modulebookReleaseDate ? `<p><strong>Modulebook release date:</strong> ${escapeHtml(formatDateOnly(currentTag.modulebookReleaseDate))}</p>` : ""}
-                        ${currentTag.studyExaminationRegulationsDate ? `<p><strong>Study and Examination Regulations:</strong> ${escapeHtml(formatDateOnly(currentTag.studyExaminationRegulationsDate))}</p>` : ""}
+                    <div class="modulebook-version-summary">
+                        <h1>Modulebook version</h1>
+                        <p><strong>Version message:</strong></p>
+                        <p>${escapeHtml(currentVersion.versionMessage || "")}</p>
+                        <p><strong>Created:</strong> ${escapeHtml(formatDate(currentVersion.createdAt))}</p>
+                        ${currentVersion.modulebookReleaseDate ? `<p><strong>Modulebook release date:</strong> ${escapeHtml(formatDateOnly(currentVersion.modulebookReleaseDate))}</p>` : ""}
+                        ${currentVersion.studyExaminationRegulationsDate ? `<p><strong>Study and Examination Regulations:</strong> ${escapeHtml(formatDateOnly(currentVersion.studyExaminationRegulationsDate))}</p>` : ""}
                     </div>
                 </article>
             `;
@@ -256,7 +256,7 @@
         }
 
         function tableOfContentsPageNumber() {
-            return currentTag ? 3 : 2;
+            return currentVersion ? 3 : 2;
         }
 
         function modulePageNumber(index) {
@@ -426,45 +426,45 @@
             return workload.rawText || "";
         }
 
-        function showTagPanel() {
-            document.getElementById("tagPanel").hidden = false;
-            document.getElementById("tagMessage").focus();
+        function showVersionPanel() {
+            document.getElementById("versionPanel").hidden = false;
+            document.getElementById("versionMessage").focus();
         }
 
-        function hideTagPanel() {
-            document.getElementById("tagPanel").hidden = true;
-            document.getElementById("tagMessage").value = "";
-            document.getElementById("tagModulebookReleaseDate").value = "";
-            document.getElementById("tagStudyExaminationRegulationsDate").value = "";
+        function hideVersionPanel() {
+            document.getElementById("versionPanel").hidden = true;
+            document.getElementById("versionMessage").value = "";
+            document.getElementById("versionModulebookReleaseDate").value = "";
+            document.getElementById("versionStudyExaminationRegulationsDate").value = "";
         }
 
-        async function saveModulebookTag() {
-            const message = document.getElementById("tagMessage").value.trim();
+        async function saveModulebookVersion() {
+            const message = document.getElementById("versionMessage").value.trim();
 
             if (!message) {
-                setStatus("Tag message is required.");
-                document.getElementById("tagMessage").focus();
+                setStatus("Version message is required.");
+                document.getElementById("versionMessage").focus();
                 return;
             }
 
-            setStatus("Saving modulebook tag...");
+            setStatus("Saving modulebook version...");
 
             try {
-                const tag = await createModulebookTag(studyProgramId, {
-                    tagMessage: message,
-                    modulebookReleaseDate: document.getElementById("tagModulebookReleaseDate").value || null,
+                const version = await createModulebookVersion(studyProgramId, {
+                    versionMessage: message,
+                    modulebookReleaseDate: document.getElementById("versionModulebookReleaseDate").value || null,
                     studyExaminationRegulationsDate:
-                        document.getElementById("tagStudyExaminationRegulationsDate").value || null
+                        document.getElementById("versionStudyExaminationRegulationsDate").value || null
                 });
-                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}&modulebookTagId=${encodeURIComponent(tag.id)}`;
+                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}&modulebookVersionId=${encodeURIComponent(version.id)}`;
             } catch (error) {
-                setStatus("Could not save modulebook tag: " + error.message);
+                setStatus("Could not save modulebook version: " + error.message);
             }
         }
 
         function statusText() {
-            if (currentTag) {
-                return `Loaded tagged modulebook ${currentTag.id} with ${activeModules.length} active modules.`;
+            if (currentVersion) {
+                return `Loaded modulebook version ${currentVersion.id} with ${activeModules.length} active modules.`;
             }
 
             return `Loaded ${activeModules.length} active modules.`;

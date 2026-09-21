@@ -25,20 +25,20 @@
         <div id="history">Loading...</div>
     </section>
 
-    <script src="/api.js?v=modulebook-tags"></script>
+    <script src="/api.js?v=modulebook-versions"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const studyProgramId = params.get("id");
         const selectedChangeSetId = params.get("changeSetId");
-        const selectedModulebookTagId = params.get("modulebookTagId");
+        const selectedModulebookVersionId = params.get("modulebookVersionId") || params.get("modulebookTagId");
         let studyProgram = null;
         let modules = [];
         let teachingForms = [];
         let changeSets = [];
-        let modulebookTags = [];
+        let modulebookVersions = [];
         let changesByChangeSetId = new Map();
         let versionsByChangeSetId = new Map();
-        let versionsByModulebookTagId = new Map();
+        let versionsByModulebookVersionId = new Map();
 
         async function init() {
             if (!studyProgramId) {
@@ -53,17 +53,17 @@
             try {
                 const studyPrograms = await loadStudyPrograms();
                 studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
-                [modules, changeSets, modulebookTags, teachingForms] = await Promise.all([
+                [modules, changeSets, modulebookVersions, teachingForms] = await Promise.all([
                     loadModulesForStudyProgram(studyProgramId),
                     loadStudyProgramChangeSets(studyProgramId),
-                    loadModulebookTags(studyProgramId),
+                    loadModulebookVersions(studyProgramId),
                     loadTeachingForms()
                 ]);
                 await loadVisibleFieldChanges();
                 calculateHistoryVersions();
                 renderTitle();
                 renderHistory();
-                setStatus(`Loaded ${changeSets.length} change sets and ${modulebookTags.length} modulebook tags.`);
+                setStatus(`Loaded ${changeSets.length} change sets and ${modulebookVersions.length} modulebook versions.`);
             } catch (error) {
                 setStatus("Could not load study program change log: " + error.message);
             }
@@ -96,7 +96,7 @@
         function renderHistory() {
             const container = document.getElementById("history");
 
-            if (changeSets.length === 0 && modulebookTags.length === 0) {
+            if (changeSets.length === 0 && modulebookVersions.length === 0) {
                 container.textContent = "No change log exists for this study program yet.";
                 return;
             }
@@ -106,8 +106,8 @@
                 return;
             }
 
-            if (selectedModulebookTagId) {
-                renderModulebookTagDetail(container);
+            if (selectedModulebookVersionId) {
+                renderModulebookVersionDetail(container);
                 return;
             }
 
@@ -116,7 +116,7 @@
 
         function renderChangeSetList(container) {
             container.innerHTML = `
-                ${renderModulebookTagList()}
+                ${renderModulebookVersionList()}
                 <h3>Complete change log</h3>
                 <table>
                     <thead>
@@ -138,25 +138,25 @@
             `;
         }
 
-        function renderModulebookTagList() {
-            if (modulebookTags.length === 0) {
+        function renderModulebookVersionList() {
+            if (modulebookVersions.length === 0) {
                 return `
                     <section>
-                        <h3>Modulebook tags</h3>
-                        <p>No modulebook tags saved yet.</p>
+                        <h3>Modulebook versions</h3>
+                        <p>No modulebook versions saved yet.</p>
                     </section>
                 `;
             }
 
             return `
                 <section>
-                    <h3>Modulebook tags</h3>
+                    <h3>Modulebook versions</h3>
                     <table>
                         <thead>
                             <tr>
                                 <th>Version</th>
                                 <th>Created</th>
-                                <th>Tag</th>
+                                <th>Version message</th>
                                 <th>Modulebook release date</th>
                                 <th>Study and Examination Regulations</th>
                                 <th>Active modules</th>
@@ -164,18 +164,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${modulebookTags.map(tag => `
-                                <tr class="modulebook-tag-row">
-                                    <td class="version-cell">${escapeHtml(versionForModulebookTag(tag))}</td>
-                                    <td>${escapeHtml(formatDate(tag.createdAt))}</td>
-                                    <td>${escapeHtml(tag.tagMessage || "")}</td>
-                                    <td>${escapeHtml(formatDateOnly(tag.modulebookReleaseDate))}</td>
-                                    <td>${escapeHtml(formatDateOnly(tag.studyExaminationRegulationsDate))}</td>
-                                    <td>${escapeHtml(String(modulebookTagActiveModuleCount(tag)))}</td>
+                            ${modulebookVersions.map(version => `
+                                <tr class="modulebook-version-row">
+                                    <td class="version-cell">${escapeHtml(versionForModulebookVersion(version))}</td>
+                                    <td>${escapeHtml(formatDate(version.createdAt))}</td>
+                                    <td>${escapeHtml(version.versionMessage || "")}</td>
+                                    <td>${escapeHtml(formatDateOnly(version.modulebookReleaseDate))}</td>
+                                    <td>${escapeHtml(formatDateOnly(version.studyExaminationRegulationsDate))}</td>
+                                    <td>${escapeHtml(String(modulebookVersionActiveModuleCount(version)))}</td>
                                     <td class="row-actions">
-                                        <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
-                                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
-                                        ${modulebookTagActionHtml(tag)}
+                                        <a href="/modulebook-view.html?versionId=${escapeHtml(String(version.id))}">View / Print</a>
+                                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
+                                        ${modulebookVersionActionHtml(version)}
                                     </td>
                                 </tr>
                             `).join("")}
@@ -186,8 +186,8 @@
         }
 
         function renderHistoryRow(row) {
-            if (row.type === "modulebookTag") {
-                return renderModulebookTagRow(row.value);
+            if (row.type === "modulebookVersion") {
+                return renderModulebookVersionRow(row.value);
             }
 
             return renderChangeSetRow(row.value);
@@ -212,30 +212,30 @@
             `;
         }
 
-        function renderModulebookTagRow(tag) {
+        function renderModulebookVersionRow(version) {
             return `
-                <tr class="modulebook-tag-row">
+                <tr class="modulebook-version-row">
                     <td class="version-cell">
-                        ${escapeHtml(versionForModulebookTag(tag))}
-                        ${renderModulebookTagVersionMeta(tag)}
+                        ${escapeHtml(versionForModulebookVersion(version))}
+                        ${renderModulebookVersionMeta(version)}
                     </td>
-                    <td>${escapeHtml(formatDate(tag.createdAt))}</td>
-                    <td>Tag ${escapeHtml(String(tag.id))}</td>
-                    <td>MODULEBOOK_TAG</td>
-                    <td>${escapeHtml(tag.tagMessage || "")}</td>
-                    <td>${escapeHtml(String(modulebookTagActiveModuleCount(tag)))}</td>
+                    <td>${escapeHtml(formatDate(version.createdAt))}</td>
+                    <td>Version ${escapeHtml(String(version.id))}</td>
+                    <td>MODULEBOOK_VERSION</td>
+                    <td>${escapeHtml(version.versionMessage || "")}</td>
+                    <td>${escapeHtml(String(modulebookVersionActiveModuleCount(version)))}</td>
                     <td>--</td>
                     <td class="row-actions">
-                        <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print</a>
-                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookTagId=${escapeHtml(String(tag.id))}">Details</a>
+                        <a href="/modulebook-view.html?versionId=${escapeHtml(String(version.id))}">View / Print</a>
+                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
                     </td>
                 </tr>
             `;
         }
 
-        function renderModulebookTagVersionMeta(tag) {
-            const releaseDate = formatDateOnly(tag.modulebookReleaseDate);
-            const regulationsDate = formatDateOnly(tag.studyExaminationRegulationsDate);
+        function renderModulebookVersionMeta(version) {
+            const releaseDate = formatDateOnly(version.modulebookReleaseDate);
+            const regulationsDate = formatDateOnly(version.studyExaminationRegulationsDate);
             const rows = [];
 
             if (releaseDate) {
@@ -255,30 +255,30 @@
             `;
         }
 
-        function renderModulebookTagDetail(container) {
-            const tag = modulebookTags.find(item => String(item.id) === String(selectedModulebookTagId));
-            if (!tag) {
-                container.textContent = "Modulebook tag not found.";
+        function renderModulebookVersionDetail(container) {
+            const version = modulebookVersions.find(item => String(item.id) === String(selectedModulebookVersionId));
+            if (!version) {
+                container.textContent = "Modulebook version not found.";
                 return;
             }
 
-            const snapshot = parseSnapshot(tag);
+            const snapshot = parseSnapshot(version);
             const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
 
             container.innerHTML = `
                 <div class="form-actions">
                     <a href="${backUrl}">Back to program history</a>
-                    <a href="/modulebook-view.html?tagId=${escapeHtml(String(tag.id))}">View / Print modulebook</a>
+                    <a href="/modulebook-view.html?versionId=${escapeHtml(String(version.id))}">View / Print modulebook</a>
                 </div>
-                <h3>Modulebook tag ${escapeHtml(String(tag.id))}</h3>
+                <h3>Modulebook version ${escapeHtml(String(version.id))}</h3>
                 <p class="muted">
-                    Version ${escapeHtml(versionForModulebookTag(tag))}
-                    ${escapeHtml(formatDate(tag.createdAt))}
-                    ${tag.tagMessage ? `- ${escapeHtml(tag.tagMessage)}` : ""}
+                    Version ${escapeHtml(versionForModulebookVersion(version))}
+                    ${escapeHtml(formatDate(version.createdAt))}
+                    ${version.versionMessage ? `- ${escapeHtml(version.versionMessage)}` : ""}
                 </p>
                 <p class="muted">
-                    ${tag.modulebookReleaseDate ? `Modulebook release date: ${escapeHtml(formatDateOnly(tag.modulebookReleaseDate))}` : ""}
-                    ${tag.studyExaminationRegulationsDate ? ` Study and Examination Regulations: ${escapeHtml(formatDateOnly(tag.studyExaminationRegulationsDate))}` : ""}
+                    ${version.modulebookReleaseDate ? `Modulebook release date: ${escapeHtml(formatDateOnly(version.modulebookReleaseDate))}` : ""}
+                    ${version.studyExaminationRegulationsDate ? ` Study and Examination Regulations: ${escapeHtml(formatDateOnly(version.studyExaminationRegulationsDate))}` : ""}
                 </p>
                 <table>
                     <thead>
@@ -443,22 +443,22 @@
             `;
         }
 
-        function modulebookTagActionHtml(tag) {
+        function modulebookVersionActionHtml(version) {
             return `
-                <button type="button" data-restore-modulebook-tag="${escapeHtml(String(tag.id))}">
+                <button type="button" data-restore-modulebook-version="${escapeHtml(String(version.id))}">
                     Back to this Version
                 </button>
-                ${modulebookTagDeleteActionHtml(tag)}
+                ${modulebookVersionDeleteActionHtml(version)}
             `;
         }
 
-        function modulebookTagDeleteActionHtml(tag) {
-            if (tag.sourceType === "INITIAL_IMPORT") {
+        function modulebookVersionDeleteActionHtml(version) {
+            if (version.sourceType === "INITIAL_IMPORT") {
                 return "";
             }
 
             return `
-                <button type="button" data-delete-modulebook-tag="${escapeHtml(String(tag.id))}">
+                <button type="button" data-delete-modulebook-version="${escapeHtml(String(version.id))}">
                     Delete this version
                 </button>
             `;
@@ -502,18 +502,18 @@
                     id: Number(changeSet.id),
                     value: changeSet
                 })),
-                ...modulebookTags.map(tag => ({
-                    type: "modulebookTag",
-                    createdAt: tag.createdAt,
-                    id: Number(tag.id),
-                    value: tag
+                ...modulebookVersions.map(version => ({
+                    type: "modulebookVersion",
+                    createdAt: version.createdAt,
+                    id: Number(version.id),
+                    value: version
                 }))
             ];
         }
 
         function calculateHistoryVersions() {
             versionsByChangeSetId = new Map();
-            versionsByModulebookTagId = new Map();
+            versionsByModulebookVersionId = new Map();
 
             const versionBeforeChangeSetId = new Map();
             const events = historyEvents().sort(compareHistoryEvents);
@@ -523,8 +523,8 @@
             let hasVersion = false;
 
             for (const event of events) {
-                if (event.type === "modulebookTag") {
-                    if (isInitialImportTag(event.value)) {
+                if (event.type === "modulebookVersion") {
+                    if (isInitialImportVersion(event.value)) {
                         hasVersion = true;
                     } else if (hasVersion) {
                         major += 1;
@@ -532,7 +532,7 @@
                     } else {
                         hasVersion = true;
                     }
-                    versionsByModulebookTagId.set(Number(event.value.id), formatVersion(major, minor));
+                    versionsByModulebookVersionId.set(Number(event.value.id), formatVersion(major, minor));
                     continue;
                 }
 
@@ -553,8 +553,8 @@
                 }
 
                 if (changeSet.sourceType === "RESTORE_TAG") {
-                    const targetTagId = restoreTargetModulebookTagId(changeSet);
-                    const restoredVersion = versionsByModulebookTagId.get(targetTagId)
+                    const targetVersionId = restoreTargetModulebookVersionId(changeSet);
+                    const restoredVersion = versionsByModulebookVersionId.get(targetVersionId)
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
                     const parsedVersion = parseVersion(restoredVersion);
                     major = parsedVersion.major;
@@ -596,16 +596,16 @@
             return versionsByChangeSetId.get(Number(changeSet.id)) || "";
         }
 
-        function versionForModulebookTag(tag) {
-            return versionsByModulebookTagId.get(Number(tag.id)) || "";
+        function versionForModulebookVersion(version) {
+            return versionsByModulebookVersionId.get(Number(version.id)) || "";
         }
 
-        function isInitialImportTag(tag) {
-            return tag.sourceType === "INITIAL_IMPORT";
+        function isInitialImportVersion(version) {
+            return version.sourceType === "INITIAL_IMPORT";
         }
 
-        function modulebookTagActiveModuleCount(tag) {
-            const snapshot = parseSnapshot(tag);
+        function modulebookVersionActiveModuleCount(version) {
+            const snapshot = parseSnapshot(version);
             return snapshot?.modules?.length ?? "";
         }
 
@@ -614,8 +614,8 @@
             return match ? Number(match[1]) : null;
         }
 
-        function restoreTargetModulebookTagId(changeSet) {
-            const match = String(changeSet.reason || "").match(/modulebook tag\s+(\d+)/i);
+        function restoreTargetModulebookVersionId(changeSet) {
+            const match = String(changeSet.reason || "").match(/modulebook (?:tag|version)\s+(\d+)/i);
             return match ? Number(match[1]) : null;
         }
 
@@ -742,9 +742,9 @@
             return "";
         }
 
-        function parseSnapshot(tag) {
+        function parseSnapshot(version) {
             try {
-                return JSON.parse(tag.snapshotJson);
+                return JSON.parse(version.snapshotJson);
             } catch (error) {
                 return null;
             }
@@ -769,17 +769,17 @@
                 return;
             }
 
-            const restoreTagButton = event.target.closest("[data-restore-modulebook-tag]");
-            if (restoreTagButton) {
-                const tagId = restoreTagButton.getAttribute("data-restore-modulebook-tag");
-                await handleRestoreModulebookTag(tagId);
+            const restoreVersionButton = event.target.closest("[data-restore-modulebook-version]");
+            if (restoreVersionButton) {
+                const versionId = restoreVersionButton.getAttribute("data-restore-modulebook-version");
+                await handleRestoreModulebookVersion(versionId);
                 return;
             }
 
-            const deleteTagButton = event.target.closest("[data-delete-modulebook-tag]");
-            if (deleteTagButton) {
-                const tagId = deleteTagButton.getAttribute("data-delete-modulebook-tag");
-                await handleDeleteModulebookTag(tagId);
+            const deleteVersionButton = event.target.closest("[data-delete-modulebook-version]");
+            if (deleteVersionButton) {
+                const versionId = deleteVersionButton.getAttribute("data-delete-modulebook-version");
+                await handleDeleteModulebookVersion(versionId);
             }
         });
 
@@ -816,7 +816,7 @@
 
         async function handleResetToInitialImport(changeSetId) {
             const confirmed = window.confirm(
-                "This will reset the study program to the initial PDF import and permanently delete all later change logs and modulebook tags. Continue?"
+                "This will reset the study program to the initial PDF import and permanently delete all later change logs and modulebook versions. Continue?"
             );
             if (!confirmed) {
                 return;
@@ -831,34 +831,34 @@
             }
         }
 
-        async function handleRestoreModulebookTag(tagId) {
+        async function handleRestoreModulebookVersion(versionId) {
             const confirmed = window.confirm(
-                "This will change the current study program back to this modulebook tag version. The tag itself will stay saved. Continue?"
+                "This will change the current study program back to this modulebook version. The version itself will stay saved. Continue?"
             );
             if (!confirmed) {
                 return;
             }
 
             try {
-                setStatus(`Restoring modulebook tag ${tagId}...`);
-                await restoreModulebookTag(tagId);
+                setStatus(`Restoring modulebook version ${versionId}...`);
+                await restoreModulebookVersion(versionId);
                 window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
             } catch (error) {
                 setStatus("Back to this version failed: " + error.message);
             }
         }
 
-        async function handleDeleteModulebookTag(tagId) {
+        async function handleDeleteModulebookVersion(versionId) {
             const confirmed = window.confirm(
-                "This will delete this saved modulebook tag version. The current study program will not change. Continue?"
+                "This will delete this saved modulebook version. The current study program will not change. Continue?"
             );
             if (!confirmed) {
                 return;
             }
 
             try {
-                setStatus(`Deleting modulebook tag ${tagId}...`);
-                await deleteModulebookTag(tagId);
+                setStatus(`Deleting modulebook version ${versionId}...`);
+                await deleteModulebookVersion(versionId);
                 window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
             } catch (error) {
                 setStatus("Delete this version failed: " + error.message);

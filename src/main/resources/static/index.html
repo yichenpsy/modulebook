@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Study Programs</title>
+    <title>Modulebooks</title>
     <link rel="stylesheet" href="/app.css?v=actions-gap">
 </head>
 <body>
     <nav>
-        <a href="/index.html">Study programs</a>
-        <a href="#createStudyProgramPanel" onclick="showCreateStudyProgramPanel()">Create new study program</a>
+        <a href="/index.html">Modulebooks</a>
+        <a href="#createStudyProgramPanel" onclick="showCreateStudyProgramPanel()">Create new modulebook</a>
     </nav>
 
-    <h1>Study Programs</h1>
+    <h1>Modulebooks</h1>
 
     <section id="createStudyProgramPanel" class="commit-message-panel" hidden>
-        <h2>Create new study program</h2>
+        <h2>Create new modulebook</h2>
         <label>
             Study program name
             <input id="newStudyProgramName">
@@ -27,13 +27,13 @@
             </select>
         </label>
         <div class="form-actions">
-            <button type="button" onclick="createNewStudyProgram()">Create</button>
+            <button type="button" onclick="createNewModulebook()">Create</button>
             <button type="button" onclick="hideCreateStudyProgramPanel()">Cancel</button>
         </div>
     </section>
 
     <section>
-        <div id="status" class="status">Loading study programs...</div>
+        <div id="status" class="status">Loading modulebooks...</div>
         <div id="studyPrograms">Loading...</div>
     </section>
 
@@ -57,10 +57,10 @@
                 if (selectInitialStudyProgram()) {
                     await loadSelectedStudyProgramModules(initialStudyProgramId);
                 } else {
-                    setStatus(`Loaded ${studyPrograms.length} study programs.`);
+                    setStatus(`Loaded ${studyPrograms.length} modulebooks.`);
                 }
             } catch (error) {
-                setStatus("Could not load study programs: " + error.message);
+                setStatus("Could not load modulebooks: " + error.message);
             }
         }
 
@@ -68,7 +68,7 @@
             const container = document.getElementById("studyPrograms");
 
             if (studyPrograms.length === 0) {
-                container.textContent = "No study programs saved yet.";
+                container.textContent = "No modulebooks saved yet.";
                 return;
             }
 
@@ -76,7 +76,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Study Program name</th>
+                            <th>Modulebook</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -90,7 +90,7 @@
                                     <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
                                     <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History & Version</a>
-                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View, Export & Tag modulebook</a>
+                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View, Export & Save version</a>
                                 </td>
                             </tr>
                         `).join("")}
@@ -103,7 +103,7 @@
             const program = studyPrograms.find(item => Number(item.id) === Number(programId));
             const label = program ? studyProgramLabel(program) : `study program ${programId}`;
             const confirmed = confirm(
-                `Delete ${label}?\n\nThis will delete the study program and all related records, including modules and history.`
+                `Delete ${label}?\n\nThis will delete the modulebook and all related records, including modules and history.`
             );
 
             if (!confirmed) {
@@ -121,9 +121,9 @@
                 renderStudyPrograms();
                 document.getElementById("modulesTitle").textContent = "Modules";
                 document.getElementById("modules").textContent = "Open a study program to see its modules.";
-                setStatus(`Deleted ${label}. Loaded ${studyPrograms.length} study programs.`);
+                setStatus(`Deleted ${label}. Loaded ${studyPrograms.length} modulebooks.`);
             } catch (error) {
-                setStatus("Could not delete study program: " + error.message);
+                setStatus("Could not delete modulebook: " + error.message);
             }
         }
 
@@ -239,7 +239,7 @@
                 ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
                 : `module ${moduleId}`;
             const confirmation = prompt(
-                `Permanently delete ${label}?\n\nThis cannot be restored from the change log. If a saved modulebook tag contains this module, restoring that tag can recreate it.\n\nType DELETE to confirm.`
+                `Permanently delete ${label}?\n\nThis cannot be restored from the change log. If a saved modulebook version contains this module, restoring that version can recreate it.\n\nType DELETE to confirm.`
             );
 
             if (confirmation !== "DELETE") {
@@ -274,7 +274,7 @@
             document.getElementById("newDegreeType").value = "BACHELOR";
         }
 
-        async function createNewStudyProgram() {
+        async function createNewModulebook() {
             const request = {
                 name: document.getElementById("newStudyProgramName").value.trim(),
                 degreeType: document.getElementById("newDegreeType").value
@@ -286,18 +286,19 @@
                 return;
             }
 
-            setStatus("Creating study program...");
+            setStatus("Creating modulebook...");
 
             try {
-                const created = await createStudyProgram(request);
+                const created = await createModulebook(request);
                 studyPrograms = await loadStudyPrograms();
                 renderStudyPrograms();
                 hideCreateStudyProgramPanel();
-                setStatus(`Created ${studyProgramLabel(created)}.`);
-                window.history.replaceState(null, "", `/index.html?studyProgramId=${encodeURIComponent(created.id)}`);
-                await loadSelectedStudyProgramModules(created.id);
+                const createdStudyProgram = studyPrograms.find(program => Number(program.id) === Number(created.studyProgramId));
+                setStatus(`Created ${createdStudyProgram ? studyProgramLabel(createdStudyProgram) : created.title}.`);
+                window.history.replaceState(null, "", `/index.html?studyProgramId=${encodeURIComponent(created.studyProgramId)}`);
+                await loadSelectedStudyProgramModules(created.studyProgramId);
             } catch (error) {
-                setStatus("Could not create study program: " + error.message);
+                setStatus("Could not create modulebook: " + error.message);
             }
         }
 

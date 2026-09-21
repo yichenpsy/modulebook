@@ -3,10 +3,12 @@ package de.bht.modulebook.modulebook.dto;
 import java.time.Instant;
 import java.time.LocalDate;
 
-public record ModulebookTagResponse(
+public record ModulebookVersionResponse(
         Long id,
+        Long modulebookId,
         Long studyProgramId,
-        String tagMessage,
+        Integer versionNumber,
+        String versionMessage,
         String snapshotJson,
         Instant createdAt,
         String sourceType,

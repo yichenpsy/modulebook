@@ -1046,7 +1046,7 @@
             }
 
             const confirmation = prompt(
-                `Permanently delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis cannot be restored from the change log. If a saved modulebook tag contains this module, restoring that tag can recreate it.\n\nType DELETE to confirm.`
+                `Permanently delete module ${currentModule.moduleNumber || currentModule.id}?\n\nThis cannot be restored from the change log. If a saved modulebook version contains this module, restoring that version can recreate it.\n\nType DELETE to confirm.`
             );
             if (confirmation !== "DELETE") {
                 setStatus("Delete cancelled. Type DELETE exactly to delete a module.");

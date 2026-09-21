@@ -3,10 +3,12 @@ package de.bht.modulebook.modulebook;
 import java.time.Instant;
 import java.time.LocalDate;
 
-public class ModulebookTag {
+public class ModulebookVersion {
     private final Long id;
+    private final Long modulebookId;
     private final Long studyProgramId;
-    private final String tagMessage;
+    private final Integer versionNumber;
+    private final String versionMessage;
     private final String snapshotJson;
     private final Instant createdAt;
     private final String sourceType;
@@ -14,14 +16,16 @@ public class ModulebookTag {
     private final LocalDate modulebookReleaseDate;
     private final LocalDate studyExaminationRegulationsDate;
 
-    public ModulebookTag(Long id, Long studyProgramId, String tagMessage, String snapshotJson, Instant createdAt) {
-        this(id, studyProgramId, tagMessage, snapshotJson, createdAt, "MANUAL", null, null, null);
+    public ModulebookVersion(Long id, Long studyProgramId, String versionMessage, String snapshotJson, Instant createdAt) {
+        this(id, null, studyProgramId, null, versionMessage, snapshotJson, createdAt, "MANUAL", null, null, null);
     }
 
-    public ModulebookTag(
+    public ModulebookVersion(
             Long id,
+            Long modulebookId,
             Long studyProgramId,
-            String tagMessage,
+            Integer versionNumber,
+            String versionMessage,
             String snapshotJson,
             Instant createdAt,
             String sourceType,
@@ -30,8 +34,10 @@ public class ModulebookTag {
             LocalDate studyExaminationRegulationsDate
     ) {
         this.id = id;
+        this.modulebookId = modulebookId;
         this.studyProgramId = studyProgramId;
-        this.tagMessage = tagMessage;
+        this.versionNumber = versionNumber;
+        this.versionMessage = versionMessage;
         this.snapshotJson = snapshotJson;
         this.createdAt = createdAt;
         this.sourceType = sourceType;
@@ -44,12 +50,20 @@ public class ModulebookTag {
         return id;
     }
 
+    public Long getModulebookId() {
+        return modulebookId;
+    }
+
     public Long getStudyProgramId() {
         return studyProgramId;
     }
 
-    public String getTagMessage() {
-        return tagMessage;
+    public Integer getVersionNumber() {
+        return versionNumber;
+    }
+
+    public String getVersionMessage() {
+        return versionMessage;
     }
 
     public String getSnapshotJson() {

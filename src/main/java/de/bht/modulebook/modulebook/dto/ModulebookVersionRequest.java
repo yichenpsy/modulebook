@@ -2,8 +2,8 @@ package de.bht.modulebook.modulebook.dto;
 
 import java.time.LocalDate;
 
-public record ModulebookTagRequest(
-        String tagMessage,
+public record ModulebookVersionRequest(
+        String versionMessage,
         LocalDate modulebookReleaseDate,
         LocalDate studyExaminationRegulationsDate
 ) {

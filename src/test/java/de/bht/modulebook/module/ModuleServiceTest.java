@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -27,6 +28,8 @@ import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
+import de.bht.modulebook.modulebook.Modulebook;
+import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import de.bht.modulebook.teachingform.TeachingForm;
@@ -49,6 +52,9 @@ class ModuleServiceTest {
     @Mock
     private ModuleChangeLogService changeLogService;
 
+    @Mock
+    private ModulebookService modulebookService;
+
     private ModuleService service;
 
     @BeforeEach
@@ -58,8 +64,20 @@ class ModuleServiceTest {
                 workloadRepository,
                 moduleTeachingFormRepository,
                 changeSetService,
-                changeLogService
+                changeLogService,
+                modulebookService
         );
+        lenient().when(modulebookService.getOrCreateForStudyProgramId(any()))
+                .thenAnswer(invocation -> new Modulebook(
+                        1L,
+                        invocation.getArgument(0),
+                        "Test Modulebook",
+                        "DRAFT",
+                        null,
+                        null,
+                        null,
+                        null
+                ));
     }
 
     @Test

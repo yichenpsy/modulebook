@@ -23,6 +23,16 @@ async function createStudyProgram(request) {
     });
 }
 
+async function createModulebook(request) {
+    return requestJson("/api/modulebooks", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+    });
+}
+
 async function deleteStudyProgram(studyProgramId) {
     await requestJson(`/api/study-programs/${studyProgramId}`, {
         method: "DELETE"
@@ -45,32 +55,36 @@ async function loadStudyProgramChangeSets(studyProgramId) {
     return requestJson(`/api/study-programs/${studyProgramId}/change-sets`);
 }
 
-async function loadModulebookTags(studyProgramId) {
-    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-tags`);
+async function loadModulebookVersions(studyProgramId) {
+    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-versions`);
 }
 
-async function loadModulebookTag(tagId) {
-    return requestJson(`/api/modulebook-tags/${tagId}`);
+async function loadModulebookVersion(versionId) {
+    return requestJson(`/api/modulebook-versions/${versionId}`);
 }
 
-async function createModulebookTag(studyProgramId, request) {
-    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-tags`, {
+async function createModulebookVersion(studyProgramId, request) {
+    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-versions`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(request)
+        body: JSON.stringify({
+            versionMessage: request.versionMessage ?? request.tagMessage,
+            modulebookReleaseDate: request.modulebookReleaseDate,
+            studyExaminationRegulationsDate: request.studyExaminationRegulationsDate
+        })
     });
 }
 
-async function deleteModulebookTag(tagId) {
-    await requestJson(`/api/modulebook-tags/${tagId}`, {
+async function deleteModulebookVersion(versionId) {
+    await requestJson(`/api/modulebook-versions/${versionId}`, {
         method: "DELETE"
     });
 }
 
-async function restoreModulebookTag(tagId) {
-    return requestJson(`/api/modulebook-tags/${tagId}/restore`, {
+async function restoreModulebookVersion(versionId) {
+    return requestJson(`/api/modulebook-versions/${versionId}/restore`, {
         method: "POST"
     });
 }

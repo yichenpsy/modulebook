@@ -154,7 +154,10 @@ public class StudyProgramRepository {
         // Deleting modules first also deletes module child rows such as workloads.
         jdbcTemplate.update("DELETE FROM modules WHERE study_program_id = ?", id);
 
-        // modulebooks are connected through study_examination_regulations.
+        // Current digital modulebooks are connected directly to study_programs.
+        jdbcTemplate.update("DELETE FROM modulebooks WHERE study_program_id = ?", id);
+
+        // Older modulebooks may still be connected through study_examination_regulations.
         jdbcTemplate.update(
                 """
                 DELETE FROM modulebooks

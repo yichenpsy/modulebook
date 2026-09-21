@@ -71,12 +71,12 @@ th {
     color: #6f7890;
 }
 
-.modulebook-tag-row {
+.modulebook-version-row {
     background: #eef7ff;
     border-left: 4px solid #2b78c5;
 }
 
-.modulebook-tag-row td {
+.modulebook-version-row td {
     border-top-color: #bdd8f0;
     border-bottom-color: #bdd8f0;
 }
@@ -587,17 +587,17 @@ th {
     font-size: 1.05rem;
 }
 
-.modulebook-tag-summary {
+.modulebook-version-summary {
     margin-top: 96mm;
     max-width: 140mm;
 }
 
-.modulebook-tag-summary h1 {
+.modulebook-version-summary h1 {
     margin: 0 0 14mm;
     font-size: 1.75rem;
 }
 
-.modulebook-tag-summary p {
+.modulebook-version-summary p {
     margin: 0 0 8mm;
     font-size: 1.05rem;
     white-space: pre-wrap;

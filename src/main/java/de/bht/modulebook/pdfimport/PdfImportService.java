@@ -22,7 +22,7 @@ import de.bht.modulebook.module.ModuleMapper;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
 import de.bht.modulebook.module.workload.ModuleWorkload;
-import de.bht.modulebook.modulebook.ModulebookTagService;
+import de.bht.modulebook.modulebook.ModulebookVersionService;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModuleError;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
@@ -49,7 +49,7 @@ public class PdfImportService {
     private final StudyProgramService studyProgramService;
     private final StudyProgramChangeSetService changeSetService;
     private final TeachingFormRepository teachingFormRepository;
-    private final ModulebookTagService modulebookTagService;
+    private final ModulebookVersionService modulebookVersionService;
 
     public PdfImportService(
         PythonPdfImportRunner runner,
@@ -60,7 +60,7 @@ public class PdfImportService {
         StudyProgramService studyProgramService,
         StudyProgramChangeSetService changeSetService,
         TeachingFormRepository teachingFormRepository,
-        ModulebookTagService modulebookTagService
+        ModulebookVersionService modulebookVersionService
     ){
         this.runner = runner;
         this.properties = properties;
@@ -70,7 +70,7 @@ public class PdfImportService {
         this.studyProgramService = studyProgramService;
         this.changeSetService = changeSetService;
         this.teachingFormRepository = teachingFormRepository;
-        this.modulebookTagService = modulebookTagService;
+        this.modulebookVersionService = modulebookVersionService;
     }
 
     public Map<String, JsonNode> importPdf(
@@ -199,7 +199,7 @@ public class PdfImportService {
             }
         }
         markModulesMissingFromImport(existingModules, importedModuleIds, importedModuleNumbers, changeSet.getId());
-        createInitialImportTagIfNeeded(
+        createInitialImportVersionIfNeeded(
                 studyProgram.getId(),
                 changeSet.getId(),
                 request.modulebookReleaseDate(),
@@ -216,7 +216,7 @@ public class PdfImportService {
         );
     }
 
-    private void createInitialImportTagIfNeeded(
+    private void createInitialImportVersionIfNeeded(
             Long studyProgramId,
             Long changeSetId,
             LocalDate modulebookReleaseDate,
@@ -227,7 +227,7 @@ public class PdfImportService {
                 StudyProgramChangeSetService.SOURCE_PDF_IMPORT,
                 changeSetId
         )) {
-            modulebookTagService.createInitialImportTag(
+            modulebookVersionService.createInitialImportVersion(
                     studyProgramId,
                     changeSetId,
                     modulebookReleaseDate,

@@ -32,12 +32,13 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
 @Service
-public class ModulebookTagService {
+public class ModulebookVersionService {
     public static final String SOURCE_MANUAL = "MANUAL";
     public static final String SOURCE_INITIAL_IMPORT = "INITIAL_IMPORT";
-    public static final String INITIAL_IMPORT_TAG_MESSAGE = "Version 1";
+    public static final String INITIAL_IMPORT_VERSION_MESSAGE = "Version 1";
 
-    private final ModulebookTagRepository repository;
+    private final ModulebookVersionRepository repository;
+    private final ModulebookService modulebookService;
     private final StudyProgramService studyProgramService;
     private final ModuleService moduleService;
     private final ModuleRepository moduleRepository;
@@ -47,8 +48,9 @@ public class ModulebookTagService {
     private final ModuleChangeLogService changeLogService;
     private final JsonMapper jsonMapper;
 
-    public ModulebookTagService(
-            ModulebookTagRepository repository,
+    public ModulebookVersionService(
+            ModulebookVersionRepository repository,
+            ModulebookService modulebookService,
             StudyProgramService studyProgramService,
             ModuleService moduleService,
             ModuleRepository moduleRepository,
@@ -59,6 +61,7 @@ public class ModulebookTagService {
             JsonMapper jsonMapper
     ) {
         this.repository = repository;
+        this.modulebookService = modulebookService;
         this.studyProgramService = studyProgramService;
         this.moduleService = moduleService;
         this.moduleRepository = moduleRepository;
@@ -70,20 +73,21 @@ public class ModulebookTagService {
     }
 
     @Transactional
-    public ModulebookTag create(
+    public ModulebookVersion create(
             Long studyProgramId,
-            String tagMessage,
+            String versionMessage,
             LocalDate modulebookReleaseDate,
             LocalDate studyExaminationRegulationsDate
     ) {
-        String normalizedMessage = normalizeTagMessage(tagMessage);
+        String normalizedMessage = normalizeVersionMessage(versionMessage);
         StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
+        Modulebook modulebook = modulebookService.getOrCreateForStudyProgram(studyProgram);
         ModulebookSnapshot snapshot = buildSnapshot(studyProgram);
 
         try {
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
             return repository.insert(
-                    studyProgramId,
+                    modulebook,
                     normalizedMessage,
                     snapshotJson,
                     SOURCE_MANUAL,
@@ -92,25 +96,26 @@ public class ModulebookTagService {
                     studyExaminationRegulationsDate
             );
         } catch (JacksonException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create modulebook tag");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create modulebook version");
         }
     }
 
     @Transactional
-    public ModulebookTag createInitialImportTag(
+    public ModulebookVersion createInitialImportVersion(
             Long studyProgramId,
             Long sourceChangeSetId,
             LocalDate modulebookReleaseDate,
             LocalDate studyExaminationRegulationsDate
     ) {
         StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
+        Modulebook modulebook = modulebookService.getOrCreateForStudyProgram(studyProgram);
         ModulebookSnapshot snapshot = buildSnapshot(studyProgram);
 
         try {
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
             return repository.insert(
-                    studyProgramId,
-                    INITIAL_IMPORT_TAG_MESSAGE,
+                    modulebook,
+                    INITIAL_IMPORT_VERSION_MESSAGE,
                     snapshotJson,
                     SOURCE_INITIAL_IMPORT,
                     sourceChangeSetId,
@@ -118,48 +123,48 @@ public class ModulebookTagService {
                     studyExaminationRegulationsDate
             );
         } catch (JacksonException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create initial import tag");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not create initial import version");
         }
     }
 
-    public List<ModulebookTag> getByStudyProgramId(Long studyProgramId) {
+    public List<ModulebookVersion> getByStudyProgramId(Long studyProgramId) {
         studyProgramService.getById(studyProgramId);
         return repository.findByStudyProgramId(studyProgramId);
     }
 
-    public ModulebookTag getById(Long id) {
+    public ModulebookVersion getById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modulebook tag not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modulebook version not found"));
     }
 
     public void delete(Long id) {
-        ModulebookTag tag = getById(id);
-        if (SOURCE_INITIAL_IMPORT.equals(tag.getSourceType())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Initial import tag cannot be deleted");
+        ModulebookVersion version = getById(id);
+        if (SOURCE_INITIAL_IMPORT.equals(version.getSourceType())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Initial import version cannot be deleted");
         }
 
         boolean deleted = repository.delete(id);
         if (!deleted) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Modulebook tag not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Modulebook version not found");
         }
     }
 
     @Transactional
     public StudyProgramChangeSet restore(Long id) {
-        ModulebookTag tag = getById(id);
-        ModulebookSnapshot snapshot = parseSnapshot(tag);
+        ModulebookVersion version = getById(id);
+        ModulebookSnapshot snapshot = parseSnapshot(version);
         StudyProgramChangeSet changeSet = changeSetService.create(
-                tag.getStudyProgramId(),
+                version.getStudyProgramId(),
                 StudyProgramChangeSetService.SOURCE_RESTORE_TAG,
-                "back to modulebook tag " + tag.getId()
+                "back to modulebook version " + version.getId()
         );
         Set<Long> restoredModuleIds = new HashSet<>();
 
         for (ModuleResponse moduleResponse : snapshot.modules()) {
-            Module desiredModule = moduleFromResponse(moduleResponse, tag.getStudyProgramId());
+            Module desiredModule = moduleFromResponse(moduleResponse, version.getStudyProgramId());
             ModuleWorkload desiredWorkload = workloadFromResponse(moduleResponse);
             List<Long> desiredTeachingFormIds = teachingFormIdsFromResponse(moduleResponse);
-            Module existingModule = findExistingModule(moduleResponse, tag.getStudyProgramId());
+            Module existingModule = findExistingModule(moduleResponse, version.getStudyProgramId());
 
             if (existingModule == null) {
                 desiredModule.setId(null);
@@ -177,15 +182,15 @@ public class ModulebookTagService {
             updateModuleToTagState(existingModule, desiredModule, desiredWorkload, desiredTeachingFormIds, changeSet.getId());
         }
 
-        markMissingActiveModulesDeleted(tag.getStudyProgramId(), restoredModuleIds, changeSet.getId());
+        markMissingActiveModulesDeleted(version.getStudyProgramId(), restoredModuleIds, changeSet.getId());
         return changeSet;
     }
 
-    private ModulebookSnapshot parseSnapshot(ModulebookTag tag) {
+    private ModulebookSnapshot parseSnapshot(ModulebookVersion version) {
         try {
-            return jsonMapper.readValue(tag.getSnapshotJson(), ModulebookSnapshot.class);
+            return jsonMapper.readValue(version.getSnapshotJson(), ModulebookSnapshot.class);
         } catch (JacksonException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not parse modulebook tag");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not parse modulebook version");
         }
     }
 
@@ -388,11 +393,11 @@ public class ModulebookTagService {
         return ModuleService.ACTIVE_STATUS.equalsIgnoreCase(String.valueOf(module.getModuleStatus()));
     }
 
-    private String normalizeTagMessage(String tagMessage) {
-        if (tagMessage == null || tagMessage.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tag message is required");
+    private String normalizeVersionMessage(String versionMessage) {
+        if (versionMessage == null || versionMessage.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Version message is required");
         }
 
-        return tagMessage.trim();
+        return versionMessage.trim();
     }
 }

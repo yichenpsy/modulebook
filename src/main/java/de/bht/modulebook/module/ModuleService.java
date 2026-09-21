@@ -19,6 +19,7 @@ import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.workload.PresenceHourComponent;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
+import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.teachingform.TeachingForm;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 
@@ -36,6 +37,7 @@ public class ModuleService {
     private final ModuleTeachingFormRepository moduleTeachingFormRepository;
     private final StudyProgramChangeSetService changeSetService;
     private final ModuleChangeLogService changeLogService;
+    private final ModulebookService modulebookService;
     
 
     public ModuleService(
@@ -43,7 +45,8 @@ public class ModuleService {
         ModuleWorkloadRepository workloadRepository,
         ModuleTeachingFormRepository moduleTeachingFormRepository,
         StudyProgramChangeSetService changeSetService,
-        ModuleChangeLogService changeLogService
+        ModuleChangeLogService changeLogService,
+        ModulebookService modulebookService
     ) {
         // The service needs the repository to access the database.
         this.moduleRepository = moduleRepository;
@@ -51,6 +54,7 @@ public class ModuleService {
         this.moduleTeachingFormRepository = moduleTeachingFormRepository;
         this.changeSetService = changeSetService;
         this.changeLogService = changeLogService;
+        this.modulebookService = modulebookService;
     }
 
     public Module create(Module module) {
@@ -98,6 +102,7 @@ public class ModuleService {
             Long changeSetId
     ) {
         normalizeAndValidateUniqueModuleNumberForCreate(module);
+        ensureModulebookId(module);
         applyDefaultStatus(module);
         module.setCreatedChangeSetId(changeSetId);
         Module created = moduleRepository.insert(module);
@@ -165,6 +170,7 @@ public class ModuleService {
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
+        ensureModulebookId(module, oldModule);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
@@ -199,6 +205,7 @@ public class ModuleService {
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
+        ensureModulebookId(module, oldModule);
         var changeSet = changeSetService.create(
             oldModule.getStudyProgramId(),
             StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
@@ -233,6 +240,7 @@ public class ModuleService {
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
+        ensureModulebookId(module, oldModule);
         boolean updated = moduleRepository.update(id, module);
 
         if (!updated) {
@@ -355,6 +363,7 @@ public class ModuleService {
             List<String> changedFieldPaths
     ) {
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
+        ensureModulebookId(module, oldModule);
         Module savedModule = saveModuleState(id, module, workload, teachingFormIds);
         ModuleWorkload savedWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> savedTeachingFormIds = teachingFormIdsByModuleId(id);
@@ -658,5 +667,22 @@ public class ModuleService {
 
     private Long createChangeSet(Long studyProgramId, String reason, String sourceType) {
         return changeSetService.create(studyProgramId, sourceType, reason).getId();
+    }
+
+    private void ensureModulebookId(Module module) {
+        ensureModulebookId(module, null);
+    }
+
+    private void ensureModulebookId(Module module, Module oldModule) {
+        if (module.getModulebookId() != null) {
+            return;
+        }
+        if (oldModule != null && oldModule.getModulebookId() != null) {
+            module.setModulebookId(oldModule.getModulebookId());
+            return;
+        }
+        if (module.getStudyProgramId() != null) {
+            module.setModulebookId(modulebookService.getOrCreateForStudyProgramId(module.getStudyProgramId()).getId());
+        }
     }
 }

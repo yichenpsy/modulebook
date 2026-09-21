@@ -52,7 +52,7 @@
         let modules = [];
         let teachingForms = [];
         let changeSets = [];
-        let modulebookTags = [];
+        let modulebookVersions = [];
         let changesByChangeSetId = new Map();
         let versionPoints = [];
 
@@ -68,10 +68,10 @@
             try {
                 const studyPrograms = await loadStudyPrograms();
                 studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
-                [modules, changeSets, modulebookTags, teachingForms] = await Promise.all([
+                [modules, changeSets, modulebookVersions, teachingForms] = await Promise.all([
                     loadModulesForStudyProgram(studyProgramId),
                     loadStudyProgramChangeSets(studyProgramId),
-                    loadModulebookTags(studyProgramId),
+                    loadModulebookVersions(studyProgramId),
                     loadTeachingForms()
                 ]);
                 await loadAllFieldChanges();
@@ -99,7 +99,7 @@
 
         function buildVersionPoints() {
             const versionBeforeChangeSetId = new Map();
-            const versionByModulebookTagId = new Map();
+            const versionByModulebookVersionId = new Map();
             const events = historyEvents();
             const latestPointByVersion = new Map();
             let major = 1;
@@ -109,8 +109,8 @@
             versionPoints = [];
 
             events.forEach((event, index) => {
-                if (event.type === "modulebookTag") {
-                    if (isInitialImportTag(event.value)) {
+                if (event.type === "modulebookVersion") {
+                    if (isInitialImportVersion(event.value)) {
                         hasVersion = true;
                     } else if (hasVersion) {
                         major += 1;
@@ -120,13 +120,13 @@
                     }
 
                     const version = formatVersion(major, minor);
-                    versionByModulebookTagId.set(Number(event.value.id), version);
+                    versionByModulebookVersionId.set(Number(event.value.id), version);
                     latestPointByVersion.set(version, {
                         key: `tag:${event.value.id}`,
                         index,
                         version,
-                        label: `Tag ${event.value.id}`,
-                        detail: event.value.tagMessage || "",
+                        label: `Version ${event.value.id}`,
+                        detail: event.value.versionMessage || "",
                         createdAt: event.value.createdAt
                     });
                     return;
@@ -149,8 +149,8 @@
                 }
 
                 if (changeSet.sourceType === "RESTORE_TAG") {
-                    const targetTagId = restoreTargetModulebookTagId(changeSet);
-                    const restoredVersion = versionByModulebookTagId.get(targetTagId)
+                    const targetVersionId = restoreTargetModulebookVersionId(changeSet);
+                    const restoredVersion = versionByModulebookVersionId.get(targetVersionId)
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
                     const parsedVersion = parseVersion(restoredVersion);
                     major = parsedVersion.major;
@@ -349,8 +349,8 @@
                     id: Number(changeSet.id),
                     value: changeSet
                 })),
-                ...modulebookTags.map(tag => ({
-                    type: "modulebookTag",
+                ...modulebookVersions.map(tag => ({
+                    type: "modulebookVersion",
                     createdAt: tag.createdAt,
                     id: Number(tag.id),
                     value: tag
@@ -403,12 +403,12 @@
             return match ? Number(match[1]) : null;
         }
 
-        function restoreTargetModulebookTagId(changeSet) {
-            const match = String(changeSet.reason || "").match(/modulebook tag\s+(\d+)/i);
+        function restoreTargetModulebookVersionId(changeSet) {
+            const match = String(changeSet.reason || "").match(/modulebook (?:tag|version)\s+(\d+)/i);
             return match ? Number(match[1]) : null;
         }
 
-        function isInitialImportTag(tag) {
+        function isInitialImportVersion(tag) {
             return tag.sourceType === "INITIAL_IMPORT";
         }
 
