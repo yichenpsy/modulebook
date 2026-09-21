@@ -1,57 +1,86 @@
 package de.bht.modulebook.modulebook;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import de.bht.modulebook.modulebook.dto.CreateModulebookRequest;
 import de.bht.modulebook.modulebook.dto.ModulebookResponse;
-import de.bht.modulebook.studyprogram.StudyProgram;
-import de.bht.modulebook.studyprogram.StudyProgramService;
 
 @Service
 public class ModulebookService {
     private final ModulebookRepository modulebookRepository;
-    private final StudyProgramService studyProgramService;
 
-    public ModulebookService(
-            ModulebookRepository modulebookRepository,
-            StudyProgramService studyProgramService
-    ) {
+    public ModulebookService(ModulebookRepository modulebookRepository) {
         this.modulebookRepository = modulebookRepository;
-        this.studyProgramService = studyProgramService;
     }
 
     @Transactional
     public ModulebookResponse create(CreateModulebookRequest request) {
-        StudyProgram studyProgram = new StudyProgram();
-        studyProgram.setName(request.name());
-        studyProgram.setDegreeType(request.degreeType());
+        String studyProgramName = normalizeStudyProgramName(request.requestedStudyProgramName());
+        String degreeType = normalizeDegreeType(request.degreeType());
 
-        StudyProgram createdStudyProgram = studyProgramService.create(studyProgram);
-        Modulebook modulebook = modulebookRepository.insertBlank(
-                createdStudyProgram.getId(),
-                titleFor(createdStudyProgram)
-        );
-        return ModulebookMapper.toResponse(modulebook, createdStudyProgram);
+        modulebookRepository.findByStudyProgramNameAndDegreeType(studyProgramName, degreeType)
+                .ifPresent(existing -> {
+                    throw duplicateModulebook(studyProgramName, degreeType);
+                });
+
+        Modulebook modulebook = modulebookRepository.insert(studyProgramName, degreeType);
+        return ModulebookMapper.toResponse(modulebook);
     }
 
-    public Modulebook getOrCreateForStudyProgram(StudyProgram studyProgram) {
-        return modulebookRepository.findByStudyProgramId(studyProgram.getId())
-                .orElseGet(() -> modulebookRepository.insertBlank(studyProgram.getId(), titleFor(studyProgram)));
+    public Modulebook getById(Long id) {
+        return modulebookRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modulebook not found"));
     }
 
-    public Modulebook getOrCreateForStudyProgramId(Long studyProgramId) {
-        StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
-        return getOrCreateForStudyProgram(studyProgram);
+    public List<Modulebook> getAll() {
+        return modulebookRepository.findAll();
     }
 
     public ModulebookResponse getByStudyProgramId(Long studyProgramId) {
-        StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
-        Modulebook modulebook = getOrCreateForStudyProgram(studyProgram);
-        return ModulebookMapper.toResponse(modulebook, studyProgram);
+        return ModulebookMapper.toResponse(getById(studyProgramId));
     }
 
-    private String titleFor(StudyProgram studyProgram) {
-        return (studyProgram.getName() + " " + studyProgram.getDegreeType() + " Modulebook").trim();
+    public Modulebook getOrCreateForStudyProgramId(Long studyProgramId) {
+        return getById(studyProgramId);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        getById(id);
+        boolean deleted = modulebookRepository.delete(id);
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Modulebook not found");
+        }
+    }
+
+    private String normalizeStudyProgramName(String studyProgramName) {
+        if (studyProgramName == null || studyProgramName.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Study program name is required");
+        }
+        return studyProgramName.trim();
+    }
+
+    private String normalizeDegreeType(String degreeType) {
+        if (degreeType == null || degreeType.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Degree type is required");
+        }
+
+        String normalized = degreeType.trim().toUpperCase();
+        if (!normalized.equals("BACHELOR") && !normalized.equals("MASTER")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Degree type must be BACHELOR or MASTER");
+        }
+        return normalized;
+    }
+
+    private ResponseStatusException duplicateModulebook(String studyProgramName, String degreeType) {
+        return new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Modulebook " + studyProgramName + " " + degreeType + " already exists"
+        );
     }
 }

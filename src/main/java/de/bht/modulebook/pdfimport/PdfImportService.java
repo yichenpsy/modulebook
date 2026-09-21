@@ -22,12 +22,12 @@ import de.bht.modulebook.module.ModuleMapper;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
 import de.bht.modulebook.module.workload.ModuleWorkload;
+import de.bht.modulebook.modulebook.Modulebook;
+import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.modulebook.ModulebookVersionService;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModuleError;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
-import de.bht.modulebook.studyprogram.StudyProgram;
-import de.bht.modulebook.studyprogram.StudyProgramService;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import de.bht.modulebook.teachingform.TeachingForm;
@@ -46,7 +46,7 @@ public class PdfImportService {
     private final ObjectMapper objectMapper;
     private final ModuleService moduleService;
     private final PdfImportedModuleMapper importedModuleMapper;
-    private final StudyProgramService studyProgramService;
+    private final ModulebookService modulebookService;
     private final StudyProgramChangeSetService changeSetService;
     private final TeachingFormRepository teachingFormRepository;
     private final ModulebookVersionService modulebookVersionService;
@@ -57,7 +57,7 @@ public class PdfImportService {
         ObjectMapper objectMapper,
         ModuleService moduleService,
         PdfImportedModuleMapper importedModuleMapper,
-        StudyProgramService studyProgramService,
+        ModulebookService modulebookService,
         StudyProgramChangeSetService changeSetService,
         TeachingFormRepository teachingFormRepository,
         ModulebookVersionService modulebookVersionService
@@ -67,7 +67,7 @@ public class PdfImportService {
         this.objectMapper = objectMapper;
         this.moduleService = moduleService;
         this.importedModuleMapper = importedModuleMapper;
-        this.studyProgramService = studyProgramService;
+        this.modulebookService = modulebookService;
         this.changeSetService = changeSetService;
         this.teachingFormRepository = teachingFormRepository;
         this.modulebookVersionService = modulebookVersionService;
@@ -79,7 +79,7 @@ public class PdfImportService {
             LocalDate studyExaminationRegulationsDate,
             MultipartFile file
     ) throws Exception {
-        StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
+        Modulebook modulebook = modulebookService.getById(studyProgramId);
 
         // check empty file
         if (file.isEmpty()){
@@ -116,9 +116,9 @@ public class PdfImportService {
         JsonNode report = objectMapper.readTree(reportJson.toFile());
 
         Map<String, JsonNode> response = new HashMap<>();
-        response.put("studyProgramId", objectMapper.valueToTree(studyProgram.getId()));
-        response.put("studyProgram", objectMapper.valueToTree(studyProgram.getName()));
-        response.put("degreeType", objectMapper.valueToTree(studyProgram.getDegreeType()));
+        response.put("studyProgramId", objectMapper.valueToTree(modulebook.getId()));
+        response.put("studyProgram", objectMapper.valueToTree(modulebook.getStudyProgramName()));
+        response.put("degreeType", objectMapper.valueToTree(modulebook.getDegreeType()));
         response.put("modulebookReleaseDate", objectMapper.valueToTree(modulebookReleaseDate));
         response.put("studyExaminationRegulationsDate", objectMapper.valueToTree(studyExaminationRegulationsDate));
         response.put("report", report);
@@ -133,14 +133,14 @@ public class PdfImportService {
 
         List<ModuleResponse> createdModules = new ArrayList<>();
         List<SaveImportedModuleError> errors = new ArrayList<>();
-        StudyProgram studyProgram = studyProgramService.getById(request.studyProgramId());
-        String changeSetReason = "Re-import " + studyProgram.getName() + " " + studyProgram.getDegreeType() + " PDF";
+        Modulebook modulebook = modulebookService.getById(request.studyProgramId());
+        String changeSetReason = "Re-import " + modulebook.getStudyProgramName() + " " + modulebook.getDegreeType() + " PDF";
         StudyProgramChangeSet changeSet = changeSetService.create(
-                studyProgram.getId(),
+                modulebook.getId(),
                 StudyProgramChangeSetService.SOURCE_PDF_IMPORT,
                 changeSetReason
         );
-        List<Module> existingModules = moduleService.getByStudyProgramId(studyProgram.getId());
+        List<Module> existingModules = moduleService.getByStudyProgramId(modulebook.getId());
         Set<Long> importedModuleIds = new HashSet<>();
         Set<String> importedModuleNumbers = new HashSet<>();
         Map<String, Long> teachingFormIdsByCode = teachingFormRepository.findAll()
@@ -163,9 +163,10 @@ public class PdfImportService {
             }
 
             try {
-                Module module = importedModuleMapper.toModule(imported, studyProgram.getName(), studyProgram.getDegreeType());
+                Module module = importedModuleMapper.toModule(imported, modulebook.getStudyProgramName(), modulebook.getDegreeType());
                 ModuleWorkload workload = importedModuleMapper.toWorkload(imported, teachingFormIdsByCode);
-                module.setStudyProgramId(studyProgram.getId());
+                module.setStudyProgramId(modulebook.getId());
+                module.setModulebookId(modulebook.getId());
                 module.setModuleStatus(ModuleService.ACTIVE_STATUS);
                 module.setModuleComments(null);
                 Module saved;
@@ -176,7 +177,7 @@ public class PdfImportService {
                     saved = moduleService.update(moduleId, module, workload, List.of(), PDF_REIMPORT_VERSION_REASON, changeSet.getId());
                 } else if (module.getModuleNumber() != null && !module.getModuleNumber().isBlank()) {
                     Module existing = moduleService
-                        .findByStudyProgramIdAndModuleNumber(studyProgram.getId(), module.getModuleNumber())
+                        .findByStudyProgramIdAndModuleNumber(modulebook.getId(), module.getModuleNumber())
                         .orElse(null);
 
                     if (existing == null) {
@@ -200,7 +201,7 @@ public class PdfImportService {
         }
         markModulesMissingFromImport(existingModules, importedModuleIds, importedModuleNumbers, changeSet.getId());
         createInitialImportVersionIfNeeded(
-                studyProgram.getId(),
+                modulebook.getId(),
                 changeSet.getId(),
                 request.modulebookReleaseDate(),
                 request.studyExaminationRegulationsDate()

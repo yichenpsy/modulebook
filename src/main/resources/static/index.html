@@ -276,11 +276,11 @@
 
         async function createNewModulebook() {
             const request = {
-                name: document.getElementById("newStudyProgramName").value.trim(),
+                studyProgramName: document.getElementById("newStudyProgramName").value.trim(),
                 degreeType: document.getElementById("newDegreeType").value
             };
 
-            if (!request.name) {
+            if (!request.studyProgramName) {
                 setStatus("Please enter a study program name.");
                 document.getElementById("newStudyProgramName").focus();
                 return;
@@ -294,7 +294,7 @@
                 renderStudyPrograms();
                 hideCreateStudyProgramPanel();
                 const createdStudyProgram = studyPrograms.find(program => Number(program.id) === Number(created.studyProgramId));
-                setStatus(`Created ${createdStudyProgram ? studyProgramLabel(createdStudyProgram) : created.title}.`);
+                setStatus(`Created ${createdStudyProgram ? studyProgramLabel(createdStudyProgram) : created.studyProgramName}.`);
                 window.history.replaceState(null, "", `/index.html?studyProgramId=${encodeURIComponent(created.studyProgramId)}`);
                 await loadSelectedStudyProgramModules(created.studyProgramId);
             } catch (error) {

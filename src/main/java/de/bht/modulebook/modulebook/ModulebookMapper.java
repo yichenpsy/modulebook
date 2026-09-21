@@ -1,19 +1,14 @@
 package de.bht.modulebook.modulebook;
 
 import de.bht.modulebook.modulebook.dto.ModulebookResponse;
-import de.bht.modulebook.studyprogram.StudyProgram;
 
 public class ModulebookMapper {
-    public static ModulebookResponse toResponse(Modulebook modulebook, StudyProgram studyProgram) {
+    public static ModulebookResponse toResponse(Modulebook modulebook) {
         return new ModulebookResponse(
                 modulebook.getId(),
-                modulebook.getStudyProgramId(),
-                studyProgram.getName(),
-                studyProgram.getDegreeType(),
-                modulebook.getTitle(),
-                modulebook.getStatus(),
-                modulebook.getModulebookReleaseDate(),
-                modulebook.getStudyExaminationRegulationsDate(),
+                modulebook.getId(),
+                modulebook.getStudyProgramName(),
+                modulebook.getDegreeType(),
                 modulebook.getCreatedAt(),
                 modulebook.getUpdatedAt()
         );

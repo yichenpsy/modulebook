@@ -26,11 +26,11 @@ import de.bht.modulebook.config.PdfImportProperties;
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.workload.ModuleWorkload;
+import de.bht.modulebook.modulebook.Modulebook;
+import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.modulebook.ModulebookVersionService;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
-import de.bht.modulebook.studyprogram.StudyProgram;
-import de.bht.modulebook.studyprogram.StudyProgramService;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
 import de.bht.modulebook.teachingform.TeachingForm;
@@ -61,7 +61,7 @@ class PdfImportServiceTest {
     private PdfImportedModuleMapper importedModuleMapper;
 
     @Mock
-    private StudyProgramService studyProgramService;
+    private ModulebookService modulebookService;
 
     @Mock
     private StudyProgramChangeSetService changeSetService;
@@ -83,7 +83,7 @@ class PdfImportServiceTest {
                 objectMapper,
                 moduleService,
                 importedModuleMapper,
-                studyProgramService,
+                modulebookService,
                 changeSetService,
                 teachingFormRepository,
                 modulebookVersionService
@@ -142,16 +142,14 @@ class PdfImportServiceTest {
         // Define how the mocked collaborators should behave for this example.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");
         when(importedModuleMapper.moduleId(imported)).thenReturn(null);
-        StudyProgram studyProgram = new StudyProgram(
+        Modulebook modulebook = new Modulebook(
                 10L,
                 "Architektur",
                 "BACHELOR",
-                LocalDate.parse("2024-11-25"),
-                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
-        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(modulebookService.getById(10L)).thenReturn(modulebook);
         when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
                 .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of(teachingForm(1L, "SU"), teachingForm(2L, "UE")));
@@ -203,16 +201,14 @@ class PdfImportServiceTest {
         // Simulate a save failure, such as a duplicate module code from the database.
         when(importedModuleMapper.moduleNumber(imported)).thenReturn("B01");
         when(importedModuleMapper.moduleId(imported)).thenReturn(null);
-        StudyProgram studyProgram = new StudyProgram(
+        Modulebook modulebook = new Modulebook(
                 10L,
                 "Architektur",
                 "BACHELOR",
-                LocalDate.parse("2024-11-25"),
-                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
-        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(modulebookService.getById(10L)).thenReturn(modulebook);
         when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
                 .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
@@ -270,17 +266,15 @@ class PdfImportServiceTest {
         Module savedB01 = module(1L, "B01", "Module B01", "ACTIVE");
         Module savedB03 = module(3L, "B03", "Module B03", "ACTIVE");
         Module savedB02 = module(2L, "B02", "Old B02", "MISSING_FROM_IMPORT");
-        StudyProgram studyProgram = new StudyProgram(
+        Modulebook modulebook = new Modulebook(
                 10L,
                 "Architektur",
                 "BACHELOR",
-                LocalDate.parse("2024-11-25"),
-                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-01T00:00:00Z")
         );
 
-        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(modulebookService.getById(10L)).thenReturn(modulebook);
         when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
                 .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());

@@ -6,7 +6,6 @@ public record StudyProgramResponse(
         Long id,
         String name,
         String degreeType,
-        Instant createdAt,
-        Instant updatedAt
+        Instant createdAt
 ) {
 }

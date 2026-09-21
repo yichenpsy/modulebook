@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.bht.modulebook.module.version.ModuleFieldChange;
 import de.bht.modulebook.module.version.ModuleFieldChangeRepository;
-import de.bht.modulebook.studyprogram.StudyProgramService;
+import de.bht.modulebook.modulebook.ModulebookService;
 
 @RestController
 public class StudyProgramChangeSetController {
     private final StudyProgramChangeSetService changeSetService;
-    private final StudyProgramService studyProgramService;
+    private final ModulebookService modulebookService;
     private final ModuleFieldChangeRepository fieldChangeRepository;
     private final ChangeSetRestoreService restoreService;
 
     public StudyProgramChangeSetController(
             StudyProgramChangeSetService changeSetService,
-            StudyProgramService studyProgramService,
+            ModulebookService modulebookService,
             ModuleFieldChangeRepository fieldChangeRepository,
             ChangeSetRestoreService restoreService
     ) {
         this.changeSetService = changeSetService;
-        this.studyProgramService = studyProgramService;
+        this.modulebookService = modulebookService;
         this.fieldChangeRepository = fieldChangeRepository;
         this.restoreService = restoreService;
     }
 
     @GetMapping("/api/study-programs/{studyProgramId}/change-sets")
     public List<StudyProgramChangeSet> getChangeSets(@PathVariable Long studyProgramId) {
-        studyProgramService.getById(studyProgramId);
+        modulebookService.getById(studyProgramId);
         return changeSetService.getByStudyProgramId(studyProgramId);
     }
 

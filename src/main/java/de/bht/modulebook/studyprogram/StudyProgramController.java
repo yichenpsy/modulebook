@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import de.bht.modulebook.module.ModuleMapper;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
+import de.bht.modulebook.modulebook.ModulebookService;
+import de.bht.modulebook.modulebook.dto.CreateModulebookRequest;
+import de.bht.modulebook.modulebook.dto.ModulebookResponse;
 import de.bht.modulebook.studyprogram.dto.StudyProgramRequest;
 import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 
@@ -22,29 +25,33 @@ import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 @RequestMapping("/api/study-programs")
 public class StudyProgramController {
 
-    private final StudyProgramService studyProgramService;
+    private final ModulebookService modulebookService;
     private final ModuleService moduleService;
 
     public StudyProgramController(
-            StudyProgramService studyProgramService,
+            ModulebookService modulebookService,
             ModuleService moduleService
     ) {
-        this.studyProgramService = studyProgramService;
+        this.modulebookService = modulebookService;
         this.moduleService = moduleService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public StudyProgramResponse create(@RequestBody StudyProgramRequest request) {
-        // Request values come from JSON sent by the frontend create/import forms.
-        StudyProgram created = studyProgramService.create(StudyProgramMapper.toEntity(request));
-        return StudyProgramMapper.toResponse(created);
+        ModulebookResponse created = modulebookService.create(new CreateModulebookRequest(request.name(), request.degreeType()));
+        return new StudyProgramResponse(
+                created.id(),
+                created.studyProgramName(),
+                created.degreeType(),
+                created.createdAt()
+        );
     }
 
     @GetMapping
     public List<StudyProgramResponse> getAll() {
-        // Used by the frontend to show the study-program selection list.
-        return studyProgramService.getAll()
+        // Kept for frontend compatibility. The ids are now modulebooks.id values.
+        return modulebookService.getAll()
                 .stream()
                 .map(StudyProgramMapper::toResponse)
                 .toList();
@@ -52,15 +59,15 @@ public class StudyProgramController {
 
     @GetMapping("/{id}")
     public StudyProgramResponse getById(@PathVariable Long id) {
-        return StudyProgramMapper.toResponse(studyProgramService.getById(id));
+        return StudyProgramMapper.toResponse(modulebookService.getById(id));
     }
 
     @GetMapping("/{id}/modules")
     public List<ModuleResponse> getModules(@PathVariable Long id) {
-        // First check the study program exists, so an invalid id returns 404.
-        studyProgramService.getById(id);
+        // First check the modulebook exists, so an invalid id returns 404.
+        modulebookService.getById(id);
 
-        // Then load only modules whose modules.study_program_id equals this path id.
+        // Then load only modules whose modules.modulebook_id equals this path id.
         return moduleService.getByStudyProgramId(id)
                 .stream()
                 .map(ModuleMapper::toResponse)
@@ -70,6 +77,6 @@ public class StudyProgramController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        studyProgramService.delete(id);
+        modulebookService.delete(id);
     }
 }

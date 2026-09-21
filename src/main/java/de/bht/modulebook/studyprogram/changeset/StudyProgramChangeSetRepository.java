@@ -24,13 +24,13 @@ public class StudyProgramChangeSetRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.insert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("study_program_change_sets")
-                .usingColumns("study_program_id", "source_type", "reason")
+                .usingColumns("modulebook_id", "source_type", "reason")
                 .usingGeneratedKeyColumns("id");
     }
 
     public StudyProgramChangeSet insert(Long studyProgramId, String sourceType, String reason) {
         MapSqlParameterSource values = new MapSqlParameterSource()
-                .addValue("study_program_id", studyProgramId)
+                .addValue("modulebook_id", studyProgramId)
                 .addValue("source_type", sourceType)
                 .addValue("reason", reason);
         Number id = insert.executeAndReturnKey(values);
@@ -40,7 +40,7 @@ public class StudyProgramChangeSetRepository {
     public StudyProgramChangeSet findById(Long id) {
         List<StudyProgramChangeSet> changeSets = jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
                 WHERE id = ?
@@ -54,10 +54,10 @@ public class StudyProgramChangeSetRepository {
     public List<StudyProgramChangeSet> findByStudyProgramId(Long studyProgramId) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
-                WHERE study_program_id = ?
+                WHERE modulebook_id = ?
                 ORDER BY created_at DESC, id DESC
                 """,
                 rowMapper,
@@ -68,10 +68,10 @@ public class StudyProgramChangeSetRepository {
     public Optional<StudyProgramChangeSet> findFirstByStudyProgramIdAndSourceType(Long studyProgramId, String sourceType) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
-                WHERE study_program_id = ?
+                WHERE modulebook_id = ?
                   AND source_type = ?
                 ORDER BY created_at, id
                 LIMIT 1
@@ -85,10 +85,10 @@ public class StudyProgramChangeSetRepository {
     public List<StudyProgramChangeSet> findActiveFromInclusive(StudyProgramChangeSet target) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
-                WHERE study_program_id = ?
+                WHERE modulebook_id = ?
                   AND discarded_at IS NULL
                   AND (
                       created_at > ?
@@ -107,10 +107,10 @@ public class StudyProgramChangeSetRepository {
     public List<StudyProgramChangeSet> findAfter(StudyProgramChangeSet changeSet) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
-                WHERE study_program_id = ?
+                WHERE modulebook_id = ?
                   AND (
                       created_at > ?
                       OR (created_at = ? AND id > ?)

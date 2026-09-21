@@ -23,7 +23,6 @@ import de.bht.modulebook.module.version.ModuleFieldChangeRepository;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
-import de.bht.modulebook.studyprogram.StudyProgramRepository;
 import de.bht.modulebook.teachingform.TeachingForm;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
@@ -38,7 +37,6 @@ public class ChangeSetRestoreService {
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository teachingFormRepository;
     private final ModuleChangeLogService changeLogService;
-    private final StudyProgramRepository studyProgramRepository;
     private final JsonMapper jsonMapper;
 
     public ChangeSetRestoreService(
@@ -49,7 +47,6 @@ public class ChangeSetRestoreService {
             ModuleWorkloadRepository workloadRepository,
             ModuleTeachingFormRepository teachingFormRepository,
             ModuleChangeLogService changeLogService,
-            StudyProgramRepository studyProgramRepository,
             JsonMapper jsonMapper
     ) {
         this.changeSetRepository = changeSetRepository;
@@ -59,7 +56,6 @@ public class ChangeSetRestoreService {
         this.workloadRepository = workloadRepository;
         this.teachingFormRepository = teachingFormRepository;
         this.changeLogService = changeLogService;
-        this.studyProgramRepository = studyProgramRepository;
         this.jsonMapper = jsonMapper;
     }
 
@@ -95,7 +91,6 @@ public class ChangeSetRestoreService {
         restoreFields(restoreChangeSetIds, moduleIdsToDelete, restoreChangeSet.getId());
         deleteCreatedModules(modulesToDelete);
         changeSetRepository.markDiscarded(restoreChangeSetIds, restoreChangeSet.getId());
-        hideStudyProgramIfImportWasFullyRestored(target.getStudyProgramId(), restoreCollection, restoreChangeSet.getId());
 
         return restoreChangeSet;
     }
@@ -118,7 +113,6 @@ public class ChangeSetRestoreService {
         restoreFields(laterChangeSetIds, moduleIdsToDelete, null);
         deleteCreatedModules(modulesToDelete);
         changeSetRepository.deleteByIds(laterChangeSetIds);
-        studyProgramRepository.unhide(target.getStudyProgramId());
 
         return target;
     }
@@ -136,18 +130,6 @@ public class ChangeSetRestoreService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Initial PDF import not found"));
         if (!Objects.equals(initialImport.getId(), target.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only the first PDF import can clean history");
-        }
-    }
-
-    private void hideStudyProgramIfImportWasFullyRestored(
-            Long studyProgramId,
-            List<StudyProgramChangeSet> restoreCollection,
-            Long restoreChangeSetId
-    ) {
-        boolean restoresPdfImport = restoreCollection.stream()
-                .anyMatch(changeSet -> StudyProgramChangeSetService.SOURCE_PDF_IMPORT.equals(changeSet.getSourceType()));
-        if (restoresPdfImport) {
-            studyProgramRepository.hideIfNoModules(studyProgramId, restoreChangeSetId);
         }
     }
 

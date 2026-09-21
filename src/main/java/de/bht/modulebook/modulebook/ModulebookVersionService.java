@@ -22,11 +22,9 @@ import de.bht.modulebook.module.version.ModuleChangeLogService;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.workload.PresenceHourComponent;
-import de.bht.modulebook.studyprogram.StudyProgram;
-import de.bht.modulebook.studyprogram.StudyProgramMapper;
-import de.bht.modulebook.studyprogram.StudyProgramService;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
 import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
+import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 import de.bht.modulebook.teachingform.TeachingForm;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
@@ -39,7 +37,6 @@ public class ModulebookVersionService {
 
     private final ModulebookVersionRepository repository;
     private final ModulebookService modulebookService;
-    private final StudyProgramService studyProgramService;
     private final ModuleService moduleService;
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
@@ -51,7 +48,6 @@ public class ModulebookVersionService {
     public ModulebookVersionService(
             ModulebookVersionRepository repository,
             ModulebookService modulebookService,
-            StudyProgramService studyProgramService,
             ModuleService moduleService,
             ModuleRepository moduleRepository,
             ModuleWorkloadRepository workloadRepository,
@@ -62,7 +58,6 @@ public class ModulebookVersionService {
     ) {
         this.repository = repository;
         this.modulebookService = modulebookService;
-        this.studyProgramService = studyProgramService;
         this.moduleService = moduleService;
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
@@ -80,9 +75,8 @@ public class ModulebookVersionService {
             LocalDate studyExaminationRegulationsDate
     ) {
         String normalizedMessage = normalizeVersionMessage(versionMessage);
-        StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
-        Modulebook modulebook = modulebookService.getOrCreateForStudyProgram(studyProgram);
-        ModulebookSnapshot snapshot = buildSnapshot(studyProgram);
+        Modulebook modulebook = modulebookService.getById(studyProgramId);
+        ModulebookSnapshot snapshot = buildSnapshot(modulebook);
 
         try {
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
@@ -107,9 +101,8 @@ public class ModulebookVersionService {
             LocalDate modulebookReleaseDate,
             LocalDate studyExaminationRegulationsDate
     ) {
-        StudyProgram studyProgram = studyProgramService.getById(studyProgramId);
-        Modulebook modulebook = modulebookService.getOrCreateForStudyProgram(studyProgram);
-        ModulebookSnapshot snapshot = buildSnapshot(studyProgram);
+        Modulebook modulebook = modulebookService.getById(studyProgramId);
+        ModulebookSnapshot snapshot = buildSnapshot(modulebook);
 
         try {
             String snapshotJson = jsonMapper.writeValueAsString(snapshot);
@@ -128,7 +121,7 @@ public class ModulebookVersionService {
     }
 
     public List<ModulebookVersion> getByStudyProgramId(Long studyProgramId) {
-        studyProgramService.getById(studyProgramId);
+        modulebookService.getById(studyProgramId);
         return repository.findByStudyProgramId(studyProgramId);
     }
 
@@ -264,6 +257,7 @@ public class ModulebookVersionService {
     }
 
     private Module moduleFromResponse(ModuleResponse response, Long studyProgramId) {
+        Long modulebookId = response.modulebookId() == null ? studyProgramId : response.modulebookId();
         return new Module(
                 response.id(),
                 studyProgramId,
@@ -271,7 +265,7 @@ public class ModulebookVersionService {
                 response.name(),
                 response.credits(),
                 response.description(),
-                response.modulebookId(),
+                modulebookId,
                 response.moduleType(),
                 response.titleDe(),
                 response.titleEn(),
@@ -368,8 +362,8 @@ public class ModulebookVersionService {
         );
     }
 
-    private ModulebookSnapshot buildSnapshot(StudyProgram studyProgram) {
-        var modules = moduleService.getByStudyProgramId(studyProgram.getId())
+    private ModulebookSnapshot buildSnapshot(Modulebook modulebook) {
+        var modules = moduleService.getByStudyProgramId(modulebook.getId())
                 .stream()
                 .filter(this::isActiveModule)
                 .sorted(Comparator.comparing(
@@ -384,7 +378,12 @@ public class ModulebookVersionService {
                 .toList();
 
         return new ModulebookSnapshot(
-                StudyProgramMapper.toResponse(studyProgram),
+                new StudyProgramResponse(
+                        modulebook.getId(),
+                        modulebook.getStudyProgramName(),
+                        modulebook.getDegreeType(),
+                        modulebook.getCreatedAt()
+                ),
                 modules
         );
     }

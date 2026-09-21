@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
+import de.bht.modulebook.modulebook.Modulebook;
+import de.bht.modulebook.modulebook.ModulebookService;
+import de.bht.modulebook.modulebook.dto.CreateModulebookRequest;
+import de.bht.modulebook.modulebook.dto.ModulebookResponse;
 import de.bht.modulebook.studyprogram.dto.StudyProgramRequest;
 import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 
@@ -25,7 +28,7 @@ import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 class StudyProgramControllerTest {
 
     @Mock
-    private StudyProgramService studyProgramService;
+    private ModulebookService modulebookService;
 
     @Mock
     private ModuleService moduleService;
@@ -34,21 +37,19 @@ class StudyProgramControllerTest {
 
     @BeforeEach
     void setUp() {
-        controller = new StudyProgramController(studyProgramService, moduleService);
+        controller = new StudyProgramController(modulebookService, moduleService);
     }
 
     @Test
     void getAllReturnsStudyProgramResponses() {
-        StudyProgram studyProgram = new StudyProgram(
+        Modulebook modulebook = new Modulebook(
                 10L,
                 "Architektur",
                 "BACHELOR",
-                LocalDate.parse("2024-11-25"),
-                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
-                Instant.parse("2026-01-01T00:00:00Z")
+                Instant.parse("2026-01-02T00:00:00Z")
         );
-        when(studyProgramService.getAll()).thenReturn(List.of(studyProgram));
+        when(modulebookService.getAll()).thenReturn(List.of(modulebook));
 
         List<StudyProgramResponse> response = controller.getAll();
 
@@ -60,16 +61,15 @@ class StudyProgramControllerTest {
 
     @Test
     void createPassesRequestDataToService() {
-        StudyProgram created = new StudyProgram(
+        ModulebookResponse created = new ModulebookResponse(
+                10L,
                 10L,
                 "Architektur",
                 "BACHELOR",
-                LocalDate.parse("2024-11-25"),
-                LocalDate.parse("2016-06-14"),
                 Instant.parse("2026-01-01T00:00:00Z"),
-                Instant.parse("2026-01-01T00:00:00Z")
+                Instant.parse("2026-01-02T00:00:00Z")
         );
-        when(studyProgramService.create(org.mockito.ArgumentMatchers.any(StudyProgram.class))).thenReturn(created);
+        when(modulebookService.create(new CreateModulebookRequest("Architektur", "BACHELOR"))).thenReturn(created);
 
         StudyProgramResponse response = controller.create(new StudyProgramRequest("Architektur", "BACHELOR"));
 
@@ -80,7 +80,7 @@ class StudyProgramControllerTest {
 
     @Test
     void getModulesLoadsModulesForSelectedStudyProgram() {
-        StudyProgram studyProgram = new StudyProgram(10L, "Architektur", "BACHELOR", null, null, null, null);
+        Modulebook modulebook = new Modulebook(10L, "Architektur", "BACHELOR", null, null);
         Module module = new Module(
                 100L,
                 10L,
@@ -109,7 +109,7 @@ class StudyProgramControllerTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         );
 
-        when(studyProgramService.getById(10L)).thenReturn(studyProgram);
+        when(modulebookService.getById(10L)).thenReturn(modulebook);
         when(moduleService.getByStudyProgramId(10L)).thenReturn(List.of(module));
 
         List<ModuleResponse> response = controller.getModules(10L);
@@ -118,7 +118,7 @@ class StudyProgramControllerTest {
         assertThat(response.get(0).id()).isEqualTo(100L);
         assertThat(response.get(0).studyProgramId()).isEqualTo(10L);
         assertThat(response.get(0).moduleNumber()).isEqualTo("B01");
-        verify(studyProgramService).getById(10L);
+        verify(modulebookService).getById(10L);
         verify(moduleService).getByStudyProgramId(10L);
     }
 

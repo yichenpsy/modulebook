@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 public class ModuleRepository {
 
     private static final String SELECT_COLUMNS = """
-            id, study_program_id, module_number, name, credits, description,
+            id, modulebook_id AS study_program_id, module_number, name, credits, description,
             modulebook_id, module_type, title_de, title_en, coordinator, applicability,
             learning_area, learning_objectives, prerequisites, level, module_status, module_comments, frequency,
             examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at,
@@ -42,9 +42,8 @@ public class ModuleRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.insertModule = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("modules")
-                // study_program_id links this module to one row in study_programs.
+                // modulebook_id links this module to one row in modulebooks.
                 .usingColumns(
-                        "study_program_id",
                         "module_number",
                         "name",
                         "credits",
@@ -76,7 +75,6 @@ public class ModuleRepository {
         Map<String, Object> values = new HashMap<>();
 
         // Map Java object fields to database column names.
-        values.put("study_program_id", module.getStudyProgramId());
         values.put("module_number", module.getModuleNumber());
         values.put("name", module.getName());
         values.put("credits", decimalToText(module.getCredits()));
@@ -127,9 +125,9 @@ public class ModuleRepository {
     }
 
     public List<Module> findByStudyProgramId(Long studyProgramId) {
-        // The selected study program id comes from /api/study-programs/{id}/modules.
+        // The frontend still calls this studyProgramId, but it is now modulebooks.id.
         return jdbcTemplate.query(
-                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE study_program_id = ? ORDER BY module_number",
+                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE modulebook_id = ? ORDER BY module_number",
                 moduleRowMapper,
                 studyProgramId);
     }
@@ -152,8 +150,7 @@ public class ModuleRepository {
         int rowsUpdated = jdbcTemplate.update(
                 """
                         UPDATE modules
-                        SET study_program_id = ?,
-                            module_number = ?,
+                        SET module_number = ?,
                             name = ?,
                             credits = ?,
                             description = ?,
@@ -178,9 +175,6 @@ public class ModuleRepository {
                             updated_at = now()
                         WHERE id = ?
                         """,
-                // Keeping study_program_id here allows moving a module to another program if
-                // needed later.
-                module.getStudyProgramId(),
                 module.getModuleNumber(),
                 module.getName(),
                 decimalToText(module.getCredits()),
@@ -296,7 +290,7 @@ public class ModuleRepository {
 
     public Optional<Module> findByStudyProgramIdAndModuleNumber(Long studyProgramId, String moduleNumber) {
         List<Module> modules = jdbcTemplate.query(
-                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE study_program_id = ? AND lower(module_number) = lower(?) ORDER BY id",
+                "SELECT " + SELECT_COLUMNS + " FROM modules WHERE modulebook_id = ? AND lower(module_number) = lower(?) ORDER BY id",
                 moduleRowMapper,
                 studyProgramId,
                 moduleNumber);

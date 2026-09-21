@@ -88,6 +88,7 @@ public class ModuleService {
             String initialVersionReason
     ) {
         String normalizedReason = normalizeInitialVersionReason(initialVersionReason);
+        normalizeModulebookReference(module);
         normalizeAndValidateUniqueModuleNumberForCreate(module);
         Long changeSetId = createChangeSet(module.getStudyProgramId(), normalizedReason, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE);
         return create(module, workload, teachingFormIds, normalizedReason, changeSetId);
@@ -101,6 +102,7 @@ public class ModuleService {
             String initialVersionReason,
             Long changeSetId
     ) {
+        normalizeModulebookReference(module);
         normalizeAndValidateUniqueModuleNumberForCreate(module);
         ensureModulebookId(module);
         applyDefaultStatus(module);
@@ -496,6 +498,7 @@ public class ModuleService {
     }
 
     private void normalizeAndValidateUniqueModuleNumberForUpdate(Long moduleId, Module module, Module oldModule) {
+        normalizeModulebookReference(module, oldModule);
         String normalizedModuleNumber = normalizeModuleNumber(module.getModuleNumber());
         boolean sameStudyProgram = Objects.equals(module.getStudyProgramId(), oldModule.getStudyProgramId());
         boolean sameModuleNumber = Objects.equals(
@@ -683,6 +686,25 @@ public class ModuleService {
         }
         if (module.getStudyProgramId() != null) {
             module.setModulebookId(modulebookService.getOrCreateForStudyProgramId(module.getStudyProgramId()).getId());
+        }
+    }
+
+    private void normalizeModulebookReference(Module module) {
+        normalizeModulebookReference(module, null);
+    }
+
+    private void normalizeModulebookReference(Module module, Module oldModule) {
+        if (module.getStudyProgramId() == null && module.getModulebookId() != null) {
+            module.setStudyProgramId(module.getModulebookId());
+        }
+        if (module.getModulebookId() == null && module.getStudyProgramId() != null) {
+            module.setModulebookId(module.getStudyProgramId());
+        }
+        if (module.getStudyProgramId() == null && oldModule != null) {
+            module.setStudyProgramId(oldModule.getStudyProgramId());
+        }
+        if (module.getModulebookId() == null && oldModule != null) {
+            module.setModulebookId(oldModule.getModulebookId());
         }
     }
 }

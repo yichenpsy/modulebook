@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,20 +20,19 @@ public class ModulebookRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Modulebook insertBlank(Long studyProgramId, String title) {
+    public Modulebook insert(String studyProgramName, String degreeType) {
         Long id = jdbcTemplate.queryForObject(
                 """
                 INSERT INTO modulebooks (
-                    study_program_id,
-                    title,
-                    status
+                    study_program_name,
+                    degree_type
                 )
-                VALUES (?, ?, 'DRAFT')
+                VALUES (?, ?)
                 RETURNING id
                 """,
                 Long.class,
-                studyProgramId,
-                title
+                studyProgramName,
+                degreeType
         );
         return findById(id).orElseThrow();
     }
@@ -40,9 +40,7 @@ public class ModulebookRepository {
     public Optional<Modulebook> findById(Long id) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, title, status,
-                       modulebook_release_date, study_examination_regulations_date,
-                       created_at, updated_at
+                SELECT id, study_program_name, degree_type, created_at, updated_at
                 FROM modulebooks
                 WHERE id = ?
                 """,
@@ -51,18 +49,33 @@ public class ModulebookRepository {
         ).stream().findFirst();
     }
 
-    public Optional<Modulebook> findByStudyProgramId(Long studyProgramId) {
+    public Optional<Modulebook> findByStudyProgramNameAndDegreeType(String studyProgramName, String degreeType) {
         return jdbcTemplate.query(
                 """
-                SELECT id, study_program_id, title, status,
-                       modulebook_release_date, study_examination_regulations_date,
-                       created_at, updated_at
+                SELECT id, study_program_name, degree_type, created_at, updated_at
                 FROM modulebooks
-                WHERE study_program_id = ?
+                WHERE study_program_name = ? AND degree_type = ?
                 """,
                 rowMapper,
-                studyProgramId
+                studyProgramName,
+                degreeType
         ).stream().findFirst();
+    }
+
+    public List<Modulebook> findAll() {
+        return jdbcTemplate.query(
+                """
+                SELECT id, study_program_name, degree_type, created_at, updated_at
+                FROM modulebooks
+                ORDER BY study_program_name, degree_type
+                """,
+                rowMapper
+        );
+    }
+
+    public boolean delete(Long id) {
+        int rowsDeleted = jdbcTemplate.update("DELETE FROM modulebooks WHERE id = ?", id);
+        return rowsDeleted == 1;
     }
 
     private static class ModulebookRowMapper implements RowMapper<Modulebook> {
@@ -70,11 +83,8 @@ public class ModulebookRepository {
         public Modulebook mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Modulebook(
                     rs.getLong("id"),
-                    rs.getLong("study_program_id"),
-                    rs.getString("title"),
-                    rs.getString("status"),
-                    rs.getObject("modulebook_release_date", java.time.LocalDate.class),
-                    rs.getObject("study_examination_regulations_date", java.time.LocalDate.class),
+                    rs.getString("study_program_name"),
+                    rs.getString("degree_type"),
                     toInstantOrNull(rs, "created_at"),
                     toInstantOrNull(rs, "updated_at")
             );

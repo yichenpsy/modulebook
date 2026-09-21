@@ -35,7 +35,6 @@ public class ModulebookVersionRepository {
                 """
                 INSERT INTO modulebook_versions (
                     modulebook_id,
-                    study_program_id,
                     version_number,
                     version_message,
                     snapshot_json,
@@ -44,12 +43,11 @@ public class ModulebookVersionRepository {
                     modulebook_release_date,
                     study_examination_regulations_date
                 )
-                VALUES (?, ?, ?, ?, CAST(? AS jsonb), ?, ?, ?, ?)
+                VALUES (?, ?, ?, CAST(? AS jsonb), ?, ?, ?, ?)
                 RETURNING id
                 """,
                 Long.class,
                 modulebook.getId(),
-                modulebook.getStudyProgramId(),
                 versionNumber,
                 versionMessage,
                 snapshotJson,
@@ -78,7 +76,7 @@ public class ModulebookVersionRepository {
                         """
                         SELECT modulebook_versions.id,
                                modulebook_versions.modulebook_id,
-                               COALESCE(modulebook_versions.study_program_id, modulebooks.study_program_id) AS study_program_id,
+                               modulebook_versions.modulebook_id AS study_program_id,
                                modulebook_versions.version_number,
                                modulebook_versions.version_message,
                                modulebook_versions.snapshot_json::text AS snapshot_json,
@@ -88,7 +86,6 @@ public class ModulebookVersionRepository {
                                modulebook_versions.modulebook_release_date,
                                modulebook_versions.study_examination_regulations_date
                         FROM modulebook_versions
-                        LEFT JOIN modulebooks ON modulebooks.id = modulebook_versions.modulebook_id
                         WHERE modulebook_versions.id = ?
                         """,
                         rowMapper,
@@ -103,7 +100,7 @@ public class ModulebookVersionRepository {
                 """
                 SELECT modulebook_versions.id,
                        modulebook_versions.modulebook_id,
-                       COALESCE(modulebook_versions.study_program_id, modulebooks.study_program_id) AS study_program_id,
+                       modulebook_versions.modulebook_id AS study_program_id,
                        modulebook_versions.version_number,
                        modulebook_versions.version_message,
                        modulebook_versions.snapshot_json::text AS snapshot_json,
@@ -113,15 +110,12 @@ public class ModulebookVersionRepository {
                        modulebook_versions.modulebook_release_date,
                        modulebook_versions.study_examination_regulations_date
                 FROM modulebook_versions
-                LEFT JOIN modulebooks ON modulebooks.id = modulebook_versions.modulebook_id
-                WHERE modulebook_versions.study_program_id = ?
-                   OR modulebooks.study_program_id = ?
+                WHERE modulebook_versions.modulebook_id = ?
                 ORDER BY modulebook_versions.version_number DESC,
                          modulebook_versions.created_at DESC,
                          modulebook_versions.id DESC
                 """,
                 rowMapper,
-                studyProgramId,
                 studyProgramId
         );
     }
@@ -130,14 +124,8 @@ public class ModulebookVersionRepository {
         jdbcTemplate.update(
                 """
                 DELETE FROM modulebook_versions
-                WHERE study_program_id = ?
-                   OR modulebook_id IN (
-                       SELECT id
-                       FROM modulebooks
-                       WHERE study_program_id = ?
-                   )
+                WHERE modulebook_id = ?
                 """,
-                studyProgramId,
                 studyProgramId
         );
     }

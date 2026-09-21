@@ -70,11 +70,8 @@ class ModuleServiceTest {
         lenient().when(modulebookService.getOrCreateForStudyProgramId(any()))
                 .thenAnswer(invocation -> new Modulebook(
                         1L,
-                        invocation.getArgument(0),
                         "Test Modulebook",
-                        "DRAFT",
-                        null,
-                        null,
+                        "BACHELOR",
                         null,
                         null
                 ));
