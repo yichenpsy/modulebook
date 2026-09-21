@@ -7,7 +7,6 @@ public class ModulebookVersionMapper {
         return new ModulebookVersionResponse(
                 version.getId(),
                 version.getModulebookId(),
-                version.getStudyProgramId(),
                 version.getVersionNumber(),
                 version.getVersionMessage(),
                 version.getSnapshotJson(),

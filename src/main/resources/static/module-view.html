@@ -30,7 +30,7 @@
         const params = new URLSearchParams(window.location.search);
         const moduleId = params.get("id");
         let currentModule = null;
-        let studyPrograms = [];
+        let modulebooks = [];
 
         const moduleFields = [
             ["Modulnummer", module => module.moduleNumber],
@@ -63,9 +63,9 @@
             document.getElementById("versionsLink").href = `/module-versions.html?id=${encodeURIComponent(moduleId)}`;
 
             try {
-                [currentModule, studyPrograms] = await Promise.all([
+                [currentModule, modulebooks] = await Promise.all([
                     loadModule(moduleId),
-                    loadStudyPrograms()
+                    loadModulebooks()
                 ]);
                 renderTitle();
                 renderLinks();
@@ -85,9 +85,9 @@
         }
 
         function renderLinks() {
-            if (currentModule.studyProgramId) {
+            if (currentModule.modulebookId) {
                 document.getElementById("backLink").href =
-                    `/index.html?studyProgramId=${encodeURIComponent(currentModule.studyProgramId)}`;
+                    `/index.html?modulebookId=${encodeURIComponent(currentModule.modulebookId)}`;
             }
         }
 
@@ -126,19 +126,20 @@
             `;
         }
 
-        function studyProgramLabel(studyProgramId) {
-            const selectedProgram = studyPrograms.find(program =>
-                String(program.id) === String(studyProgramId)
+        function modulebookLabel(modulebookId) {
+            const selectedProgram = modulebooks.find(program =>
+                String(program.id) === String(modulebookId)
             );
 
             return selectedProgram
                 ? studyProgramDisplayLabel(selectedProgram)
-                : `Study program ${studyProgramId}`;
+                : `Modulebook ${modulebookId}`;
         }
 
         function studyProgramDisplayLabel(program) {
             const suffix = degreeTypeShortLabel(program.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program.name || "");
+            const name = program?.studyProgramName || program?.name || "";
+            return suffix ? `${name} (${suffix})` : name;
         }
 
         function degreeTypeShortLabel(degreeType) {

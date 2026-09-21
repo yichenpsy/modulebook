@@ -7,7 +7,7 @@ import tools.jackson.databind.JsonNode;
 
 // accept the normalized import shape directly first.
 public record SaveImportedModulesRequest(
-        Long studyProgramId,
+        Long modulebookId,
         LocalDate modulebookReleaseDate,
         LocalDate studyExaminationRegulationsDate,
         List<JsonNode> modules

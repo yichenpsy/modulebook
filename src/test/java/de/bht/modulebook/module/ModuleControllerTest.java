@@ -43,7 +43,6 @@ class ModuleControllerTest {
                 "New Module",
                 new BigDecimal("5.0"),
                 "description",
-                null,
                 "Pflichtmodul",
                 "",
                 "",
@@ -69,7 +68,6 @@ class ModuleControllerTest {
                 "New Module",
                 new BigDecimal("5.0"),
                 "description",
-                null,
                 "Pflichtmodul",
                 "",
                 "",
@@ -101,7 +99,7 @@ class ModuleControllerTest {
         ModuleResponse response = controller.create(request);
 
         assertThat(response.id()).isEqualTo(100L);
-        assertThat(response.studyProgramId()).isEqualTo(10L);
+        assertThat(response.modulebookId()).isEqualTo(10L);
         assertThat(response.moduleNumber()).isEqualTo("B01");
         assertThat(response.name()).isEqualTo("New Module");
         verify(moduleService).create(any(Module.class), isNull(), eq(List.of()), eq("created module manually"));

@@ -9,12 +9,11 @@ import de.bht.modulebook.teachingform.dto.TeachingFormResponse;
 // shape of JSON returned to frontend
 public record ModuleResponse(
     Long id,
-    Long studyProgramId,
+    Long modulebookId,
     String moduleNumber,
     String name,
     BigDecimal credits,
     String description,
-    Long modulebookId,
     String moduleType,
     String titleDe,
     String titleEn,

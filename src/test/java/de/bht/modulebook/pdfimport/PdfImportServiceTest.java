@@ -31,8 +31,8 @@ import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.modulebook.ModulebookVersionService;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesRequest;
 import de.bht.modulebook.pdfimport.dto.SaveImportedModulesResponse;
-import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
-import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
+import de.bht.modulebook.modulebook.changeset.ModulebookChangeSet;
+import de.bht.modulebook.modulebook.changeset.ModulebookChangeSetService;
 import de.bht.modulebook.teachingform.TeachingForm;
 import de.bht.modulebook.teachingform.TeachingFormRepository;
 import tools.jackson.databind.JsonNode;
@@ -64,7 +64,7 @@ class PdfImportServiceTest {
     private ModulebookService modulebookService;
 
     @Mock
-    private StudyProgramChangeSetService changeSetService;
+    private ModulebookChangeSetService changeSetService;
 
     @Mock
     private TeachingFormRepository teachingFormRepository;
@@ -150,12 +150,12 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         );
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
+                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of(teachingForm(1L, "SU"), teachingForm(2L, "UE")));
         when(importedModuleMapper.toModule(imported, "Architektur", "BACHELOR")).thenReturn(mapped);
         when(importedModuleMapper.toWorkload(imported, java.util.Map.of("SU", 1L, "UE", 2L))).thenReturn(workload);
-        when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
+        when(moduleService.findByModulebookIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
         when(moduleService.create(mapped, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L)).thenReturn(created);
 
         // This is the request body shape sent to POST /api/pdf-import/modules.
@@ -176,11 +176,11 @@ class PdfImportServiceTest {
         assertThat(response.changeSetId()).isEqualTo(99L);
         assertThat(response.createdModules()).hasSize(1);
         assertThat(response.createdModules().get(0).id()).isEqualTo(1L);
-        assertThat(response.createdModules().get(0).studyProgramId()).isEqualTo(10L);
+        assertThat(response.createdModules().get(0).modulebookId()).isEqualTo(10L);
         assertThat(response.createdModules().get(0).moduleNumber()).isEqualTo("B01");
         assertThat(response.errors()).isEmpty();
         verify(moduleService).create(mapped, workload, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L);
-        assertThat(mapped.getStudyProgramId()).isEqualTo(10L);
+        assertThat(mapped.getModulebookId()).isEqualTo(10L);
         assertThat(mapped.getModuleStatus()).isEqualTo("ACTIVE");
     }
 
@@ -209,12 +209,12 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         );
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
+                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
         when(importedModuleMapper.toModule(imported, "Architektur", "BACHELOR")).thenReturn(mapped);
         when(importedModuleMapper.toWorkload(imported, java.util.Map.of())).thenReturn(null);
-        when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
+        when(moduleService.findByModulebookIdAndModuleNumber(10L, "B01")).thenReturn(Optional.empty());
         when(moduleService.create(mapped, null, List.of(), ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON, 99L))
                 .thenThrow(new IllegalArgumentException("Duplicate module code"));
 
@@ -275,10 +275,10 @@ class PdfImportServiceTest {
         );
 
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(changeSetService.create(10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
-                .thenReturn(new StudyProgramChangeSet(99L, 10L, StudyProgramChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
+                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
-        when(moduleService.getByStudyProgramId(10L)).thenReturn(List.of(existingB01, existingB02, existingB03, existingB04));
+        when(moduleService.getByModulebookId(10L)).thenReturn(List.of(existingB01, existingB02, existingB03, existingB04));
         when(importedModuleMapper.moduleNumber(importedB01)).thenReturn("B01");
         when(importedModuleMapper.moduleNumber(importedB03)).thenReturn("B03");
         when(importedModuleMapper.moduleId(importedB01)).thenReturn(null);
@@ -287,8 +287,8 @@ class PdfImportServiceTest {
         when(importedModuleMapper.toModule(importedB03, "Architektur", "BACHELOR")).thenReturn(mappedB03);
         when(importedModuleMapper.toWorkload(importedB01, java.util.Map.of())).thenReturn(null);
         when(importedModuleMapper.toWorkload(importedB03, java.util.Map.of())).thenReturn(null);
-        when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B01")).thenReturn(Optional.of(existingB01));
-        when(moduleService.findByStudyProgramIdAndModuleNumber(10L, "B03")).thenReturn(Optional.of(existingB03));
+        when(moduleService.findByModulebookIdAndModuleNumber(10L, "B01")).thenReturn(Optional.of(existingB01));
+        when(moduleService.findByModulebookIdAndModuleNumber(10L, "B03")).thenReturn(Optional.of(existingB03));
         when(moduleService.update(1L, mappedB01, null, List.of(), "before PDF re-import", 99L)).thenReturn(savedB01);
         when(moduleService.update(3L, mappedB03, null, List.of(), "before PDF re-import", 99L)).thenReturn(savedB03);
         when(moduleService.update(eq(2L), org.mockito.ArgumentMatchers.any(Module.class), eq("before marking missing from PDF re-import"), eq(99L)))
@@ -343,7 +343,7 @@ class PdfImportServiceTest {
     private Module module(Long id, String moduleNumber, String name, String moduleStatus) {
         Module module = new Module();
         module.setId(id);
-        module.setStudyProgramId(10L);
+        module.setModulebookId(10L);
         module.setModuleNumber(moduleNumber);
         module.setName(name);
         module.setCredits(new BigDecimal("5.0"));

@@ -1,4 +1,4 @@
-package de.bht.modulebook.studyprogram.changeset;
+package de.bht.modulebook.modulebook.changeset;
 
 import java.util.List;
 
@@ -13,14 +13,14 @@ import de.bht.modulebook.module.version.ModuleFieldChangeRepository;
 import de.bht.modulebook.modulebook.ModulebookService;
 
 @RestController
-public class StudyProgramChangeSetController {
-    private final StudyProgramChangeSetService changeSetService;
+public class ModulebookChangeSetController {
+    private final ModulebookChangeSetService changeSetService;
     private final ModulebookService modulebookService;
     private final ModuleFieldChangeRepository fieldChangeRepository;
     private final ChangeSetRestoreService restoreService;
 
-    public StudyProgramChangeSetController(
-            StudyProgramChangeSetService changeSetService,
+    public ModulebookChangeSetController(
+            ModulebookChangeSetService changeSetService,
             ModulebookService modulebookService,
             ModuleFieldChangeRepository fieldChangeRepository,
             ChangeSetRestoreService restoreService
@@ -31,10 +31,10 @@ public class StudyProgramChangeSetController {
         this.restoreService = restoreService;
     }
 
-    @GetMapping("/api/study-programs/{studyProgramId}/change-sets")
-    public List<StudyProgramChangeSet> getChangeSets(@PathVariable Long studyProgramId) {
-        modulebookService.getById(studyProgramId);
-        return changeSetService.getByStudyProgramId(studyProgramId);
+    @GetMapping("/api/modulebooks/{modulebookId}/change-sets")
+    public List<ModulebookChangeSet> getChangeSets(@PathVariable Long modulebookId) {
+        modulebookService.getById(modulebookId);
+        return changeSetService.getByModulebookId(modulebookId);
     }
 
     @GetMapping("/api/change-sets/{changeSetId}/field-changes")
@@ -48,7 +48,7 @@ public class StudyProgramChangeSetController {
     }
 
     @PostMapping("/api/change-sets/{changeSetId}/restore-before")
-    public StudyProgramChangeSet restoreBefore(
+    public ModulebookChangeSet restoreBefore(
             @PathVariable Long changeSetId,
             @RequestParam(defaultValue = "false") boolean force
     ) {
@@ -56,7 +56,7 @@ public class StudyProgramChangeSetController {
     }
 
     @PostMapping("/api/change-sets/{changeSetId}/reset-to-initial-import")
-    public StudyProgramChangeSet resetToInitialImport(@PathVariable Long changeSetId) {
+    public ModulebookChangeSet resetToInitialImport(@PathVariable Long changeSetId) {
         return restoreService.resetToInitialImport(changeSetId);
     }
 }

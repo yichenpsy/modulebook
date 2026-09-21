@@ -3,11 +3,10 @@ package de.bht.modulebook.modulebook;
 import java.util.List;
 
 import de.bht.modulebook.module.dto.ModuleResponse;
-import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
+import de.bht.modulebook.modulebook.dto.ModulebookResponse;
 
 public record ModulebookSnapshot(
-        StudyProgramResponse studyProgram,
+        ModulebookResponse modulebook,
         List<ModuleResponse> modules
 ) {
 }
-

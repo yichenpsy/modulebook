@@ -9,18 +9,8 @@ async function requestJson(url, options = {}) {
     return text ? JSON.parse(text) : null;
 }
 
-async function loadStudyPrograms() {
-    return requestJson("/api/study-programs");
-}
-
-async function createStudyProgram(request) {
-    return requestJson("/api/study-programs", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(request)
-    });
+async function loadModulebooks() {
+    return requestJson("/api/modulebooks");
 }
 
 async function createModulebook(request) {
@@ -33,8 +23,8 @@ async function createModulebook(request) {
     });
 }
 
-async function deleteStudyProgram(studyProgramId) {
-    await requestJson(`/api/study-programs/${studyProgramId}`, {
+async function deleteModulebook(modulebookId) {
+    await requestJson(`/api/modulebooks/${modulebookId}`, {
         method: "DELETE"
     });
 }
@@ -43,28 +33,28 @@ async function loadAllModules() {
     return requestJson("/api/modules");
 }
 
-async function loadModulesForStudyProgram(studyProgramId) {
-    return requestJson(`/api/study-programs/${studyProgramId}/modules`);
+async function loadModulesForModulebook(modulebookId) {
+    return requestJson(`/api/modulebooks/${modulebookId}/modules`);
 }
 
 async function loadModule(moduleId) {
     return requestJson(`/api/modules/${moduleId}`);
 }
 
-async function loadStudyProgramChangeSets(studyProgramId) {
-    return requestJson(`/api/study-programs/${studyProgramId}/change-sets`);
+async function loadModulebookChangeSets(modulebookId) {
+    return requestJson(`/api/modulebooks/${modulebookId}/change-sets`);
 }
 
-async function loadModulebookVersions(studyProgramId) {
-    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-versions`);
+async function loadModulebookVersions(modulebookId) {
+    return requestJson(`/api/modulebooks/${modulebookId}/modulebook-versions`);
 }
 
 async function loadModulebookVersion(versionId) {
     return requestJson(`/api/modulebook-versions/${versionId}`);
 }
 
-async function createModulebookVersion(studyProgramId, request) {
-    return requestJson(`/api/study-programs/${studyProgramId}/modulebook-versions`, {
+async function createModulebookVersion(modulebookId, request) {
+    return requestJson(`/api/modulebooks/${modulebookId}/modulebook-versions`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -45,7 +45,7 @@
                     <div class="module-field-label">Studiengang</div>
                     <div class="module-field-control">
                         <div id="studyProgramDisplay" class="readonly-value">Loading...</div>
-                        <input id="studyProgramId" type="hidden">
+                        <input id="modulebookId" type="hidden">
                     </div>
                 </div>
 
@@ -255,12 +255,12 @@
     <script>
         const params = new URLSearchParams(window.location.search);
         const moduleId = params.get("id");
-        const studyProgramId = params.get("studyProgramId");
+        const modulebookId = params.get("modulebookId");
         const isCreateMode = !moduleId;
         const weeksPerSemester = 17;
         const hoursPerCredit = 30;
         let currentModule = null;
-        let studyPrograms = [];
+        let modulebooks = [];
         let studyProgramModules = [];
         let teachingForms = [];
         let extraTeachingFormIds = new Set();
@@ -268,23 +268,23 @@
         let pendingModuleRequest = null;
 
         async function init() {
-            if (isCreateMode && !studyProgramId) {
-                setStatus("Missing study program id in URL. Example: /module-edit.html?studyProgramId=3");
+            if (isCreateMode && !modulebookId) {
+                setStatus("Missing modulebook id in URL. Example: /module-edit.html?modulebookId=3");
                 return;
             }
 
             try {
-                [studyPrograms, teachingForms] = await Promise.all([
-                    loadStudyPrograms(),
+                [modulebooks, teachingForms] = await Promise.all([
+                    loadModulebooks(),
                     loadTeachingForms()
                 ]);
 
                 if (isCreateMode) {
-                    studyProgramModules = await loadModulesForStudyProgram(studyProgramId);
+                    studyProgramModules = await loadModulesForModulebook(modulebookId);
                     prepareCreateForm();
                 } else {
                     currentModule = await loadModule(moduleId);
-                    studyProgramModules = await loadModulesForStudyProgram(currentModule.studyProgramId);
+                    studyProgramModules = await loadModulesForModulebook(currentModule.modulebookId);
                     fillForm(currentModule);
                 }
 
@@ -300,10 +300,10 @@
             document.getElementById("deleteButton").hidden = true;
             document.getElementById("versionsLink").hidden = true;
             document.getElementById("viewLink").hidden = true;
-            document.getElementById("studyProgramId").value = studyProgramId;
-            renderStudyProgramDisplay(studyProgramId);
+            document.getElementById("modulebookId").value = modulebookId;
+            renderStudyProgramDisplay(modulebookId);
             renderModuleIdDisplay(null);
-            document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
+            document.getElementById("backLink").href = `/index.html?modulebookId=${modulebookId}`;
             renderLevelOptions("");
             renderFrequencyOptions("");
             renderModuleTypeOptions("");
@@ -318,8 +318,8 @@
         function fillForm(module) {
             document.getElementById("pageTitle").textContent = "Edit Module";
             document.getElementById("documentTitle").textContent = "Edit Module";
-            document.getElementById("studyProgramId").value = module.studyProgramId ?? "";
-            renderStudyProgramDisplay(module.studyProgramId);
+            document.getElementById("modulebookId").value = module.modulebookId ?? "";
+            renderStudyProgramDisplay(module.modulebookId);
             renderModuleIdDisplay(module.id);
             document.getElementById("modulebookId").value = module.modulebookId ?? "";
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
@@ -347,27 +347,28 @@
             document.getElementById("additionalNotes").value = module.additionalNotes || "";
             document.getElementById("moduleWeight").value = module.moduleWeight ?? "";
 
-            if (module.studyProgramId) {
-                document.getElementById("backLink").href = `/index.html?studyProgramId=${module.studyProgramId}`;
+            if (module.modulebookId) {
+                document.getElementById("backLink").href = `/index.html?modulebookId=${module.modulebookId}`;
             }
             document.getElementById("versionsLink").href = `/module-versions.html?id=${module.id}`;
             document.getElementById("viewLink").href = `/module-view.html?id=${module.id}`;
             setStatus(`Loaded module ${module.id}.`);
         }
 
-        function renderStudyProgramDisplay(selectedStudyProgramId) {
-            const selectedProgram = studyPrograms.find(program =>
-                String(program.id) === String(selectedStudyProgramId)
+        function renderStudyProgramDisplay(selectedModulebookId) {
+            const selectedProgram = modulebooks.find(program =>
+                String(program.id) === String(selectedModulebookId)
             );
 
             document.getElementById("studyProgramDisplay").textContent = selectedProgram
-                ? studyProgramLabel(selectedProgram)
-                : `Study program ${selectedStudyProgramId}`;
+                ? modulebookLabel(selectedProgram)
+                : `Modulebook ${selectedModulebookId}`;
         }
 
-        function studyProgramLabel(program) {
+        function modulebookLabel(program) {
             const suffix = degreeTypeShortLabel(program.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program.name || "");
+            const name = program?.studyProgramName || program?.name || "";
+            return suffix ? `${name} (${suffix})` : name;
         }
 
         function degreeTypeShortLabel(degreeType) {
@@ -381,8 +382,8 @@
         }
 
         function selectedStudyProgram() {
-            const selectedStudyProgramId = document.getElementById("studyProgramId").value;
-            return studyPrograms.find(program => String(program.id) === String(selectedStudyProgramId));
+            const selectedModulebookId = document.getElementById("modulebookId").value;
+            return modulebooks.find(program => String(program.id) === String(selectedModulebookId));
         }
 
         function selectedDegreeType() {
@@ -723,7 +724,7 @@
             const workloadRequest = buildWorkloadRequest();
 
             const request = {
-                studyProgramId: numberOrNull(document.getElementById("studyProgramId").value),
+                modulebookId: numberOrNull(document.getElementById("modulebookId").value),
                 moduleNumber: moduleNumber,
                 name: name,
                 titleDe: currentModule?.titleDe || "",
@@ -1057,8 +1058,8 @@
 
             try {
                 await deleteModule(moduleId, confirmation);
-                window.location.href = currentModule.studyProgramId
-                    ? `/index.html?studyProgramId=${currentModule.studyProgramId}`
+                window.location.href = currentModule.modulebookId
+                    ? `/index.html?modulebookId=${currentModule.modulebookId}`
                     : "/index.html";
             } catch (error) {
                 setStatus("Delete failed: " + error.message);

@@ -41,10 +41,10 @@
         <div id="diffResult">Choose two versions to compare.</div>
     </section>
 
-    <script src="/api.js?v=study-program-version-compare"></script>
+    <script src="/api.js?v=modulebook-version-compare"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
-        const studyProgramId = params.get("id");
+        const modulebookId = params.get("id");
         const initialFrom = params.get("from");
         const initialTo = params.get("to");
 
@@ -57,21 +57,21 @@
         let versionPoints = [];
 
         async function init() {
-            if (!studyProgramId) {
-                setStatus("Missing study program id in URL. Example: /study-program-version-compare.html?id=3");
+            if (!modulebookId) {
+                setStatus("Missing modulebook id in URL. Example: /modulebook-version-compare.html?id=3");
                 return;
             }
 
             document.getElementById("historyLink").href =
-                `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
 
             try {
-                const studyPrograms = await loadStudyPrograms();
-                studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
+                const modulebooks = await loadModulebooks();
+                studyProgram = modulebooks.find(program => String(program.id) === String(modulebookId));
                 [modules, changeSets, modulebookVersions, teachingForms] = await Promise.all([
-                    loadModulesForStudyProgram(studyProgramId),
-                    loadStudyProgramChangeSets(studyProgramId),
-                    loadModulebookVersions(studyProgramId),
+                    loadModulesForModulebook(modulebookId),
+                    loadModulebookChangeSets(modulebookId),
+                    loadModulebookVersions(modulebookId),
                     loadTeachingForms()
                 ]);
                 await loadAllFieldChanges();
@@ -190,17 +190,18 @@
         function renderTitle() {
             if (!studyProgram) {
                 document.getElementById("studyProgramTitle").textContent =
-                    `Study program ${studyProgramId}`;
+                    `Study program ${modulebookId}`;
                 return;
             }
 
             document.getElementById("studyProgramTitle").textContent =
-                studyProgramLabel(studyProgram);
+                modulebookLabel(studyProgram);
         }
 
-        function studyProgramLabel(program) {
+        function modulebookLabel(program) {
             const suffix = degreeTypeShortLabel(program?.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program?.name || "");
+            const name = program?.studyProgramName || program?.name || "";
+            return suffix ? `${name} (${suffix})` : name;
         }
 
         function degreeTypeShortLabel(degreeType) {

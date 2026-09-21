@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.bht.modulebook.modulebook.dto.ModulebookVersionRequest;
 import de.bht.modulebook.modulebook.dto.ModulebookVersionResponse;
-import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSet;
+import de.bht.modulebook.modulebook.changeset.ModulebookChangeSet;
 
 @RestController
 public class ModulebookVersionController {
@@ -23,15 +23,15 @@ public class ModulebookVersionController {
         this.service = service;
     }
 
-    @PostMapping("/api/study-programs/{studyProgramId}/modulebook-versions")
+    @PostMapping("/api/modulebooks/{modulebookId}/modulebook-versions")
     @ResponseStatus(HttpStatus.CREATED)
     public ModulebookVersionResponse create(
-            @PathVariable Long studyProgramId,
+            @PathVariable Long modulebookId,
             @RequestBody ModulebookVersionRequest request
     ) {
         return ModulebookVersionMapper.toResponse(
                 service.create(
-                        studyProgramId,
+                        modulebookId,
                         request.versionMessage(),
                         request.modulebookReleaseDate(),
                         request.studyExaminationRegulationsDate()
@@ -39,9 +39,9 @@ public class ModulebookVersionController {
         );
     }
 
-    @GetMapping("/api/study-programs/{studyProgramId}/modulebook-versions")
-    public List<ModulebookVersionResponse> getByStudyProgramId(@PathVariable Long studyProgramId) {
-        return service.getByStudyProgramId(studyProgramId)
+    @GetMapping("/api/modulebooks/{modulebookId}/modulebook-versions")
+    public List<ModulebookVersionResponse> getByModulebookId(@PathVariable Long modulebookId) {
+        return service.getByModulebookId(modulebookId)
                 .stream()
                 .map(ModulebookVersionMapper::toResponse)
                 .toList();
@@ -59,7 +59,7 @@ public class ModulebookVersionController {
     }
 
     @PostMapping("/api/modulebook-versions/{versionId}/restore")
-    public StudyProgramChangeSet restore(@PathVariable Long versionId) {
+    public ModulebookChangeSet restore(@PathVariable Long versionId) {
         return service.restore(versionId);
     }
 }

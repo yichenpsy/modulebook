@@ -1,4 +1,4 @@
-package de.bht.modulebook.studyprogram.changeset;
+package de.bht.modulebook.modulebook.changeset;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class ChangeSetRestoreService {
-    private final StudyProgramChangeSetRepository changeSetRepository;
-    private final StudyProgramChangeSetService changeSetService;
+    private final ModulebookChangeSetRepository changeSetRepository;
+    private final ModulebookChangeSetService changeSetService;
     private final ModuleFieldChangeRepository fieldChangeRepository;
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
@@ -40,8 +40,8 @@ public class ChangeSetRestoreService {
     private final JsonMapper jsonMapper;
 
     public ChangeSetRestoreService(
-            StudyProgramChangeSetRepository changeSetRepository,
-            StudyProgramChangeSetService changeSetService,
+            ModulebookChangeSetRepository changeSetRepository,
+            ModulebookChangeSetService changeSetService,
             ModuleFieldChangeRepository fieldChangeRepository,
             ModuleRepository moduleRepository,
             ModuleWorkloadRepository workloadRepository,
@@ -60,13 +60,13 @@ public class ChangeSetRestoreService {
     }
 
     @Transactional
-    public StudyProgramChangeSet restoreBefore(Long changeSetId, boolean force) {
-        StudyProgramChangeSet target = changeSetRepository.findById(changeSetId);
+    public ModulebookChangeSet restoreBefore(Long changeSetId, boolean force) {
+        ModulebookChangeSet target = changeSetRepository.findById(changeSetId);
         validateTarget(target);
 
-        List<StudyProgramChangeSet> restoreCollection = changeSetRepository.findActiveFromInclusive(target);
+        List<ModulebookChangeSet> restoreCollection = changeSetRepository.findActiveFromInclusive(target);
         List<Long> restoreChangeSetIds = restoreCollection.stream()
-                .map(StudyProgramChangeSet::getId)
+                .map(ModulebookChangeSet::getId)
                 .toList();
         List<Module> modulesToDelete = moduleRepository.findByCreatedChangeSetIds(restoreChangeSetIds);
 
@@ -77,9 +77,9 @@ public class ChangeSetRestoreService {
             );
         }
 
-        StudyProgramChangeSet restoreChangeSet = changeSetService.create(
-                target.getStudyProgramId(),
-                StudyProgramChangeSetService.SOURCE_RESTORE_BEFORE,
+        ModulebookChangeSet restoreChangeSet = changeSetService.create(
+                target.getModulebookId(),
+                ModulebookChangeSetService.SOURCE_RESTORE_BEFORE,
                 "restore to before change set " + target.getId()
         );
 
@@ -96,13 +96,13 @@ public class ChangeSetRestoreService {
     }
 
     @Transactional
-    public StudyProgramChangeSet resetToInitialImport(Long changeSetId) {
-        StudyProgramChangeSet target = changeSetRepository.findById(changeSetId);
+    public ModulebookChangeSet resetToInitialImport(Long changeSetId) {
+        ModulebookChangeSet target = changeSetRepository.findById(changeSetId);
         validateInitialImportTarget(target);
 
-        List<StudyProgramChangeSet> laterChangeSets = changeSetRepository.findAfter(target);
+        List<ModulebookChangeSet> laterChangeSets = changeSetRepository.findAfter(target);
         List<Long> laterChangeSetIds = laterChangeSets.stream()
-                .map(StudyProgramChangeSet::getId)
+                .map(ModulebookChangeSet::getId)
                 .toList();
         List<Module> modulesToDelete = moduleRepository.findByCreatedChangeSetIds(laterChangeSetIds);
         Set<Long> moduleIdsToDelete = modulesToDelete.stream()
@@ -117,15 +117,15 @@ public class ChangeSetRestoreService {
         return target;
     }
 
-    private void validateInitialImportTarget(StudyProgramChangeSet target) {
-        if (!StudyProgramChangeSetService.SOURCE_PDF_IMPORT.equals(target.getSourceType())) {
+    private void validateInitialImportTarget(ModulebookChangeSet target) {
+        if (!ModulebookChangeSetService.SOURCE_PDF_IMPORT.equals(target.getSourceType())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only the initial PDF import can clean history");
         }
 
-        StudyProgramChangeSet initialImport = changeSetRepository
-                .findFirstByStudyProgramIdAndSourceType(
-                        target.getStudyProgramId(),
-                        StudyProgramChangeSetService.SOURCE_PDF_IMPORT
+        ModulebookChangeSet initialImport = changeSetRepository
+                .findFirstByModulebookIdAndSourceType(
+                        target.getModulebookId(),
+                        ModulebookChangeSetService.SOURCE_PDF_IMPORT
                 )
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Initial PDF import not found"));
         if (!Objects.equals(initialImport.getId(), target.getId())) {
@@ -133,17 +133,17 @@ public class ChangeSetRestoreService {
         }
     }
 
-    private void validateTarget(StudyProgramChangeSet target) {
+    private void validateTarget(ModulebookChangeSet target) {
         if (target.getDiscardedAt() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Discarded change sets cannot be restored");
         }
-        if (StudyProgramChangeSetService.SOURCE_DELETE.equals(target.getSourceType())) {
+        if (ModulebookChangeSetService.SOURCE_DELETE.equals(target.getSourceType())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Delete change sets cannot be restored");
         }
-        if (StudyProgramChangeSetService.SOURCE_PDF_IMPORT.equals(target.getSourceType())) {
+        if (ModulebookChangeSetService.SOURCE_PDF_IMPORT.equals(target.getSourceType())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PDF import change sets cannot be restored");
         }
-        if (StudyProgramChangeSetService.SOURCE_RESTORE_BEFORE.equals(target.getSourceType())) {
+        if (ModulebookChangeSetService.SOURCE_RESTORE_BEFORE.equals(target.getSourceType())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Restore change sets cannot be restored");
         }
     }
@@ -335,12 +335,11 @@ public class ChangeSetRestoreService {
     private Module copyModule(Module source) {
         return new Module(
                 source.getId(),
-                source.getStudyProgramId(),
+                source.getModulebookId(),
                 source.getModuleNumber(),
                 source.getName(),
                 source.getCredits(),
                 source.getDescription(),
-                source.getModulebookId(),
                 source.getModuleType(),
                 source.getTitleDe(),
                 source.getTitleEn(),

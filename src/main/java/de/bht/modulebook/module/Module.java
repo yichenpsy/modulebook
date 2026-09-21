@@ -6,12 +6,11 @@ import java.time.Instant;
 public class Module {
 
     private Long id;
-    private Long studyProgramId;
+    private Long modulebookId;
     private String moduleNumber;
     private String name;
     private BigDecimal credits;
     private String description;
-    private Long modulebookId;
     private String moduleType;
     private String titleDe;
     private String titleEn;
@@ -36,55 +35,54 @@ public class Module {
     public Module() {
     }
 
-    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
-            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+    public Module(Long id, Long modulebookId, String moduleNumber, String name, BigDecimal credits,
+            String description, String moduleType, String titleDe, String titleEn,
             String coordinator, String applicability, String learningArea, String learningObjectives,
             String prerequisites, String level, String moduleStatus, String frequency, String examinationForm, String contents,
             String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
             Instant updatedAt) {
-        this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
+        this(id, modulebookId, moduleNumber, name, credits, description, moduleType, titleDe,
                 titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
                 moduleStatus, null, frequency, examinationForm, contents, literature, additionalNotes, moduleWeight,
                 createdAt, updatedAt, null);
     }
 
-    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
-            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+    public Module(Long id, Long modulebookId, String moduleNumber, String name, BigDecimal credits,
+            String description, String moduleType, String titleDe, String titleEn,
             String coordinator, String applicability, String learningArea, String learningObjectives,
             String prerequisites, String level, String moduleStatus, String moduleComments, String frequency,
             String examinationForm, String contents, String literature, String additionalNotes,
             BigDecimal moduleWeight, Instant createdAt, Instant updatedAt) {
-        this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
+        this(id, modulebookId, moduleNumber, name, credits, description, moduleType, titleDe,
                 titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
                 moduleStatus, moduleComments, frequency, examinationForm, contents, literature, additionalNotes,
                 moduleWeight, createdAt, updatedAt, null);
     }
 
-    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
-            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+    public Module(Long id, Long modulebookId, String moduleNumber, String name, BigDecimal credits,
+            String description, String moduleType, String titleDe, String titleEn,
             String coordinator, String applicability, String learningArea, String learningObjectives,
             String prerequisites, String level, String moduleStatus, String frequency, String examinationForm, String contents,
             String literature, String additionalNotes, BigDecimal moduleWeight, Instant createdAt,
             Instant updatedAt, Long createdChangeSetId) {
-        this(id, studyProgramId, moduleNumber, name, credits, description, modulebookId, moduleType, titleDe,
+        this(id, modulebookId, moduleNumber, name, credits, description, moduleType, titleDe,
                 titleEn, coordinator, applicability, learningArea, learningObjectives, prerequisites, level,
                 moduleStatus, null, frequency, examinationForm, contents, literature, additionalNotes, moduleWeight,
                 createdAt, updatedAt, createdChangeSetId);
     }
 
-    public Module(Long id, Long studyProgramId, String moduleNumber, String name, BigDecimal credits,
-            String description, Long modulebookId, String moduleType, String titleDe, String titleEn,
+    public Module(Long id, Long modulebookId, String moduleNumber, String name, BigDecimal credits,
+            String description, String moduleType, String titleDe, String titleEn,
             String coordinator, String applicability, String learningArea, String learningObjectives,
             String prerequisites, String level, String moduleStatus, String moduleComments, String frequency,
             String examinationForm, String contents, String literature, String additionalNotes,
             BigDecimal moduleWeight, Instant createdAt, Instant updatedAt, Long createdChangeSetId) {
         this.id = id;
-        this.studyProgramId = studyProgramId;
+        this.modulebookId = modulebookId;
         this.moduleNumber = moduleNumber;
         this.name = name;
         this.credits = credits;
         this.description = description;
-        this.modulebookId = modulebookId;
         this.moduleType = moduleType;
         this.titleDe = titleDe;
         this.titleEn = titleEn;
@@ -115,12 +113,12 @@ public class Module {
         this.id = id;
     }
 
-    public Long getStudyProgramId() {
-        return studyProgramId;
+    public Long getModulebookId() {
+        return modulebookId;
     }
 
-    public void setStudyProgramId(Long studyProgramId) {
-        this.studyProgramId = studyProgramId;
+    public void setModulebookId(Long modulebookId) {
+        this.modulebookId = modulebookId;
     }
 
     public String getModuleNumber() {
@@ -153,14 +151,6 @@ public class Module {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getModulebookId() {
-        return modulebookId;
-    }
-
-    public void setModulebookId(Long modulebookId) {
-        this.modulebookId = modulebookId;
     }
 
     public String getModuleType() {

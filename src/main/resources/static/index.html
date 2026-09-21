@@ -8,12 +8,12 @@
 <body>
     <nav>
         <a href="/index.html">Modulebooks</a>
-        <a href="#createStudyProgramPanel" onclick="showCreateStudyProgramPanel()">Create new modulebook</a>
+        <a href="#createModulebookPanel" onclick="showCreateModulebookPanel()">Create new modulebook</a>
     </nav>
 
     <h1>Modulebooks</h1>
 
-    <section id="createStudyProgramPanel" class="commit-message-panel" hidden>
+    <section id="createModulebookPanel" class="commit-message-panel" hidden>
         <h2>Create new modulebook</h2>
         <label>
             Study program name
@@ -28,46 +28,46 @@
         </label>
         <div class="form-actions">
             <button type="button" onclick="createNewModulebook()">Create</button>
-            <button type="button" onclick="hideCreateStudyProgramPanel()">Cancel</button>
+            <button type="button" onclick="hideCreateModulebookPanel()">Cancel</button>
         </div>
     </section>
 
     <section>
         <div id="status" class="status">Loading modulebooks...</div>
-        <div id="studyPrograms">Loading...</div>
+        <div id="modulebooks">Loading...</div>
     </section>
 
     <section>
         <h2 id="modulesTitle">Modules</h2>
-        <div id="modules">Open a study program to see its modules.</div>
+        <div id="modules">Open a modulebook to see its modules.</div>
     </section>
 
     <script src="/api.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
-        const initialStudyProgramId = params.get("studyProgramId");
-        let selectedStudyProgramId = initialStudyProgramId;
-        let studyPrograms = [];
+        const initialModulebookId = params.get("modulebookId");
+        let selectedModulebookId = initialModulebookId;
+        let modulebooks = [];
         let modules = [];
 
         async function init() {
             try {
-                studyPrograms = await loadStudyPrograms();
-                renderStudyPrograms();
-                if (selectInitialStudyProgram()) {
-                    await loadSelectedStudyProgramModules(initialStudyProgramId);
+                modulebooks = await loadModulebooks();
+                renderModulebooks();
+                if (selectInitialModulebook()) {
+                    await loadSelectedModulebookModules(initialModulebookId);
                 } else {
-                    setStatus(`Loaded ${studyPrograms.length} modulebooks.`);
+                    setStatus(`Loaded ${modulebooks.length} modulebooks.`);
                 }
             } catch (error) {
                 setStatus("Could not load modulebooks: " + error.message);
             }
         }
 
-        function renderStudyPrograms() {
-            const container = document.getElementById("studyPrograms");
+        function renderModulebooks() {
+            const container = document.getElementById("modulebooks");
 
-            if (studyPrograms.length === 0) {
+            if (modulebooks.length === 0) {
                 container.textContent = "No modulebooks saved yet.";
                 return;
             }
@@ -81,16 +81,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        ${studyPrograms.map(program => `
+                        ${modulebooks.map(program => `
                             <tr>
-                                <td>${escapeHtml(studyProgramLabel(program))}</td>
+                                <td>${escapeHtml(modulebookLabel(program))}</td>
                                 <td class="row-actions">
-                                    <a href="/study-program-import.html?studyProgramId=${escapeHtml(String(program.id))}">Import PDF</a>
-                                    <a href="/index.html?studyProgramId=${escapeHtml(String(program.id))}">Show Modules</a>
-                                    <a href="/module-edit.html?studyProgramId=${escapeHtml(String(program.id))}">Add module</a>
-                                    <button class="link-button" type="button" onclick="confirmDeleteStudyProgram(${program.id})">Delete</button>
-                                    <a href="/study-program-history.html?id=${escapeHtml(String(program.id))}">History & Version</a>
-                                    <a href="/modulebook-view.html?studyProgramId=${escapeHtml(String(program.id))}">View, Export & Save version</a>
+                                    <a href="/modulebook-import.html?modulebookId=${escapeHtml(String(program.id))}">Import PDF</a>
+                                    <a href="/index.html?modulebookId=${escapeHtml(String(program.id))}">Show Modules</a>
+                                    <a href="/module-edit.html?modulebookId=${escapeHtml(String(program.id))}">Add module</a>
+                                    <button class="link-button" type="button" onclick="confirmDeleteModulebook(${program.id})">Delete</button>
+                                    <a href="/modulebook-history.html?id=${escapeHtml(String(program.id))}">History & Version</a>
+                                    <a href="/modulebook-view.html?modulebookId=${escapeHtml(String(program.id))}">View, Export & Save version</a>
                                 </td>
                             </tr>
                         `).join("")}
@@ -99,9 +99,9 @@
             `;
         }
 
-        async function confirmDeleteStudyProgram(programId) {
-            const program = studyPrograms.find(item => Number(item.id) === Number(programId));
-            const label = program ? studyProgramLabel(program) : `study program ${programId}`;
+        async function confirmDeleteModulebook(modulebookId) {
+            const modulebook = modulebooks.find(item => Number(item.id) === Number(modulebookId));
+            const label = modulebook ? modulebookLabel(modulebook) : `modulebook ${modulebookId}`;
             const confirmed = confirm(
                 `Delete ${label}?\n\nThis will delete the modulebook and all related records, including modules and history.`
             );
@@ -113,46 +113,46 @@
             setStatus(`Deleting ${label}...`);
 
             try {
-                await deleteStudyProgram(programId);
-                studyPrograms = studyPrograms.filter(item => Number(item.id) !== Number(programId));
-                renderStudyPrograms();
-                studyPrograms = await loadStudyPrograms();
+                await deleteModulebook(modulebookId);
+                modulebooks = modulebooks.filter(item => Number(item.id) !== Number(modulebookId));
+                renderModulebooks();
+                modulebooks = await loadModulebooks();
                 modules = [];
-                renderStudyPrograms();
+                renderModulebooks();
                 document.getElementById("modulesTitle").textContent = "Modules";
-                document.getElementById("modules").textContent = "Open a study program to see its modules.";
-                setStatus(`Deleted ${label}. Loaded ${studyPrograms.length} modulebooks.`);
+                document.getElementById("modules").textContent = "Open a modulebook to see its modules.";
+                setStatus(`Deleted ${label}. Loaded ${modulebooks.length} modulebooks.`);
             } catch (error) {
                 setStatus("Could not delete modulebook: " + error.message);
             }
         }
 
-        function selectInitialStudyProgram() {
-            if (!initialStudyProgramId) {
+        function selectInitialModulebook() {
+            if (!initialModulebookId) {
                 return false;
             }
 
-            return studyPrograms.some(program => String(program.id) === initialStudyProgramId);
+            return modulebooks.some(program => String(program.id) === initialModulebookId);
         }
 
-        async function loadSelectedStudyProgramModules(programId) {
-            const selectedProgram = studyPrograms.find(program => String(program.id) === String(programId));
+        async function loadSelectedModulebookModules(modulebookId) {
+            const selectedModulebook = modulebooks.find(modulebook => String(modulebook.id) === String(modulebookId));
 
-            if (!selectedProgram) {
-                selectedStudyProgramId = null;
+            if (!selectedModulebook) {
+                selectedModulebookId = null;
                 modules = [];
                 document.getElementById("modulesTitle").textContent = "Modules";
-                document.getElementById("modules").textContent = "Open a study program to see its modules.";
+                document.getElementById("modules").textContent = "Open a modulebook to see its modules.";
                 return;
             }
 
-            selectedStudyProgramId = String(programId);
+            selectedModulebookId = String(modulebookId);
             document.getElementById("modulesTitle").textContent =
-                `${studyProgramLabel(selectedProgram)} modules`;
+                `${modulebookLabel(selectedModulebook)} modules`;
             setStatus("Loading modules...");
 
             try {
-                modules = await loadModulesForStudyProgram(programId);
+                modules = await loadModulesForModulebook(modulebookId);
                 renderModules();
                 setStatus(`Loaded ${modules.length} modules.`);
             } catch (error) {
@@ -164,7 +164,7 @@
             const container = document.getElementById("modules");
 
             if (modules.length === 0) {
-                container.textContent = "No modules saved for this study program.";
+                container.textContent = "No modules saved for this modulebook.";
                 return;
             }
 
@@ -225,7 +225,7 @@
 
             try {
                 await updateModuleStatus(moduleId, targetStatus);
-                modules = await loadModulesForStudyProgram(selectedStudyProgramId);
+                modules = await loadModulesForModulebook(selectedModulebookId);
                 renderModules();
                 setStatus(`${label} is now ${targetStatus}.`);
             } catch (error) {
@@ -251,7 +251,7 @@
 
             try {
                 await deleteModule(moduleId, confirmation);
-                modules = await loadModulesForStudyProgram(selectedStudyProgramId);
+                modules = await loadModulesForModulebook(selectedModulebookId);
                 renderModules();
                 setStatus(`Deleted ${label}. Loaded ${modules.length} modules.`);
             } catch (error) {
@@ -263,13 +263,13 @@
             document.getElementById("status").textContent = message;
         }
 
-        function showCreateStudyProgramPanel() {
-            document.getElementById("createStudyProgramPanel").hidden = false;
+        function showCreateModulebookPanel() {
+            document.getElementById("createModulebookPanel").hidden = false;
             document.getElementById("newStudyProgramName").focus();
         }
 
-        function hideCreateStudyProgramPanel() {
-            document.getElementById("createStudyProgramPanel").hidden = true;
+        function hideCreateModulebookPanel() {
+            document.getElementById("createModulebookPanel").hidden = true;
             document.getElementById("newStudyProgramName").value = "";
             document.getElementById("newDegreeType").value = "BACHELOR";
         }
@@ -290,21 +290,22 @@
 
             try {
                 const created = await createModulebook(request);
-                studyPrograms = await loadStudyPrograms();
-                renderStudyPrograms();
-                hideCreateStudyProgramPanel();
-                const createdStudyProgram = studyPrograms.find(program => Number(program.id) === Number(created.studyProgramId));
-                setStatus(`Created ${createdStudyProgram ? studyProgramLabel(createdStudyProgram) : created.studyProgramName}.`);
-                window.history.replaceState(null, "", `/index.html?studyProgramId=${encodeURIComponent(created.studyProgramId)}`);
-                await loadSelectedStudyProgramModules(created.studyProgramId);
+                modulebooks = await loadModulebooks();
+                renderModulebooks();
+                hideCreateModulebookPanel();
+                const createdModulebook = modulebooks.find(program => Number(program.id) === Number(created.id));
+                setStatus(`Created ${createdModulebook ? modulebookLabel(createdModulebook) : created.studyProgramName}.`);
+                window.history.replaceState(null, "", `/index.html?modulebookId=${encodeURIComponent(created.id)}`);
+                await loadSelectedModulebookModules(created.id);
             } catch (error) {
                 setStatus("Could not create modulebook: " + error.message);
             }
         }
 
-        function studyProgramLabel(program) {
+        function modulebookLabel(program) {
             const suffix = degreeTypeShortLabel(program.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program.name || "");
+            const name = program.studyProgramName || program.name || "";
+            return suffix ? `${name} (${suffix})` : name;
         }
 
         function degreeTypeShortLabel(degreeType) {

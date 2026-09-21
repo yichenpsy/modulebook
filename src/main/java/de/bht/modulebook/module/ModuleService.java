@@ -21,7 +21,7 @@ import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
 import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.teachingform.TeachingForm;
-import de.bht.modulebook.studyprogram.changeset.StudyProgramChangeSetService;
+import de.bht.modulebook.modulebook.changeset.ModulebookChangeSetService;
 
 // logic layer, checkes things like "module not found", calls repository
 @Service
@@ -35,7 +35,7 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository moduleTeachingFormRepository;
-    private final StudyProgramChangeSetService changeSetService;
+    private final ModulebookChangeSetService changeSetService;
     private final ModuleChangeLogService changeLogService;
     private final ModulebookService modulebookService;
     
@@ -44,7 +44,7 @@ public class ModuleService {
         ModuleRepository moduleRepository,
         ModuleWorkloadRepository workloadRepository,
         ModuleTeachingFormRepository moduleTeachingFormRepository,
-        StudyProgramChangeSetService changeSetService,
+        ModulebookChangeSetService changeSetService,
         ModuleChangeLogService changeLogService,
         ModulebookService modulebookService
     ) {
@@ -90,7 +90,7 @@ public class ModuleService {
         String normalizedReason = normalizeInitialVersionReason(initialVersionReason);
         normalizeModulebookReference(module);
         normalizeAndValidateUniqueModuleNumberForCreate(module);
-        Long changeSetId = createChangeSet(module.getStudyProgramId(), normalizedReason, StudyProgramChangeSetService.SOURCE_INITIAL_MODULE);
+        Long changeSetId = createChangeSet(module.getModulebookId(), normalizedReason, ModulebookChangeSetService.SOURCE_INITIAL_MODULE);
         return create(module, workload, teachingFormIds, normalizedReason, changeSetId);
     }
 
@@ -129,16 +129,16 @@ public class ModuleService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
     }
 
-    public Optional<Module> findByStudyProgramIdAndModuleNumber(Long studyProgramId, String moduleNumber) {
-        return findExistingModuleNumber(studyProgramId, normalizeModuleNumber(moduleNumber));
+    public Optional<Module> findByModulebookIdAndModuleNumber(Long modulebookId, String moduleNumber) {
+        return findExistingModuleNumber(modulebookId, normalizeModuleNumber(moduleNumber));
     }
 
     public List<Module> getAll() {
         return moduleRepository.findAll();
     }
 
-    public List<Module> getByStudyProgramId(Long studyProgramId) {
-        return moduleRepository.findByStudyProgramId(studyProgramId);
+    public List<Module> getByModulebookId(Long modulebookId) {
+        return moduleRepository.findByModulebookId(modulebookId);
     }
 
     @Transactional
@@ -148,8 +148,8 @@ public class ModuleService {
         ModuleWorkload oldWorkload = workloadRepository.findByModuleId(id).orElse(null);
         List<Long> oldTeachingFormIds = teachingFormIdsByModuleId(id);
         var changeSet = changeSetService.create(
-            oldModule.getStudyProgramId(),
-            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            oldModule.getModulebookId(),
+            ModulebookChangeSetService.SOURCE_MANUAL_EDIT,
             "changed module status to " + normalizedStatus
         );
         Module desiredModule = copyModule(oldModule);
@@ -174,8 +174,8 @@ public class ModuleService {
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         ensureModulebookId(module, oldModule);
         var changeSet = changeSetService.create(
-            oldModule.getStudyProgramId(),
-            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            oldModule.getModulebookId(),
+            ModulebookChangeSetService.SOURCE_MANUAL_EDIT,
             "update"
         );
         boolean updated = moduleRepository.update(id, module);
@@ -209,8 +209,8 @@ public class ModuleService {
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         ensureModulebookId(module, oldModule);
         var changeSet = changeSetService.create(
-            oldModule.getStudyProgramId(),
-            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            oldModule.getModulebookId(),
+            ModulebookChangeSetService.SOURCE_MANUAL_EDIT,
             normalizeVersionReason(versionReason)
         );
         boolean updated = moduleRepository.update(id, module);
@@ -295,8 +295,8 @@ public class ModuleService {
         preserveUnchangedModuleFields(module, oldModule, changedFieldPaths);
         normalizeAndValidateUniqueModuleNumberForUpdate(id, module, oldModule);
         var changeSet = changeSetService.create(
-            oldModule.getStudyProgramId(),
-            StudyProgramChangeSetService.SOURCE_MANUAL_EDIT,
+            oldModule.getModulebookId(),
+            ModulebookChangeSetService.SOURCE_MANUAL_EDIT,
             normalizeVersionReason(versionReason)
         );
         return updateAndLogSavedState(
@@ -491,7 +491,7 @@ public class ModuleService {
 
     private void normalizeAndValidateUniqueModuleNumberForCreate(Module module) {
         module.setModuleNumber(normalizeModuleNumber(module.getModuleNumber()));
-        findExistingModuleNumber(module.getStudyProgramId(), module.getModuleNumber())
+        findExistingModuleNumber(module.getModulebookId(), module.getModuleNumber())
                 .ifPresent(existing -> {
                     throw duplicateModuleNumber(module.getModuleNumber());
                 });
@@ -500,31 +500,31 @@ public class ModuleService {
     private void normalizeAndValidateUniqueModuleNumberForUpdate(Long moduleId, Module module, Module oldModule) {
         normalizeModulebookReference(module, oldModule);
         String normalizedModuleNumber = normalizeModuleNumber(module.getModuleNumber());
-        boolean sameStudyProgram = Objects.equals(module.getStudyProgramId(), oldModule.getStudyProgramId());
+        boolean sameModulebook = Objects.equals(module.getModulebookId(), oldModule.getModulebookId());
         boolean sameModuleNumber = Objects.equals(
                 moduleNumberKey(normalizedModuleNumber),
                 moduleNumberKey(oldModule.getModuleNumber())
         );
 
-        if (sameStudyProgram && sameModuleNumber) {
+        if (sameModulebook && sameModuleNumber) {
             module.setModuleNumber(oldModule.getModuleNumber());
             return;
         }
 
         module.setModuleNumber(normalizedModuleNumber);
-        findExistingModuleNumber(module.getStudyProgramId(), module.getModuleNumber())
+        findExistingModuleNumber(module.getModulebookId(), module.getModuleNumber())
                 .filter(existing -> !Objects.equals(existing.getId(), moduleId))
                 .ifPresent(existing -> {
                     throw duplicateModuleNumber(module.getModuleNumber());
                 });
     }
 
-    private Optional<Module> findExistingModuleNumber(Long studyProgramId, String moduleNumber) {
-        if (studyProgramId == null || moduleNumber == null || moduleNumber.isBlank()) {
+    private Optional<Module> findExistingModuleNumber(Long modulebookId, String moduleNumber) {
+        if (modulebookId == null || moduleNumber == null || moduleNumber.isBlank()) {
             return Optional.empty();
         }
 
-        Optional<Module> existing = moduleRepository.findByStudyProgramIdAndModuleNumber(studyProgramId, moduleNumber);
+        Optional<Module> existing = moduleRepository.findByModulebookIdAndModuleNumber(modulebookId, moduleNumber);
         return existing == null ? Optional.empty() : existing;
     }
 
@@ -544,7 +544,7 @@ public class ModuleService {
     private ResponseStatusException duplicateModuleNumber(String moduleNumber) {
         return new ResponseStatusException(
                 HttpStatus.CONFLICT,
-                "Module number " + moduleNumber + " already exists in this study program"
+                "Module number " + moduleNumber + " already exists in this modulebook"
         );
     }
 
@@ -557,8 +557,8 @@ public class ModuleService {
 
         Module module = getById(id);
         changeSetService.create(
-                module.getStudyProgramId(),
-                StudyProgramChangeSetService.SOURCE_DELETE,
+                module.getModulebookId(),
+                ModulebookChangeSetService.SOURCE_DELETE,
                 deleteReason(module)
         );
         boolean deleted = moduleRepository.delete(id);
@@ -585,12 +585,11 @@ public class ModuleService {
     private Module copyModule(Module source) {
         return new Module(
                 source.getId(),
-                source.getStudyProgramId(),
+                source.getModulebookId(),
                 source.getModuleNumber(),
                 source.getName(),
                 source.getCredits(),
                 source.getDescription(),
-                source.getModulebookId(),
                 source.getModuleType(),
                 source.getTitleDe(),
                 source.getTitleEn(),
@@ -668,8 +667,8 @@ public class ModuleService {
         return normalized;
     }
 
-    private Long createChangeSet(Long studyProgramId, String reason, String sourceType) {
-        return changeSetService.create(studyProgramId, sourceType, reason).getId();
+    private Long createChangeSet(Long modulebookId, String reason, String sourceType) {
+        return changeSetService.create(modulebookId, sourceType, reason).getId();
     }
 
     private void ensureModulebookId(Module module) {
@@ -677,16 +676,11 @@ public class ModuleService {
     }
 
     private void ensureModulebookId(Module module, Module oldModule) {
-        if (module.getModulebookId() != null) {
-            return;
+        normalizeModulebookReference(module, oldModule);
+        if (module.getModulebookId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Modulebook id is required");
         }
-        if (oldModule != null && oldModule.getModulebookId() != null) {
-            module.setModulebookId(oldModule.getModulebookId());
-            return;
-        }
-        if (module.getStudyProgramId() != null) {
-            module.setModulebookId(modulebookService.getOrCreateForStudyProgramId(module.getStudyProgramId()).getId());
-        }
+        modulebookService.getById(module.getModulebookId());
     }
 
     private void normalizeModulebookReference(Module module) {
@@ -694,15 +688,6 @@ public class ModuleService {
     }
 
     private void normalizeModulebookReference(Module module, Module oldModule) {
-        if (module.getStudyProgramId() == null && module.getModulebookId() != null) {
-            module.setStudyProgramId(module.getModulebookId());
-        }
-        if (module.getModulebookId() == null && module.getStudyProgramId() != null) {
-            module.setModulebookId(module.getStudyProgramId());
-        }
-        if (module.getStudyProgramId() == null && oldModule != null) {
-            module.setStudyProgramId(oldModule.getStudyProgramId());
-        }
         if (module.getModulebookId() == null && oldModule != null) {
             module.setModulebookId(oldModule.getModulebookId());
         }

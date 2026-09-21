@@ -52,7 +52,7 @@
         let importedModules = [];
         let studyProgram = null;
         const params = new URLSearchParams(window.location.search);
-        const studyProgramId = params.get("studyProgramId");
+        const modulebookId = params.get("modulebookId");
         const importedModuleFieldDefinitions = [
             { key: "module_number", label: "Module number", important: true, control: "input" },
             { key: "title", label: "Title", important: true, control: "input" },
@@ -78,23 +78,23 @@
         ];
 
         async function init() {
-            if (!studyProgramId) {
-                setStatus("Missing study program id. Open Import PDF from a study program row on the index page.");
+            if (!modulebookId) {
+                setStatus("Missing modulebook id. Open Import PDF from a modulebook row on the index page.");
                 document.getElementById("studyProgramDisplay").textContent = "No study program selected.";
                 return;
             }
 
             try {
-                const studyPrograms = await loadStudyPrograms();
-                studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
+                const modulebooks = await loadModulebooks();
+                studyProgram = modulebooks.find(program => String(program.id) === String(modulebookId));
                 if (!studyProgram) {
-                    setStatus(`Study program ${studyProgramId} was not found.`);
+                    setStatus(`Study program ${modulebookId} was not found.`);
                     document.getElementById("studyProgramDisplay").textContent = "Study program not found.";
                     return;
                 }
 
                 document.getElementById("studyProgramDisplay").textContent =
-                    `Import PDF for ${studyProgramLabel(studyProgram)}`;
+                    `Import PDF for ${modulebookLabel(studyProgram)}`;
                 setStatus("Ready.");
             } catch (error) {
                 setStatus("Could not load study programs: " + error.message);
@@ -122,7 +122,7 @@
             }
 
             const formData = new FormData();
-            formData.append("studyProgramId", studyProgram.id);
+            formData.append("modulebookId", studyProgram.id);
             formData.append("modulebookReleaseDate", modulebookReleaseDate);
             if (studyExaminationRegulationsDate) {
                 formData.append("studyExaminationRegulationsDate", studyExaminationRegulationsDate);
@@ -154,7 +154,7 @@
             syncImportedModulesFromForm();
 
             const request = {
-                studyProgramId: Number(studyProgramId),
+                modulebookId: Number(modulebookId),
                 modulebookReleaseDate: document.getElementById("modulebookReleaseDate").value || null,
                 studyExaminationRegulationsDate: document.getElementById("studyExaminationRegulationsDate").value || null,
                 modules: importedModules
@@ -192,7 +192,7 @@
             const summary = document.getElementById("reportSummary");
 
             summary.innerHTML = `
-                <div><strong>Study program:</strong> ${escapeHtml(studyProgramLabel(studyProgram))}</div>
+                <div><strong>Study program:</strong> ${escapeHtml(modulebookLabel(studyProgram))}</div>
                 <div><strong>Modulebook release date:</strong> ${escapeHtml(formatDateOnly(importResponse.modulebookReleaseDate))}</div>
                 <div><strong>Study and Examination Regulations:</strong> ${escapeHtml(formatDateOnly(importResponse.studyExaminationRegulationsDate))}</div>
                 <div><strong>Status:</strong> ${escapeHtml(report.status || "unknown")}</div>
@@ -411,9 +411,10 @@
             setStatus(`Removed module row ${index + 1}.`);
         }
 
-        function studyProgramLabel(program) {
+        function modulebookLabel(program) {
             const suffix = degreeTypeShortLabel(program.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program.name || "");
+            const name = program?.studyProgramName || program?.name || "";
+            return suffix ? `${name} (${suffix})` : name;
         }
 
         function degreeTypeShortLabel(degreeType) {

@@ -1,4 +1,4 @@
-package de.bht.modulebook.studyprogram.changeset;
+package de.bht.modulebook.modulebook.changeset;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,12 +15,12 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class StudyProgramChangeSetRepository {
+public class ModulebookChangeSetRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert insert;
-    private final RowMapper<StudyProgramChangeSet> rowMapper = new StudyProgramChangeSetRowMapper();
+    private final RowMapper<ModulebookChangeSet> rowMapper = new ModulebookChangeSetRowMapper();
 
-    public StudyProgramChangeSetRepository(JdbcTemplate jdbcTemplate) {
+    public ModulebookChangeSetRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.insert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("study_program_change_sets")
@@ -28,19 +28,19 @@ public class StudyProgramChangeSetRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
-    public StudyProgramChangeSet insert(Long studyProgramId, String sourceType, String reason) {
+    public ModulebookChangeSet insert(Long modulebookId, String sourceType, String reason) {
         MapSqlParameterSource values = new MapSqlParameterSource()
-                .addValue("modulebook_id", studyProgramId)
+                .addValue("modulebook_id", modulebookId)
                 .addValue("source_type", sourceType)
                 .addValue("reason", reason);
         Number id = insert.executeAndReturnKey(values);
         return findById(id.longValue());
     }
 
-    public StudyProgramChangeSet findById(Long id) {
-        List<StudyProgramChangeSet> changeSets = jdbcTemplate.query(
+    public ModulebookChangeSet findById(Long id) {
+        List<ModulebookChangeSet> changeSets = jdbcTemplate.query(
                 """
-                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
                 WHERE id = ?
@@ -51,24 +51,24 @@ public class StudyProgramChangeSetRepository {
         return changeSets.stream().findFirst().orElseThrow();
     }
 
-    public List<StudyProgramChangeSet> findByStudyProgramId(Long studyProgramId) {
+    public List<ModulebookChangeSet> findByModulebookId(Long modulebookId) {
         return jdbcTemplate.query(
                 """
-                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
                 WHERE modulebook_id = ?
                 ORDER BY created_at DESC, id DESC
                 """,
                 rowMapper,
-                studyProgramId
+                modulebookId
         );
     }
 
-    public Optional<StudyProgramChangeSet> findFirstByStudyProgramIdAndSourceType(Long studyProgramId, String sourceType) {
+    public Optional<ModulebookChangeSet> findFirstByModulebookIdAndSourceType(Long modulebookId, String sourceType) {
         return jdbcTemplate.query(
                 """
-                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
                 WHERE modulebook_id = ?
@@ -77,15 +77,15 @@ public class StudyProgramChangeSetRepository {
                 LIMIT 1
                 """,
                 rowMapper,
-                studyProgramId,
+                modulebookId,
                 sourceType
         ).stream().findFirst();
     }
 
-    public List<StudyProgramChangeSet> findActiveFromInclusive(StudyProgramChangeSet target) {
+    public List<ModulebookChangeSet> findActiveFromInclusive(ModulebookChangeSet target) {
         return jdbcTemplate.query(
                 """
-                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
                 WHERE modulebook_id = ?
@@ -97,17 +97,17 @@ public class StudyProgramChangeSetRepository {
                 ORDER BY created_at, id
                 """,
                 rowMapper,
-                target.getStudyProgramId(),
+                target.getModulebookId(),
                 Timestamp.from(target.getCreatedAt()),
                 Timestamp.from(target.getCreatedAt()),
                 target.getId()
         );
     }
 
-    public List<StudyProgramChangeSet> findAfter(StudyProgramChangeSet changeSet) {
+    public List<ModulebookChangeSet> findAfter(ModulebookChangeSet changeSet) {
         return jdbcTemplate.query(
                 """
-                SELECT id, modulebook_id AS study_program_id, source_type, reason, created_at,
+                SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
                 FROM study_program_change_sets
                 WHERE modulebook_id = ?
@@ -118,7 +118,7 @@ public class StudyProgramChangeSetRepository {
                 ORDER BY created_at, id
                 """,
                 rowMapper,
-                changeSet.getStudyProgramId(),
+                changeSet.getModulebookId(),
                 Timestamp.from(changeSet.getCreatedAt()),
                 Timestamp.from(changeSet.getCreatedAt()),
                 changeSet.getId()
@@ -157,15 +157,15 @@ public class StudyProgramChangeSetRepository {
         );
     }
 
-    private static class StudyProgramChangeSetRowMapper implements RowMapper<StudyProgramChangeSet> {
+    private static class ModulebookChangeSetRowMapper implements RowMapper<ModulebookChangeSet> {
         @Override
-        public StudyProgramChangeSet mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public ModulebookChangeSet mapRow(ResultSet rs, int rowNum) throws SQLException {
             Timestamp createdAt = rs.getTimestamp("created_at");
             Instant createdAtInstant = createdAt == null ? null : createdAt.toInstant();
 
-            return new StudyProgramChangeSet(
+            return new ModulebookChangeSet(
                     rs.getLong("id"),
-                    rs.getLong("study_program_id"),
+                    rs.getLong("modulebook_id"),
                     rs.getString("source_type"),
                     rs.getString("reason"),
                     createdAtInstant,

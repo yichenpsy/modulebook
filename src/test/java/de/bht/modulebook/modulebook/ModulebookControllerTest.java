@@ -1,4 +1,4 @@
-package de.bht.modulebook.studyprogram;
+package de.bht.modulebook.modulebook;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -17,15 +17,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
-import de.bht.modulebook.modulebook.Modulebook;
-import de.bht.modulebook.modulebook.ModulebookService;
 import de.bht.modulebook.modulebook.dto.CreateModulebookRequest;
 import de.bht.modulebook.modulebook.dto.ModulebookResponse;
-import de.bht.modulebook.studyprogram.dto.StudyProgramRequest;
-import de.bht.modulebook.studyprogram.dto.StudyProgramResponse;
 
 @ExtendWith(MockitoExtension.class)
-class StudyProgramControllerTest {
+class ModulebookControllerTest {
 
     @Mock
     private ModulebookService modulebookService;
@@ -33,15 +29,15 @@ class StudyProgramControllerTest {
     @Mock
     private ModuleService moduleService;
 
-    private StudyProgramController controller;
+    private ModulebookController controller;
 
     @BeforeEach
     void setUp() {
-        controller = new StudyProgramController(modulebookService, moduleService);
+        controller = new ModulebookController(modulebookService, moduleService);
     }
 
     @Test
-    void getAllReturnsStudyProgramResponses() {
+    void getAllReturnsModulebookResponses() {
         Modulebook modulebook = new Modulebook(
                 10L,
                 "Architektur",
@@ -51,11 +47,11 @@ class StudyProgramControllerTest {
         );
         when(modulebookService.getAll()).thenReturn(List.of(modulebook));
 
-        List<StudyProgramResponse> response = controller.getAll();
+        List<ModulebookResponse> response = controller.getAll();
 
         assertThat(response).hasSize(1);
         assertThat(response.get(0).id()).isEqualTo(10L);
-        assertThat(response.get(0).name()).isEqualTo("Architektur");
+        assertThat(response.get(0).studyProgramName()).isEqualTo("Architektur");
         assertThat(response.get(0).degreeType()).isEqualTo("BACHELOR");
     }
 
@@ -63,23 +59,23 @@ class StudyProgramControllerTest {
     void createPassesRequestDataToService() {
         ModulebookResponse created = new ModulebookResponse(
                 10L,
-                10L,
                 "Architektur",
                 "BACHELOR",
                 Instant.parse("2026-01-01T00:00:00Z"),
                 Instant.parse("2026-01-02T00:00:00Z")
         );
-        when(modulebookService.create(new CreateModulebookRequest("Architektur", "BACHELOR"))).thenReturn(created);
+        CreateModulebookRequest request = new CreateModulebookRequest("Architektur", "BACHELOR");
+        when(modulebookService.create(request)).thenReturn(created);
 
-        StudyProgramResponse response = controller.create(new StudyProgramRequest("Architektur", "BACHELOR"));
+        ModulebookResponse response = controller.create(request);
 
         assertThat(response.id()).isEqualTo(10L);
-        assertThat(response.name()).isEqualTo("Architektur");
+        assertThat(response.studyProgramName()).isEqualTo("Architektur");
         assertThat(response.degreeType()).isEqualTo("BACHELOR");
     }
 
     @Test
-    void getModulesLoadsModulesForSelectedStudyProgram() {
+    void getModulesLoadsModulesForSelectedModulebook() {
         Modulebook modulebook = new Modulebook(10L, "Architektur", "BACHELOR", null, null);
         Module module = new Module(
                 100L,
@@ -110,16 +106,15 @@ class StudyProgramControllerTest {
         );
 
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(moduleService.getByStudyProgramId(10L)).thenReturn(List.of(module));
+        when(moduleService.getByModulebookId(10L)).thenReturn(List.of(module));
 
         List<ModuleResponse> response = controller.getModules(10L);
 
         assertThat(response).hasSize(1);
         assertThat(response.get(0).id()).isEqualTo(100L);
-        assertThat(response.get(0).studyProgramId()).isEqualTo(10L);
+        assertThat(response.get(0).modulebookId()).isEqualTo(10L);
         assertThat(response.get(0).moduleNumber()).isEqualTo("B01");
         verify(modulebookService).getById(10L);
-        verify(moduleService).getByStudyProgramId(10L);
+        verify(moduleService).getByModulebookId(10L);
     }
-
 }

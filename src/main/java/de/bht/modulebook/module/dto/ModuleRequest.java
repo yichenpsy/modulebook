@@ -9,8 +9,8 @@ import de.bht.modulebook.module.workload.dto.ModuleWorkloadRequest;
 
 // shape of JSON received from frontend when creating/updating a module.
 public record ModuleRequest(
-    @NotNull(message = "Study program id is required")
-    Long studyProgramId,
+    @NotNull(message = "Modulebook id is required")
+    Long modulebookId,
 
     @NotBlank(message = "Module number is required")
     @Size(max = 50, message = "Module number must be at most 50 characters")
@@ -22,7 +22,6 @@ public record ModuleRequest(
     @NotNull(message = "Credits are required")
     BigDecimal credits,
     String description,
-    Long modulebookId,
     String moduleType,
     String titleDe,
     String titleEn,

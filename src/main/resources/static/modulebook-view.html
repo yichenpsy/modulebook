@@ -45,7 +45,7 @@
     <script src="/api.js?v=modulebook-versions"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
-        const studyProgramId = params.get("studyProgramId");
+        const modulebookId = params.get("modulebookId");
         const versionId = params.get("versionId") || params.get("tagId");
         let studyProgram = null;
         let activeModules = [];
@@ -73,8 +73,8 @@
         ];
 
         async function init() {
-            if (!studyProgramId && !versionId) {
-                setStatus("Missing study program id or version id in URL. Example: /modulebook-view.html?studyProgramId=19");
+            if (!modulebookId && !versionId) {
+                setStatus("Missing modulebook id or version id in URL. Example: /modulebook-view.html?modulebookId=19");
                 return;
             }
 
@@ -94,19 +94,19 @@
 
         async function loadCurrentModulebook() {
             document.getElementById("backLink").href =
-                `/index.html?studyProgramId=${encodeURIComponent(studyProgramId)}`;
+                `/index.html?modulebookId=${encodeURIComponent(modulebookId)}`;
 
-            const [studyPrograms, modules] = await Promise.all([
-                loadStudyPrograms(),
-                loadModulesForStudyProgram(studyProgramId)
+            const [modulebooks, modules] = await Promise.all([
+                loadModulebooks(),
+                loadModulesForModulebook(modulebookId)
             ]);
 
-            studyProgram = studyPrograms.find(program =>
-                String(program.id) === String(studyProgramId)
+            studyProgram = modulebooks.find(program =>
+                String(program.id) === String(modulebookId)
             );
 
             if (!studyProgram) {
-                throw new Error(`Could not find study program ${studyProgramId}.`);
+                throw new Error(`Could not find study program ${modulebookId}.`);
             }
 
             activeModules = modules
@@ -117,15 +117,15 @@
         async function loadSavedModulebookVersion() {
             currentVersion = await loadModulebookVersion(versionId);
             const snapshot = JSON.parse(currentVersion.snapshotJson);
-            studyProgram = snapshot.studyProgram;
+            studyProgram = snapshot.modulebook || snapshot.studyProgram;
             activeModules = snapshot.modules || [];
             document.getElementById("versionButton").hidden = true;
             document.getElementById("backLink").href =
-                `/study-program-history.html?id=${encodeURIComponent(currentVersion.studyProgramId)}`;
+                `/modulebook-history.html?id=${encodeURIComponent(currentVersion.modulebookId)}`;
         }
 
         function renderModulebook() {
-            const documentTitle = `Modulebook - ${studyProgramLabel(studyProgram)}`.trim();
+            const documentTitle = `Modulebook - ${modulebookLabel(studyProgram)}`.trim();
             document.getElementById("documentTitle").textContent = documentTitle;
 
             const container = document.getElementById("modulebook");
@@ -140,7 +140,7 @@
         }
 
         function renderCover() {
-            const programName = studyProgram.name || "Study program";
+            const programName = modulebookName(studyProgram) || "Study program";
 
             return `
                 <article id="modulebook-cover" class="modulebook-page modulebook-cover">
@@ -157,7 +157,7 @@
                     </div>
 
                     <div class="modulebook-cover-meta">
-                        <p>Studiengang: ${escapeHtml(studyProgramLabel(studyProgram))}</p>
+                        <p>Studiengang: ${escapeHtml(modulebookLabel(studyProgram))}</p>
                     </div>
                 </article>
             `;
@@ -167,7 +167,7 @@
             return `
                 <article class="modulebook-page modulebook-version-page">
                     <header class="modulebook-page-header">
-                        <div>${escapeHtml(studyProgram.name || "")}</div>
+                        <div>${escapeHtml(modulebookName(studyProgram))}</div>
                         <div>Saved modulebook version</div>
                     </header>
 
@@ -187,7 +187,7 @@
             return `
                 <article id="modulebook-toc" class="modulebook-page modulebook-toc-page">
                     <header class="modulebook-page-header">
-                        <div>${escapeHtml(studyProgram.name || "")}</div>
+                        <div>${escapeHtml(modulebookName(studyProgram))}</div>
                         <div>Anlage 3 | Seite ${tableOfContentsPageNumber()}</div>
                     </header>
 
@@ -234,7 +234,7 @@
             return `
                 <article id="${moduleAnchorId(module, index)}" class="modulebook-page modulebook-module-page">
                     <header class="modulebook-page-header">
-                        <div>${escapeHtml(studyProgram.name || "")}</div>
+                        <div>${escapeHtml(modulebookName(studyProgram))}</div>
                         <div>Anlage 3 | Seite ${pageNumber}</div>
                     </header>
 
@@ -450,13 +450,13 @@
             setStatus("Saving modulebook version...");
 
             try {
-                const version = await createModulebookVersion(studyProgramId, {
+                const version = await createModulebookVersion(modulebookId, {
                     versionMessage: message,
                     modulebookReleaseDate: document.getElementById("versionModulebookReleaseDate").value || null,
                     studyExaminationRegulationsDate:
                         document.getElementById("versionStudyExaminationRegulationsDate").value || null
                 });
-                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}&modulebookVersionId=${encodeURIComponent(version.id)}`;
+                window.location.href = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}&modulebookVersionId=${encodeURIComponent(version.id)}`;
             } catch (error) {
                 setStatus("Could not save modulebook version: " + error.message);
             }
@@ -486,9 +486,14 @@
             return new Date(`${value}T00:00:00`).toLocaleDateString("de-DE");
         }
 
-        function studyProgramLabel(program) {
+        function modulebookLabel(program) {
             const suffix = degreeTypeShortLabel(program?.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program?.name || "");
+            const name = modulebookName(program);
+            return suffix ? `${name} (${suffix})` : name;
+        }
+
+        function modulebookName(program) {
+            return program?.studyProgramName || program?.name || "";
         }
 
         function degreeTypeShortLabel(degreeType) {

@@ -21,8 +21,8 @@ import org.springframework.stereotype.Repository;
 public class ModuleRepository {
 
     private static final String SELECT_COLUMNS = """
-            id, modulebook_id AS study_program_id, module_number, name, credits, description,
-            modulebook_id, module_type, title_de, title_en, coordinator, applicability,
+            id, modulebook_id, module_number, name, credits, description,
+            module_type, title_de, title_en, coordinator, applicability,
             learning_area, learning_objectives, prerequisites, level, module_status, module_comments, frequency,
             examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at,
             created_change_set_id
@@ -124,12 +124,11 @@ public class ModuleRepository {
                 moduleRowMapper);
     }
 
-    public List<Module> findByStudyProgramId(Long studyProgramId) {
-        // The frontend still calls this studyProgramId, but it is now modulebooks.id.
+    public List<Module> findByModulebookId(Long modulebookId) {
         return jdbcTemplate.query(
                 "SELECT " + SELECT_COLUMNS + " FROM modules WHERE modulebook_id = ? ORDER BY module_number",
                 moduleRowMapper,
-                studyProgramId);
+                modulebookId);
     }
 
     public List<Module> findByCreatedChangeSetIds(List<Long> changeSetIds) {
@@ -236,12 +235,11 @@ public class ModuleRepository {
         public Module mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Module(
                     rs.getLong("id"),
-                    getLongOrNull(rs, "study_program_id"),
+                    getLongOrNull(rs, "modulebook_id"),
                     rs.getString("module_number"),
                     rs.getString("name"),
                     getBigDecimalOrNull(rs, "credits"),
                     rs.getString("description"),
-                    getLongOrNull(rs, "modulebook_id"),
                     rs.getString("module_type"),
                     rs.getString("title_de"),
                     rs.getString("title_en"),
@@ -288,11 +286,11 @@ public class ModuleRepository {
         }
     }
 
-    public Optional<Module> findByStudyProgramIdAndModuleNumber(Long studyProgramId, String moduleNumber) {
+    public Optional<Module> findByModulebookIdAndModuleNumber(Long modulebookId, String moduleNumber) {
         List<Module> modules = jdbcTemplate.query(
                 "SELECT " + SELECT_COLUMNS + " FROM modules WHERE modulebook_id = ? AND lower(module_number) = lower(?) ORDER BY id",
                 moduleRowMapper,
-                studyProgramId,
+                modulebookId,
                 moduleNumber);
 
         return modules.stream().findFirst();

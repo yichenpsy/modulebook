@@ -11,15 +11,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.bht.modulebook.module.ModuleMapper;
+import de.bht.modulebook.module.ModuleService;
+import de.bht.modulebook.module.dto.ModuleResponse;
 import de.bht.modulebook.modulebook.dto.CreateModulebookRequest;
 import de.bht.modulebook.modulebook.dto.ModulebookResponse;
 
 @RestController
 public class ModulebookController {
     private final ModulebookService service;
+    private final ModuleService moduleService;
 
-    public ModulebookController(ModulebookService service) {
+    public ModulebookController(ModulebookService service, ModuleService moduleService) {
         this.service = service;
+        this.moduleService = moduleService;
     }
 
     @PostMapping("/api/modulebooks")
@@ -47,8 +52,12 @@ public class ModulebookController {
         service.delete(id);
     }
 
-    @GetMapping("/api/study-programs/{studyProgramId}/modulebook")
-    public ModulebookResponse getByStudyProgramId(@PathVariable Long studyProgramId) {
-        return service.getByStudyProgramId(studyProgramId);
+    @GetMapping("/api/modulebooks/{modulebookId}/modules")
+    public List<ModuleResponse> getModules(@PathVariable Long modulebookId) {
+        service.getById(modulebookId);
+        return moduleService.getByModulebookId(modulebookId)
+                .stream()
+                .map(ModuleMapper::toResponse)
+                .toList();
     }
 }

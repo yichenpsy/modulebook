@@ -6,7 +6,6 @@ import java.time.LocalDate;
 public class ModulebookVersion {
     private final Long id;
     private final Long modulebookId;
-    private final Long studyProgramId;
     private final Integer versionNumber;
     private final String versionMessage;
     private final String snapshotJson;
@@ -16,14 +15,13 @@ public class ModulebookVersion {
     private final LocalDate modulebookReleaseDate;
     private final LocalDate studyExaminationRegulationsDate;
 
-    public ModulebookVersion(Long id, Long studyProgramId, String versionMessage, String snapshotJson, Instant createdAt) {
-        this(id, null, studyProgramId, null, versionMessage, snapshotJson, createdAt, "MANUAL", null, null, null);
+    public ModulebookVersion(Long id, Long modulebookId, String versionMessage, String snapshotJson, Instant createdAt) {
+        this(id, modulebookId, null, versionMessage, snapshotJson, createdAt, "MANUAL", null, null, null);
     }
 
     public ModulebookVersion(
             Long id,
             Long modulebookId,
-            Long studyProgramId,
             Integer versionNumber,
             String versionMessage,
             String snapshotJson,
@@ -35,7 +33,6 @@ public class ModulebookVersion {
     ) {
         this.id = id;
         this.modulebookId = modulebookId;
-        this.studyProgramId = studyProgramId;
         this.versionNumber = versionNumber;
         this.versionMessage = versionMessage;
         this.snapshotJson = snapshotJson;
@@ -52,10 +49,6 @@ public class ModulebookVersion {
 
     public Long getModulebookId() {
         return modulebookId;
-    }
-
-    public Long getStudyProgramId() {
-        return studyProgramId;
     }
 
     public Integer getVersionNumber() {

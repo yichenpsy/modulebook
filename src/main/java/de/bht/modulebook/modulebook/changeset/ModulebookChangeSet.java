@@ -1,23 +1,23 @@
-package de.bht.modulebook.studyprogram.changeset;
+package de.bht.modulebook.modulebook.changeset;
 
 import java.time.Instant;
 
-public class StudyProgramChangeSet {
+public class ModulebookChangeSet {
     private Long id;
-    private Long studyProgramId;
+    private Long modulebookId;
     private String sourceType;
     private String reason;
     private Instant createdAt;
     private Instant discardedAt;
     private Long discardedByChangeSetId;
 
-    public StudyProgramChangeSet(Long id, Long studyProgramId, String sourceType, String reason, Instant createdAt) {
-        this(id, studyProgramId, sourceType, reason, createdAt, null, null);
+    public ModulebookChangeSet(Long id, Long modulebookId, String sourceType, String reason, Instant createdAt) {
+        this(id, modulebookId, sourceType, reason, createdAt, null, null);
     }
 
-    public StudyProgramChangeSet(
+    public ModulebookChangeSet(
             Long id,
-            Long studyProgramId,
+            Long modulebookId,
             String sourceType,
             String reason,
             Instant createdAt,
@@ -25,7 +25,7 @@ public class StudyProgramChangeSet {
             Long discardedByChangeSetId
     ) {
         this.id = id;
-        this.studyProgramId = studyProgramId;
+        this.modulebookId = modulebookId;
         this.sourceType = sourceType;
         this.reason = reason;
         this.createdAt = createdAt;
@@ -34,7 +34,7 @@ public class StudyProgramChangeSet {
     }
 
     public Long getId() { return id; }
-    public Long getStudyProgramId() { return studyProgramId; }
+    public Long getModulebookId() { return modulebookId; }
     public String getSourceType() { return sourceType; }
     public String getReason() { return reason; }
     public Instant getCreatedAt() { return createdAt; }

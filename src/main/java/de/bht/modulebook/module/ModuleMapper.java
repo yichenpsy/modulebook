@@ -15,12 +15,11 @@ public class ModuleMapper {
     // takes JSON request data and builds a Module object the service can save
     public static Module toEntity(ModuleRequest request) {
         Module module = new Module();
-        module.setStudyProgramId(request.studyProgramId());
+        module.setModulebookId(request.modulebookId());
         module.setModuleNumber(request.moduleNumber());
         module.setName(request.name());
         module.setCredits(request.credits());
         module.setDescription(request.description());
-        module.setModulebookId(request.modulebookId());
         module.setModuleType(request.moduleType());
         module.setTitleDe(request.titleDe());
         module.setTitleEn(request.titleEn());
@@ -58,12 +57,11 @@ public class ModuleMapper {
     ) {
         return new ModuleResponse(
             module.getId(),
-            module.getStudyProgramId(),
+            module.getModulebookId(),
             module.getModuleNumber(),
             module.getName(),
             module.getCredits(),
             module.getDescription(),
-            module.getModulebookId(),
             module.getModuleType(),
             module.getTitleDe(),
             module.getTitleEn(),

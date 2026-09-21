@@ -28,7 +28,7 @@
     <script src="/api.js?v=modulebook-versions"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
-        const studyProgramId = params.get("id");
+        const modulebookId = params.get("id");
         const selectedChangeSetId = params.get("changeSetId");
         const selectedModulebookVersionId = params.get("modulebookVersionId") || params.get("modulebookTagId");
         let studyProgram = null;
@@ -41,22 +41,22 @@
         let versionsByModulebookVersionId = new Map();
 
         async function init() {
-            if (!studyProgramId) {
-                setStatus("Missing study program id in URL. Example: /study-program-history.html?id=3");
+            if (!modulebookId) {
+                setStatus("Missing modulebook id in URL. Example: /modulebook-history.html?id=3");
                 return;
             }
 
-            document.getElementById("backLink").href = `/index.html?studyProgramId=${studyProgramId}`;
+            document.getElementById("backLink").href = `/index.html?modulebookId=${modulebookId}`;
             document.getElementById("compareVersionLink").href =
-                `/study-program-version-compare.html?id=${encodeURIComponent(studyProgramId)}`;
+                `/modulebook-version-compare.html?id=${encodeURIComponent(modulebookId)}`;
 
             try {
-                const studyPrograms = await loadStudyPrograms();
-                studyProgram = studyPrograms.find(program => String(program.id) === String(studyProgramId));
+                const modulebooks = await loadModulebooks();
+                studyProgram = modulebooks.find(program => String(program.id) === String(modulebookId));
                 [modules, changeSets, modulebookVersions, teachingForms] = await Promise.all([
-                    loadModulesForStudyProgram(studyProgramId),
-                    loadStudyProgramChangeSets(studyProgramId),
-                    loadModulebookVersions(studyProgramId),
+                    loadModulesForModulebook(modulebookId),
+                    loadModulebookChangeSets(modulebookId),
+                    loadModulebookVersions(modulebookId),
                     loadTeachingForms()
                 ]);
                 await loadVisibleFieldChanges();
@@ -85,12 +85,12 @@
         function renderTitle() {
             if (!studyProgram) {
                 document.getElementById("studyProgramTitle").textContent =
-                    `Study program ${studyProgramId}`;
+                    `Study program ${modulebookId}`;
                 return;
             }
 
             document.getElementById("studyProgramTitle").textContent =
-                studyProgramLabel(studyProgram);
+                modulebookLabel(studyProgram);
         }
 
         function renderHistory() {
@@ -174,7 +174,7 @@
                                     <td>${escapeHtml(String(modulebookVersionActiveModuleCount(version)))}</td>
                                     <td class="row-actions">
                                         <a href="/modulebook-view.html?versionId=${escapeHtml(String(version.id))}">View / Print</a>
-                                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
+                                        <a href="/modulebook-history.html?id=${escapeHtml(String(modulebookId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
                                         ${modulebookVersionActionHtml(version)}
                                     </td>
                                 </tr>
@@ -205,7 +205,7 @@
                     <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
                     <td>${escapeHtml(changeSetChangedFieldsSummary(changeSet, changes))}</td>
                     <td class="row-actions">
-                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
+                        <a href="/modulebook-history.html?id=${escapeHtml(String(modulebookId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
                         ${restoreActionHtml(changeSet)}
                     </td>
                 </tr>
@@ -227,7 +227,7 @@
                     <td>--</td>
                     <td class="row-actions">
                         <a href="/modulebook-view.html?versionId=${escapeHtml(String(version.id))}">View / Print</a>
-                        <a href="/study-program-history.html?id=${escapeHtml(String(studyProgramId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
+                        <a href="/modulebook-history.html?id=${escapeHtml(String(modulebookId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
                     </td>
                 </tr>
             `;
@@ -263,7 +263,7 @@
             }
 
             const snapshot = parseSnapshot(version);
-            const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+            const backUrl = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
 
             container.innerHTML = `
                 <div class="form-actions">
@@ -313,7 +313,7 @@
             }
 
             const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
-            const backUrl = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+            const backUrl = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
 
             container.innerHTML = `
                 <div class="form-actions">
@@ -727,9 +727,10 @@
             return new Date(`${value}T00:00:00`).toLocaleDateString("de-DE");
         }
 
-        function studyProgramLabel(program) {
+        function modulebookLabel(program) {
             const suffix = degreeTypeShortLabel(program?.degreeType);
-            return suffix ? `${program.name || ""} (${suffix})` : (program?.name || "");
+            const name = program?.studyProgramName || program?.name || "";
+            return suffix ? `${name} (${suffix})` : name;
         }
 
         function degreeTypeShortLabel(degreeType) {
@@ -794,7 +795,7 @@
             try {
                 setStatus(`Restoring to before change set ${changeSetId}...`);
                 await restoreBeforeChangeSet(changeSetId, false);
-                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                window.location.href = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
             } catch (error) {
                 const force = window.confirm(
                     `${error.message}\n\nContinue anyway? Created modules listed above will be deleted.`
@@ -807,7 +808,7 @@
                 try {
                     setStatus(`Restoring to before change set ${changeSetId} with confirmation...`);
                     await restoreBeforeChangeSet(changeSetId, true);
-                    window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                    window.location.href = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
                 } catch (forceError) {
                     setStatus("Restore failed: " + forceError.message);
                 }
@@ -825,7 +826,7 @@
             try {
                 setStatus("Resetting to initial PDF import and cleaning history...");
                 await resetToInitialImport(changeSetId);
-                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                window.location.href = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
             } catch (error) {
                 setStatus("Reset to initial import failed: " + error.message);
             }
@@ -842,7 +843,7 @@
             try {
                 setStatus(`Restoring modulebook version ${versionId}...`);
                 await restoreModulebookVersion(versionId);
-                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                window.location.href = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
             } catch (error) {
                 setStatus("Back to this version failed: " + error.message);
             }
@@ -859,7 +860,7 @@
             try {
                 setStatus(`Deleting modulebook version ${versionId}...`);
                 await deleteModulebookVersion(versionId);
-                window.location.href = `/study-program-history.html?id=${encodeURIComponent(studyProgramId)}`;
+                window.location.href = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
             } catch (error) {
                 setStatus("Delete this version failed: " + error.message);
             }

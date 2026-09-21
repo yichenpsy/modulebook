@@ -24,13 +24,13 @@ public class PdfImportController {
     // upload a PDF and runs Python
     @PostMapping("/api/pdf-import/normalize")
     public Map<String, JsonNode> normalize(
-        @RequestParam("studyProgramId") Long studyProgramId,
+        @RequestParam("modulebookId") Long modulebookId,
         @RequestParam(value = "modulebookReleaseDate", required = false) LocalDate modulebookReleaseDate,
         @RequestParam(value = "studyExaminationRegulationsDate", required = false) LocalDate studyExaminationRegulationsDate,
         @RequestParam("file") MultipartFile file
     ) throws Exception {
         return pdfImportService.importPdf(
-                studyProgramId,
+                modulebookId,
                 modulebookReleaseDate,
                 studyExaminationRegulationsDate,
                 file

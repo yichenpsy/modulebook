@@ -119,7 +119,7 @@ class ModuleChangeLogServiceTest {
     private Module module(String name) {
         Module module = new Module();
         module.setId(100L);
-        module.setStudyProgramId(10L);
+        module.setModulebookId(10L);
         module.setModuleNumber("B01");
         module.setName(name);
         module.setCredits(new BigDecimal("5.0"));

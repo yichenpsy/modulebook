@@ -76,7 +76,6 @@ public class ModulebookVersionRepository {
                         """
                         SELECT modulebook_versions.id,
                                modulebook_versions.modulebook_id,
-                               modulebook_versions.modulebook_id AS study_program_id,
                                modulebook_versions.version_number,
                                modulebook_versions.version_message,
                                modulebook_versions.snapshot_json::text AS snapshot_json,
@@ -95,12 +94,11 @@ public class ModulebookVersionRepository {
                 .findFirst();
     }
 
-    public List<ModulebookVersion> findByStudyProgramId(Long studyProgramId) {
+    public List<ModulebookVersion> findByModulebookId(Long modulebookId) {
         return jdbcTemplate.query(
                 """
                 SELECT modulebook_versions.id,
                        modulebook_versions.modulebook_id,
-                       modulebook_versions.modulebook_id AS study_program_id,
                        modulebook_versions.version_number,
                        modulebook_versions.version_message,
                        modulebook_versions.snapshot_json::text AS snapshot_json,
@@ -116,17 +114,17 @@ public class ModulebookVersionRepository {
                          modulebook_versions.id DESC
                 """,
                 rowMapper,
-                studyProgramId
+                modulebookId
         );
     }
 
-    public void deleteByStudyProgramId(Long studyProgramId) {
+    public void deleteByModulebookId(Long modulebookId) {
         jdbcTemplate.update(
                 """
                 DELETE FROM modulebook_versions
                 WHERE modulebook_id = ?
                 """,
-                studyProgramId
+                modulebookId
         );
     }
 
@@ -147,7 +145,6 @@ public class ModulebookVersionRepository {
             return new ModulebookVersion(
                     rs.getLong("id"),
                     getLongOrNull(rs, "modulebook_id"),
-                    rs.getLong("study_program_id"),
                     rs.getInt("version_number"),
                     rs.getString("version_message"),
                     rs.getString("snapshot_json"),

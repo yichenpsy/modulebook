@@ -41,14 +41,6 @@ public class ModulebookService {
         return modulebookRepository.findAll();
     }
 
-    public ModulebookResponse getByStudyProgramId(Long studyProgramId) {
-        return ModulebookMapper.toResponse(getById(studyProgramId));
-    }
-
-    public Modulebook getOrCreateForStudyProgramId(Long studyProgramId) {
-        return getById(studyProgramId);
-    }
-
     @Transactional
     public void delete(Long id) {
         getById(id);

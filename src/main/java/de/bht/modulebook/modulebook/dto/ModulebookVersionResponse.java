@@ -6,7 +6,6 @@ import java.time.LocalDate;
 public record ModulebookVersionResponse(
         Long id,
         Long modulebookId,
-        Long studyProgramId,
         Integer versionNumber,
         String versionMessage,
         String snapshotJson,
