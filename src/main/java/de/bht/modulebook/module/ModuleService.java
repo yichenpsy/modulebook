@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.workload.PresenceHourComponent;
+import de.bht.modulebook.module.dto.ModuleResponse;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
 import de.bht.modulebook.modulebook.ModulebookService;
@@ -39,6 +40,7 @@ public class ModuleService {
     private final ModulebookChangeSetService changeSetService;
     private final ModuleChangeLogService changeLogService;
     private final ModulebookService modulebookService;
+    private final ModuleViewRepository moduleViewRepository;
     
 
     public ModuleService(
@@ -47,7 +49,8 @@ public class ModuleService {
         ModuleTeachingFormRepository moduleTeachingFormRepository,
         ModulebookChangeSetService changeSetService,
         ModuleChangeLogService changeLogService,
-        ModulebookService modulebookService
+        ModulebookService modulebookService,
+        ModuleViewRepository moduleViewRepository
     ) {
         // The service needs the repository to access the database.
         this.moduleRepository = moduleRepository;
@@ -56,6 +59,7 @@ public class ModuleService {
         this.changeSetService = changeSetService;
         this.changeLogService = changeLogService;
         this.modulebookService = modulebookService;
+        this.moduleViewRepository = moduleViewRepository;
     }
 
     public Module create(Module module) {
@@ -129,6 +133,11 @@ public class ModuleService {
 
     public Module getById(Long id) {
         return moduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
+    }
+
+    public ModuleResponse getModuleView(Long id) {
+        return moduleViewRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Module not found"));
     }
 

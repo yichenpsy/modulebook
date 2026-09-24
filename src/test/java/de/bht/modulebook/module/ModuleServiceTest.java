@@ -55,6 +55,9 @@ class ModuleServiceTest {
     @Mock
     private ModulebookService modulebookService;
 
+    @Mock
+    private ModuleViewRepository moduleViewRepository;
+
     private ModuleService service;
 
     @BeforeEach
@@ -65,7 +68,8 @@ class ModuleServiceTest {
                 moduleTeachingFormRepository,
                 changeSetService,
                 changeLogService,
-                modulebookService
+                modulebookService,
+                moduleViewRepository
         );
         lenient().when(modulebookService.getById(any()))
                 .thenAnswer(invocation -> new Modulebook(

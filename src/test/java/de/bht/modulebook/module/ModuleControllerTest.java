@@ -93,8 +93,7 @@ class ModuleControllerTest {
 
         when(moduleService.create(any(Module.class), any(), eq(List.of()), eq("created module manually")))
                 .thenReturn(created);
-        when(moduleService.getWorkloadByModuleId(100L)).thenReturn(Optional.empty());
-        when(moduleService.getTeachingFormsByModuleId(100L)).thenReturn(List.of());
+        when(moduleService.getModuleView(100L)).thenReturn(ModuleMapper.toResponse(created));
 
         ModuleResponse response = controller.create(request);
 

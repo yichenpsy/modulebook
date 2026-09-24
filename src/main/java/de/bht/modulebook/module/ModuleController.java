@@ -31,11 +31,7 @@ public class ModuleController {
             request.teachingFormIds(),
             request.versionReason()
         );
-        return ModuleMapper.toResponse(
-            created,
-            moduleService.getWorkloadByModuleId(created.getId()).orElse(null),
-            moduleService.getTeachingFormsByModuleId(created.getId())
-        );
+        return moduleService.getModuleView(created.getId());
     }
 
     @GetMapping //GET /api/modules
@@ -48,12 +44,7 @@ public class ModuleController {
 
     @GetMapping("/{id}") //GET /api/modules/1
     public ModuleResponse getById(@PathVariable Long id) {
-        Module module = moduleService.getById(id);
-        return ModuleMapper.toResponse(
-            module,
-            moduleService.getWorkloadByModuleId(id).orElse(null),
-            moduleService.getTeachingFormsByModuleId(id)
-        );
+        return moduleService.getModuleView(id);
     }
 
     @PutMapping("/{id}") //PUT /api/modules/1
@@ -70,21 +61,13 @@ public class ModuleController {
             request.versionReason(),
             request.changedFieldPaths()
         );
-        return ModuleMapper.toResponse(
-            updated,
-            moduleService.getWorkloadByModuleId(id).orElse(null),
-            moduleService.getTeachingFormsByModuleId(id)
-        );
+        return moduleService.getModuleView(updated.getId());
     }
 
     @PatchMapping("/{id}/status")
     public ModuleResponse updateStatus(@PathVariable Long id, @RequestBody ModuleStatusRequest request) {
         Module updated = moduleService.updateModuleStatus(id, request.moduleStatus());
-        return ModuleMapper.toResponse(
-            updated,
-            moduleService.getWorkloadByModuleId(id).orElse(null),
-            moduleService.getTeachingFormsByModuleId(id)
-        );
+        return moduleService.getModuleView(updated.getId());
     }
 
     @DeleteMapping("/{id}") // DELETE /api/modules/1
