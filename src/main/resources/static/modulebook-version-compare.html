@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Compare Study Program Versions</title>
+    <title>Compare Modulebook Versions</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
     <nav>
-        <a href="/index.html">Study programs</a>
+        <a href="/index.html">Modulebooks</a>
     </nav>
 
-    <h1>Compare Study Program Versions</h1>
+    <h1>Compare Modulebook Versions</h1>
 
     <section>
         <div id="status" class="status">Loading versions...</div>
@@ -20,7 +20,7 @@
     </section>
 
     <section>
-        <h2 id="studyProgramTitle">Study program</h2>
+        <h2 id="studyProgramTitle">Modulebook</h2>
         <div class="compare-controls">
             <label>
                 From version
@@ -190,7 +190,7 @@
         function renderTitle() {
             if (!studyProgram) {
                 document.getElementById("studyProgramTitle").textContent =
-                    `Study program ${modulebookId}`;
+                    `Modulebook ${modulebookId}`;
                 return;
             }
 
@@ -284,11 +284,15 @@
                         moduleId: change.moduleId,
                         path: change.fieldPath,
                         oldValue: change.oldValue,
-                        newValue: change.newValue
+                        newValue: change.newValue,
+                        detailChangeSetId: change.changeSetId,
+                        detailChangeId: change.id
                     });
                     return;
                 }
                 existing.newValue = change.newValue;
+                existing.detailChangeSetId = change.changeSetId;
+                existing.detailChangeId = change.id;
             });
 
             return Array.from(byField.values())
@@ -296,7 +300,9 @@
                     moduleId: change.moduleId,
                     path: change.path,
                     oldValue: change.newValue,
-                    newValue: change.oldValue
+                    newValue: change.oldValue,
+                    detailChangeSetId: change.detailChangeSetId,
+                    detailChangeId: change.detailChangeId
                 } : change)
                 .filter(change => !valuesEqual(change.oldValue, change.newValue))
                 .sort((left, right) =>
@@ -322,6 +328,7 @@
                             <th>Field</th>
                             <th>${escapeHtml(fromPoint.version)}</th>
                             <th>${escapeHtml(toPoint.version)}</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -330,10 +337,13 @@
                             const newValue = formatFieldChangeValue(change.path, change.newValue);
                             return `
                                 <tr>
-                                    <td>${escapeHtml(moduleLabel(moduleById(change.moduleId), change.moduleId))}</td>
+                                    <td>${escapeHtml(compareModuleLabel(change))}</td>
                                     <td>${escapeHtml(readablePath(change.path))}</td>
-                                    <td class="diff-old">${highlightOldValue(oldValue, newValue)}</td>
-                                    <td class="diff-new">${highlightNewValue(oldValue, newValue)}</td>
+                                    <td class="diff-old">${renderCompareValue(change.path, change.oldValue, oldValue, newValue, "old")}</td>
+                                    <td class="diff-new">${renderCompareValue(change.path, change.newValue, oldValue, newValue, "new")}</td>
+                                    <td class="row-actions">
+                                        <a href="${fieldChangeDetailUrl(change)}">Change details</a>
+                                    </td>
                                 </tr>
                             `;
                         }).join("")}
@@ -389,7 +399,7 @@
 
         function moduleLabel(module, moduleId) {
             if (!moduleId) {
-                return "Study program";
+                return "Modulebook";
             }
 
             if (!module) {
@@ -450,19 +460,195 @@
             if (fieldPath === "teachingFormIds") {
                 return teachingFormLabelsForJsonValue(value);
             }
+            if (fieldPath === "module.created") {
+                if (isJsonNull(value)) {
+                    return "--";
+                }
+                return `created module "${lifecycleSnapshotLabelFromValue(value)}"`;
+            }
+            if (fieldPath === "module.deleted") {
+                if (isJsonNull(value)) {
+                    return "--";
+                }
+                return `deleted module "${lifecycleSnapshotLabelFromValue(value)}"`;
+            }
 
             return formatJsonValue(value);
+        }
+
+        function renderCompareValue(fieldPath, rawValue, oldValue, newValue, side) {
+            if (fieldPath === "module.created" || fieldPath === "module.deleted") {
+                if (isJsonNull(rawValue)) {
+                    return "--";
+                }
+                const snapshot = parseLifecycleSnapshot(rawValue);
+                return snapshot
+                    ? renderModuleSnapshotTable(snapshot, fieldPath === "module.deleted")
+                    : escapeHtml(formatJsonValue(rawValue));
+            }
+
+            return side === "old"
+                ? highlightOldValue(oldValue, newValue)
+                : highlightNewValue(oldValue, newValue);
+        }
+
+        function fieldChangeDetailUrl(change) {
+            return `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}&changeSetId=${encodeURIComponent(change.detailChangeSetId)}&changeId=${encodeURIComponent(change.detailChangeId)}&source=versionControl`;
+        }
+
+        function compareModuleLabel(change) {
+            if (change.path === "module.created") {
+                return lifecycleSnapshotLabelFromValue(change.newValue) || moduleLabel(moduleById(change.moduleId), change.moduleId);
+            }
+            if (change.path === "module.deleted") {
+                return lifecycleSnapshotLabelFromValue(change.oldValue) || moduleLabel(moduleById(change.moduleId), change.moduleId);
+            }
+
+            return moduleLabel(moduleById(change.moduleId), change.moduleId);
+        }
+
+        function lifecycleSnapshotLabelFromValue(value) {
+            const snapshot = parseLifecycleSnapshot(value);
+            if (!snapshot) {
+                return "";
+            }
+
+            return moduleSnapshotLabel(snapshot.module || snapshot);
+        }
+
+        function parseLifecycleSnapshot(value) {
+            const parsed = parseJsonValue(value);
+            if (!parsed || typeof parsed !== "object") {
+                return null;
+            }
+
+            return parsed;
+        }
+
+        function moduleSnapshotLabel(module) {
+            if (!module || typeof module !== "object") {
+                return "Module";
+            }
+
+            const moduleNumber = module.moduleNumber || "";
+            const title = module.name || module.titleDe || module.titleEn || "";
+            const label = `${moduleNumber} ${title}`.trim();
+            return label || (module.id ? `Module ${module.id}` : "Module");
+        }
+
+        function renderModuleSnapshotTable(snapshot, deleted) {
+            const module = snapshot.module || snapshot;
+            const workload = snapshot.workload || null;
+            const teachingFormIds = snapshot.teachingFormIds || [];
+            const tableClass = deleted
+                ? "modulebook-module-table compare-module-snapshot-table deleted-module-snapshot"
+                : "modulebook-module-table compare-module-snapshot-table";
+
+            return `
+                <table class="${tableClass}">
+                    <thead>
+                        <tr>
+                            <th>Datenfeld</th>
+                            <th>Erklärung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${moduleSnapshotRows(module, workload, teachingFormIds)}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function moduleSnapshotRows(module, workload, teachingFormIds) {
+            const rows = [
+                ["Modulnummer", module.moduleNumber],
+                ["Titel", module.name],
+                ["Koordinator/in", module.coordinator],
+                ["Leistungspunkte", creditsText(module.credits)],
+                ["Workload", workloadText(workload)],
+                ["Verwendbarkeit", module.applicability],
+                ["Lerngebiet", module.learningArea],
+                ["Lernziele / Kompetenzen", module.learningObjectives],
+                ["Voraussetzungen", module.prerequisites],
+                ["Niveaustufe", module.level],
+                ["Lernform", teachingFormLabelsForIds(teachingFormIds)],
+                ["Status", module.moduleStatus],
+                ["Häufigkeit des Angebotes", module.frequency],
+                ["Prüfungsform", module.examinationForm],
+                ["Inhalte", module.contents],
+                ["Literatur", module.literature],
+                ["Weitere Hinweise", module.additionalNotes],
+                ["Modulgewicht", module.moduleWeight]
+            ];
+
+            return rows.map(([label, value]) => `
+                <tr>
+                    <td>${escapeHtml(label)}</td>
+                    <td>${escapeHtml(String(value ?? ""))}</td>
+                </tr>
+            `).join("");
+        }
+
+        function creditsText(credits) {
+            return credits === null || credits === undefined || credits === "" ? "" : `${credits} Cr`;
+        }
+
+        function workloadText(workload) {
+            if (!workload) {
+                return "";
+            }
+
+            const components = workload.components && workload.components.length > 0
+                ? workload.components
+                    .map(component => {
+                        const teachingForm = teachingFormLabelForId(component.teachingFormId);
+                        return `${formatNumber(component.swsAmount)} SWS ${teachingForm}`.trim();
+                    })
+                    .filter(Boolean)
+                    .join(" + ")
+                : "";
+
+            if (workload.presenceHours !== null && workload.presenceHours !== undefined) {
+                const componentPart = components ? ` (${components})` : "";
+                const selfStudyPart = workload.selfStudyHours !== null && workload.selfStudyHours !== undefined
+                    ? `, ${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`
+                    : "";
+                return `${formatNumber(workload.presenceHours)} Stunden Präsenz${componentPart}${selfStudyPart}`;
+            }
+
+            if (workload.selfStudyHours !== null && workload.selfStudyHours !== undefined) {
+                return `${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`;
+            }
+
+            return workload.rawText || components;
+        }
+
+        function formatNumber(value) {
+            if (value === null || value === undefined || value === "") {
+                return "";
+            }
+
+            const number = Number(value);
+            return Number.isInteger(number) ? String(number) : String(value);
         }
 
         function teachingFormLabelsForJsonValue(value) {
             const parsed = parseJsonValue(value);
             const ids = Array.isArray(parsed) ? parsed : [];
+            return teachingFormLabelsForIds(ids);
+        }
+
+        function teachingFormLabelsForIds(ids) {
             return normalizedTeachingFormIds(ids)
                 .map(id => {
-                    const teachingForm = teachingForms.find(option => Number(option.id) === id);
-                    return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+                    return teachingFormLabelForId(id);
                 })
                 .join(", ");
+        }
+
+        function teachingFormLabelForId(id) {
+            const teachingForm = teachingForms.find(option => Number(option.id) === Number(id));
+            return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
         }
 
         function parseJsonValue(value) {
@@ -475,6 +661,10 @@
             } catch (error) {
                 return value;
             }
+        }
+
+        function isJsonNull(value) {
+            return value === null || value === undefined || value === "null";
         }
 
         function normalizedTeachingFormIds(ids) {
@@ -584,6 +774,13 @@
         }
 
         function readablePath(path) {
+            if (path === "module.created") {
+                return "created all fields";
+            }
+            if (path === "module.deleted") {
+                return "deleted all fields";
+            }
+
             return String(path || "")
                 .replace(/^module\./, "")
                 .replaceAll(".", " / ");

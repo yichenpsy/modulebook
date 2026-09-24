@@ -150,8 +150,8 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         );
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
-                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Import Architektur BACHELOR PDF"))
+                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of(teachingForm(1L, "SU"), teachingForm(2L, "UE")));
         when(importedModuleMapper.toModule(imported, "Architektur", "BACHELOR")).thenReturn(mapped);
         when(importedModuleMapper.toWorkload(imported, java.util.Map.of("SU", 1L, "UE", 2L))).thenReturn(workload);
@@ -209,8 +209,8 @@ class PdfImportServiceTest {
                 Instant.parse("2026-01-01T00:00:00Z")
         );
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
-                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Import Architektur BACHELOR PDF"))
+                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
         when(importedModuleMapper.toModule(imported, "Architektur", "BACHELOR")).thenReturn(mapped);
         when(importedModuleMapper.toWorkload(imported, java.util.Map.of())).thenReturn(null);
@@ -275,8 +275,8 @@ class PdfImportServiceTest {
         );
 
         when(modulebookService.getById(10L)).thenReturn(modulebook);
-        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF"))
-                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Re-import Architektur BACHELOR PDF", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Import Architektur BACHELOR PDF"))
+                .thenReturn(new ModulebookChangeSet(99L, 10L, ModulebookChangeSetService.SOURCE_PDF_IMPORT, "Import Architektur BACHELOR PDF", null));
         when(teachingFormRepository.findAll()).thenReturn(List.of());
         when(moduleService.getByModulebookId(10L)).thenReturn(List.of(existingB01, existingB02, existingB03, existingB04));
         when(importedModuleMapper.moduleNumber(importedB01)).thenReturn("B01");

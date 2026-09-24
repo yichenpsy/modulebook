@@ -19,12 +19,44 @@ import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class ModuleChangeLogService {
+    public static final String MODULE_CREATED_FIELD = "module.created";
+    public static final String MODULE_DELETED_FIELD = "module.deleted";
+
     private final ModuleFieldChangeRepository repository;
     private final JsonMapper jsonMapper;
 
     public ModuleChangeLogService(ModuleFieldChangeRepository repository, JsonMapper jsonMapper) {
         this.repository = repository;
         this.jsonMapper = jsonMapper;
+    }
+
+    public static boolean isLifecycleChange(String fieldPath) {
+        return MODULE_CREATED_FIELD.equals(fieldPath) || MODULE_DELETED_FIELD.equals(fieldPath);
+    }
+
+    public void saveModuleCreated(Long changeSetId, Module module) {
+        repository.insert(
+                changeSetId,
+                module.getId(),
+                MODULE_CREATED_FIELD,
+                toJson(null),
+                toJson(CreatedModuleSnapshot.from(module))
+        );
+    }
+
+    public void saveModuleDeleted(
+            Long changeSetId,
+            Module module,
+            ModuleWorkload workload,
+            List<Long> teachingFormIds
+    ) {
+        repository.insert(
+                changeSetId,
+                module.getId(),
+                MODULE_DELETED_FIELD,
+                toJson(DeletedModuleSnapshot.from(module, workload, teachingFormIds)),
+                toJson(null)
+        );
     }
 
     public void saveChanges(
@@ -214,6 +246,42 @@ public class ModuleChangeLogService {
             return jsonMapper.writeValueAsString(value);
         } catch (JacksonException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not serialize field change");
+        }
+    }
+
+    private record CreatedModuleSnapshot(
+            Long id,
+            String moduleNumber,
+            String name,
+            BigDecimal credits,
+            String moduleType
+    ) {
+        private static CreatedModuleSnapshot from(Module module) {
+            return new CreatedModuleSnapshot(
+                    module.getId(),
+                    module.getModuleNumber(),
+                    module.getName(),
+                    module.getCredits(),
+                    module.getModuleType()
+            );
+        }
+    }
+
+    private record DeletedModuleSnapshot(
+            Module module,
+            ModuleWorkload workload,
+            List<Long> teachingFormIds
+    ) {
+        private static DeletedModuleSnapshot from(
+                Module module,
+                ModuleWorkload workload,
+                List<Long> teachingFormIds
+        ) {
+            return new DeletedModuleSnapshot(
+                    module,
+                    workload,
+                    teachingFormIds == null ? List.of() : teachingFormIds
+            );
         }
     }
 }

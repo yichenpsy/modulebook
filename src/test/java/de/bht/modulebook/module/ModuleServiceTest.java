@@ -102,10 +102,11 @@ class ModuleServiceTest {
         assertThat(result.getId()).isEqualTo(100L);
         assertThat(request.getModuleStatus()).isEqualTo(ModuleService.ACTIVE_STATUS);
 
-        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, changeLogService);
         inOrder.verify(changeSetService).create(10L, ModulebookChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.MANUAL_INITIAL_VERSION_REASON);
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
+        inOrder.verify(changeLogService).saveModuleCreated(99L, inserted);
     }
 
     @Test
@@ -132,10 +133,11 @@ class ModuleServiceTest {
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, changeLogService);
         inOrder.verify(changeSetService).create(10L, ModulebookChangeSetService.SOURCE_INITIAL_MODULE, ModuleService.PDF_IMPORT_INITIAL_VERSION_REASON);
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
+        inOrder.verify(changeLogService).saveModuleCreated(99L, inserted);
     }
 
     @Test
@@ -162,10 +164,11 @@ class ModuleServiceTest {
 
         assertThat(result.getId()).isEqualTo(100L);
 
-        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository);
+        InOrder inOrder = inOrder(changeSetService, moduleRepository, moduleTeachingFormRepository, changeLogService);
         inOrder.verify(changeSetService).create(10L, ModulebookChangeSetService.SOURCE_INITIAL_MODULE, "created module manually");
         inOrder.verify(moduleRepository).insert(request);
         inOrder.verify(moduleTeachingFormRepository).replaceForModule(100L, List.of());
+        inOrder.verify(changeLogService).saveModuleCreated(99L, inserted);
     }
 
     @Test
@@ -254,15 +257,17 @@ class ModuleServiceTest {
         when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module"))
                 .thenReturn(new ModulebookChangeSet(77L, 10L, ModulebookChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module", null));
         when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));
+        when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.empty());
+        when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of());
         when(moduleRepository.delete(100L)).thenReturn(true);
 
         service.delete(100L, "DELETE");
 
-        InOrder inOrder = inOrder(moduleRepository, changeSetService);
+        InOrder inOrder = inOrder(moduleRepository, changeSetService, changeLogService);
         inOrder.verify(moduleRepository).findById(100L);
         inOrder.verify(changeSetService).create(10L, ModulebookChangeSetService.SOURCE_DELETE, "deleted module B01 Old Module");
+        inOrder.verify(changeLogService).saveModuleDeleted(77L, oldModule, null, List.of());
         inOrder.verify(moduleRepository).delete(100L);
-        verifyNoInteractions(changeLogService);
     }
 
     @Test

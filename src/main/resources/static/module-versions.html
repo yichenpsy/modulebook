@@ -7,7 +7,7 @@
 </head>
 <body>
     <nav>
-        <a href="/index.html">Study programs</a>
+        <a href="/index.html">Modulebooks</a>
     </nav>
 
     <h1>Module Change Log</h1>
@@ -16,8 +16,7 @@
         <div id="status" class="status">Loading change log...</div>
         <div class="form-actions">
             <a id="editLink" href="/index.html">Back to module</a>
-            <a id="modulebooksLink" href="/index.html">Back to study programs</a>
-            <a id="compareLink" href="/index.html" hidden>Compare changes</a>
+            <a id="modulebooksLink" href="/index.html">Back to Modulebooks</a>
         </div>
     </section>
 
@@ -43,7 +42,6 @@
             }
 
             document.getElementById("editLink").href = `/module-edit.html?id=${moduleId}`;
-            document.getElementById("compareLink").href = `/module-version-compare.html?id=${moduleId}`;
 
             try {
                 currentModule = await loadModule(moduleId);
@@ -57,7 +55,6 @@
                 buildChangeGroups();
                 renderTitle();
                 renderChanges();
-                document.getElementById("compareLink").hidden = changeGroups.length < 2;
                 setStatus(`Loaded ${changeGroups.length} change sets.`);
             } catch (error) {
                 setStatus("Could not load change log: " + error.message);
@@ -113,42 +110,29 @@
                             <th>Change set</th>
                             <th>Source</th>
                             <th>Reason</th>
-                            <th>Field changes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${changeGroups.map(group => `
-                            <tr>
-                                <td>${escapeHtml(formatDate(group.changeSet.createdAt))}</td>
-                                <td>${escapeHtml(String(group.changeSet.id))}</td>
-                                <td>${escapeHtml(group.changeSet.sourceType || "")}</td>
-                                <td>${escapeHtml(group.changeSet.reason || "")}</td>
-                                <td>${renderFieldChangeList(group.changes)}</td>
-                            </tr>
-                        `).join("")}
-                    </tbody>
-                </table>
-            `;
-        }
-
-        function renderFieldChangeList(changes) {
-            return `
-                <table>
-                    <thead>
-                        <tr>
                             <th>Field</th>
                             <th>Old value</th>
                             <th>New value</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${changes.map(change => `
-                            <tr>
-                                <td>${escapeHtml(readablePath(change.fieldPath))}</td>
-                                <td class="diff-old">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.oldValue))}</td>
-                                <td class="diff-new">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.newValue))}</td>
-                            </tr>
-                        `).join("")}
+                        ${changeGroups.flatMap(group =>
+                            group.changes.map(change => `
+                                <tr>
+                                    <td>${escapeHtml(formatDate(group.changeSet.createdAt))}</td>
+                                    <td>${escapeHtml(String(group.changeSet.id))}</td>
+                                    <td>${escapeHtml(group.changeSet.sourceType || "")}</td>
+                                    <td>${escapeHtml(group.changeSet.reason || "")}</td>
+                                    <td>${escapeHtml(readablePath(change.fieldPath))}</td>
+                                    <td class="diff-old">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.oldValue))}</td>
+                                    <td class="diff-new">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.newValue))}</td>
+                                    <td class="row-actions">
+                                        <a href="${fieldChangeDetailUrl(group.changeSet.id, change.id)}">Change details</a>
+                                    </td>
+                                </tr>
+                            `)
+                        ).join("")}
                     </tbody>
                 </table>
             `;
@@ -177,8 +161,34 @@
             if (fieldPath === "teachingFormIds") {
                 return teachingFormLabelsForJsonValue(value);
             }
+            if (fieldPath === "module.created") {
+                if (isJsonNull(value)) {
+                    return "--";
+                }
+                return `created module "${lifecycleSnapshotLabelFromValue(value)}"`;
+            }
+            if (fieldPath === "module.deleted") {
+                return lifecycleSnapshotLabelFromValue(value);
+            }
 
             return formatJsonValue(value);
+        }
+
+        function fieldChangeDetailUrl(changeSetId, changeId) {
+            return `/modulebook-history.html?id=${encodeURIComponent(currentModule.modulebookId)}&changeSetId=${encodeURIComponent(changeSetId)}&changeId=${encodeURIComponent(changeId)}&moduleLogId=${encodeURIComponent(moduleId)}`;
+        }
+
+        function lifecycleSnapshotLabelFromValue(value) {
+            const parsed = parseJsonValue(value);
+            if (!parsed || typeof parsed !== "object") {
+                return "";
+            }
+
+            const module = parsed.module || parsed;
+            const moduleNumber = module.moduleNumber || "";
+            const title = module.name || module.titleDe || module.titleEn || "";
+            const label = `${moduleNumber} ${title}`.trim();
+            return label || (module.id ? `Module ${module.id}` : "Module");
         }
 
         function teachingFormLabelsForJsonValue(value) {
@@ -204,6 +214,10 @@
             }
         }
 
+        function isJsonNull(value) {
+            return value === null || value === undefined || value === "null";
+        }
+
         function normalizedTeachingFormIds(ids) {
             return (ids || [])
                 .map(Number)
@@ -217,6 +231,13 @@
         }
 
         function readablePath(path) {
+            if (path === "module.created") {
+                return "created module";
+            }
+            if (path === "module.deleted") {
+                return "deleted module";
+            }
+
             return String(path || "")
                 .replace(/^module\./, "")
                 .replaceAll(".", " / ");

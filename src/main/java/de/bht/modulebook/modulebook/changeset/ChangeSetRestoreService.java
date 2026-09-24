@@ -89,7 +89,7 @@ public class ChangeSetRestoreService {
                 .collect(java.util.stream.Collectors.toSet());
 
         restoreFields(restoreChangeSetIds, moduleIdsToDelete, restoreChangeSet.getId());
-        deleteCreatedModules(modulesToDelete);
+        deleteCreatedModules(modulesToDelete, restoreChangeSet.getId());
         changeSetRepository.markDiscarded(restoreChangeSetIds, restoreChangeSet.getId());
 
         return restoreChangeSet;
@@ -111,7 +111,7 @@ public class ChangeSetRestoreService {
                 .collect(java.util.stream.Collectors.toSet());
 
         restoreFields(laterChangeSetIds, moduleIdsToDelete, null);
-        deleteCreatedModules(modulesToDelete);
+        deleteCreatedModules(modulesToDelete, null);
         changeSetRepository.deleteByIds(laterChangeSetIds);
 
         return target;
@@ -153,7 +153,9 @@ public class ChangeSetRestoreService {
         Map<ModuleFieldKey, ModuleFieldChange> oldestChangeByField = new HashMap<>();
 
         for (ModuleFieldChange change : changes) {
-            if (change.getModuleId() == null || moduleIdsToDelete.contains(change.getModuleId())) {
+            if (ModuleChangeLogService.isLifecycleChange(change.getFieldPath())
+                    || change.getModuleId() == null
+                    || moduleIdsToDelete.contains(change.getModuleId())) {
                 continue;
             }
             ModuleFieldKey key = new ModuleFieldKey(change.getModuleId(), change.getFieldPath());
@@ -229,8 +231,17 @@ public class ChangeSetRestoreService {
         }
     }
 
-    private void deleteCreatedModules(List<Module> modulesToDelete) {
+    private void deleteCreatedModules(List<Module> modulesToDelete, Long restoreChangeSetId) {
         for (Module module : modulesToDelete) {
+            if (restoreChangeSetId != null) {
+                Long moduleId = module.getId();
+                changeLogService.saveModuleDeleted(
+                        restoreChangeSetId,
+                        module,
+                        moduleId == null ? null : workloadRepository.findByModuleId(moduleId).orElse(null),
+                        moduleId == null ? List.of() : teachingFormIdsByModuleId(moduleId)
+                );
+            }
             if (module.getId() != null) {
                 moduleRepository.delete(module.getId());
             }

@@ -7,7 +7,7 @@
 </head>
 <body>
     <nav>
-        <a href="/index.html">Study programs</a>
+        <a href="/index.html">Modulebooks</a>
     </nav>
 
     <h1>Study Program Change Log</h1>
@@ -30,6 +30,10 @@
         const params = new URLSearchParams(window.location.search);
         const modulebookId = params.get("id");
         const selectedChangeSetId = params.get("changeSetId");
+        const selectedChangeId = params.get("changeId");
+        const sourceModuleLogId = params.get("moduleLogId");
+        const sourcePage = params.get("source");
+        const fromVersionControl = sourcePage === "versionControl";
         const selectedModulebookVersionId = params.get("modulebookVersionId") || params.get("modulebookTagId");
         let studyProgram = null;
         let modules = [];
@@ -49,6 +53,10 @@
             document.getElementById("backLink").href = `/index.html?modulebookId=${modulebookId}`;
             document.getElementById("compareVersionLink").href =
                 `/modulebook-version-compare.html?id=${encodeURIComponent(modulebookId)}`;
+            if (sourceModuleLogId || fromVersionControl) {
+                document.getElementById("backLink").hidden = true;
+                document.getElementById("compareVersionLink").hidden = true;
+            }
 
             try {
                 const modulebooks = await loadModulebooks();
@@ -62,7 +70,7 @@
                 await loadVisibleFieldChanges();
                 calculateHistoryVersions();
                 renderTitle();
-                renderHistory();
+                await renderHistory();
                 setStatus(`Loaded ${changeSets.length} change sets and ${modulebookVersions.length} modulebook versions.`);
             } catch (error) {
                 setStatus("Could not load study program change log: " + error.message);
@@ -93,11 +101,16 @@
                 modulebookLabel(studyProgram);
         }
 
-        function renderHistory() {
+        async function renderHistory() {
             const container = document.getElementById("history");
 
             if (changeSets.length === 0 && modulebookVersions.length === 0) {
                 container.textContent = "No change log exists for this study program yet.";
+                return;
+            }
+
+            if (selectedChangeSetId && selectedChangeId) {
+                await renderFieldChangeDetail(container);
                 return;
             }
 
@@ -333,6 +346,10 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Created</th>
+                                <th>Change set</th>
+                                <th>Source</th>
+                                <th>Reason</th>
                                 <th>Module</th>
                                 <th>Field</th>
                                 <th>Old value</th>
@@ -345,13 +362,20 @@
                                 const module = moduleById(change.moduleId);
                                 return `
                                     <tr>
-                                        <td>${escapeHtml(moduleLabel(module, change.moduleId))}</td>
+                                        <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
+                                        <td>${escapeHtml(String(changeSet.id))}</td>
+                                        <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
+                                        <td>${escapeHtml(changeSet.reason || "")}</td>
+                                        <td>${escapeHtml(changeModuleLabel(change, module))}</td>
                                         <td>${escapeHtml(readablePath(change.fieldPath))}</td>
                                         <td class="diff-old">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.oldValue))}</td>
                                         <td class="diff-new">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.newValue))}</td>
                                         <td class="row-actions">
-                                            <a href="/module-versions.html?id=${escapeHtml(String(change.moduleId))}">Module log</a>
-                                            <a href="/module-edit.html?id=${escapeHtml(String(change.moduleId))}">Edit</a>
+                                            <a href="${fieldChangeDetailUrl(changeSet.id, change.id)}">Change details</a>
+                                            ${change.moduleId ? `
+                                                <a href="/module-versions.html?id=${escapeHtml(String(change.moduleId))}">Module log</a>
+                                                <a href="/module-edit.html?id=${escapeHtml(String(change.moduleId))}">Edit</a>
+                                            ` : ""}
                                         </td>
                                     </tr>
                                 `;
@@ -362,9 +386,144 @@
             `;
         }
 
+        async function renderFieldChangeDetail(container) {
+            const changeSet = changeSets.find(item => String(item.id) === String(selectedChangeSetId));
+            if (!changeSet) {
+                container.textContent = "Change set not found.";
+                return;
+            }
+
+            const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
+            const change = changes.find(item => String(item.id) === String(selectedChangeId));
+            if (!change) {
+                container.textContent = "Change not found.";
+                return;
+            }
+
+            const module = moduleById(change.moduleId);
+            const changeSetUrl = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}&changeSetId=${encodeURIComponent(changeSet.id)}`;
+            const programHistoryUrl = `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}`;
+            const moduleLogUrl = sourceModuleLogId
+                ? `/module-versions.html?id=${encodeURIComponent(sourceModuleLogId)}`
+                : "";
+            const versionControlUrl = `/modulebook-version-compare.html?id=${encodeURIComponent(modulebookId)}`;
+            const lifecycleSnapshot = await lifecycleSnapshotForDetail(change);
+
+            container.innerHTML = `
+                <div class="form-actions">
+                    ${sourceModuleLogId ? `
+                        <a href="${moduleLogUrl}">Back to Module Change Log</a>
+                    ` : fromVersionControl ? `
+                        <a href="${versionControlUrl}">Back to version control</a>
+                    ` : `
+                        <a href="${changeSetUrl}">Back to change set</a>
+                        <a href="${programHistoryUrl}">Back to program history</a>
+                    `}
+                </div>
+                <h3>Change details ${escapeHtml(String(change.id))}</h3>
+                <dl class="detail-list">
+                    <dt>Source</dt>
+                    <dd>${escapeHtml(changeSetSourceLabel(changeSet))}</dd>
+                    <dt>Reason</dt>
+                    <dd>${escapeHtml(changeSet.reason || "")}</dd>
+                    <dt>Changed at</dt>
+                    <dd>${escapeHtml(formatDate(change.createdAt || changeSet.createdAt))}</dd>
+                    ${lifecycleSnapshot ? renderModuleSnapshotMetadataRows(lifecycleSnapshot) : ""}
+                </dl>
+                ${lifecycleSnapshot ? renderModuleSnapshotDetail(lifecycleSnapshot, change.fieldPath) : renderFieldValueDetail(change)}
+            `;
+        }
+
+        function renderFieldValueDetail(change) {
+            return `
+                <table class="change-detail-value-table">
+                    <thead>
+                        <tr>
+                            <th>Old value</th>
+                            <th>New value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="diff-old">${escapeHtml(formatJsonValue(change.oldValue))}</td>
+                            <td class="diff-new">${escapeHtml(formatJsonValue(change.newValue))}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function renderModuleSnapshotDetail(snapshot, fieldPath) {
+            const module = snapshot.module || snapshot;
+            const workload = snapshot.workload || null;
+            const teachingFormIds = snapshot.teachingFormIds || [];
+            const heading = fieldPath === "module.created" ? "Created module snapshot" : "Deleted module snapshot";
+
+            return `
+                <h4>${escapeHtml(heading)}</h4>
+                <div class="module-view-details">
+                    <table class="modulebook-module-table">
+                        <thead>
+                            <tr>
+                                <th>Datenfeld</th>
+                                <th>Erklärung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${moduleSnapshotRows(module, workload, teachingFormIds)}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderModuleSnapshotMetadataRows(snapshot) {
+            const module = snapshot.module || snapshot;
+            const rows = [
+                ["Module created at", formatDate(module.createdAt)],
+                ["Module updated at", formatDate(module.updatedAt)]
+            ];
+
+            return rows.map(([label, value]) => `
+                <dt>${escapeHtml(label)}</dt>
+                <dd>${escapeHtml(String(value ?? ""))}</dd>
+            `).join("");
+        }
+
+        function moduleSnapshotRows(module, workload, teachingFormIds) {
+            const rows = [
+                ["Modulnummer", module.moduleNumber],
+                ["Titel", module.name],
+                ["Koordinator/in", module.coordinator],
+                ["Leistungspunkte", creditsText(module.credits)],
+                ["Workload", workloadText(workload)],
+                ["Verwendbarkeit", module.applicability],
+                ["Lerngebiet", module.learningArea],
+                ["Lernziele / Kompetenzen", module.learningObjectives],
+                ["Voraussetzungen", module.prerequisites],
+                ["Niveaustufe", module.level],
+                ["Lernform", teachingFormLabelsForIds(teachingFormIds)],
+                ["Status", module.moduleStatus],
+                ["Häufigkeit des Angebotes", module.frequency],
+                ["Prüfungsform", module.examinationForm],
+                ["Inhalte", module.contents],
+                ["Literatur", module.literature],
+                ["Weitere Hinweise", module.additionalNotes],
+                ["Modulgewicht", module.moduleWeight]
+            ];
+
+            return rows
+                .map(([label, value]) => `
+                    <tr>
+                        <td>${escapeHtml(label)}</td>
+                        <td>${formatModuleSnapshotFieldHtml(label, value)}</td>
+                    </tr>
+                `).join("");
+        }
+
         function moduleSummary(changes) {
             const labels = Array.from(new Set(
-                changes.map(change => moduleLabel(moduleById(change.moduleId), change.moduleId))
+                changes.map(change => changeModuleLabel(change, moduleById(change.moduleId)))
             ));
 
             return labels.length > 0 ? labels.join(", ") : "No field changes";
@@ -643,6 +802,19 @@
             return `${module.moduleNumber || module.id} ${module.name || ""}`.trim();
         }
 
+        function fieldChangeDetailUrl(changeSetId, changeId) {
+            return `/modulebook-history.html?id=${encodeURIComponent(modulebookId)}&changeSetId=${encodeURIComponent(changeSetId)}&changeId=${encodeURIComponent(changeId)}`;
+        }
+
+        function changeModuleLabel(change, module) {
+            const snapshotLabel = lifecycleSnapshotLabel(change);
+            if (snapshotLabel) {
+                return snapshotLabel;
+            }
+
+            return moduleLabel(module, change.moduleId);
+        }
+
         function formatJsonValue(value) {
             if (value === null || value === undefined) {
                 return "";
@@ -666,19 +838,317 @@
             if (fieldPath === "teachingFormIds") {
                 return teachingFormLabelsForJsonValue(value);
             }
+            if (fieldPath === "module.created") {
+                if (isJsonNull(value)) {
+                    return "--";
+                }
+                return `created module "${lifecycleSnapshotLabelFromValue(value)}"`;
+            }
+            if (fieldPath === "module.deleted") {
+                return lifecycleSnapshotLabelFromValue(value);
+            }
 
             return formatJsonValue(value);
+        }
+
+        function lifecycleSnapshotLabel(change) {
+            if (change.fieldPath !== "module.created" && change.fieldPath !== "module.deleted") {
+                return "";
+            }
+
+            return lifecycleSnapshotLabelFromValue(change.newValue)
+                || lifecycleSnapshotLabelFromValue(change.oldValue);
+        }
+
+        function lifecycleSnapshotLabelFromValue(value) {
+            const parsed = parseJsonValue(value);
+            if (!parsed || typeof parsed !== "object") {
+                return "";
+            }
+
+            const module = parsed.module || parsed;
+            return moduleSnapshotLabel(module);
+        }
+
+        function lifecycleSnapshotForChange(change) {
+            if (change.fieldPath === "module.created") {
+                return parseLifecycleSnapshot(change.newValue);
+            }
+            if (change.fieldPath === "module.deleted") {
+                return parseLifecycleSnapshot(change.oldValue);
+            }
+
+            return null;
+        }
+
+        async function lifecycleSnapshotForDetail(change) {
+            if (change.fieldPath === "module.created") {
+                return reconstructCreatedModuleSnapshot(change);
+            }
+
+            return lifecycleSnapshotForChange(change);
+        }
+
+        async function reconstructCreatedModuleSnapshot(change) {
+            const createdSnapshot = parseLifecycleSnapshot(change.newValue);
+            const moduleId = change.moduleId || createdSnapshot?.id;
+            if (!moduleId) {
+                return createdSnapshot;
+            }
+
+            try {
+                const [currentModule, moduleChanges] = await Promise.all([
+                    loadModule(moduleId),
+                    loadModuleFieldChanges(moduleId)
+                ]);
+                const snapshot = moduleResponseSnapshot(currentModule);
+                const laterChanges = moduleChanges
+                    .filter(item => isChangeAfter(item, change))
+                    .sort(compareFieldChangesDescending);
+
+                laterChanges.forEach(item => rollBackFieldChange(snapshot, item));
+                snapshot.module.updatedAt = snapshot.module.createdAt;
+                return snapshot;
+            } catch (error) {
+                return await reconstructCreatedModuleSnapshotFromDeleteSnapshot(change, moduleId)
+                    || createdSnapshot;
+            }
+        }
+
+        async function reconstructCreatedModuleSnapshotFromDeleteSnapshot(createChange, moduleId) {
+            await ensureAllFieldChangesLoaded();
+            const deleteChange = findDeletedModuleChange(moduleId, createChange);
+            if (!deleteChange) {
+                return null;
+            }
+
+            const snapshot = parseLifecycleSnapshot(deleteChange.oldValue);
+            if (!snapshot) {
+                return null;
+            }
+
+            allLoadedFieldChanges()
+                .filter(item => belongsToModule(item, moduleId))
+                .filter(item => isChangeAfter(item, createChange))
+                .filter(item => isChangeBefore(item, deleteChange))
+                .sort(compareFieldChangesDescending)
+                .forEach(item => rollBackFieldChange(snapshot, item));
+
+            if (snapshot.module) {
+                snapshot.module.updatedAt = snapshot.module.createdAt;
+            }
+            return snapshot;
+        }
+
+        async function ensureAllFieldChangesLoaded() {
+            const missingChangeSets = changeSets.filter(changeSet =>
+                !changesByChangeSetId.has(Number(changeSet.id))
+            );
+            if (missingChangeSets.length === 0) {
+                return;
+            }
+
+            const entries = await Promise.all(missingChangeSets.map(async changeSet => [
+                Number(changeSet.id),
+                await loadChangeSetFieldChanges(changeSet.id)
+            ]));
+            entries.forEach(([changeSetId, changes]) => {
+                changesByChangeSetId.set(changeSetId, changes);
+            });
+        }
+
+        function findDeletedModuleChange(moduleId, createChange) {
+            return allLoadedFieldChanges()
+                .filter(change => change.fieldPath === "module.deleted")
+                .filter(change => isChangeAfter(change, createChange))
+                .find(change => {
+                    const snapshot = parseLifecycleSnapshot(change.oldValue);
+                    const module = snapshot?.module || snapshot;
+                    return String(module?.id) === String(moduleId);
+                }) || null;
+        }
+
+        function allLoadedFieldChanges() {
+            return Array.from(changesByChangeSetId.values()).flat();
+        }
+
+        function belongsToModule(change, moduleId) {
+            return String(change.moduleId) === String(moduleId);
+        }
+
+        function moduleResponseSnapshot(module) {
+            return {
+                module: {
+                    id: module.id,
+                    modulebookId: module.modulebookId,
+                    moduleNumber: module.moduleNumber,
+                    name: module.name,
+                    credits: module.credits,
+                    description: module.description,
+                    moduleType: module.moduleType,
+                    titleDe: module.titleDe,
+                    titleEn: module.titleEn,
+                    coordinator: module.coordinator,
+                    applicability: module.applicability,
+                    learningArea: module.learningArea,
+                    learningObjectives: module.learningObjectives,
+                    prerequisites: module.prerequisites,
+                    level: module.level,
+                    moduleStatus: module.moduleStatus,
+                    moduleComments: module.moduleComments,
+                    frequency: module.frequency,
+                    examinationForm: module.examinationForm,
+                    contents: module.contents,
+                    literature: module.literature,
+                    additionalNotes: module.additionalNotes,
+                    moduleWeight: module.moduleWeight,
+                    createdAt: module.createdAt,
+                    updatedAt: module.updatedAt
+                },
+                workload: module.workload || null,
+                teachingFormIds: (module.teachingForms || []).map(teachingForm => teachingForm.id)
+            };
+        }
+
+        function isChangeAfter(candidate, baseChange) {
+            const candidateTime = new Date(candidate.createdAt).getTime();
+            const baseTime = new Date(baseChange.createdAt).getTime();
+            if (Number.isFinite(candidateTime) && Number.isFinite(baseTime) && candidateTime !== baseTime) {
+                return candidateTime > baseTime;
+            }
+
+            return Number(candidate.id) > Number(baseChange.id);
+        }
+
+        function isChangeBefore(candidate, baseChange) {
+            const candidateTime = new Date(candidate.createdAt).getTime();
+            const baseTime = new Date(baseChange.createdAt).getTime();
+            if (Number.isFinite(candidateTime) && Number.isFinite(baseTime) && candidateTime !== baseTime) {
+                return candidateTime < baseTime;
+            }
+
+            return Number(candidate.id) < Number(baseChange.id);
+        }
+
+        function compareFieldChangesDescending(left, right) {
+            const timeComparison = new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+            if (timeComparison !== 0 && Number.isFinite(timeComparison)) {
+                return timeComparison;
+            }
+
+            return Number(right.id) - Number(left.id);
+        }
+
+        function rollBackFieldChange(snapshot, change) {
+            if (change.fieldPath === "workload") {
+                snapshot.workload = parseJsonValue(change.oldValue);
+                return;
+            }
+            if (change.fieldPath === "teachingFormIds") {
+                const ids = parseJsonValue(change.oldValue);
+                snapshot.teachingFormIds = Array.isArray(ids) ? ids : [];
+                return;
+            }
+            if (!change.fieldPath || !change.fieldPath.startsWith("module.")) {
+                return;
+            }
+            if (change.fieldPath === "module.created" || change.fieldPath === "module.deleted") {
+                return;
+            }
+
+            const fieldName = change.fieldPath.replace(/^module\./, "");
+            snapshot.module[fieldName] = parseJsonValue(change.oldValue);
+        }
+
+        function parseLifecycleSnapshot(value) {
+            const parsed = parseJsonValue(value);
+            if (!parsed || typeof parsed !== "object") {
+                return null;
+            }
+
+            return parsed;
+        }
+
+        function moduleSnapshotLabel(module) {
+            if (!module || typeof module !== "object") {
+                return "Module";
+            }
+
+            const moduleNumber = module.moduleNumber || "";
+            const title = module.name || module.titleDe || module.titleEn || "";
+            const label = `${moduleNumber} ${title}`.trim();
+            return label || (module.id ? `Module ${module.id}` : "Module");
+        }
+
+        function creditsText(credits) {
+            return credits === null || credits === undefined || credits === "" ? "" : `${credits} Cr`;
+        }
+
+        function workloadText(workload) {
+            if (!workload) {
+                return "";
+            }
+
+            const components = workload.components && workload.components.length > 0
+                ? workload.components
+                    .map(component => {
+                        const teachingForm = teachingFormLabelForId(component.teachingFormId);
+                        return `${formatNumber(component.swsAmount)} SWS ${teachingForm}`.trim();
+                    })
+                    .filter(Boolean)
+                    .join(" + ")
+                : "";
+
+            if (workload.presenceHours !== null && workload.presenceHours !== undefined) {
+                const componentPart = components ? ` (${components})` : "";
+                const selfStudyPart = workload.selfStudyHours !== null && workload.selfStudyHours !== undefined
+                    ? `, ${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`
+                    : "";
+                return `${formatNumber(workload.presenceHours)} Stunden Präsenz${componentPart}${selfStudyPart}`;
+            }
+
+            if (workload.selfStudyHours !== null && workload.selfStudyHours !== undefined) {
+                return `${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`;
+            }
+
+            return workload.rawText || components;
+        }
+
+        function formatNumber(value) {
+            if (value === null || value === undefined || value === "") {
+                return "";
+            }
+
+            const number = Number(value);
+            return Number.isInteger(number) ? String(number) : String(value);
+        }
+
+        function formatModuleSnapshotFieldHtml(label, value) {
+            const text = String(value ?? "");
+            if (!["Lernziele / Kompetenzen", "Prüfungsform", "Inhalte", "Literatur"].includes(label)) {
+                return escapeHtml(text);
+            }
+
+            return escapeHtml(text);
         }
 
         function teachingFormLabelsForJsonValue(value) {
             const parsed = parseJsonValue(value);
             const ids = Array.isArray(parsed) ? parsed : [];
+            return teachingFormLabelsForIds(ids);
+        }
+
+        function teachingFormLabelsForIds(ids) {
             return normalizedTeachingFormIds(ids)
                 .map(id => {
-                    const teachingForm = teachingForms.find(option => Number(option.id) === id);
-                    return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+                    return teachingFormLabelForId(id);
                 })
                 .join(", ");
+        }
+
+        function teachingFormLabelForId(id) {
+            const teachingForm = teachingForms.find(option => Number(option.id) === Number(id));
+            return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
         }
 
         function parseJsonValue(value) {
@@ -691,6 +1161,10 @@
             } catch (error) {
                 return value;
             }
+        }
+
+        function isJsonNull(value) {
+            return value === null || value === undefined || value === "null";
         }
 
         function normalizedTeachingFormIds(ids) {
@@ -706,6 +1180,13 @@
         }
 
         function readablePath(path) {
+            if (path === "module.created") {
+                return "created module";
+            }
+            if (path === "module.deleted") {
+                return "deleted module";
+            }
+
             return String(path || "")
                 .replace(/^module\./, "")
                 .replaceAll(".", " / ");

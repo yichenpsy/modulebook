@@ -20,6 +20,7 @@ import de.bht.modulebook.module.workload.PresenceHourComponent;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
 import de.bht.modulebook.modulebook.ModulebookService;
+import de.bht.modulebook.modulebook.changeset.ModulebookChangeSet;
 import de.bht.modulebook.teachingform.TeachingForm;
 import de.bht.modulebook.modulebook.changeset.ModulebookChangeSetService;
 
@@ -115,7 +116,9 @@ public class ModuleService {
                 created.getId(),
                 mergeTeachingFormIds(teachingFormIds, workload)
         );
-        return getById(created.getId());
+        Module saved = getById(created.getId());
+        changeLogService.saveModuleCreated(changeSetId, saved);
+        return saved;
     }
 
     private void applyDefaultStatus(Module module) {
@@ -556,10 +559,16 @@ public class ModuleService {
         }
 
         Module module = getById(id);
-        changeSetService.create(
+        ModulebookChangeSet changeSet = changeSetService.create(
                 module.getModulebookId(),
                 ModulebookChangeSetService.SOURCE_DELETE,
                 deleteReason(module)
+        );
+        changeLogService.saveModuleDeleted(
+                changeSet.getId(),
+                module,
+                workloadRepository.findByModuleId(id).orElse(null),
+                teachingFormIdsByModuleId(id)
         );
         boolean deleted = moduleRepository.delete(id);
 

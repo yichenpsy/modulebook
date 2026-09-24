@@ -166,6 +166,7 @@ public class ModulebookVersionService {
                     workloadRepository.upsert(created.getId(), desiredWorkload);
                 }
                 teachingFormRepository.replaceForModule(created.getId(), desiredTeachingFormIds);
+                changeLogService.saveModuleCreated(changeSet.getId(), created);
                 restoredModuleIds.add(created.getId());
                 continue;
             }

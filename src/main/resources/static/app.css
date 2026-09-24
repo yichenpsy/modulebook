@@ -144,6 +144,22 @@ th {
     white-space: pre-wrap;
 }
 
+.detail-list {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 8px 16px;
+    max-width: 1200px;
+}
+
+.detail-list dt {
+    font-weight: bold;
+}
+
+.detail-list dd {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
 .row-actions {
     white-space: nowrap;
 }
@@ -430,6 +446,31 @@ th {
 
 .diff-new {
     background: #f3fff4;
+}
+
+.deleted-module-snapshot {
+    text-decoration: line-through;
+}
+
+.deleted-module-snapshot th,
+.deleted-module-snapshot td {
+    text-decoration: line-through;
+}
+
+.compare-module-snapshot-table {
+    width: min(520px, 100%);
+    margin-top: 0;
+    table-layout: fixed;
+}
+
+.compare-module-snapshot-table td,
+.compare-module-snapshot-table th {
+    padding: 4px 7px;
+}
+
+.compare-module-snapshot-table td:first-child,
+.compare-module-snapshot-table th:first-child {
+    width: 150px;
 }
 
 .diff-removed,

@@ -134,7 +134,7 @@ public class PdfImportService {
         List<ModuleResponse> createdModules = new ArrayList<>();
         List<SaveImportedModuleError> errors = new ArrayList<>();
         Modulebook modulebook = modulebookService.getById(request.modulebookId());
-        String changeSetReason = "Re-import " + modulebook.getStudyProgramName() + " " + modulebook.getDegreeType() + " PDF";
+        String changeSetReason = "Import " + modulebook.getStudyProgramName() + " " + modulebook.getDegreeType() + " PDF";
         ModulebookChangeSet changeSet = changeSetService.create(
                 modulebook.getId(),
                 ModulebookChangeSetService.SOURCE_PDF_IMPORT,
