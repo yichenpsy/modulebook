@@ -23,7 +23,7 @@ public class ModulebookChangeSetRepository {
     public ModulebookChangeSetRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.insert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("study_program_change_sets")
+                .withTableName("modulebook_change_sets")
                 .usingColumns("modulebook_id", "source_type", "reason")
                 .usingGeneratedKeyColumns("id");
     }
@@ -42,7 +42,7 @@ public class ModulebookChangeSetRepository {
                 """
                 SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
-                FROM study_program_change_sets
+                FROM modulebook_change_sets
                 WHERE id = ?
                 """,
                 rowMapper,
@@ -56,7 +56,7 @@ public class ModulebookChangeSetRepository {
                 """
                 SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
-                FROM study_program_change_sets
+                FROM modulebook_change_sets
                 WHERE modulebook_id = ?
                 ORDER BY created_at DESC, id DESC
                 """,
@@ -70,7 +70,7 @@ public class ModulebookChangeSetRepository {
                 """
                 SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
-                FROM study_program_change_sets
+                FROM modulebook_change_sets
                 WHERE modulebook_id = ?
                   AND source_type = ?
                 ORDER BY created_at, id
@@ -87,7 +87,7 @@ public class ModulebookChangeSetRepository {
                 """
                 SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
-                FROM study_program_change_sets
+                FROM modulebook_change_sets
                 WHERE modulebook_id = ?
                   AND discarded_at IS NULL
                   AND (
@@ -109,7 +109,7 @@ public class ModulebookChangeSetRepository {
                 """
                 SELECT id, modulebook_id, source_type, reason, created_at,
                        discarded_at, discarded_by_change_set_id
-                FROM study_program_change_sets
+                FROM modulebook_change_sets
                 WHERE modulebook_id = ?
                   AND (
                       created_at > ?
@@ -138,7 +138,7 @@ public class ModulebookChangeSetRepository {
         }
 
         jdbcTemplate.update(
-                "UPDATE study_program_change_sets "
+                "UPDATE modulebook_change_sets "
                         + "SET discarded_at = now(), discarded_by_change_set_id = ? "
                         + "WHERE id IN (" + placeholders + ")",
                 arguments
@@ -152,7 +152,7 @@ public class ModulebookChangeSetRepository {
 
         String placeholders = String.join(",", Collections.nCopies(changeSetIds.size(), "?"));
         jdbcTemplate.update(
-                "DELETE FROM study_program_change_sets WHERE id IN (" + placeholders + ")",
+                "DELETE FROM modulebook_change_sets WHERE id IN (" + placeholders + ")",
                 changeSetIds.toArray()
         );
     }

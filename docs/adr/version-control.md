@@ -5,14 +5,14 @@ The main version control model is based on change sets.
 ```text
 User edits modules or imports a PDF
         ↓
-create study_program_change_sets row
+create modulebook_change_sets row
         ↓
 save module_field_changes rows
         ↓
 current module data changes
 ```
 
-`study_program_change_sets` stores one high-level operation, for example a manual edit, PDF import, restore, or tag restore.
+`modulebook_change_sets` stores one high-level operation, for example a manual edit, PDF import, restore, or version restore.
 
 `module_field_changes` stores the concrete field-level changes that belong to one change set. Each row stores:
 
@@ -29,11 +29,11 @@ Restore uses `old_value` from `module_field_changes` to write fields back to the
 Named modulebook tags still use a snapshot:
 
 ```text
-User creates a modulebook tag
+User creates a modulebook version
         ↓
-take current study program + modules
+take current modulebook + modules
         ↓
-store JSON in modulebook_tags.snapshot_json
+store JSON in modulebook_versions.snapshot_json
 ```
 
-The tag snapshot is not the old module version system. It is only used to freeze and restore a named modulebook state.
+The version snapshot is used to freeze and restore a named modulebook state.

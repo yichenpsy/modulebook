@@ -75,11 +75,11 @@ public class ModuleFieldChangeRepository {
                        module_field_changes.new_value::text AS new_value,
                        module_field_changes.created_at
                 FROM module_field_changes
-                JOIN study_program_change_sets ON study_program_change_sets.id = module_field_changes.change_set_id
+                JOIN modulebook_change_sets ON modulebook_change_sets.id = module_field_changes.change_set_id
                 WHERE module_field_changes.change_set_id IN (
                 """ + placeholders + """
                 )
-                ORDER BY study_program_change_sets.created_at, study_program_change_sets.id, module_field_changes.id
+                ORDER BY modulebook_change_sets.created_at, modulebook_change_sets.id, module_field_changes.id
                 """,
                 rowMapper,
                 changeSetIds.toArray()
