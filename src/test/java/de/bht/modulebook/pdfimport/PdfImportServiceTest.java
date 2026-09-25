@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -313,6 +314,46 @@ class PdfImportServiceTest {
         assertThat(missingDeactiveModule.getValue().getModuleNumber()).isEqualTo("B04");
         assertThat(missingDeactiveModule.getValue().getModuleStatus()).isEqualTo("DEACTIVE");
         assertThat(missingDeactiveModule.getValue().getModuleComments()).isEqualTo("MISSING_FROM_IMPORT");
+    }
+
+    @Test
+    void returnsErrorWhenImportContainsDuplicateModuleNumbers() throws Exception {
+        JsonNode importedB01 = objectMapper.readTree("""
+                {
+                  "module_number": "B01",
+                  "title": "Module B01",
+                  "credits": 5.0
+                }
+                """);
+        JsonNode importedDuplicateB01 = objectMapper.readTree("""
+                {
+                  "module_number": " b01 ",
+                  "title": "Duplicate Module B01",
+                  "credits": 5.0
+                }
+                """);
+
+        when(importedModuleMapper.moduleNumber(importedB01)).thenReturn("B01");
+        when(importedModuleMapper.moduleNumber(importedDuplicateB01)).thenReturn(" b01 ");
+
+        SaveImportedModulesResponse response = service.saveImportedModules(new SaveImportedModulesRequest(
+                10L,
+                LocalDate.parse("2024-11-25"),
+                LocalDate.parse("2016-06-14"),
+                List.of(importedB01, importedDuplicateB01)
+        ));
+
+        assertThat(response.requestedCount()).isEqualTo(2);
+        assertThat(response.createdCount()).isZero();
+        assertThat(response.errorCount()).isEqualTo(1);
+        assertThat(response.changeSetId()).isNull();
+        assertThat(response.errors()).hasSize(1);
+        assertThat(response.errors().get(0).index()).isEqualTo(1);
+        assertThat(response.errors().get(0).moduleNumber()).isEqualTo(" b01 ");
+        assertThat(response.errors().get(0).message())
+                .contains("Duplicate module number B01")
+                .contains("row 1");
+        verifyNoInteractions(modulebookService, changeSetService, teachingFormRepository, moduleService);
     }
 
     @Test

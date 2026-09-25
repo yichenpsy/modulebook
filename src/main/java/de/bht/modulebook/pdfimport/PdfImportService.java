@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -133,6 +134,18 @@ public class PdfImportService {
 
         List<ModuleResponse> createdModules = new ArrayList<>();
         List<SaveImportedModuleError> errors = new ArrayList<>();
+        collectDuplicateModuleNumberErrors(request.modules(), errors);
+        if (!errors.isEmpty()) {
+            return new SaveImportedModulesResponse(
+                    request.modules().size(),
+                    0,
+                    errors.size(),
+                    null,
+                    createdModules,
+                    errors
+            );
+        }
+
         Modulebook modulebook = modulebookService.getById(request.modulebookId());
         String changeSetReason = "Import " + modulebook.getStudyProgramName() + " " + modulebook.getDegreeType() + " PDF";
         ModulebookChangeSet changeSet = changeSetService.create(
@@ -215,6 +228,39 @@ public class PdfImportService {
             createdModules,
             errors
         );
+    }
+
+    private void collectDuplicateModuleNumberErrors(
+            List<JsonNode> importedModules,
+            List<SaveImportedModuleError> errors
+    ) {
+        Map<String, Integer> firstIndexByModuleNumber = new HashMap<>();
+        Map<String, String> firstDisplayValueByModuleNumber = new HashMap<>();
+
+        for (int index = 0; index < importedModules.size(); index++) {
+            JsonNode imported = importedModules.get(index);
+            String moduleNumber = importedModuleMapper.moduleNumber(imported);
+            String key = moduleNumberKey(moduleNumber);
+            if (key == null) {
+                continue;
+            }
+
+            Integer firstIndex = firstIndexByModuleNumber.putIfAbsent(key, index);
+            firstDisplayValueByModuleNumber.putIfAbsent(key, moduleNumber.trim());
+            if (firstIndex != null) {
+                String displayValue = firstDisplayValueByModuleNumber.get(key);
+                String message = "Duplicate module number " + displayValue
+                        + " in this import. First occurrence is row " + (firstIndex + 1) + ".";
+                errors.add(new SaveImportedModuleError(index, moduleNumber, message));
+            }
+        }
+    }
+
+    private String moduleNumberKey(String moduleNumber) {
+        if (moduleNumber == null || moduleNumber.isBlank()) {
+            return null;
+        }
+        return moduleNumber.trim().toLowerCase(Locale.ROOT);
     }
 
     private void createInitialImportVersionIfNeeded(
