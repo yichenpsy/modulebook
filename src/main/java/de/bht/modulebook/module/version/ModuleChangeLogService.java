@@ -86,12 +86,9 @@ public class ModuleChangeLogService {
     ) {
         Set<String> allowedPaths = changedFieldPaths == null ? null : new HashSet<>(changedFieldPaths);
         addIfChanged(changeSetId, moduleId, "module.moduleNumber", oldModule.getModuleNumber(), newModule.getModuleNumber(), allowedPaths);
-        addIfChanged(changeSetId, moduleId, "module.name", oldModule.getName(), newModule.getName(), allowedPaths);
+        addIfChanged(changeSetId, moduleId, "module.title", oldModule.getTitle(), newModule.getTitle(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.credits", oldModule.getCredits(), newModule.getCredits(), allowedPaths);
-        addIfChanged(changeSetId, moduleId, "module.description", oldModule.getDescription(), newModule.getDescription(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.moduleType", oldModule.getModuleType(), newModule.getModuleType(), allowedPaths);
-        addIfChanged(changeSetId, moduleId, "module.titleDe", oldModule.getTitleDe(), newModule.getTitleDe(), allowedPaths);
-        addIfChanged(changeSetId, moduleId, "module.titleEn", oldModule.getTitleEn(), newModule.getTitleEn(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.coordinator", oldModule.getCoordinator(), newModule.getCoordinator(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.applicability", oldModule.getApplicability(), newModule.getApplicability(), allowedPaths);
         addIfChanged(changeSetId, moduleId, "module.learningArea", oldModule.getLearningArea(), newModule.getLearningArea(), allowedPaths);
@@ -252,7 +249,7 @@ public class ModuleChangeLogService {
     private record CreatedModuleSnapshot(
             Long id,
             String moduleNumber,
-            String name,
+            String title,
             BigDecimal credits,
             String moduleType
     ) {
@@ -260,7 +257,7 @@ public class ModuleChangeLogService {
             return new CreatedModuleSnapshot(
                     module.getId(),
                     module.getModuleNumber(),
-                    module.getName(),
+                    module.getTitle(),
                     module.getCredits(),
                     module.getModuleType()
             );

@@ -34,7 +34,7 @@
 
         const moduleFields = [
             ["Modulnummer", module => module.moduleNumber],
-            ["Titel", module => module.name],
+            ["Titel", module => module.title],
             ["Koordinator/in", module => module.coordinator],
             ["Leistungspunkte", module => creditsText(module.credits)],
             ["Workload", module => workloadText(module.workload)],
@@ -78,7 +78,7 @@
 
         function renderTitle() {
             const number = currentModule.moduleNumber || currentModule.id;
-            const name = currentModule.name || "Untitled module";
+            const name = currentModule.title || "Untitled module";
             const title = `${number} - ${name}`;
             document.getElementById("pageTitle").textContent = title;
             document.getElementById("documentTitle").textContent = title;

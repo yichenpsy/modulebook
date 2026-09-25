@@ -86,14 +86,14 @@ class ModuleServiceTest {
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B01");
-        request.setName("New Module");
+        request.setTitle("New Module");
         request.setCredits(new BigDecimal("5.0"));
 
         Module inserted = new Module();
         inserted.setId(100L);
         inserted.setModulebookId(10L);
         inserted.setModuleNumber("B01");
-        inserted.setName("New Module");
+        inserted.setTitle("New Module");
         inserted.setCredits(new BigDecimal("5.0"));
 
         when(moduleRepository.insert(request)).thenReturn(inserted);
@@ -118,14 +118,14 @@ class ModuleServiceTest {
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B01");
-        request.setName("Imported Module");
+        request.setTitle("Imported Module");
         request.setCredits(new BigDecimal("5.0"));
 
         Module inserted = new Module();
         inserted.setId(100L);
         inserted.setModulebookId(10L);
         inserted.setModuleNumber("B01");
-        inserted.setName("Imported Module");
+        inserted.setTitle("Imported Module");
         inserted.setCredits(new BigDecimal("5.0"));
 
         when(moduleRepository.insert(request)).thenReturn(inserted);
@@ -149,14 +149,14 @@ class ModuleServiceTest {
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B01");
-        request.setName("New Module");
+        request.setTitle("New Module");
         request.setCredits(new BigDecimal("5.0"));
 
         Module inserted = new Module();
         inserted.setId(100L);
         inserted.setModulebookId(10L);
         inserted.setModuleNumber("B01");
-        inserted.setName("New Module");
+        inserted.setTitle("New Module");
         inserted.setCredits(new BigDecimal("5.0"));
 
         when(moduleRepository.insert(request)).thenReturn(inserted);
@@ -180,7 +180,7 @@ class ModuleServiceTest {
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B01");
-        request.setName("New Module");
+        request.setTitle("New Module");
         request.setCredits(new BigDecimal("5.0"));
 
         Module existing = new Module();
@@ -207,13 +207,13 @@ class ModuleServiceTest {
         oldModule.setId(100L);
         oldModule.setModulebookId(10L);
         oldModule.setModuleNumber("B01");
-        oldModule.setName("Old Module");
+        oldModule.setTitle("Old Module");
         oldModule.setCredits(new BigDecimal("5.0"));
 
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B02");
-        request.setName("Old Module");
+        request.setTitle("Old Module");
         request.setCredits(new BigDecimal("5.0"));
 
         Module existing = new Module();
@@ -254,7 +254,7 @@ class ModuleServiceTest {
         oldModule.setId(100L);
         oldModule.setModulebookId(10L);
         oldModule.setModuleNumber("B01");
-        oldModule.setName("Old Module");
+        oldModule.setTitle("Old Module");
         oldModule.setCredits(new BigDecimal("5.0"));
         oldModule.setModuleStatus(ModuleService.ACTIVE_STATUS);
 
@@ -280,13 +280,13 @@ class ModuleServiceTest {
         oldModule.setId(100L);
         oldModule.setModulebookId(10L);
         oldModule.setModuleNumber("B01");
-        oldModule.setName("Old Module");
+        oldModule.setTitle("Old Module");
         oldModule.setCredits(new BigDecimal("5.0"));
 
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B01");
-        request.setName("Updated Module");
+        request.setTitle("Updated Module");
         request.setCredits(new BigDecimal("6.0"));
 
         ModuleWorkload oldWorkload = new ModuleWorkload();
@@ -300,17 +300,17 @@ class ModuleServiceTest {
         when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule), Optional.of(request));
         when(workloadRepository.findByModuleId(100L)).thenReturn(Optional.of(oldWorkload), Optional.of(savedWorkload));
         when(moduleTeachingFormRepository.findByModuleId(100L)).thenReturn(List.of(), List.of(savedTeachingForm));
-        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits"))
-                .thenReturn(new ModulebookChangeSet(55L, 10L, ModulebookChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits", null));
+        when(changeSetService.create(10L, ModulebookChangeSetService.SOURCE_MANUAL_EDIT, "changed title and credits"))
+                .thenReturn(new ModulebookChangeSet(55L, 10L, ModulebookChangeSetService.SOURCE_MANUAL_EDIT, "changed title and credits", null));
         when(moduleRepository.update(100L, request)).thenReturn(true);
 
-        Module result = service.update(100L, request, requestWorkload, List.of(), "changed name and credits");
+        Module result = service.update(100L, request, requestWorkload, List.of(), "changed title and credits");
 
         assertThat(result).isSameAs(request);
 
         InOrder inOrder = inOrder(moduleRepository, changeSetService, changeLogService);
         inOrder.verify(moduleRepository).findById(100L);
-        inOrder.verify(changeSetService).create(10L, ModulebookChangeSetService.SOURCE_MANUAL_EDIT, "changed name and credits");
+        inOrder.verify(changeSetService).create(10L, ModulebookChangeSetService.SOURCE_MANUAL_EDIT, "changed title and credits");
         inOrder.verify(moduleRepository).update(100L, request);
         inOrder.verify(changeLogService).saveChanges(55L, 100L, oldModule, request, oldWorkload, savedWorkload, List.of(), List.of(1L));
     }
@@ -321,13 +321,13 @@ class ModuleServiceTest {
         oldModule.setId(100L);
         oldModule.setModulebookId(10L);
         oldModule.setModuleNumber("B01");
-        oldModule.setName("Old Module");
+        oldModule.setTitle("Old Module");
         oldModule.setCredits(new BigDecimal("5.0"));
 
         Module request = new Module();
         request.setModulebookId(10L);
         request.setModuleNumber("B01");
-        request.setName("Old Module");
+        request.setTitle("Old Module");
         request.setCredits(new BigDecimal("5.0"));
 
         when(moduleRepository.findById(100L)).thenReturn(Optional.of(oldModule));

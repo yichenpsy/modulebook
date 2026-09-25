@@ -307,7 +307,7 @@
                         ${(snapshot?.modules || []).map(module => `
                             <tr>
                                 <td>${escapeHtml(module.moduleNumber || "")}</td>
-                                <td>${escapeHtml(module.name || "")}</td>
+                                <td>${escapeHtml(module.title || "")}</td>
                                 <td>${escapeHtml(String(module.credits ?? ""))}</td>
                                 <td>${escapeHtml(module.moduleStatus || "")}</td>
                                 <td>${escapeHtml(module.moduleComments || "")}</td>
@@ -493,7 +493,7 @@
         function moduleSnapshotRows(module, workload, teachingFormIds) {
             const rows = [
                 ["Modulnummer", module.moduleNumber],
-                ["Titel", module.name],
+                ["Titel", module.title],
                 ["Koordinator/in", module.coordinator],
                 ["Leistungspunkte", creditsText(module.credits)],
                 ["Workload", workloadText(workload)],
@@ -799,7 +799,7 @@
                 return moduleId ? `Module ${moduleId}` : "Deleted module";
             }
 
-            return `${module.moduleNumber || module.id} ${module.name || ""}`.trim();
+            return `${module.moduleNumber || module.id} ${module.title || ""}`.trim();
         }
 
         function fieldChangeDetailUrl(changeSetId, changeId) {
@@ -982,12 +982,9 @@
                     id: module.id,
                     modulebookId: module.modulebookId,
                     moduleNumber: module.moduleNumber,
-                    name: module.name,
+                    title: module.title,
                     credits: module.credits,
-                    description: module.description,
                     moduleType: module.moduleType,
-                    titleDe: module.titleDe,
-                    titleEn: module.titleEn,
                     coordinator: module.coordinator,
                     applicability: module.applicability,
                     learningArea: module.learningArea,
@@ -1075,7 +1072,7 @@
             }
 
             const moduleNumber = module.moduleNumber || "";
-            const title = module.name || module.titleDe || module.titleEn || "";
+            const title = module.title || module.name || "";
             const label = `${moduleNumber} ${title}`.trim();
             return label || (module.id ? `Module ${module.id}` : "Module");
         }

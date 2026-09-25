@@ -252,12 +252,9 @@ public class ChangeSetRestoreService {
         JsonNode value = parseJson(oldValue);
         switch (fieldPath) {
             case "module.moduleNumber" -> module.setModuleNumber(textOrNull(value));
-            case "module.name" -> module.setName(textOrNull(value));
+            case "module.title" -> module.setTitle(textOrNull(value));
             case "module.credits" -> module.setCredits(decimalOrNull(value));
-            case "module.description" -> module.setDescription(textOrNull(value));
             case "module.moduleType" -> module.setModuleType(textOrNull(value));
-            case "module.titleDe" -> module.setTitleDe(textOrNull(value));
-            case "module.titleEn" -> module.setTitleEn(textOrNull(value));
             case "module.coordinator" -> module.setCoordinator(textOrNull(value));
             case "module.applicability" -> module.setApplicability(textOrNull(value));
             case "module.learningArea" -> module.setLearningArea(textOrNull(value));
@@ -348,12 +345,9 @@ public class ChangeSetRestoreService {
                 source.getId(),
                 source.getModulebookId(),
                 source.getModuleNumber(),
-                source.getName(),
+                source.getTitle(),
                 source.getCredits(),
-                source.getDescription(),
                 source.getModuleType(),
-                source.getTitleDe(),
-                source.getTitleEn(),
                 source.getCoordinator(),
                 source.getApplicability(),
                 source.getLearningArea(),
@@ -378,8 +372,8 @@ public class ChangeSetRestoreService {
         Set<String> labels = new LinkedHashSet<>();
         for (Module module : modules) {
             String moduleNumber = module.getModuleNumber() == null ? "" : module.getModuleNumber();
-            String name = module.getName() == null ? "" : module.getName();
-            String label = (moduleNumber + " " + name).trim();
+            String title = module.getTitle() == null ? "" : module.getTitle();
+            String label = (moduleNumber + " " + title).trim();
             labels.add(label.isBlank() ? "module " + module.getId() : label);
         }
         return String.join(", ", labels);

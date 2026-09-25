@@ -419,23 +419,14 @@ public class ModuleService {
         if (!changedPaths.contains("module.moduleNumber")) {
             module.setModuleNumber(oldModule.getModuleNumber());
         }
-        if (!changedPaths.contains("module.name")) {
-            module.setName(oldModule.getName());
+        if (!changedPaths.contains("module.title")) {
+            module.setTitle(oldModule.getTitle());
         }
         if (!changedPaths.contains("module.credits")) {
             module.setCredits(oldModule.getCredits());
         }
-        if (!changedPaths.contains("module.description")) {
-            module.setDescription(oldModule.getDescription());
-        }
         if (!changedPaths.contains("module.moduleType")) {
             module.setModuleType(oldModule.getModuleType());
-        }
-        if (!changedPaths.contains("module.titleDe")) {
-            module.setTitleDe(oldModule.getTitleDe());
-        }
-        if (!changedPaths.contains("module.titleEn")) {
-            module.setTitleEn(oldModule.getTitleEn());
         }
         if (!changedPaths.contains("module.coordinator")) {
             module.setCoordinator(oldModule.getCoordinator());
@@ -596,8 +587,8 @@ public class ModuleService {
 
     private String moduleLabel(Module module) {
         String moduleNumber = module.getModuleNumber() == null ? "" : module.getModuleNumber().trim();
-        String name = module.getName() == null ? "" : module.getName().trim();
-        return (moduleNumber + " " + name).trim();
+        String title = module.getTitle() == null ? "" : module.getTitle().trim();
+        return (moduleNumber + " " + title).trim();
     }
 
     private Module copyModule(Module source) {
@@ -605,12 +596,9 @@ public class ModuleService {
                 source.getId(),
                 source.getModulebookId(),
                 source.getModuleNumber(),
-                source.getName(),
+                source.getTitle(),
                 source.getCredits(),
-                source.getDescription(),
                 source.getModuleType(),
-                source.getTitleDe(),
-                source.getTitleEn(),
                 source.getCoordinator(),
                 source.getApplicability(),
                 source.getLearningArea(),

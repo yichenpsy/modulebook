@@ -50,7 +50,7 @@ class ModuleChangeLogServiceTest {
                 List.of(1L)
         );
 
-        verify(repository).insert(eq(55L), eq(100L), eq("module.name"), eq("\"Old title\""), eq("\"New title\""));
+        verify(repository).insert(eq(55L), eq(100L), eq("module.title"), eq("\"Old title\""), eq("\"New title\""));
         verify(repository, never()).insert(eq(55L), eq(100L), eq("workload"), anyString(), anyString());
         verify(repository, never()).insert(eq(55L), eq(100L), eq("teachingFormIds"), anyString(), anyString());
     }
@@ -58,11 +58,9 @@ class ModuleChangeLogServiceTest {
     @Test
     void saveChangesTreatsNullAndBlankOptionalTextAsEqual() {
         Module oldModule = module("Same title");
-        oldModule.setDescription(null);
         oldModule.setCoordinator(null);
 
         Module newModule = module("Same title");
-        newModule.setDescription("");
         newModule.setCoordinator("   ");
 
         service.saveChanges(
@@ -121,7 +119,7 @@ class ModuleChangeLogServiceTest {
         module.setId(100L);
         module.setModulebookId(10L);
         module.setModuleNumber("B01");
-        module.setName(name);
+        module.setTitle(name);
         module.setCredits(new BigDecimal("5.0"));
         return module;
     }

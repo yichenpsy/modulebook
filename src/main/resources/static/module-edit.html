@@ -69,9 +69,9 @@
                 </div>
 
                 <div class="module-field-row">
-                    <label class="module-field-label" for="name">Titel <span class="required-marker">*</span></label>
+                    <label class="module-field-label" for="title">Titel <span class="required-marker">*</span></label>
                     <div class="module-field-control">
-                        <input id="name" required maxlength="255" placeholder="Einführung in die Informatik">
+                        <input id="title" required maxlength="255" placeholder="Einführung in die Informatik">
                     </div>
                 </div>
 
@@ -323,7 +323,7 @@
             renderModuleIdDisplay(module.id);
             document.getElementById("modulebookId").value = module.modulebookId ?? "";
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
-            document.getElementById("name").value = module.name || "";
+            document.getElementById("title").value = module.title || "";
             document.getElementById("credits").value = module.credits ?? "";
             document.getElementById("workloadPresenceHours").value = module.workload?.presenceHours ?? "";
             document.getElementById("workloadSelfStudyHours").value = module.workload?.selfStudyHours ?? "";
@@ -689,14 +689,14 @@
             const normalizedValue = value.replace(/^@/, "").trim().toLowerCase();
             return studyProgramModules.find(module =>
                 String(module.moduleNumber || "").toLowerCase() === normalizedValue
-                || String(module.name || "").toLowerCase() === normalizedValue
-                || `${module.moduleNumber || ""} ${module.name || ""}`.trim().toLowerCase() === normalizedValue
+                || String(module.title || "").toLowerCase() === normalizedValue
+                || `${module.moduleNumber || ""} ${module.title || ""}`.trim().toLowerCase() === normalizedValue
                 || moduleReferenceText(module).replace(/^@/, "").toLowerCase() === normalizedValue
             );
         }
 
         function moduleReferenceText(module) {
-            return `${module.moduleNumber || ""} ${module.name || ""}`.trim();
+            return `${module.moduleNumber || ""} ${module.title || ""}`.trim();
         }
 
         async function saveModule(event) {
@@ -720,19 +720,16 @@
         function buildModuleRequest() {
 
             const moduleNumber = document.getElementById("moduleNumber").value.trim();
-            const name = document.getElementById("name").value.trim();
+            const title = document.getElementById("title").value.trim();
             const workloadRequest = buildWorkloadRequest();
 
             const request = {
                 modulebookId: numberOrNull(document.getElementById("modulebookId").value),
                 moduleNumber: moduleNumber,
-                name: name,
-                titleDe: currentModule?.titleDe || "",
-                titleEn: currentModule?.titleEn || "",
+                title: title,
                 credits: numberOrNull(document.getElementById("credits").value),
                 teachingFormIds: normalizedTeachingFormIds(collectModuleTeachingFormIds()),
                 workload: workloadRequest,
-                description: currentModule?.description || "",
 
                 modulebookId: numberOrNull(document.getElementById("modulebookId").value),
                 moduleType: collectModuleType(),
@@ -780,11 +777,9 @@
 
             const fieldMappings = [
                 ["module.moduleNumber", currentModule.moduleNumber, request.moduleNumber],
-                ["module.name", currentModule.name, request.name],
+                ["module.title", currentModule.title, request.title],
                 ["module.credits", currentModule.credits, request.credits],
                 ["module.moduleType", currentModule.moduleType, request.moduleType],
-                ["module.titleDe", currentModule.titleDe, request.titleDe],
-                ["module.titleEn", currentModule.titleEn, request.titleEn],
                 ["module.coordinator", currentModule.coordinator, request.coordinator],
                 ["module.applicability", currentModule.applicability, request.applicability],
                 ["module.learningArea", currentModule.learningArea, request.learningArea],
@@ -854,7 +849,7 @@
             const changedPaths = new Set(request.changedFieldPaths || []);
             const changes = [
                 changeMessagePart("module number", oldModule.moduleNumber, request.moduleNumber, "module.moduleNumber", changedPaths),
-                changeMessagePart("title", oldModule.name, request.name, "module.name", changedPaths),
+                changeMessagePart("title", oldModule.title, request.title, "module.title", changedPaths),
                 changeMessagePart("credits", oldModule.credits, request.credits, "module.credits", changedPaths),
                 changeMessagePart("module type", oldModule.moduleType, request.moduleType, "module.moduleType", changedPaths),
                 changeMessagePart("coordinator", oldModule.coordinator, request.coordinator, "module.coordinator", changedPaths),

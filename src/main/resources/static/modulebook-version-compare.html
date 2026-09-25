@@ -406,7 +406,7 @@
                 return `Module ${moduleId}`;
             }
 
-            return `${module.moduleNumber || module.id} ${module.name || ""}`.trim();
+            return `${module.moduleNumber || module.id} ${module.title || ""}`.trim();
         }
 
         function restoreTargetChangeSetId(changeSet) {
@@ -531,7 +531,7 @@
             }
 
             const moduleNumber = module.moduleNumber || "";
-            const title = module.name || module.titleDe || module.titleEn || "";
+            const title = module.title || module.name || "";
             const label = `${moduleNumber} ${title}`.trim();
             return label || (module.id ? `Module ${module.id}` : "Module");
         }
@@ -562,7 +562,7 @@
         function moduleSnapshotRows(module, workload, teachingFormIds) {
             const rows = [
                 ["Modulnummer", module.moduleNumber],
-                ["Titel", module.name],
+                ["Titel", module.title],
                 ["Koordinator/in", module.coordinator],
                 ["Leistungspunkte", creditsText(module.credits)],
                 ["Workload", workloadText(workload)],

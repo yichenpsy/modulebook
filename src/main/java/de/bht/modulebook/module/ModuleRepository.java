@@ -21,8 +21,8 @@ import org.springframework.stereotype.Repository;
 public class ModuleRepository {
 
     private static final String SELECT_COLUMNS = """
-            id, modulebook_id, module_number, name, credits, description,
-            module_type, title_de, title_en, coordinator, applicability,
+            id, modulebook_id, module_number, title, credits,
+            module_type, coordinator, applicability,
             learning_area, learning_objectives, prerequisites, level, module_status, module_comments, frequency,
             examination_form, contents, literature, additional_notes, module_weight, created_at, updated_at,
             created_change_set_id
@@ -45,13 +45,10 @@ public class ModuleRepository {
                 // modulebook_id links this module to one row in modulebooks.
                 .usingColumns(
                         "module_number",
-                        "name",
+                        "title",
                         "credits",
-                        "description",
                         "modulebook_id",
                         "module_type",
-                        "title_de",
-                        "title_en",
                         "coordinator",
                         "applicability",
                         "learning_area",
@@ -76,13 +73,10 @@ public class ModuleRepository {
 
         // Map Java object fields to database column names.
         values.put("module_number", module.getModuleNumber());
-        values.put("name", module.getName());
+        values.put("title", module.getTitle());
         values.put("credits", decimalToText(module.getCredits()));
-        values.put("description", module.getDescription());
         values.put("modulebook_id", module.getModulebookId());
         values.put("module_type", module.getModuleType());
-        values.put("title_de", module.getTitleDe());
-        values.put("title_en", module.getTitleEn());
         values.put("coordinator", module.getCoordinator());
         values.put("applicability", module.getApplicability());
         values.put("learning_area", module.getLearningArea());
@@ -150,13 +144,10 @@ public class ModuleRepository {
                 """
                         UPDATE modules
                         SET module_number = ?,
-                            name = ?,
+                            title = ?,
                             credits = ?,
-                            description = ?,
                             modulebook_id = ?,
                             module_type = ?,
-                            title_de = ?,
-                            title_en = ?,
                             coordinator = ?,
                             applicability = ?,
                             learning_area = ?,
@@ -175,13 +166,10 @@ public class ModuleRepository {
                         WHERE id = ?
                         """,
                 module.getModuleNumber(),
-                module.getName(),
+                module.getTitle(),
                 decimalToText(module.getCredits()),
-                module.getDescription(),
                 module.getModulebookId(),
                 module.getModuleType(),
-                module.getTitleDe(),
-                module.getTitleEn(),
                 module.getCoordinator(),
                 module.getApplicability(),
                 module.getLearningArea(),
@@ -237,12 +225,9 @@ public class ModuleRepository {
                     rs.getLong("id"),
                     getLongOrNull(rs, "modulebook_id"),
                     rs.getString("module_number"),
-                    rs.getString("name"),
+                    rs.getString("title"),
                     getBigDecimalOrNull(rs, "credits"),
-                    rs.getString("description"),
                     rs.getString("module_type"),
-                    rs.getString("title_de"),
-                    rs.getString("title_en"),
                     rs.getString("coordinator"),
                     rs.getString("applicability"),
                     rs.getString("learning_area"),

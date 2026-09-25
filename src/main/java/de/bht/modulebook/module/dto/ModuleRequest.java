@@ -16,15 +16,12 @@ public record ModuleRequest(
     @Size(max = 50, message = "Module number must be at most 50 characters")
     String moduleNumber,
 
-    @NotBlank(message = "Name is required")
-    @Size(max = 255, message = "Name must be at most 255 characters")
-    String name,
+    @NotBlank(message = "Title is required")
+    @Size(max = 255, message = "Title must be at most 255 characters")
+    String title,
     @NotNull(message = "Credits are required")
     BigDecimal credits,
-    String description,
     String moduleType,
-    String titleDe,
-    String titleEn,
     String coordinator,
     String applicability,
     String learningArea,

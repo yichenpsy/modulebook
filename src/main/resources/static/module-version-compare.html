@@ -122,7 +122,7 @@
 
         function renderTitle() {
             const number = currentModule.moduleNumber || currentModule.id;
-            const name = currentModule.name || "Untitled module";
+            const name = currentModule.title || "Untitled module";
             document.getElementById("moduleTitle").textContent = `${number} - ${name}`;
         }
 

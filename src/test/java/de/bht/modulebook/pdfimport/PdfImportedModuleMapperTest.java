@@ -43,18 +43,12 @@ class PdfImportedModuleMapperTest {
 
         // Assert: required fields are mapped to the database-facing Module fields.
         assertThat(module.getModuleNumber()).isEqualTo("B01");
-        assertThat(module.getName()).isEqualTo("Test Module");
+        assertThat(module.getTitle()).isEqualTo("Test Module");
         assertThat(module.getCredits()).isEqualByComparingTo("5.0");
         assertThat(module.getModuleType()).isEqualTo("Pflichtmodul");
         assertThat(module.getExaminationForm()).isEqualTo("100% Klausur (90 Minuten)");
         assertThat(module.getContents()).isEqualTo("Test contents");
         assertThat(module.getLearningObjectives()).isEqualTo("Test objectives");
-
-        // Assert: PDF-specific details are preserved inside the current description field.
-        assertThat(module.getDescription()).contains("Architektur");
-        assertThat(module.getDescription()).contains("Test contents");
-        assertThat(module.getDescription()).contains("Test objectives");
-        assertThat(module.getDescription()).contains("test.pdf");
     }
 
     @Test

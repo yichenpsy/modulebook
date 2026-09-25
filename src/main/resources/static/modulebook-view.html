@@ -53,7 +53,7 @@
 
         const moduleRows = [
             ["Modulnummer", module => module.moduleNumber],
-            ["Titel", module => module.name],
+            ["Titel", module => module.title],
             ["Koordinator/in", module => module.coordinator],
             ["Leistungspunkte", module => creditsText(module.credits)],
             ["Workload", module => workloadText(module.workload)],
@@ -205,7 +205,7 @@
                                 <tr>
                                     <td>${escapeHtml(module.moduleNumber || "")}</td>
                                     <td>
-                                        <a href="#${moduleAnchorId(module, index)}">${escapeHtml(module.name || "Untitled module")}</a>
+                                        <a href="#${moduleAnchorId(module, index)}">${escapeHtml(module.title || "Untitled module")}</a>
                                     </td>
                                     <td>${modulePageNumber(index)}</td>
                                 </tr>

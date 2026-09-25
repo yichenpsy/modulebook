@@ -53,11 +53,8 @@ public class PdfImportedModuleMapper {
 
         Module module = new Module();
         module.setModuleNumber(moduleNumber);
-        module.setName(title);
+        module.setTitle(title);
         module.setCredits(credits);
-        module.setDescription(buildDescription(imported, studyProgram, degreeType));
-        module.setTitleDe(text(imported, "title_de"));
-        module.setTitleEn(text(imported, "title_en"));
         module.setCoordinator(text(imported, "coordinator"));
         module.setApplicability(text(imported, "applicability"));
         module.setLearningArea(text(imported, "learning_area"));
@@ -127,44 +124,6 @@ public class PdfImportedModuleMapper {
         }
 
         return value.asLong();
-    }
-
-    private String buildDescription(JsonNode imported, String studyProgram, String degreeType) {
-        return """
-                Study program: %s
-                Degree type: %s
-
-                Contents:
-                %s
-
-                Learning objectives:
-                %s
-
-                Prerequisites:
-                %s
-
-                Exam form:
-                %s
-
-                Literature:
-                %s
-
-                Source file:
-                %s
-
-                Source pages:
-                %s
-                """.formatted(
-                studyProgram,
-                degreeType,
-                text(imported, "contents"),
-                text(imported, "learning_objectives"),
-                text(imported, "prerequisites"),
-                text(imported, "exam_form"),
-                text(imported, "literature"),
-                text(imported, "source_file"),
-                imported.get("source_pages")
-        );
     }
 
     private String normalizeTeachingFormCode(String code) {

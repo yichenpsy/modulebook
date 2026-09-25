@@ -36,8 +36,8 @@ public class ModuleViewRepository {
     public Optional<ModuleResponse> findById(Long id) {
         return jdbcTemplate.query(
                 """
-                SELECT id, modulebook_id, module_number, name, credits, description,
-                       module_type, title_de, title_en, coordinator, applicability,
+                SELECT id, modulebook_id, module_number, title, credits,
+                       module_type, coordinator, applicability,
                        learning_area, learning_objectives, prerequisites, level,
                        module_status, module_comments, frequency, examination_form,
                        contents, literature, additional_notes, module_weight,
@@ -70,12 +70,9 @@ public class ModuleViewRepository {
                 rs.getLong("id"),
                 getLongOrNull(rs, "modulebook_id"),
                 rs.getString("module_number"),
-                rs.getString("name"),
+                rs.getString("title"),
                 rs.getBigDecimal("credits"),
-                rs.getString("description"),
                 rs.getString("module_type"),
-                rs.getString("title_de"),
-                rs.getString("title_en"),
                 rs.getString("coordinator"),
                 rs.getString("applicability"),
                 rs.getString("learning_area"),

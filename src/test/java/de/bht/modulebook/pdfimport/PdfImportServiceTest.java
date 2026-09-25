@@ -104,9 +104,8 @@ class PdfImportServiceTest {
         // The mapper converts imported JSON into the existing Module model.
         Module mapped = new Module();
         mapped.setModuleNumber("B01");
-        mapped.setName("Test Module");
+        mapped.setTitle("Test Module");
         mapped.setCredits(new BigDecimal("5.0"));
-        mapped.setDescription("description");
         ModuleWorkload workload = new ModuleWorkload();
         workload.setRawText("68 Stunden Präsenz (2 SWS SU + 2 SWS Ü)");
 
@@ -117,10 +116,6 @@ class PdfImportServiceTest {
                 "B01",
                 "Test Module",
                 new BigDecimal("5.0"),
-                "description",
-                null,
-                null,
-                null,
                 null,
                 null,
                 null,
@@ -345,9 +340,8 @@ class PdfImportServiceTest {
         module.setId(id);
         module.setModulebookId(10L);
         module.setModuleNumber(moduleNumber);
-        module.setName(name);
+        module.setTitle(name);
         module.setCredits(new BigDecimal("5.0"));
-        module.setDescription("description " + moduleNumber);
         module.setModuleStatus(moduleStatus);
         return module;
     }

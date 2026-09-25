@@ -17,12 +17,9 @@ public class ModuleMapper {
         Module module = new Module();
         module.setModulebookId(request.modulebookId());
         module.setModuleNumber(request.moduleNumber());
-        module.setName(request.name());
+        module.setTitle(request.title());
         module.setCredits(request.credits());
-        module.setDescription(request.description());
         module.setModuleType(request.moduleType());
-        module.setTitleDe(request.titleDe());
-        module.setTitleEn(request.titleEn());
         module.setCoordinator(request.coordinator());
         module.setApplicability(request.applicability());
         module.setLearningArea(request.learningArea());
@@ -59,12 +56,9 @@ public class ModuleMapper {
             module.getId(),
             module.getModulebookId(),
             module.getModuleNumber(),
-            module.getName(),
+            module.getTitle(),
             module.getCredits(),
-            module.getDescription(),
             module.getModuleType(),
-            module.getTitleDe(),
-            module.getTitleEn(),
             module.getCoordinator(),
             module.getApplicability(),
             module.getLearningArea(),

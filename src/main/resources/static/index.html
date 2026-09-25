@@ -184,7 +184,7 @@
                         ${modules.map(module => `
                             <tr>
                                 <td>${escapeHtml(module.moduleNumber || "")}</td>
-                                <td>${escapeHtml(module.name || "")}</td>
+                                <td>${escapeHtml(module.title || "")}</td>
                                 <td>${escapeHtml(String(module.credits ?? ""))}</td>
                                 <td>${escapeHtml(module.moduleStatus || "")}</td>
                                 <td class="row-actions">
@@ -218,7 +218,7 @@
             const module = modules.find(item => Number(item.id) === Number(moduleId));
             const targetStatus = nextModuleStatus(module || {});
             const label = module
-                ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
+                ? `${module.moduleNumber || ""} ${module.title || ""}`.trim()
                 : `module ${moduleId}`;
 
             setStatus(`${moduleStatusActionLabel(module || {})} ${label}...`);
@@ -236,7 +236,7 @@
         async function confirmDeleteModule(moduleId) {
             const module = modules.find(item => Number(item.id) === Number(moduleId));
             const label = module
-                ? `${module.moduleNumber || ""} ${module.name || ""}`.trim()
+                ? `${module.moduleNumber || ""} ${module.title || ""}`.trim()
                 : `module ${moduleId}`;
             const confirmation = prompt(
                 `Permanently delete ${label}?\n\nThis cannot be restored from the change log. If a saved modulebook version contains this module, restoring that version can recreate it.\n\nType DELETE to confirm.`

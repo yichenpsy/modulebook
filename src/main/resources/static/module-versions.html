@@ -90,7 +90,7 @@
 
         function renderTitle() {
             const number = currentModule.moduleNumber || currentModule.id;
-            const name = currentModule.name || "Untitled module";
+            const name = currentModule.title || "Untitled module";
             document.getElementById("moduleTitle").textContent = `${number} - ${name}`;
         }
 
@@ -186,7 +186,7 @@
 
             const module = parsed.module || parsed;
             const moduleNumber = module.moduleNumber || "";
-            const title = module.name || module.titleDe || module.titleEn || "";
+            const title = module.title || module.name || "";
             const label = `${moduleNumber} ${title}`.trim();
             return label || (module.id ? `Module ${module.id}` : "Module");
         }
