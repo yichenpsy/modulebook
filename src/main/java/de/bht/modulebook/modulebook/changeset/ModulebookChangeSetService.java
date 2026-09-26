@@ -11,7 +11,7 @@ public class ModulebookChangeSetService {
     public static final String SOURCE_MANUAL_EDIT = "MANUAL_EDIT";
     public static final String SOURCE_PDF_IMPORT = "PDF_IMPORT";
     public static final String SOURCE_RESTORE = "RESTORE";
-    public static final String SOURCE_RESTORE_BEFORE = "RESTORE_BEFORE";
+    public static final String SOURCE_RESTORE_BEFORE = "RESTORE_VERSION";
     public static final String SOURCE_RESTORE_TAG = "RESTORE_TAG";
     public static final String SOURCE_DELETE = "DELETE";
     public static final String SOURCE_INITIAL_MODULE = "INITIAL_MODULE";

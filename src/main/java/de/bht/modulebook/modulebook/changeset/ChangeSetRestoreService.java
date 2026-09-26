@@ -23,6 +23,7 @@ import de.bht.modulebook.module.version.ModuleChangeRepository;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
+import de.bht.modulebook.modulebook.ModulebookVersionRepository;
 import de.bht.modulebook.teachingform.TeachingForm;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
@@ -37,6 +38,7 @@ public class ChangeSetRestoreService {
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository teachingFormRepository;
     private final ModuleChangeLogService changeLogService;
+    private final ModulebookVersionRepository modulebookVersionRepository;
     private final JsonMapper jsonMapper;
 
     public ChangeSetRestoreService(
@@ -47,6 +49,7 @@ public class ChangeSetRestoreService {
             ModuleWorkloadRepository workloadRepository,
             ModuleTeachingFormRepository teachingFormRepository,
             ModuleChangeLogService changeLogService,
+            ModulebookVersionRepository modulebookVersionRepository,
             JsonMapper jsonMapper
     ) {
         this.changeSetRepository = changeSetRepository;
@@ -56,6 +59,7 @@ public class ChangeSetRestoreService {
         this.workloadRepository = workloadRepository;
         this.teachingFormRepository = teachingFormRepository;
         this.changeLogService = changeLogService;
+        this.modulebookVersionRepository = modulebookVersionRepository;
         this.jsonMapper = jsonMapper;
     }
 
@@ -80,7 +84,7 @@ public class ChangeSetRestoreService {
         ModulebookChangeSet restoreChangeSet = changeSetService.create(
                 target.getModulebookId(),
                 ModulebookChangeSetService.SOURCE_RESTORE_BEFORE,
-                "restore to before change set " + target.getId()
+                "restore to version before change set " + target.getId()
         );
 
         Set<Long> moduleIdsToDelete = modulesToDelete.stream()
@@ -112,6 +116,7 @@ public class ChangeSetRestoreService {
 
         restoreFields(laterChangeSetIds, moduleIdsToDelete, null);
         deleteCreatedModules(modulesToDelete, null);
+        modulebookVersionRepository.deleteByModulebookIdExceptInitialImport(target.getModulebookId(), target.getId());
         changeSetRepository.deleteByIds(laterChangeSetIds);
 
         return target;

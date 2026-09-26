@@ -14,10 +14,6 @@
 
     <section>
         <div id="status" class="status">Loading change log...</div>
-        <div class="form-actions">
-            <a id="editLink" href="/index.html">Back to module</a>
-            <a id="modulebooksLink" href="/index.html">Back to Modulebooks</a>
-        </div>
     </section>
 
     <section>
@@ -40,13 +36,8 @@
                 setStatus("Missing module id in URL. Example: /module-versions.html?id=12");
                 return;
             }
-
-            document.getElementById("editLink").href = `/module-edit.html?id=${moduleId}`;
-
             try {
                 currentModule = await loadModule(moduleId);
-                document.getElementById("modulebooksLink").href =
-                    `/index.html?modulebookId=${encodeURIComponent(currentModule.modulebookId)}`;
                 [changeSets, fieldChanges, teachingForms] = await Promise.all([
                     loadModulebookChangeSets(currentModule.modulebookId),
                     loadModuleFieldChanges(moduleId),
@@ -107,7 +98,7 @@
                     <thead>
                         <tr>
                             <th>Created</th>
-                            <th>Change set</th>
+                            <th>Change set id</th>
                             <th>Source</th>
                             <th>Reason</th>
                             <th>Change</th>
@@ -239,6 +230,9 @@
             }
             if (path === "module.deleted") {
                 return "deleted module";
+            }
+            if (path === "module.moduleStatus") {
+                return "Module Status";
             }
 
             return String(path || "")

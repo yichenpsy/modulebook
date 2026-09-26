@@ -81,13 +81,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        ${modulebooks.map(program => `
-                            <tr>
-                                <td>${escapeHtml(modulebookLabel(program))}</td>
-                                <td class="row-actions">
-                                    <a href="/modulebook-import.html?modulebookId=${escapeHtml(String(program.id))}">Import PDF</a>
-                                    <a href="/index.html?modulebookId=${escapeHtml(String(program.id))}">Show Modules</a>
-                                    <a href="/module-edit.html?modulebookId=${escapeHtml(String(program.id))}">Add module</a>
+	                        ${modulebooks.map(program => `
+	                            <tr>
+	                                <td>
+	                                    <a href="/index.html?modulebookId=${escapeHtml(String(program.id))}" onclick="showModulesForModulebook(event, ${program.id})">${escapeHtml(modulebookLabel(program))}</a>
+	                                </td>
+	                                <td class="row-actions">
+	                                    <a href="/index.html?modulebookId=${escapeHtml(String(program.id))}" onclick="showModulesForModulebook(event, ${program.id})">Show Modules</a>
+	                                    <a href="/modulebook-import.html?modulebookId=${escapeHtml(String(program.id))}">Import PDF</a>
+	                                    <a href="/module-edit.html?modulebookId=${escapeHtml(String(program.id))}">Add module</a>
                                     <button class="link-button" type="button" onclick="confirmDeleteModulebook(${program.id})">Delete</button>
                                     <a href="/modulebook-history.html?id=${escapeHtml(String(program.id))}">History & Version</a>
                                     <a href="/modulebook-view.html?modulebookId=${escapeHtml(String(program.id))}">View, Export & Save version</a>
@@ -160,6 +162,12 @@
             }
         }
 
+        async function showModulesForModulebook(event, modulebookId) {
+            event.preventDefault();
+            window.history.replaceState(null, "", `/index.html?modulebookId=${encodeURIComponent(modulebookId)}`);
+            await loadSelectedModulebookModules(modulebookId);
+        }
+
         function renderModules() {
             const container = document.getElementById("modules");
 
@@ -175,7 +183,7 @@
                             <th>Module number</th>
                             <th>Name</th>
                             <th>Credits</th>
-                            <th>Module status</th>
+                            <th>Module Status</th>
                             <th>Actions</th>
 	                            <th>Module comments</th>
                         </tr>
@@ -229,7 +237,7 @@
                 renderModules();
                 setStatus(`${label} is now ${targetStatus}.`);
             } catch (error) {
-                setStatus("Could not update module status: " + error.message);
+                setStatus("Could not update Module Status: " + error.message);
             }
         }
 

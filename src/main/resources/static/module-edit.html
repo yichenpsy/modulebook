@@ -21,7 +21,6 @@
 	                <button id="deleteButton" type="button" onclick="deleteCurrentModule()">Delete</button>
 	                <a id="versionsLink" href="/index.html">History</a>
 	                <a id="viewLink" href="/index.html">View module</a>
-	                <a id="backLink" href="/index.html">Back to study program</a>
 	            </div>
 
             <section id="commitMessagePanel" class="commit-message-panel" hidden>
@@ -78,7 +77,7 @@
                 <div class="module-field-row">
                     <label class="module-field-label" for="credits">Leistungspunkte <span class="required-marker">*</span></label>
                     <div class="module-field-control">
-                        <input id="credits" type="number" step="0.5" required oninput="updateWorkloadPreview()">
+                        <input id="credits" type="number" min="0" step="0.5" required oninput="updateWorkloadPreview()">
                     </div>
                 </div>
 
@@ -303,7 +302,6 @@
             document.getElementById("modulebookId").value = modulebookId;
             renderStudyProgramDisplay(modulebookId);
             renderModuleIdDisplay(null);
-            document.getElementById("backLink").href = `/index.html?modulebookId=${modulebookId}`;
             renderLevelOptions("");
             renderFrequencyOptions("");
             renderModuleTypeOptions("");
@@ -347,9 +345,6 @@
             document.getElementById("additionalNotes").value = module.additionalNotes || "";
             document.getElementById("moduleWeight").value = module.moduleWeight ?? "";
 
-            if (module.modulebookId) {
-                document.getElementById("backLink").href = `/index.html?modulebookId=${module.modulebookId}`;
-            }
             document.getElementById("versionsLink").href = `/module-versions.html?id=${module.id}`;
             document.getElementById("viewLink").href = `/module-view.html?id=${module.id}`;
             setStatus(`Loaded module ${module.id}.`);
@@ -702,6 +697,13 @@
         async function saveModule(event) {
             event.preventDefault();
             pendingModuleRequest = buildModuleRequest();
+            if (pendingModuleRequest.credits !== null && pendingModuleRequest.credits < 0) {
+                pendingModuleRequest = null;
+                document.getElementById("commitMessagePanel").hidden = true;
+                setStatus("Leistungspunkte cannot be negative.");
+                document.getElementById("credits").focus();
+                return;
+            }
             if (!isCreateMode && pendingModuleRequest.changedFieldPaths.length === 0) {
                 pendingModuleRequest = null;
                 document.getElementById("commitMessagePanel").hidden = true;
@@ -858,7 +860,7 @@
                 changeMessagePart("learning objectives", oldModule.learningObjectives, request.learningObjectives, "module.learningObjectives", changedPaths),
                 changeMessagePart("prerequisites", oldModule.prerequisites, request.prerequisites, "module.prerequisites", changedPaths),
                 changeMessagePart("level", oldModule.level, request.level, "module.level", changedPaths),
-                changeMessagePart("module status", oldModule.moduleStatus, request.moduleStatus, "module.moduleStatus", changedPaths),
+                changeMessagePart("Module Status", oldModule.moduleStatus, request.moduleStatus, "module.moduleStatus", changedPaths),
                 changeMessagePart("frequency", oldModule.frequency, request.frequency, "module.frequency", changedPaths),
                 changeMessagePart("examination form", oldModule.examinationForm, request.examinationForm, "module.examinationForm", changedPaths),
                 changeMessagePart("contents", oldModule.contents, request.contents, "module.contents", changedPaths),

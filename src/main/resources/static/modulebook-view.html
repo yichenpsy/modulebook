@@ -13,7 +13,6 @@
     <section class="screen-only">
         <div id="status" class="status">Loading modulebook...</div>
         <div class="form-actions">
-            <a id="backLink" href="/index.html">Back to study program</a>
             <button id="versionButton" type="button" onclick="showVersionPanel()">Save current version</button>
             <button type="button" onclick="window.print()">Print</button>
         </div>
@@ -63,7 +62,6 @@
             ["Voraussetzungen", module => module.prerequisites],
             ["Niveaustufe", module => module.level],
             ["Lernform", module => teachingFormsText(module.teachingForms)],
-            ["Status", module => module.moduleStatus],
             ["Häufigkeit des Angebotes", module => module.frequency],
             ["Prüfungsform", module => module.examinationForm],
             ["Inhalte", module => module.contents],
@@ -93,9 +91,6 @@
         }
 
         async function loadCurrentModulebook() {
-            document.getElementById("backLink").href =
-                `/index.html?modulebookId=${encodeURIComponent(modulebookId)}`;
-
             const [modulebooks, modules] = await Promise.all([
                 loadModulebooks(),
                 loadModulesForModulebook(modulebookId)
@@ -120,8 +115,6 @@
             studyProgram = snapshot.modulebook || snapshot.studyProgram;
             activeModules = snapshot.modules || [];
             document.getElementById("versionButton").hidden = true;
-            document.getElementById("backLink").href =
-                `/modulebook-history.html?id=${encodeURIComponent(currentVersion.modulebookId)}`;
         }
 
         function renderModulebook() {
@@ -269,10 +262,6 @@
 
         function renderModuleRow(label, value) {
             const formattedValue = formatValue(value);
-
-            if (!formattedValue) {
-                return "";
-            }
 
             return `
                 <tr>

@@ -136,7 +136,7 @@
                 const changeSetId = Number(changeSet.id);
                 versionBeforeChangeSetId.set(changeSetId, hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
 
-                if (changeSet.sourceType === "RESTORE_BEFORE") {
+                if (isRestoreVersionChangeSet(changeSet)) {
                     const targetChangeSetId = restoreTargetChangeSetId(changeSet);
                     const restoredVersion = versionBeforeChangeSetId.get(targetChangeSetId)
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
@@ -166,10 +166,8 @@
                     minor += 1;
                 }
 
-                if (!changeSet.discardedAt) {
-                    const version = formatVersion(major, minor);
-                    latestPointByVersion.set(version, changeSetVersionPoint(changeSet, index, version));
-                }
+                const version = formatVersion(major, minor);
+                latestPointByVersion.set(version, changeSetVersionPoint(changeSet, index, version));
             });
 
             versionPoints = Array.from(latestPointByVersion.values())
@@ -415,6 +413,11 @@
             return match ? Number(match[1]) : null;
         }
 
+        function isRestoreVersionChangeSet(changeSet) {
+            return changeSet.sourceType === "RESTORE_VERSION"
+                || changeSet.sourceType === "RESTORE_BEFORE";
+        }
+
         function restoreTargetModulebookVersionId(changeSet) {
             const match = String(changeSet.reason || "").match(/modulebook (?:tag|version)\s+(\d+)/i);
             return match ? Number(match[1]) : null;
@@ -573,7 +576,7 @@
                 ["Voraussetzungen", module.prerequisites],
                 ["Niveaustufe", module.level],
                 ["Lernform", teachingFormLabelsForIds(teachingFormIds)],
-                ["Status", module.moduleStatus],
+                ["Module Status", module.moduleStatus],
                 ["Häufigkeit des Angebotes", module.frequency],
                 ["Prüfungsform", module.examinationForm],
                 ["Inhalte", module.contents],
@@ -780,6 +783,9 @@
             }
             if (path === "module.deleted") {
                 return "deleted all fields";
+            }
+            if (path === "module.moduleStatus") {
+                return "Module Status";
             }
 
             return String(path || "")

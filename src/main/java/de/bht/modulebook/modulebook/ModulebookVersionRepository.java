@@ -128,6 +128,21 @@ public class ModulebookVersionRepository {
         );
     }
 
+    public void deleteByModulebookIdExceptInitialImport(Long modulebookId, Long initialImportChangeSetId) {
+        jdbcTemplate.update(
+                """
+                DELETE FROM modulebook_versions
+                WHERE modulebook_id = ?
+                  AND NOT (
+                      source_type = 'INITIAL_IMPORT'
+                      AND source_change_set_id = ?
+                  )
+                """,
+                modulebookId,
+                initialImportChangeSetId
+        );
+    }
+
     public boolean delete(Long id) {
         int rowsDeleted = jdbcTemplate.update(
                 "DELETE FROM modulebook_versions WHERE id = ?",

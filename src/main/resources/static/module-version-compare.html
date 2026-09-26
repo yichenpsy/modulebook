@@ -392,6 +392,10 @@
         }
 
         function readablePath(path) {
+            if (path === "module.moduleStatus") {
+                return "Module Status";
+            }
+
             return String(path || "")
                 .replace(/^module\./, "")
                 .replaceAll(".", " / ");

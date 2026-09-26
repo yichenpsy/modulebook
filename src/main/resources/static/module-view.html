@@ -17,7 +17,6 @@
         <div class="form-actions">
             <a id="editLink" href="/index.html">Edit module</a>
             <a id="versionsLink" href="/index.html">History</a>
-            <a id="backLink" href="/index.html">Back to study program</a>
         </div>
     </section>
 
@@ -44,7 +43,7 @@
             ["Voraussetzungen", module => module.prerequisites],
             ["Niveaustufe", module => module.level],
             ["Lernform", module => teachingFormsText(module.teachingForms)],
-            ["Status", module => module.moduleStatus],
+            ["Module Status", module => module.moduleStatus],
             ["Häufigkeit des Angebotes", module => module.frequency],
             ["Prüfungsform", module => module.examinationForm],
             ["Inhalte", module => module.contents],
@@ -68,7 +67,6 @@
                     loadModulebooks()
                 ]);
                 renderTitle();
-                renderLinks();
                 renderModuleDetails();
                 setStatus(`Loaded module ${currentModule.id}.`);
             } catch (error) {
@@ -82,13 +80,6 @@
             const title = `${number} - ${name}`;
             document.getElementById("pageTitle").textContent = title;
             document.getElementById("documentTitle").textContent = title;
-        }
-
-        function renderLinks() {
-            if (currentModule.modulebookId) {
-                document.getElementById("backLink").href =
-                    `/index.html?modulebookId=${encodeURIComponent(currentModule.modulebookId)}`;
-            }
         }
 
         function renderModuleDetails() {

@@ -2,6 +2,7 @@ package de.bht.modulebook.module.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,6 +21,7 @@ public record ModuleRequest(
     @Size(max = 255, message = "Title must be at most 255 characters")
     String title,
     @NotNull(message = "Credits are required")
+    @DecimalMin(value = "0.0", inclusive = true, message = "Credits must be non-negative")
     BigDecimal credits,
     String moduleType,
     String coordinator,
