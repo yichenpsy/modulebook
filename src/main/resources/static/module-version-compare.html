@@ -187,10 +187,11 @@
             const byField = new Map();
 
             selectedChanges.forEach(change => {
-                const existing = byField.get(change.fieldPath);
+                const changePath = changePathOf(change);
+                const existing = byField.get(changePath);
                 if (!existing) {
-                    byField.set(change.fieldPath, {
-                        path: change.fieldPath,
+                    byField.set(changePath, {
+                        path: changePath,
                         oldValue: change.oldValue,
                         newValue: change.newValue
                     });
@@ -216,7 +217,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Field</th>
+                            <th>Change</th>
                             <th>Change set ${escapeHtml(String(fromChangeSetId))}</th>
                             <th>Change set ${escapeHtml(String(toChangeSetId))}</th>
                         </tr>

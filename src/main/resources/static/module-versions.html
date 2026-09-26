@@ -98,7 +98,7 @@
             const container = document.getElementById("changes");
 
             if (changeGroups.length === 0) {
-                container.textContent = "No field changes saved yet.";
+                container.textContent = "No module changes saved yet.";
                 return;
             }
 
@@ -110,7 +110,7 @@
                             <th>Change set</th>
                             <th>Source</th>
                             <th>Reason</th>
-                            <th>Field</th>
+                            <th>Change</th>
                             <th>Old value</th>
                             <th>New value</th>
                             <th>Actions</th>
@@ -118,20 +118,23 @@
                     </thead>
                     <tbody>
                         ${changeGroups.flatMap(group =>
-                            group.changes.map(change => `
+                            group.changes.map(change => {
+                                const changePath = changePathOf(change);
+                                return `
                                 <tr>
                                     <td>${escapeHtml(formatDate(group.changeSet.createdAt))}</td>
                                     <td>${escapeHtml(String(group.changeSet.id))}</td>
                                     <td>${escapeHtml(group.changeSet.sourceType || "")}</td>
                                     <td>${escapeHtml(group.changeSet.reason || "")}</td>
-                                    <td>${escapeHtml(readablePath(change.fieldPath))}</td>
-                                    <td class="diff-old">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.oldValue))}</td>
-                                    <td class="diff-new">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.newValue))}</td>
+                                    <td>${escapeHtml(readablePath(changePath))}</td>
+                                    <td class="diff-old">${escapeHtml(formatFieldChangeValue(changePath, change.oldValue))}</td>
+                                    <td class="diff-new">${escapeHtml(formatFieldChangeValue(changePath, change.newValue))}</td>
                                     <td class="row-actions">
                                         <a href="${fieldChangeDetailUrl(group.changeSet.id, change.id)}">Change details</a>
                                     </td>
                                 </tr>
-                            `)
+                            `;
+                            })
                         ).join("")}
                     </tbody>
                 </table>

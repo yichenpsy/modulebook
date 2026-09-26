@@ -17,9 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import de.bht.modulebook.module.Module;
 import de.bht.modulebook.module.ModuleRepository;
+import de.bht.modulebook.module.version.ModuleChange;
 import de.bht.modulebook.module.version.ModuleChangeLogService;
-import de.bht.modulebook.module.version.ModuleFieldChange;
-import de.bht.modulebook.module.version.ModuleFieldChangeRepository;
+import de.bht.modulebook.module.version.ModuleChangeRepository;
 import de.bht.modulebook.module.workload.ModuleWorkload;
 import de.bht.modulebook.module.workload.ModuleWorkloadRepository;
 import de.bht.modulebook.module.teachingform.ModuleTeachingFormRepository;
@@ -32,7 +32,7 @@ import tools.jackson.databind.json.JsonMapper;
 public class ChangeSetRestoreService {
     private final ModulebookChangeSetRepository changeSetRepository;
     private final ModulebookChangeSetService changeSetService;
-    private final ModuleFieldChangeRepository fieldChangeRepository;
+    private final ModuleChangeRepository changeRepository;
     private final ModuleRepository moduleRepository;
     private final ModuleWorkloadRepository workloadRepository;
     private final ModuleTeachingFormRepository teachingFormRepository;
@@ -42,7 +42,7 @@ public class ChangeSetRestoreService {
     public ChangeSetRestoreService(
             ModulebookChangeSetRepository changeSetRepository,
             ModulebookChangeSetService changeSetService,
-            ModuleFieldChangeRepository fieldChangeRepository,
+            ModuleChangeRepository changeRepository,
             ModuleRepository moduleRepository,
             ModuleWorkloadRepository workloadRepository,
             ModuleTeachingFormRepository teachingFormRepository,
@@ -51,7 +51,7 @@ public class ChangeSetRestoreService {
     ) {
         this.changeSetRepository = changeSetRepository;
         this.changeSetService = changeSetService;
-        this.fieldChangeRepository = fieldChangeRepository;
+        this.changeRepository = changeRepository;
         this.moduleRepository = moduleRepository;
         this.workloadRepository = workloadRepository;
         this.teachingFormRepository = teachingFormRepository;
@@ -149,30 +149,30 @@ public class ChangeSetRestoreService {
     }
 
     private void restoreFields(List<Long> restoreChangeSetIds, Set<Long> moduleIdsToDelete, Long restoreChangeSetId) {
-        List<ModuleFieldChange> changes = fieldChangeRepository.findByChangeSetIds(restoreChangeSetIds);
-        Map<ModuleFieldKey, ModuleFieldChange> oldestChangeByField = new HashMap<>();
+        List<ModuleChange> changes = changeRepository.findByChangeSetIds(restoreChangeSetIds);
+        Map<ModuleChangeKey, ModuleChange> oldestChangeByPath = new HashMap<>();
 
-        for (ModuleFieldChange change : changes) {
-            if (ModuleChangeLogService.isLifecycleChange(change.getFieldPath())
+        for (ModuleChange change : changes) {
+            if (ModuleChangeLogService.isLifecycleChange(change.getChangePath())
                     || change.getModuleId() == null
                     || moduleIdsToDelete.contains(change.getModuleId())) {
                 continue;
             }
-            ModuleFieldKey key = new ModuleFieldKey(change.getModuleId(), change.getFieldPath());
-            oldestChangeByField.putIfAbsent(key, change);
+            ModuleChangeKey key = new ModuleChangeKey(change.getModuleId(), change.getChangePath());
+            oldestChangeByPath.putIfAbsent(key, change);
         }
 
-        Map<Long, List<ModuleFieldChange>> changesByModule = new HashMap<>();
-        for (ModuleFieldChange change : oldestChangeByField.values()) {
+        Map<Long, List<ModuleChange>> changesByModule = new HashMap<>();
+        for (ModuleChange change : oldestChangeByPath.values()) {
             changesByModule.computeIfAbsent(change.getModuleId(), ignored -> new ArrayList<>()).add(change);
         }
 
-        for (Map.Entry<Long, List<ModuleFieldChange>> entry : changesByModule.entrySet()) {
+        for (Map.Entry<Long, List<ModuleChange>> entry : changesByModule.entrySet()) {
             restoreModuleFields(entry.getKey(), entry.getValue(), restoreChangeSetId);
         }
     }
 
-    private void restoreModuleFields(Long moduleId, List<ModuleFieldChange> changes, Long restoreChangeSetId) {
+    private void restoreModuleFields(Long moduleId, List<ModuleChange> changes, Long restoreChangeSetId) {
         Module oldModule = moduleRepository.findById(moduleId)
                 .orElse(null);
         if (oldModule == null) {
@@ -189,16 +189,16 @@ public class ChangeSetRestoreService {
         boolean workloadChanged = false;
         boolean teachingFormsChanged = false;
 
-        for (ModuleFieldChange change : changes) {
-            String fieldPath = change.getFieldPath();
-            if ("workload".equals(fieldPath)) {
+        for (ModuleChange change : changes) {
+            String changePath = change.getChangePath();
+            if ("workload".equals(changePath)) {
                 restoredWorkload = parseWorkload(change.getOldValue());
                 workloadChanged = true;
-            } else if ("teachingFormIds".equals(fieldPath)) {
+            } else if ("teachingFormIds".equals(changePath)) {
                 restoredTeachingFormIds = parseLongList(change.getOldValue());
                 teachingFormsChanged = true;
-            } else if (fieldPath != null && fieldPath.startsWith("module.")) {
-                applyModuleField(restoredModule, fieldPath, change.getOldValue());
+            } else if (changePath != null && changePath.startsWith("module.")) {
+                applyModuleChange(restoredModule, changePath, change.getOldValue());
             }
         }
 
@@ -248,9 +248,9 @@ public class ChangeSetRestoreService {
         }
     }
 
-    private void applyModuleField(Module module, String fieldPath, String oldValue) {
+    private void applyModuleChange(Module module, String changePath, String oldValue) {
         JsonNode value = parseJson(oldValue);
-        switch (fieldPath) {
+        switch (changePath) {
             case "module.moduleNumber" -> module.setModuleNumber(textOrNull(value));
             case "module.title" -> module.setTitle(textOrNull(value));
             case "module.credits" -> module.setCredits(decimalOrNull(value));
@@ -307,7 +307,7 @@ public class ChangeSetRestoreService {
         try {
             return jsonMapper.readTree(json);
         } catch (JacksonException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not parse field change history");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not parse module change history");
         }
     }
 
@@ -379,6 +379,6 @@ public class ChangeSetRestoreService {
         return String.join(", ", labels);
     }
 
-    private record ModuleFieldKey(Long moduleId, String fieldPath) {
+    private record ModuleChangeKey(Long moduleId, String changePath) {
     }
 }

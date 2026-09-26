@@ -19,26 +19,26 @@ import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class ModuleChangeLogService {
-    public static final String MODULE_CREATED_FIELD = "module.created";
-    public static final String MODULE_DELETED_FIELD = "module.deleted";
+    public static final String MODULE_CREATED_CHANGE = "module.created";
+    public static final String MODULE_DELETED_CHANGE = "module.deleted";
 
-    private final ModuleFieldChangeRepository repository;
+    private final ModuleChangeRepository repository;
     private final JsonMapper jsonMapper;
 
-    public ModuleChangeLogService(ModuleFieldChangeRepository repository, JsonMapper jsonMapper) {
+    public ModuleChangeLogService(ModuleChangeRepository repository, JsonMapper jsonMapper) {
         this.repository = repository;
         this.jsonMapper = jsonMapper;
     }
 
-    public static boolean isLifecycleChange(String fieldPath) {
-        return MODULE_CREATED_FIELD.equals(fieldPath) || MODULE_DELETED_FIELD.equals(fieldPath);
+    public static boolean isLifecycleChange(String changePath) {
+        return MODULE_CREATED_CHANGE.equals(changePath) || MODULE_DELETED_CHANGE.equals(changePath);
     }
 
     public void saveModuleCreated(Long changeSetId, Module module) {
         repository.insert(
                 changeSetId,
                 module.getId(),
-                MODULE_CREATED_FIELD,
+                MODULE_CREATED_CHANGE,
                 toJson(null),
                 toJson(CreatedModuleSnapshot.from(module))
         );
@@ -53,7 +53,7 @@ public class ModuleChangeLogService {
         repository.insert(
                 changeSetId,
                 module.getId(),
-                MODULE_DELETED_FIELD,
+                MODULE_DELETED_CHANGE,
                 toJson(DeletedModuleSnapshot.from(module, workload, teachingFormIds)),
                 toJson(null)
         );
@@ -108,12 +108,12 @@ public class ModuleChangeLogService {
         addIfChanged(changeSetId, moduleId, "teachingFormIds", oldTeachingFormIds, newTeachingFormIds, allowedPaths);
     }
 
-    private void addIfChanged(Long changeSetId, Long moduleId, String fieldPath, Object oldValue, Object newValue) {
-        addIfChanged(changeSetId, moduleId, fieldPath, oldValue, newValue, null);
+    private void addIfChanged(Long changeSetId, Long moduleId, String changePath, Object oldValue, Object newValue) {
+        addIfChanged(changeSetId, moduleId, changePath, oldValue, newValue, null);
     }
 
-    private void addIfChanged(Long changeSetId, Long moduleId, String fieldPath, Object oldValue, Object newValue, Set<String> allowedPaths) {
-        if (allowedPaths != null && !allowedPaths.contains(fieldPath)) {
+    private void addIfChanged(Long changeSetId, Long moduleId, String changePath, Object oldValue, Object newValue, Set<String> allowedPaths) {
+        if (allowedPaths != null && !allowedPaths.contains(changePath)) {
             return;
         }
         if (sameValue(oldValue, newValue)) {
@@ -123,7 +123,7 @@ public class ModuleChangeLogService {
         repository.insert(
                 changeSetId,
                 moduleId,
-                fieldPath,
+                changePath,
                 toJson(oldValue),
                 toJson(newValue)
         );

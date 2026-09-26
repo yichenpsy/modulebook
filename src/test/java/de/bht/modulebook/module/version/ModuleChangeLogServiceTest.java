@@ -23,7 +23,7 @@ import tools.jackson.databind.json.JsonMapper;
 @ExtendWith(MockitoExtension.class)
 class ModuleChangeLogServiceTest {
     @Mock
-    private ModuleFieldChangeRepository repository;
+    private ModuleChangeRepository repository;
 
     private ModuleChangeLogService service;
 

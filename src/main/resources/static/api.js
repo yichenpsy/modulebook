@@ -3,10 +3,40 @@ async function requestJson(url, options = {}) {
     const text = await response.text();
 
     if (!response.ok) {
-        throw new Error(text || `${response.status} ${response.statusText}`);
+        throw new Error(formatHttpError(response, text));
     }
 
     return text ? JSON.parse(text) : null;
+}
+
+function formatHttpError(response, text) {
+    const body = parseJsonOrNull(text);
+
+    if (!body) {
+        return text || `${response.status} ${response.statusText}`;
+    }
+
+    const statusText = body.error || response.statusText || "Request failed";
+    const detail = body.message || body.detail;
+    const path = body.path ? ` (${body.path})` : "";
+
+    if (detail && detail !== "No message available") {
+        return `${response.status} ${statusText}: ${detail}${path}`;
+    }
+
+    return `${response.status} ${statusText}${path}`;
+}
+
+function parseJsonOrNull(text) {
+    if (!text) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        return null;
+    }
 }
 
 async function loadModulebooks() {
@@ -79,8 +109,12 @@ async function restoreModulebookVersion(versionId) {
     });
 }
 
+async function loadChangeSetModuleChanges(changeSetId) {
+    return requestJson(`/api/change-sets/${changeSetId}/module-changes`);
+}
+
 async function loadChangeSetFieldChanges(changeSetId) {
-    return requestJson(`/api/change-sets/${changeSetId}/field-changes`);
+    return loadChangeSetModuleChanges(changeSetId);
 }
 
 async function restoreBeforeChangeSet(changeSetId, force = false) {
@@ -95,8 +129,12 @@ async function resetToInitialImport(changeSetId) {
     });
 }
 
+async function loadModuleChanges(moduleId) {
+    return requestJson(`/api/modules/${moduleId}/module-changes`);
+}
+
 async function loadModuleFieldChanges(moduleId) {
-    return requestJson(`/api/modules/${moduleId}/field-changes`);
+    return loadModuleChanges(moduleId);
 }
 
 async function loadTeachingForms() {
@@ -167,4 +205,8 @@ function escapeHtml(value) {
 
 function numberOrNull(value) {
     return value === "" ? null : Number(value);
+}
+
+function changePathOf(change) {
+    return change.changePath ?? change.fieldPath;
 }

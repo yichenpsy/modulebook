@@ -277,12 +277,13 @@
             const byField = new Map();
 
             selectedChanges.forEach(change => {
-                const fieldKey = `${change.moduleId || "studyProgram"}:${change.fieldPath}`;
+                const changePath = changePathOf(change);
+                const fieldKey = `${change.moduleId || "studyProgram"}:${changePath}`;
                 const existing = byField.get(fieldKey);
                 if (!existing) {
                     byField.set(fieldKey, {
                         moduleId: change.moduleId,
-                        path: change.fieldPath,
+                        path: changePath,
                         oldValue: change.oldValue,
                         newValue: change.newValue,
                         detailChangeSetId: change.changeSetId,
@@ -325,7 +326,7 @@
                     <thead>
                         <tr>
                             <th>Module</th>
-                            <th>Field</th>
+                            <th>Change</th>
                             <th>${escapeHtml(fromPoint.version)}</th>
                             <th>${escapeHtml(toPoint.version)}</th>
                             <th>Actions</th>

@@ -140,7 +140,7 @@
                             <th>Source</th>
                             <th>Reason</th>
                             <th>Changed modules</th>
-                            <th>Changed fields</th>
+                            <th>Changes</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -216,7 +216,7 @@
                     <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
                     <td>${escapeHtml(changeSet.reason || "")}</td>
                     <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
-                    <td>${escapeHtml(changeSetChangedFieldsSummary(changeSet, changes))}</td>
+                    <td>${escapeHtml(changeSetChangesSummary(changeSet, changes))}</td>
                     <td class="row-actions">
                         <a href="/modulebook-history.html?id=${escapeHtml(String(modulebookId))}&changeSetId=${escapeHtml(String(changeSet.id))}">Details</a>
                         ${restoreActionHtml(changeSet)}
@@ -351,7 +351,7 @@
                                 <th>Source</th>
                                 <th>Reason</th>
                                 <th>Module</th>
-                                <th>Field</th>
+                                <th>Change</th>
                                 <th>Old value</th>
                                 <th>New value</th>
                                 <th>Actions</th>
@@ -360,6 +360,7 @@
                         <tbody>
                             ${changes.map(change => {
                                 const module = moduleById(change.moduleId);
+                                const changePath = changePathOf(change);
                                 return `
                                     <tr>
                                         <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
@@ -367,9 +368,9 @@
                                         <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
                                         <td>${escapeHtml(changeSet.reason || "")}</td>
                                         <td>${escapeHtml(changeModuleLabel(change, module))}</td>
-                                        <td>${escapeHtml(readablePath(change.fieldPath))}</td>
-                                        <td class="diff-old">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.oldValue))}</td>
-                                        <td class="diff-new">${escapeHtml(formatFieldChangeValue(change.fieldPath, change.newValue))}</td>
+                                        <td>${escapeHtml(readablePath(changePath))}</td>
+                                        <td class="diff-old">${escapeHtml(formatFieldChangeValue(changePath, change.oldValue))}</td>
+                                        <td class="diff-new">${escapeHtml(formatFieldChangeValue(changePath, change.newValue))}</td>
                                         <td class="row-actions">
                                             <a href="${fieldChangeDetailUrl(changeSet.id, change.id)}">Change details</a>
                                             ${change.moduleId ? `
@@ -430,7 +431,7 @@
                     <dd>${escapeHtml(formatDate(change.createdAt || changeSet.createdAt))}</dd>
                     ${lifecycleSnapshot ? renderModuleSnapshotMetadataRows(lifecycleSnapshot) : ""}
                 </dl>
-                ${lifecycleSnapshot ? renderModuleSnapshotDetail(lifecycleSnapshot, change.fieldPath) : renderFieldValueDetail(change)}
+                ${lifecycleSnapshot ? renderModuleSnapshotDetail(lifecycleSnapshot, changePathOf(change)) : renderFieldValueDetail(change)}
             `;
         }
 
@@ -526,7 +527,7 @@
                 changes.map(change => changeModuleLabel(change, moduleById(change.moduleId)))
             ));
 
-            return labels.length > 0 ? labels.join(", ") : "No field changes";
+            return labels.length > 0 ? labels.join(", ") : "No module changes";
         }
 
         function changeSetModuleSummary(changeSet, changes) {
@@ -545,7 +546,7 @@
             return moduleSummary(changes);
         }
 
-        function changeSetChangedFieldsSummary(changeSet, changes) {
+        function changeSetChangesSummary(changeSet, changes) {
             if (changeSet.sourceType === "RESTORE_BEFORE" && changes.length === 0) {
                 return "Reset only";
             }
@@ -566,7 +567,7 @@
                 return changeSet.reason || "Deleted module";
             }
 
-            return "No field changes were saved for this change set.";
+            return "No module changes were saved for this change set.";
         }
 
         function changeSetSourceLabel(changeSet) {
@@ -852,7 +853,8 @@
         }
 
         function lifecycleSnapshotLabel(change) {
-            if (change.fieldPath !== "module.created" && change.fieldPath !== "module.deleted") {
+            const changePath = changePathOf(change);
+            if (changePath !== "module.created" && changePath !== "module.deleted") {
                 return "";
             }
 
@@ -871,10 +873,11 @@
         }
 
         function lifecycleSnapshotForChange(change) {
-            if (change.fieldPath === "module.created") {
+            const changePath = changePathOf(change);
+            if (changePath === "module.created") {
                 return parseLifecycleSnapshot(change.newValue);
             }
-            if (change.fieldPath === "module.deleted") {
+            if (changePath === "module.deleted") {
                 return parseLifecycleSnapshot(change.oldValue);
             }
 
@@ -882,7 +885,7 @@
         }
 
         async function lifecycleSnapshotForDetail(change) {
-            if (change.fieldPath === "module.created") {
+            if (changePathOf(change) === "module.created") {
                 return reconstructCreatedModuleSnapshot(change);
             }
 
@@ -959,7 +962,7 @@
 
         function findDeletedModuleChange(moduleId, createChange) {
             return allLoadedFieldChanges()
-                .filter(change => change.fieldPath === "module.deleted")
+                .filter(change => changePathOf(change) === "module.deleted")
                 .filter(change => isChangeAfter(change, createChange))
                 .find(change => {
                     const snapshot = parseLifecycleSnapshot(change.oldValue);
@@ -1037,23 +1040,24 @@
         }
 
         function rollBackFieldChange(snapshot, change) {
-            if (change.fieldPath === "workload") {
+            const changePath = changePathOf(change);
+            if (changePath === "workload") {
                 snapshot.workload = parseJsonValue(change.oldValue);
                 return;
             }
-            if (change.fieldPath === "teachingFormIds") {
+            if (changePath === "teachingFormIds") {
                 const ids = parseJsonValue(change.oldValue);
                 snapshot.teachingFormIds = Array.isArray(ids) ? ids : [];
                 return;
             }
-            if (!change.fieldPath || !change.fieldPath.startsWith("module.")) {
+            if (!changePath || !changePath.startsWith("module.")) {
                 return;
             }
-            if (change.fieldPath === "module.created" || change.fieldPath === "module.deleted") {
+            if (changePath === "module.created" || changePath === "module.deleted") {
                 return;
             }
 
-            const fieldName = change.fieldPath.replace(/^module\./, "");
+            const fieldName = changePath.replace(/^module\./, "");
             snapshot.module[fieldName] = parseJsonValue(change.oldValue);
         }
 

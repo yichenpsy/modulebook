@@ -8,26 +8,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.bht.modulebook.module.version.ModuleFieldChange;
-import de.bht.modulebook.module.version.ModuleFieldChangeRepository;
+import de.bht.modulebook.module.version.ModuleChange;
+import de.bht.modulebook.module.version.ModuleChangeRepository;
 import de.bht.modulebook.modulebook.ModulebookService;
 
 @RestController
 public class ModulebookChangeSetController {
     private final ModulebookChangeSetService changeSetService;
     private final ModulebookService modulebookService;
-    private final ModuleFieldChangeRepository fieldChangeRepository;
+    private final ModuleChangeRepository changeRepository;
     private final ChangeSetRestoreService restoreService;
 
     public ModulebookChangeSetController(
             ModulebookChangeSetService changeSetService,
             ModulebookService modulebookService,
-            ModuleFieldChangeRepository fieldChangeRepository,
+            ModuleChangeRepository changeRepository,
             ChangeSetRestoreService restoreService
     ) {
         this.changeSetService = changeSetService;
         this.modulebookService = modulebookService;
-        this.fieldChangeRepository = fieldChangeRepository;
+        this.changeRepository = changeRepository;
         this.restoreService = restoreService;
     }
 
@@ -37,14 +37,20 @@ public class ModulebookChangeSetController {
         return changeSetService.getByModulebookId(modulebookId);
     }
 
-    @GetMapping("/api/change-sets/{changeSetId}/field-changes")
-    public List<ModuleFieldChange> getFieldChanges(@PathVariable Long changeSetId) {
-        return fieldChangeRepository.findByChangeSetId(changeSetId);
+    @GetMapping({
+            "/api/change-sets/{changeSetId}/module-changes",
+            "/api/change-sets/{changeSetId}/field-changes"
+    })
+    public List<ModuleChange> getModuleChanges(@PathVariable Long changeSetId) {
+        return changeRepository.findByChangeSetId(changeSetId);
     }
 
-    @GetMapping("/api/modules/{moduleId}/field-changes")
-    public List<ModuleFieldChange> getModuleFieldChanges(@PathVariable Long moduleId) {
-        return fieldChangeRepository.findByModuleId(moduleId);
+    @GetMapping({
+            "/api/modules/{moduleId}/module-changes",
+            "/api/modules/{moduleId}/field-changes"
+    })
+    public List<ModuleChange> getModuleChangesByModule(@PathVariable Long moduleId) {
+        return changeRepository.findByModuleId(moduleId);
     }
 
     @PostMapping("/api/change-sets/{changeSetId}/restore-before")
