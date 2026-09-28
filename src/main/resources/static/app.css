@@ -51,6 +51,31 @@ button {
     font-size: 0.8em;
 }
 
+.modulebook-version-action-button {
+    align-items: center;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: column;
+    height: 42px;
+    justify-content: center;
+    width: 190px;
+}
+
+.modulebook-version-actions {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+}
+
+.modulebook-version-actions a,
+.modulebook-version-actions button {
+    margin: 0;
+}
+
+.modulebook-version-actions a + a {
+    margin-left: 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -493,6 +518,13 @@ th {
 
 .diff-added {
     background: #c9f7d0;
+}
+
+.modulebook-version-compare-page .diff-removed,
+.modulebook-version-compare-page .deleted-module-snapshot,
+.modulebook-version-compare-page .deleted-module-snapshot th,
+.modulebook-version-compare-page .deleted-module-snapshot td {
+    text-decoration: none;
 }
 
 .field-hint {

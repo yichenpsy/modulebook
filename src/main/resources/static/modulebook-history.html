@@ -42,6 +42,7 @@
         let changesByChangeSetId = new Map();
         let versionsByChangeSetId = new Map();
         let versionsByModulebookVersionId = new Map();
+        let restoredFromVersionByChangeSetId = new Map();
 
         async function init() {
             if (!modulebookId) {
@@ -182,7 +183,7 @@
                                     <td>${escapeHtml(formatDateOnly(version.modulebookReleaseDate))}</td>
                                     <td>${escapeHtml(formatDateOnly(version.studyExaminationRegulationsDate))}</td>
                                     <td>${escapeHtml(String(modulebookVersionActiveModuleCount(version)))}</td>
-                                    <td class="row-actions">
+                                    <td class="row-actions modulebook-version-actions">
                                         <a href="/modulebook-view.html?versionId=${escapeHtml(String(version.id))}">View / Print</a>
                                         <a href="/modulebook-history.html?id=${escapeHtml(String(modulebookId))}&modulebookVersionId=${escapeHtml(String(version.id))}">Details</a>
                                         ${modulebookVersionActionHtml(version)}
@@ -207,7 +208,10 @@
             const changes = changesByChangeSetId.get(Number(changeSet.id)) || [];
             return `
                 <tr class="${changeSet.discardedAt ? "discarded-change-set-row" : ""}">
-                    <td class="version-cell">${escapeHtml(versionForChangeSet(changeSet))}</td>
+                    <td class="version-cell">
+                        ${escapeHtml(versionForChangeSet(changeSet))}
+                        ${renderRestoreVersionMeta(changeSet)}
+                    </td>
                     <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
                     <td>${escapeHtml(String(changeSet.id))}</td>
                     <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
@@ -263,6 +267,19 @@
             return `
                 <div class="version-meta">
                     ${rows.map(row => `<div>${escapeHtml(row)}</div>`).join("")}
+                </div>
+            `;
+        }
+
+        function renderRestoreVersionMeta(changeSet) {
+            const restoredFromVersion = restoredFromVersionForChangeSet(changeSet);
+            if (!restoredFromVersion) {
+                return "";
+            }
+
+            return `
+                <div class="version-meta">
+                    ${escapeHtml(`Restored from ${restoredFromVersion}`)}
                 </div>
             `;
         }
@@ -347,6 +364,7 @@
                             <tr>
                                 <th>Created</th>
                                 <th>Change set id</th>
+                                <th>Change id</th>
                                 <th>Source</th>
                                 <th>Reason</th>
                                 <th>Module</th>
@@ -364,6 +382,7 @@
                                     <tr>
                                         <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
                                         <td>${escapeHtml(String(changeSet.id))}</td>
+                                        <td>${escapeHtml(String(change.id))}</td>
                                         <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
                                         <td>${escapeHtml(changeSet.reason || "")}</td>
                                         <td>${escapeHtml(changeModuleLabel(change, module))}</td>
@@ -585,8 +604,8 @@
 
             return `
                 <button type="button" data-restore-before="${escapeHtml(String(changeSet.id))}">
-                    Undo this and later change<br>
-                    <span class="button-subtext">(restore to previous version)</span>
+                 Restore to previous version<br>
+                    <span class="button-subtext">(Undo this and later change)</span>
                 </button>
             `;
         }
@@ -606,7 +625,7 @@
 
         function modulebookVersionActionHtml(version) {
             return `
-                <button type="button" data-restore-modulebook-version="${escapeHtml(String(version.id))}">
+                <button class="modulebook-version-action-button" type="button" data-restore-modulebook-version="${escapeHtml(String(version.id))}">
                     Back to this Version
                 </button>
                 ${modulebookVersionResetInitialImportActionHtml(version)}
@@ -620,7 +639,7 @@
             }
 
             return `
-                <button type="button" data-reset-to-initial-import="${escapeHtml(String(version.sourceChangeSetId))}">
+                <button class="modulebook-version-action-button" type="button" data-reset-to-initial-import="${escapeHtml(String(version.sourceChangeSetId))}">
                     Reset to initial import<br>
                     <span class="button-subtext">delete all change history</span>
                 </button>
@@ -633,7 +652,7 @@
             }
 
             return `
-                <button type="button" data-delete-modulebook-version="${escapeHtml(String(version.id))}">
+                <button class="modulebook-version-action-button" type="button" data-delete-modulebook-version="${escapeHtml(String(version.id))}">
                     Delete this version
                 </button>
             `;
@@ -713,6 +732,7 @@
         function calculateHistoryVersions() {
             versionsByChangeSetId = new Map();
             versionsByModulebookVersionId = new Map();
+            restoredFromVersionByChangeSetId = new Map();
 
             const versionBeforeChangeSetId = new Map();
             const events = historyEvents().sort(compareHistoryEvents);
@@ -745,9 +765,10 @@
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
                     const parsedVersion = parseVersion(restoredVersion);
                     major = parsedVersion.major;
-                    minor = parsedVersion.minor;
+                    minor = parsedVersion.minor + 1;
                     hasVersion = true;
-                    versionsByChangeSetId.set(changeSetId, restoredVersion);
+                    restoredFromVersionByChangeSetId.set(changeSetId, restoredVersion);
+                    versionsByChangeSetId.set(changeSetId, formatVersion(major, minor));
                     continue;
                 }
 
@@ -757,9 +778,10 @@
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
                     const parsedVersion = parseVersion(restoredVersion);
                     major = parsedVersion.major;
-                    minor = parsedVersion.minor;
+                    minor = parsedVersion.minor + 1;
                     hasVersion = true;
-                    versionsByChangeSetId.set(changeSetId, restoredVersion);
+                    restoredFromVersionByChangeSetId.set(changeSetId, restoredVersion);
+                    versionsByChangeSetId.set(changeSetId, formatVersion(major, minor));
                     continue;
                 }
 
@@ -793,6 +815,10 @@
 
         function versionForChangeSet(changeSet) {
             return versionsByChangeSetId.get(Number(changeSet.id)) || "";
+        }
+
+        function restoredFromVersionForChangeSet(changeSet) {
+            return restoredFromVersionByChangeSetId.get(Number(changeSet.id)) || "";
         }
 
         function versionForModulebookVersion(version) {

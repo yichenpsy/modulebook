@@ -5,7 +5,7 @@
     <title>Compare Modulebook Versions</title>
     <link rel="stylesheet" href="/app.css">
 </head>
-<body>
+<body class="modulebook-version-compare-page">
     <nav>
         <a href="/index.html">Modulebooks</a>
     </nav>
@@ -276,7 +276,7 @@
 
             selectedChanges.forEach(change => {
                 const changePath = changePathOf(change);
-                const fieldKey = `${change.moduleId || "studyProgram"}:${changePath}`;
+                const fieldKey = `${change.moduleId || "studyProgram"}:${compareFieldKey(changePath)}`;
                 const existing = byField.get(fieldKey);
                 if (!existing) {
                     byField.set(fieldKey, {
@@ -290,6 +290,7 @@
                     return;
                 }
                 existing.newValue = change.newValue;
+                existing.path = compareDisplayPath(existing.oldValue, existing.newValue, existing.path, changePath);
                 existing.detailChangeSetId = change.changeSetId;
                 existing.detailChangeId = change.id;
             });
@@ -309,6 +310,29 @@
                         moduleLabel(moduleById(right.moduleId), right.moduleId)
                     ) || String(left.path || "").localeCompare(String(right.path || ""))
                 );
+        }
+
+        function compareFieldKey(changePath) {
+            return isModuleLifecyclePath(changePath) ? "module.lifecycle" : changePath;
+        }
+
+        function compareDisplayPath(oldValue, newValue, existingPath, changePath) {
+            if (!isModuleLifecyclePath(existingPath) && !isModuleLifecyclePath(changePath)) {
+                return changePath;
+            }
+
+            if (isJsonNull(oldValue) && !isJsonNull(newValue)) {
+                return "module.created";
+            }
+            if (!isJsonNull(oldValue) && isJsonNull(newValue)) {
+                return "module.deleted";
+            }
+
+            return changePath;
+        }
+
+        function isModuleLifecyclePath(changePath) {
+            return changePath === "module.created" || changePath === "module.deleted";
         }
 
         function renderDiff(changes, fromPoint, toPoint) {
