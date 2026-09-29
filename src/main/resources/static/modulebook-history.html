@@ -215,7 +215,7 @@
                     <td>${escapeHtml(formatDate(changeSet.createdAt))}</td>
                     <td>${escapeHtml(String(changeSet.id))}</td>
                     <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
-                    <td>${escapeHtml(changeSet.reason || "")}</td>
+                    <td>${escapeHtml(changeSetReasonText(changeSet, changes))}</td>
                     <td>${escapeHtml(changeSetModuleSummary(changeSet, changes))}</td>
                     <td>${escapeHtml(changeSetChangesSummary(changeSet, changes))}</td>
                     <td class="row-actions">
@@ -354,7 +354,7 @@
                     Version ${escapeHtml(versionForChangeSet(changeSet))}
                     ${escapeHtml(changeSetSourceLabel(changeSet))}
                     ${escapeHtml(formatDate(changeSet.createdAt))}
-                    ${changeSet.reason ? `- ${escapeHtml(changeSet.reason)}` : ""}
+                    ${changeSetReasonText(changeSet, changes) ? `- ${escapeHtml(changeSetReasonText(changeSet, changes))}` : ""}
                 </p>
                 ${changes.length === 0 ? `
                     <p>${escapeHtml(emptyChangeSetMessage(changeSet))}</p>
@@ -384,7 +384,7 @@
                                         <td>${escapeHtml(String(changeSet.id))}</td>
                                         <td>${escapeHtml(String(change.id))}</td>
                                         <td>${escapeHtml(changeSetSourceLabel(changeSet))}</td>
-                                        <td>${escapeHtml(changeSet.reason || "")}</td>
+                                        <td>${escapeHtml(changeSetReasonText(changeSet, changes))}</td>
                                         <td>${escapeHtml(changeModuleLabel(change, module))}</td>
                                         <td>${escapeHtml(readablePath(changePath))}</td>
                                         <td class="diff-old">${escapeHtml(formatFieldChangeValue(changePath, change.oldValue))}</td>
@@ -444,7 +444,7 @@
                     <dt>Source</dt>
                     <dd>${escapeHtml(changeSetSourceLabel(changeSet))}</dd>
                     <dt>Reason</dt>
-                    <dd>${escapeHtml(changeSet.reason || "")}</dd>
+                    <dd>${escapeHtml(changeSetReasonText(changeSet, changes))}</dd>
                     <dt>Changed at</dt>
                     <dd>${escapeHtml(formatDate(change.createdAt || changeSet.createdAt))}</dd>
                     ${lifecycleSnapshot ? renderModuleSnapshotMetadataRows(lifecycleSnapshot) : ""}
@@ -574,6 +574,78 @@
             }
 
             return String(changes.length);
+        }
+
+        function changeSetReasonText(changeSet, changes) {
+            const reason = changeSet.reason || "";
+            if (!shouldRegenerateReadableReason(reason, changes)) {
+                return reason;
+            }
+
+            return generatedChangeMessage(changes) || reason;
+        }
+
+        function shouldRegenerateReadableReason(reason, changes) {
+            return reason.includes("changed workload from")
+                && reason.includes("{")
+                && changes.some(change => changePathOf(change) === "workload");
+        }
+
+        function generatedChangeMessage(changes) {
+            return changes
+                .map(change => {
+                    const changePath = changePathOf(change);
+                    if (changePath === "module.created" || changePath === "module.deleted") {
+                        return "";
+                    }
+
+                    const oldText = formatFieldChangeValue(changePath, change.oldValue);
+                    const newText = formatFieldChangeValue(changePath, change.newValue);
+                    if (oldText === newText) {
+                        return "";
+                    }
+
+                    return `changed ${changeMessageLabel(changePath)} from ${displayValue(oldText)} to ${displayValue(newText)}`;
+                })
+                .filter(Boolean)
+                .join("; ");
+        }
+
+        function changeMessageLabel(changePath) {
+            const labels = {
+                "module.moduleNumber": "module number",
+                "module.title": "title",
+                "module.credits": "credits",
+                "module.moduleType": "module type",
+                "module.coordinator": "coordinator",
+                "module.applicability": "applicability",
+                "module.learningArea": "learning area",
+                "module.learningObjectives": "learning objectives",
+                "module.prerequisites": "prerequisites",
+                "module.level": "level",
+                "module.moduleStatus": "Module Status",
+                "module.moduleComments": "module comments",
+                "module.frequency": "frequency",
+                "module.examinationForm": "examination form",
+                "module.contents": "contents",
+                "module.literature": "literature",
+                "module.additionalNotes": "additional notes",
+                "module.moduleWeight": "module weight",
+                "teachingFormIds": "teaching forms",
+                "workload": "workload"
+            };
+
+            return labels[changePath] || readablePath(changePath);
+        }
+
+        function displayValue(value) {
+            if (!value) {
+                return "\"\"";
+            }
+
+            const text = String(value);
+            const shortValue = text.length > 180 ? `${text.slice(0, 177)}...` : text;
+            return `"${shortValue}"`;
         }
 
         function emptyChangeSetMessage(changeSet) {
@@ -912,6 +984,9 @@
             if (fieldPath === "teachingFormIds") {
                 return teachingFormLabelsForJsonValue(value);
             }
+            if (fieldPath === "workload") {
+                return workloadText(parseJsonValue(value));
+            }
             if (fieldPath === "module.created") {
                 if (isJsonNull(value)) {
                     return "--";
@@ -1166,7 +1241,7 @@
             const components = workload.components && workload.components.length > 0
                 ? workload.components
                     .map(component => {
-                        const teachingForm = teachingFormLabelForId(component.teachingFormId);
+                        const teachingForm = workloadTeachingFormCode(component);
                         return `${formatNumber(component.swsAmount)} SWS ${teachingForm}`.trim();
                     })
                     .filter(Boolean)
@@ -1223,6 +1298,15 @@
         function teachingFormLabelForId(id) {
             const teachingForm = teachingForms.find(option => Number(option.id) === Number(id));
             return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
+        }
+
+        function workloadTeachingFormCode(component) {
+            if (component.teachingFormCode) {
+                return component.teachingFormCode;
+            }
+
+            const teachingForm = teachingForms.find(option => Number(option.id) === Number(component.teachingFormId));
+            return teachingForm?.code || component.teachingFormId || "";
         }
 
         function parseJsonValue(value) {

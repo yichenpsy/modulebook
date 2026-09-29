@@ -116,7 +116,7 @@
                                     <td>${escapeHtml(formatDate(group.changeSet.createdAt))}</td>
                                     <td>${escapeHtml(String(group.changeSet.id))}</td>
                                     <td>${escapeHtml(group.changeSet.sourceType || "")}</td>
-                                    <td>${escapeHtml(group.changeSet.reason || "")}</td>
+                                    <td>${escapeHtml(changeSetReasonText(group.changeSet, group.changes))}</td>
                                     <td>${escapeHtml(readablePath(changePath))}</td>
                                     <td class="diff-old">${escapeHtml(formatFieldChangeValue(changePath, change.oldValue))}</td>
                                     <td class="diff-new">${escapeHtml(formatFieldChangeValue(changePath, change.newValue))}</td>
@@ -151,9 +151,84 @@
             }
         }
 
+        function changeSetReasonText(changeSet, changes) {
+            const reason = changeSet.reason || "";
+            if (!shouldRegenerateReadableReason(reason, changes)) {
+                return reason;
+            }
+
+            return generatedChangeMessage(changes) || reason;
+        }
+
+        function shouldRegenerateReadableReason(reason, changes) {
+            return reason.includes("changed workload from")
+                && reason.includes("{")
+                && changes.some(change => changePathOf(change) === "workload");
+        }
+
+        function generatedChangeMessage(changes) {
+            return changes
+                .map(change => {
+                    const changePath = changePathOf(change);
+                    if (changePath === "module.created" || changePath === "module.deleted") {
+                        return "";
+                    }
+
+                    const oldText = formatFieldChangeValue(changePath, change.oldValue);
+                    const newText = formatFieldChangeValue(changePath, change.newValue);
+                    if (oldText === newText) {
+                        return "";
+                    }
+
+                    return `changed ${changeMessageLabel(changePath)} from ${displayValue(oldText)} to ${displayValue(newText)}`;
+                })
+                .filter(Boolean)
+                .join("; ");
+        }
+
+        function changeMessageLabel(changePath) {
+            const labels = {
+                "module.moduleNumber": "module number",
+                "module.title": "title",
+                "module.credits": "credits",
+                "module.moduleType": "module type",
+                "module.coordinator": "coordinator",
+                "module.applicability": "applicability",
+                "module.learningArea": "learning area",
+                "module.learningObjectives": "learning objectives",
+                "module.prerequisites": "prerequisites",
+                "module.level": "level",
+                "module.moduleStatus": "Module Status",
+                "module.moduleComments": "module comments",
+                "module.frequency": "frequency",
+                "module.examinationForm": "examination form",
+                "module.contents": "contents",
+                "module.literature": "literature",
+                "module.additionalNotes": "additional notes",
+                "module.moduleWeight": "module weight",
+                "teachingFormIds": "teaching forms",
+                "workload": "workload"
+            };
+
+            return labels[changePath] || readablePath(changePath);
+        }
+
+        function displayValue(value) {
+            if (!value) {
+                return "\"\"";
+            }
+
+            const text = String(value);
+            const shortValue = text.length > 180 ? `${text.slice(0, 177)}...` : text;
+            return `"${shortValue}"`;
+        }
+
         function formatFieldChangeValue(fieldPath, value) {
             if (fieldPath === "teachingFormIds") {
                 return teachingFormLabelsForJsonValue(value);
+            }
+            if (fieldPath === "workload") {
+                return workloadText(parseJsonValue(value));
             }
             if (fieldPath === "module.created") {
                 if (isJsonNull(value)) {
@@ -194,6 +269,56 @@
                     return teachingForm ? teachingFormLabel(teachingForm) : `Teaching form ${id}`;
                 })
                 .join(", ");
+        }
+
+        function workloadText(workload) {
+            if (!workload) {
+                return "";
+            }
+
+            const components = (workload.components || [])
+                .map(component => {
+                    const sws = formatNumber(component.swsAmount);
+                    const teachingForm = workloadTeachingFormCode(component);
+                    return `${sws ? `${sws} SWS` : ""} ${teachingForm}`.trim();
+                })
+                .filter(Boolean)
+                .join(" + ");
+
+            if (workload.presenceHours !== null && workload.presenceHours !== undefined) {
+                const componentPart = components ? ` (${components})` : "";
+                const selfStudyPart = workload.selfStudyHours !== null && workload.selfStudyHours !== undefined
+                    ? `, ${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`
+                    : "";
+                return `${formatNumber(workload.presenceHours)} Stunden Präsenz${componentPart}${selfStudyPart}`;
+            }
+
+            if (workload.selfStudyHours !== null && workload.selfStudyHours !== undefined) {
+                return `${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`;
+            }
+
+            return workload.rawText || components;
+        }
+
+        function workloadTeachingFormCode(component) {
+            if (component.teachingFormCode) {
+                return component.teachingFormCode;
+            }
+
+            const teachingForm = teachingForms.find(option => Number(option.id) === Number(component.teachingFormId));
+            return teachingForm?.code || component.teachingFormId || "";
+        }
+
+        function formatNumber(value) {
+            if (value === null || value === undefined || value === "") {
+                return "";
+            }
+
+            const number = Number(value);
+            if (!Number.isFinite(number)) {
+                return String(value);
+            }
+            return Number.isInteger(number) ? String(number) : String(Number(number.toFixed(2)));
         }
 
         function parseJsonValue(value) {

@@ -45,17 +45,9 @@
                     <div class="module-field-control">
                         <div id="studyProgramDisplay" class="readonly-value">Loading...</div>
                         <input id="modulebookId" type="hidden">
+                        <input id="moduleStatus" type="hidden">
                     </div>
                 </div>
-
-                <div class="module-field-row">
-                    <div class="module-field-label">Module id (debug)</div>
-                    <div class="module-field-control">
-	                        <div id="moduleIdDisplay" class="readonly-value">Loading...</div>
-	                        <input id="modulebookId" type="hidden">
-	                        <input id="moduleStatus" type="hidden">
-	                    </div>
-	                </div>
 
                 <div class="module-field-row">
                     <label class="module-field-label" for="moduleNumber">Modulnummer <span class="required-marker">*</span></label>
@@ -301,7 +293,6 @@
             document.getElementById("viewLink").hidden = true;
             document.getElementById("modulebookId").value = modulebookId;
             renderStudyProgramDisplay(modulebookId);
-            renderModuleIdDisplay(null);
             renderLevelOptions("");
             renderFrequencyOptions("");
             renderModuleTypeOptions("");
@@ -318,7 +309,6 @@
             document.getElementById("documentTitle").textContent = "Edit Module";
             document.getElementById("modulebookId").value = module.modulebookId ?? "";
             renderStudyProgramDisplay(module.modulebookId);
-            renderModuleIdDisplay(module.id);
             document.getElementById("modulebookId").value = module.modulebookId ?? "";
             document.getElementById("moduleNumber").value = module.moduleNumber || "";
             document.getElementById("title").value = module.title || "";
@@ -457,10 +447,6 @@
                 .filter(checkbox => checkbox.checked)
                 .map(checkbox => checkbox.value)
                 .join(", ");
-        }
-
-        function renderModuleIdDisplay(id) {
-            document.getElementById("moduleIdDisplay").textContent = id ?? "New module";
         }
 
         function fillWorkloadRows(components) {
@@ -874,10 +860,10 @@
                     "teachingFormIds",
                     changedPaths
                 ),
-                changeMessagePart(
+                workloadChangeMessagePart(
                     "workload",
-                    workloadComparableValue(oldModule.workload),
-                    workloadComparableValue(request.workload),
+                    oldModule.workload,
+                    request.workload,
                     "workload",
                     changedPaths
                 )
@@ -914,6 +900,18 @@
             }
 
             return `changed ${label} from ${displayValue(teachingFormLabelsForIds(normalizedOldIds))} to ${displayValue(teachingFormLabelsForIds(normalizedNewIds))}`;
+        }
+
+        function workloadChangeMessagePart(label, oldWorkload, newWorkload, fieldPath, changedPaths) {
+            if (changedPaths && !changedPaths.has(fieldPath)) {
+                return "";
+            }
+
+            if (comparableText(workloadComparableValue(oldWorkload)) === comparableText(workloadComparableValue(newWorkload))) {
+                return "";
+            }
+
+            return `changed ${label} from ${displayValue(workloadText(oldWorkload))} to ${displayValue(workloadText(newWorkload))}`;
         }
 
         function teachingFormIdsForModule(module) {
@@ -960,6 +958,44 @@
                 presenceHours: workload.presenceHours ?? null,
                 selfStudyHours: workload.selfStudyHours ?? null
             };
+        }
+
+        function workloadText(workload) {
+            if (!workload) {
+                return "";
+            }
+
+            const components = (workload.components || [])
+                .map(component => {
+                    const sws = formatNumber(component.swsAmount);
+                    const teachingForm = workloadTeachingFormCode(component);
+                    return `${sws ? `${sws} SWS` : ""} ${teachingForm}`.trim();
+                })
+                .filter(Boolean)
+                .join(" + ");
+
+            if (workload.presenceHours !== null && workload.presenceHours !== undefined) {
+                const componentPart = components ? ` (${components})` : "";
+                const selfStudyPart = workload.selfStudyHours !== null && workload.selfStudyHours !== undefined
+                    ? `, ${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`
+                    : "";
+                return `${formatNumber(workload.presenceHours)} Stunden Präsenz${componentPart}${selfStudyPart}`;
+            }
+
+            if (workload.selfStudyHours !== null && workload.selfStudyHours !== undefined) {
+                return `${formatNumber(workload.selfStudyHours)} Stunden Selbststudium`;
+            }
+
+            return workload.rawText || components;
+        }
+
+        function workloadTeachingFormCode(component) {
+            if (component.teachingFormCode) {
+                return component.teachingFormCode;
+            }
+
+            const teachingForm = teachingForms.find(option => Number(option.id) === Number(component.teachingFormId));
+            return teachingForm?.code || component.teachingFormId || "";
         }
 
         function comparableText(value) {
@@ -1087,7 +1123,12 @@
             if (value === null || value === undefined || value === "") {
                 return "";
             }
-            return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(2)));
+
+            const number = Number(value);
+            if (!Number.isFinite(number)) {
+                return String(value);
+            }
+            return Number.isInteger(number) ? String(number) : String(Number(number.toFixed(2)));
         }
 
         function nearlyEqual(left, right) {

@@ -103,12 +103,6 @@
         }
 
         function renderModuleRow(label, value) {
-            const formattedValue = formatValue(value);
-
-            if (!formattedValue) {
-                return "";
-            }
-
             return `
                 <tr>
                     <td>${escapeHtml(label)}</td>
@@ -201,10 +195,11 @@
 
         function formatValue(value) {
             if (value === null || value === undefined) {
-                return "";
+                return "-";
             }
 
-            return String(value);
+            const text = String(value);
+            return text ? text : "-";
         }
 
         function formatFieldHtml(label, value) {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Study Program Import</title>
+    <title>Modulebook Import</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -10,19 +10,19 @@
         <a href="/index.html">Modulebooks</a>
     </nav>
 
-    <h1>Study Program Import</h1>
+    <h1>Modulebook Import</h1>
 
     <section>
         <h2>Upload</h2>
-        <p id="studyProgramDisplay" class="muted">Loading study program...</p>
+        <p id="modulebookDisplay" class="muted">Loading modulebook...</p>
 
         <label>
-            Modulebook release date
+            Datum des Modulhandbuchs
             <input id="modulebookReleaseDate" type="date">
         </label>
 
         <label>
-            Study and Examination Regulations
+            Studien- und Prüfungsordnung
             <input id="studyExaminationRegulationsDate" type="date">
         </label>
 
@@ -50,54 +50,54 @@
     <script src="/api.js"></script>
     <script>
         let importedModules = [];
-        let studyProgram = null;
+        let modulebook = null;
         const params = new URLSearchParams(window.location.search);
         const modulebookId = params.get("modulebookId");
         const importedModuleFieldDefinitions = [
-            { key: "module_number", label: "Module number", important: true, control: "input" },
-            { key: "title", label: "Title", important: true, control: "input" },
-            { key: "credits", label: "Credits", important: true, control: "number", step: "0.5" },
+            { key: "module_number", label: "Modulnummer", important: true, control: "input" },
+            { key: "title", label: "Titel", important: true, control: "input" },
+            { key: "credits", label: "Leistungspunkte", important: true, control: "number", step: "0.5" },
             { key: "workload", label: "Workload", important: true, control: "textarea", rows: 3 },
-            { key: "teaching_form", label: "Teaching forms", important: true, control: "textarea", rows: 3 },
-            { key: "status", label: "Module type", important: true, control: "input" },
-            { key: "applicability", label: "Applicability", control: "textarea", rows: 4 },
-            { key: "learning_area", label: "Learning area", control: "input" },
-            { key: "learning_objectives", label: "Learning objectives", control: "textarea", rows: 6 },
-            { key: "prerequisites", label: "Prerequisites", control: "textarea", rows: 4 },
-            { key: "level", label: "Level", control: "input" },
-            { key: "frequency", label: "Frequency", control: "input" },
-            { key: "exam_form", label: "Examination form", control: "textarea", rows: 5 },
-            { key: "contents", label: "Contents", control: "textarea", rows: 8 },
-            { key: "literature", label: "Literature", control: "textarea", rows: 6 },
-            { key: "additional_notes", label: "Additional notes", control: "textarea", rows: 4 },
-            { key: "module_grade", label: "Module grade", control: "textarea", rows: 3 },
-            { key: "recognized_modules", label: "Recognized modules", control: "textarea", rows: 3 },
-            { key: "room_requirements", label: "Room requirements", control: "input" },
-            { key: "source_file", label: "Source file", control: "input" },
-            { key: "source_pages", label: "Source pages", control: "input" }
+            { key: "teaching_form", label: "Lernform", important: true, control: "textarea", rows: 3 },
+            { key: "status", label: "Modultyp", important: true, control: "input" },
+            { key: "applicability", label: "Verwendbarkeit", control: "textarea", rows: 4 },
+            { key: "learning_area", label: "Lerngebiet", control: "input" },
+            { key: "learning_objectives", label: "Lernziele / Kompetenzen", control: "textarea", rows: 6 },
+            { key: "prerequisites", label: "Voraussetzungen", control: "textarea", rows: 4 },
+            { key: "level", label: "Niveaustufe", control: "input" },
+            { key: "frequency", label: "Häufigkeit des Angebotes", control: "input" },
+            { key: "exam_form", label: "Prüfungsform", control: "textarea", rows: 5 },
+            { key: "contents", label: "Inhalte", control: "textarea", rows: 8 },
+            { key: "literature", label: "Literatur", control: "textarea", rows: 6 },
+            { key: "additional_notes", label: "Weitere Hinweise", control: "textarea", rows: 4 },
+            { key: "module_grade", label: "Modulnote", control: "textarea", rows: 3 },
+            { key: "recognized_modules", label: "Anerkannte Module", control: "textarea", rows: 3 },
+            { key: "room_requirements", label: "Raumanforderungen", control: "input" },
+            { key: "source_file", label: "Quelldatei", control: "input" },
+            { key: "source_pages", label: "Quellseiten", control: "input" }
         ];
 
         async function init() {
             if (!modulebookId) {
                 setStatus("Missing modulebook id. Open Import PDF from a modulebook row on the index page.");
-                document.getElementById("studyProgramDisplay").textContent = "No study program selected.";
+                document.getElementById("modulebookDisplay").textContent = "No modulebook selected.";
                 return;
             }
 
             try {
                 const modulebooks = await loadModulebooks();
-                studyProgram = modulebooks.find(program => String(program.id) === String(modulebookId));
-                if (!studyProgram) {
-                    setStatus(`Study program ${modulebookId} was not found.`);
-                    document.getElementById("studyProgramDisplay").textContent = "Study program not found.";
+                modulebook = modulebooks.find(program => String(program.id) === String(modulebookId));
+                if (!modulebook) {
+                    setStatus(`Modulebook ${modulebookId} was not found.`);
+                    document.getElementById("modulebookDisplay").textContent = "Modulebook not found.";
                     return;
                 }
 
-                document.getElementById("studyProgramDisplay").textContent =
-                    `Import PDF for ${modulebookLabel(studyProgram)}`;
+                document.getElementById("modulebookDisplay").textContent =
+                    `Import PDF for ${modulebookLabel(modulebook)}`;
                 setStatus("Ready.");
             } catch (error) {
-                setStatus("Could not load study programs: " + error.message);
+                setStatus("Could not load modulebooks: " + error.message);
             }
         }
 
@@ -106,8 +106,8 @@
             const studyExaminationRegulationsDate = document.getElementById("studyExaminationRegulationsDate").value;
             const fileInput = document.getElementById("pdfFile");
 
-            if (!studyProgram) {
-                setStatus("No study program selected.");
+            if (!modulebook) {
+                setStatus("No modulebook selected.");
                 return;
             }
 
@@ -122,7 +122,7 @@
             }
 
             const formData = new FormData();
-            formData.append("modulebookId", studyProgram.id);
+            formData.append("modulebookId", modulebook.id);
             formData.append("modulebookReleaseDate", modulebookReleaseDate);
             if (studyExaminationRegulationsDate) {
                 formData.append("studyExaminationRegulationsDate", studyExaminationRegulationsDate);
@@ -160,8 +160,8 @@
                 modules: importedModules
             };
 
-            if (!studyProgram) {
-                setStatus("No study program selected.");
+            if (!modulebook) {
+                setStatus("No modulebook selected.");
                 return;
             }
 
@@ -192,9 +192,9 @@
             const summary = document.getElementById("reportSummary");
 
             summary.innerHTML = `
-                <div><strong>Study program:</strong> ${escapeHtml(modulebookLabel(studyProgram))}</div>
-                <div><strong>Modulebook release date:</strong> ${escapeHtml(formatDateOnly(importResponse.modulebookReleaseDate))}</div>
-                <div><strong>Study and Examination Regulations:</strong> ${escapeHtml(formatDateOnly(importResponse.studyExaminationRegulationsDate))}</div>
+                <div><strong>Studiengang:</strong> ${escapeHtml(modulebookLabel(modulebook))}</div>
+                <div><strong>Datum des Modulhandbuchs:</strong> ${escapeHtml(formatDateOnly(importResponse.modulebookReleaseDate))}</div>
+                <div><strong>Studien- und Prüfungsordnung:</strong> ${escapeHtml(formatDateOnly(importResponse.studyExaminationRegulationsDate))}</div>
                 <div><strong>Status:</strong> ${escapeHtml(report.status || "unknown")}</div>
                 <div><strong>Detected modules:</strong> ${escapeHtml(String(report.detected_module_count || importedModules.length))}</div>
                 <div><strong>Required modules:</strong> ${escapeHtml(String(report.required_module_count || ""))}</div>
