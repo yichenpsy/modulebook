@@ -31,7 +31,10 @@ def configure_tracing() -> None:
 
 
 configure_tracing()
-app = FastAPI(title="Modulebook PDF Import Service")
+app = FastAPI(
+    title="Modulebook PDF Import Service",
+    telemetry={"auto_configure": False},
+)
 FastAPIInstrumentor.instrument_app(app, excluded_urls="/health")
 
 
