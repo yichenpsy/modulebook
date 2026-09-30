@@ -1,13 +1,38 @@
 import json
+import os
 import tempfile
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 from tools.pdf_import.module_import_v2.pipeline_single import run_single_pdf
 
 
+def configure_tracing() -> None:
+    service_name = os.getenv("OTEL_SERVICE_NAME", "pdf-import-service")
+    endpoint = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
+
+    provider = TracerProvider(
+        resource=Resource.create({"service.name": service_name})
+    )
+
+    if endpoint:
+        provider.add_span_processor(
+            BatchSpanProcessor(OTLPSpanExporter(endpoint=endpoint))
+        )
+
+    trace.set_tracer_provider(provider)
+
+
+configure_tracing()
 app = FastAPI(title="Modulebook PDF Import Service")
+FastAPIInstrumentor.instrument_app(app, excluded_urls="/health")
 
 
 @app.get("/health")

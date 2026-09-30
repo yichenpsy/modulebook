@@ -807,6 +807,7 @@
             restoredFromVersionByChangeSetId = new Map();
 
             const versionBeforeChangeSetId = new Map();
+            const usedMinorsByMajor = new Map();
             const events = historyEvents().sort(compareHistoryEvents);
 
             let major = 1;
@@ -823,6 +824,9 @@
                     } else {
                         hasVersion = true;
                     }
+                    const assigned = reserveVersion(usedMinorsByMajor, major, minor);
+                    major = assigned.major;
+                    minor = assigned.minor;
                     versionsByModulebookVersionId.set(Number(event.value.id), formatVersion(major, minor));
                     continue;
                 }
@@ -837,9 +841,12 @@
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
                     const parsedVersion = parseVersion(restoredVersion);
                     major = parsedVersion.major;
-                    minor = parsedVersion.minor + 1;
+                    minor = nextAvailableMinor(usedMinorsByMajor, major, parsedVersion.minor + 1);
                     hasVersion = true;
                     restoredFromVersionByChangeSetId.set(changeSetId, restoredVersion);
+                    const assigned = reserveVersion(usedMinorsByMajor, major, minor);
+                    major = assigned.major;
+                    minor = assigned.minor;
                     versionsByChangeSetId.set(changeSetId, formatVersion(major, minor));
                     continue;
                 }
@@ -850,9 +857,12 @@
                         || (hasVersion ? formatVersion(major, minor) : formatVersion(1, 0));
                     const parsedVersion = parseVersion(restoredVersion);
                     major = parsedVersion.major;
-                    minor = parsedVersion.minor + 1;
+                    minor = nextAvailableMinor(usedMinorsByMajor, major, parsedVersion.minor + 1);
                     hasVersion = true;
                     restoredFromVersionByChangeSetId.set(changeSetId, restoredVersion);
+                    const assigned = reserveVersion(usedMinorsByMajor, major, minor);
+                    major = assigned.major;
+                    minor = assigned.minor;
                     versionsByChangeSetId.set(changeSetId, formatVersion(major, minor));
                     continue;
                 }
@@ -863,8 +873,29 @@
                     minor += 1;
                 }
 
+                const assigned = reserveVersion(usedMinorsByMajor, major, minor);
+                major = assigned.major;
+                minor = assigned.minor;
                 versionsByChangeSetId.set(changeSetId, formatVersion(major, minor));
             }
+        }
+
+        function reserveVersion(usedMinorsByMajor, major, desiredMinor) {
+            const assignedMinor = nextAvailableMinor(usedMinorsByMajor, major, desiredMinor);
+            if (!usedMinorsByMajor.has(major)) {
+                usedMinorsByMajor.set(major, new Set());
+            }
+            usedMinorsByMajor.get(major).add(assignedMinor);
+            return { major, minor: assignedMinor };
+        }
+
+        function nextAvailableMinor(usedMinorsByMajor, major, desiredMinor) {
+            const usedMinors = usedMinorsByMajor.get(major) || new Set();
+            let minor = desiredMinor;
+            while (usedMinors.has(minor)) {
+                minor += 1;
+            }
+            return minor;
         }
 
         function compareHistoryEvents(left, right) {

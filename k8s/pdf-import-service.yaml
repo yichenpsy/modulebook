@@ -20,6 +20,13 @@ spec:
           image: registry.bht-berlin.de/ris/modulebook/pdf-import-service-image:latest
           ports:
             - containerPort: 8000
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: pdf-import-service
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://hudson-otel-collector.ris-lab.svc.cluster.local:4317
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: grpc
           readinessProbe:
             httpGet:
               path: /health
