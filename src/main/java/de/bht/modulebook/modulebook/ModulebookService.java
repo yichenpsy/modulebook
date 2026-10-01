@@ -42,7 +42,10 @@ public class ModulebookService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, String confirmation) {
+        if (!"DELETE".equals(confirmation)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Type DELETE to confirm modulebook deletion");
+        }
         getById(id);
         boolean deleted = modulebookRepository.delete(id);
         if (!deleted) {

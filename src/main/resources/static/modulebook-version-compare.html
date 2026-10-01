@@ -344,7 +344,14 @@
             }
 
             container.innerHTML = `
-                <table>
+                <table class="compare-diff-table">
+                    <colgroup>
+                        <col class="compare-diff-module-column">
+                        <col class="compare-diff-change-column">
+                        <col class="compare-diff-value-column">
+                        <col class="compare-diff-value-column">
+                        <col class="compare-diff-actions-column">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Module</th>
@@ -485,6 +492,9 @@
         }
 
         function formatFieldChangeValue(fieldPath, value) {
+            if (fieldPath === "workload") {
+                return workloadTextForJsonValue(value);
+            }
             if (fieldPath === "teachingFormIds") {
                 return teachingFormLabelsForJsonValue(value);
             }
@@ -502,6 +512,15 @@
             }
 
             return formatJsonValue(value);
+        }
+
+        function workloadTextForJsonValue(value) {
+            const parsed = parseJsonValue(value);
+            if (!parsed || typeof parsed !== "object") {
+                return formatJsonValue(value);
+            }
+
+            return workloadText(parsed);
         }
 
         function renderCompareValue(fieldPath, rawValue, oldValue, newValue, side) {

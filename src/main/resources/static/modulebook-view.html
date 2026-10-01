@@ -46,6 +46,7 @@
         const params = new URLSearchParams(window.location.search);
         const modulebookId = params.get("modulebookId");
         const versionId = params.get("versionId") || params.get("tagId");
+        const viewOpenedAt = new Date();
         let studyProgram = null;
         let activeModules = [];
         let currentVersion = null;
@@ -151,6 +152,7 @@
 
                     <div class="modulebook-cover-meta">
                         <p>Studiengang: ${escapeHtml(modulebookLabel(studyProgram))}</p>
+                        ${currentVersion ? "" : `<p>Viewed at: ${escapeHtml(formatDate(viewOpenedAt))}</p>`}
                     </div>
                 </article>
             `;

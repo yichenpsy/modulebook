@@ -53,8 +53,8 @@ async function createModulebook(request) {
     });
 }
 
-async function deleteModulebook(modulebookId) {
-    await requestJson(`/api/modulebooks/${modulebookId}`, {
+async function deleteModulebook(modulebookId, confirmation) {
+    await requestJson(`/api/modulebooks/${modulebookId}?confirmation=${encodeURIComponent(confirmation)}`, {
         method: "DELETE"
     });
 }

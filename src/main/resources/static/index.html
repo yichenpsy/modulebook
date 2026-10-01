@@ -104,18 +104,19 @@
         async function confirmDeleteModulebook(modulebookId) {
             const modulebook = modulebooks.find(item => Number(item.id) === Number(modulebookId));
             const label = modulebook ? modulebookLabel(modulebook) : `modulebook ${modulebookId}`;
-            const confirmed = confirm(
-                `Delete ${label}?\n\nThis will delete the modulebook and all related records, including modules and history.`
+            const confirmation = prompt(
+                `Delete ${label}?\n\nThis will delete the modulebook and all related records, including modules and history.\n\nType DELETE to confirm.`
             );
 
-            if (!confirmed) {
+            if (confirmation !== "DELETE") {
+                setStatus("Delete cancelled. Type DELETE exactly to delete a modulebook.");
                 return;
             }
 
             setStatus(`Deleting ${label}...`);
 
             try {
-                await deleteModulebook(modulebookId);
+                await deleteModulebook(modulebookId, confirmation);
                 modulebooks = modulebooks.filter(item => Number(item.id) !== Number(modulebookId));
                 renderModulebooks();
                 modulebooks = await loadModulebooks();

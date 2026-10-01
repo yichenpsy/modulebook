@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Study Program Change Log</title>
+    <title>Modulebook Change Log</title>
     <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -10,7 +10,7 @@
         <a href="/index.html">Modulebooks</a>
     </nav>
 
-    <h1>Study Program Change Log</h1>
+    <h1>Modulebook Change Log</h1>
 
     <section>
         <div id="status" class="status">Loading history...</div>
@@ -153,7 +153,7 @@
             if (modulebookVersions.length === 0) {
                 return `
                     <section>
-                        <h3>Modulebook versions</h3>
+                        <h3>Saved Modulebook main versions</h3>
                         <p>No modulebook versions saved yet.</p>
                     </section>
                 `;
@@ -161,7 +161,7 @@
 
             return `
                 <section>
-                    <h3>Modulebook versions</h3>
+                    <h3>Saved Modulebook main versions</h3>
                     <table>
                         <thead>
                             <tr>
@@ -236,7 +236,7 @@
                         ${renderModulebookVersionMeta(version)}
                     </td>
                     <td>${escapeHtml(formatDate(sourceChangeSet?.createdAt || version.createdAt))}</td>
-                    <td>${escapeHtml(sourceChangeSet ? String(sourceChangeSet.id) : `Version ${version.id}`)}</td>
+                    <td>${escapeHtml(sourceChangeSet ? String(sourceChangeSet.id) : "--")}</td>
                     <td>${escapeHtml(sourceChangeSet?.sourceType || "MODULEBOOK_VERSION")}</td>
                     <td>${escapeHtml(sourceChangeSet?.reason || version.versionMessage || "")}</td>
                     <td>--</td>

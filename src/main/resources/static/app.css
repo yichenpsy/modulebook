@@ -467,6 +467,36 @@ th {
     margin-bottom: 0;
 }
 
+.compare-diff-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.compare-diff-module-column {
+    width: 18%;
+}
+
+.compare-diff-change-column {
+    width: 10%;
+}
+
+.compare-diff-value-column {
+    width: 31%;
+}
+
+.compare-diff-actions-column {
+    width: 10%;
+}
+
+.compare-diff-table th,
+.compare-diff-table td {
+    vertical-align: top;
+}
+
+.compare-diff-table td {
+    overflow-wrap: anywhere;
+}
+
 .diff-old,
 .diff-new {
     white-space: pre-wrap;

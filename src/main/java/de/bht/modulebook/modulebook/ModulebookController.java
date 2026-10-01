@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.bht.modulebook.module.ModuleMapper;
 import de.bht.modulebook.module.ModuleService;
 import de.bht.modulebook.module.dto.ModuleResponse;
 import de.bht.modulebook.modulebook.dto.CreateModulebookRequest;
@@ -48,8 +48,8 @@ public class ModulebookController {
 
     @DeleteMapping("/api/modulebooks/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public void delete(@PathVariable Long id, @RequestParam String confirmation) {
+        service.delete(id, confirmation);
     }
 
     @GetMapping("/api/modulebooks/{modulebookId}/modules")
@@ -57,7 +57,7 @@ public class ModulebookController {
         service.getById(modulebookId);
         return moduleService.getByModulebookId(modulebookId)
                 .stream()
-                .map(ModuleMapper::toResponse)
+                .map(module -> moduleService.getModuleView(module.getId()))
                 .toList();
     }
 }
