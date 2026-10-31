@@ -63,7 +63,7 @@ Authentication/login, role-based permissions, a complete approval workflow, and 
 
 ## Source and implementation differences
 
-Source: Yichen Zhong, *User-Centered Design and Development of a System for Management of Module Handbooks*, submitted 1 October 2026; Chapters 2–5 and Appendix A. The thesis is the source for requirement IDs and historical evaluation, not a substitute for current code.
+Source: Yichen Zhong, [*User-Centered Design and Development of a System for Management of Module Handbooks*](../reference/bachelor-thesis-zhong.pdf), submitted 1 October 2026; Chapters 2–5 and Appendix A. The thesis is the source for requirement IDs and historical evaluation, not a substitute for current code.
 
 | Topic | Current implementation used by these docs | Difference from the thesis |
 | --- | --- | --- |
