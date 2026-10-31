@@ -1,258 +1,88 @@
-# How CI/CD Is Configured in This Application
+# Modulebook
 
-## 1. Creating a GitLab Runner
+Modulebook is a web application for maintaining university module handbooks. It stores module information as structured data, imports existing PDFs, and tracks edits and saved publication versions. It was developed as a bachelor thesis MVP at Berliner Hochschule für Technik (BHT).
 
-A GitLab Runner is a worker that executes CI/CD jobs. In this project, the runner runs inside BHT Kubernetes and connects GitLab with the Kubernetes cluster.
+## Features
 
-1. Create the runner in GitLab, configured with the tag:
+- Create modulebooks for a study program and degree (`BACHELOR` or `MASTER`).
+- Import a PDF, review extracted fields, and save or update modules.
+- Edit module descriptions, teaching forms, workload, and status.
+- Inspect change history, compare versions, and restore saved states.
+- Print the current modulebook or a saved version using the browser, including its Save as PDF option.
 
-   ```text
-   modulebook
-   ```
+## Technology
 
-   The runner token is saved for the Kubernetes configuration.
+Java 21, Spring Boot 4.0.5, Spring JDBC, PostgreSQL 16, and Flyway. The frontend uses plain HTML, CSS, and JavaScript served by Spring Boot. PDF extraction uses Python (3.12 in the container), PyMuPDF4LLM, and FastAPI. OpenTelemetry provides application instrumentation. GitLab CI tests the Java application and builds and deploys both application images to Kubernetes.
 
-2. Configure the runner values in:
+## Start locally
 
-   ```text
-   k8s/runner-values.yml
-   ```
+Prerequisites: JDK 21 and Docker with its daemon running. Run commands from the repository root. Maven is provided by `./mvnw`; no separate Maven installation or frontend build is required.
 
-    runner-values.yml configures how the GitLab Runner is installed into Kubernetes.
-
-3. Install or connect the runner to Kubernetes using Helm, with this command:
-
-   ```bash
-   helm upgrade --install gitlab-runner gitlab/gitlab-runner \
-   --namespace yizh8704 \
-   -f k8s/runner-values.yml
-   ```
-
-   After this step, the runner is available in Kubernetes and can receive jobs from GitLab.
-
-## 2. Defining the CI/CD Pipeline
-
-The CI/CD pipeline is defined in the file:
-
-```text
-.gitlab-ci.yml
-```
-
-When a push to the `main` branch happens, GitLab detects the `.gitlab-ci.yml` file automatically.
-
-GitLab then reads this file and assigns the jobs to runners.
-
-### Pipeline Stages
-
-```yaml
-stages:
-  - test
-  - docker
-  - deploy
-```
-
-This CI/CD pipeline has three stages:
-
-1. `test`
-2. `docker`
-3. `deploy`
-
-The runner executes the jobs according to the order of these stages.
-
-### Docker Image Variable
-
-```yaml
-variables:
-  IMAGE_NAME: "$CI_REGISTRY_IMAGE/modulebook-image"
-```
-
-The image repository path is defined in the variable `IMAGE_NAME`.  
-This path is later used when building and pushing the Docker image.  
-`$CI_REGISTRY_IMAGE` is a predefined GitLab CI variable that contains the container registry path of this GitLab project. By adding `/modulebook-image`, the concrete image repository name is defined for this application.
-
-### Job 1. Build and Test
-
-```yaml
-build-and-test:
-  stage: test
-  tags:
-    - modulebook
-  image: maven:3.9-eclipse-temurin-21
-  script:
-    - mvn clean test
-```
-
-The first job is named `build-and-test`.  
-This job belongs to the `test` stage.  
-GitLab assigns it to the GitLab Runner with the tag `modulebook`.  
-Inside Kubernetes, the runner creates a pod for this job. In this pod, a container is started with the image:
-
-```text
-maven:3.9-eclipse-temurin-21
-```
-
-This container provides Maven and Java 21, which are required to build and test the application.  
-The following command is executed inside the job container:
+Create the local database container once:
 
 ```bash
-mvn clean test
+docker run -d --name modulebook-postgres \
+  -e POSTGRES_DB=modulebook \
+  -e POSTGRES_USER=modulebook \
+  -e POSTGRES_PASSWORD=modulebook \
+  -p 127.0.0.1:5433:5432 \
+  -v modulebook-postgres-data:/var/lib/postgresql/data \
+  postgres:16
 ```
 
-Maven deletes old build artifacts, compiles and execute the java source code and tests code.
+If the container already exists, use `docker start modulebook-postgres` instead. Check database readiness, repeating this command until it reports accepting connections:
 
-### Job 2. Build and push image
-
-```yaml
-build-and-push-image:
-  stage: docker
-  tags:
-    - modulebook
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  variables:
-    DOCKER_CONFIG: /kaniko/.docker/
-  script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "$CI_PROJECT_DIR" --dockerfile "$CI_PROJECT_DIR/Dockerfile" --destination "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" --destination "$IMAGE_NAME:latest"
-  rules:
-    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+```bash
+docker exec modulebook-postgres pg_isready -U modulebook -d modulebook
 ```
 
-The second job is named `build-and-push-image`.  
-This job belongs to the `docker` stage.  
-GitLab assigns it to the GitLab Runner with the tag `modulebook`.  
-Inside Kubernetes, the runner creates a pod for this job. In this pod, a container is started with the image:
+Then start the application:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Open [http://localhost:8081](http://localhost:8081). Flyway applies database migrations at startup.
+
+`modulebook-postgres` is a chosen container name; `modulebook-postgres-data` is a named volume that preserves data. Database name and credentials match the local defaults in [application.properties](src/main/resources/application.properties). Port `5433` is the host database port; `5432` is the container port. App port `8081` comes from `server.port`. For overrides and troubleshooting, see [Local setup](docs/development/local-setup.md).
+
+This starts module editing, history, and printing. PDF import requires an additional [Python setup and configuration step](docs/development/local-setup.md#2-enable-pdf-import): install the dependencies, start the FastAPI service, and restart Java with its import URL and a writable job directory. The checked-in default import paths are specific to the author's machine.
+
+## Run tests
+
+```bash
+./mvnw test
+```
+
+See [Testing and evaluation](docs/development/testing.md) for coverage, manual acceptance checks, and the limits of historical thesis results.
+
+## Documentation
+
+| Guide | Purpose |
+| --- | --- |
+| [Requirements and scope](docs/product/requirements.md) | FR/NFR definitions, Figma prototypes, MVP boundaries, and source differences |
+| [Local setup](docs/development/local-setup.md) | Configuration, PDF service, tests, and troubleshooting |
+| [Testing and evaluation](docs/development/testing.md) | Automated coverage, acceptance checks, and historical thesis evidence |
+| [Architecture](docs/architecture/overview.md) | Components, database model, workload, and API entry points |
+| [Versioning](docs/architecture/versioning.md) | Change sets, snapshots, comparison, and restore behavior |
+| [PDF import](docs/architecture/pdf-import.md) | Extraction, review, configuration, and limitations |
+| [Deployment](docs/deployment.md) | Containers, CI/CD, Kubernetes, and operational checks |
+| [Architecture decisions](docs/adr/README.md) | Reasons, alternatives, and trade-offs behind key choices |
+
+## Repository layout
 
 ```text
-gcr.io/kaniko-project/executor:debug
-```
-Why Kaniko?  
-Docker-in-Docker = run Docker daemon inside CI job container.  
-Kaniko = build image without Docker daemon. 
-
-A `kaniko` container can build Docker images without privileged access.  
-In this job, a Docker image needs to be built inside a container. Normally, building Docker images inside a container requires privileged access, for example when using Docker-in-Docker. However, in the BHT Kubernetes cluster, the GitLab Runner must be configured with:
-
-```toml
-privileged = false
+src/main/java/de/bht/modulebook/  Java API, business logic, and repositories
+src/main/resources/static/        Browser interface
+src/main/resources/db/migration/  Database migration history
+src/test/                         Java tests
+services/pdf_import_service/      Python HTTP service
+tools/pdf_import/module_import_v2/Active PDF extraction pipeline
+tools/pdf_import/configs/         Extraction rules and source manifest
+k8s/                              Cluster deployment manifests
+docs/                             Developer documentation
 ```
 
-The runner can only create unprivileged containers.
-Because of this restriction, kaniko is used. kaniko can build and push Docker images from inside an unprivileged container, so it works in this Kubernetes environment.
+## Current limitations
 
-```yaml
-variables:
-  DOCKER_CONFIG: /kaniko/.docker/
-```
-
-This tells kaniko container where the Docker authentication configuration is stored.
-
-```yaml
-- mkdir -p /kaniko/.docker
-- echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-```
-
-The folder `/kaniko/.docker` is created for the Docker login config.  
-The kaniko executor then creates the file:`/kaniko/.docker/config.json`.  
-Kaniko container uses this file automatically when it pushes the image to the GitLab Container Registry for the login credentials.
-
-```text
-CI_REGISTRY
-CI_REGISTRY_USER
-CI_REGISTRY_PASSWORD
-```
-
-These variables are predefined by GitLab.
-
-```yaml
-/kaniko/executor \
---context "$CI_PROJECT_DIR" \
---dockerfile "$CI_PROJECT_DIR/Dockerfile" \
---destination "$IMAGE_NAME:$CI_COMMIT_SHORT_SHA" \
---destination "$IMAGE_NAME:latest"
-```
-
-`CI_PROJECT_DIR` is the folder where GitLab Runner downloaded the repository. This tells Kaniko:
-
-```text
-Use the project directory as the build context.
-Use the Dockerfile from the project directory.
-Build a container image.
-Push the image with a tag based on the commit SHA.
-Also push the same image with the tag latest.
-```
-
-
-### Job 3: deploy-to-kubernetes
-
-In the third stage `deploy`, there is one job named `deploy-to-kubernetes`.
-The job is executed by the GitLab Runner with the tag `modulebook`.
-
-The runner creates a temporary Kubernetes Pod for this job.
-Inside this Pod, the job runs in a container.
-This container is created from this image:
-
-```yaml
-alpine/kubectl:latest
-```
-
-This image contains the `kubectl` command-line tool.
-`kubectl` is used to talk to the Kubernetes cluster.  
-
-This job runs after `build-and-push-image`, because of:
-```yaml
-needs:
-  - build-and-push-image
-```
-The command
-```yml
-kubectl apply -f k8s/deployment.yaml
-```
-Meaning:
-> Tells Kubernetes how this app should run, how many app copies to run and which container image to use.
-
-
-The command
-```yml
-kubectl apply -f k8s/service.yaml
-```
-Meaning:
-> Gives a stable internal network address to the pod so other parts of the cluster can reach the app.
-
-The command
-```yml
-kubectl apply -f k8s/ingress.yaml
-```
-Meaning:
-> Sets up external web traffic routing so users outside the cluster can reach the app.
-
-
-The command
-```yml
-kubectl set image deployment/modulebook-deployment modulebook-deployment="$IMAGE_NAME:$CI_COMMIT_SHORT_SHA"
-```
-
-Meaning:
-
-> Find the Kubernetes Deployment named `modulebook-deployment`.
-> ```modulebook-deployment=...```: selects the container inside that Deployment named modulebook-deployment.
-> Change this container’s image to the newly built image from this commit.
-Example:
-
-```text
-registry.bht-berlin.de/ris/modulebook/modulebook-image:a1b2c3d
-```
-
-The command:
-```yml
-kubectl rollout status deployment/modulebook-deployment
-```
-Meaning:
-
-> Wait and check whether the Deployment update succeeds.
-Kubernetes will create a new Pod using the new image.
-If the new Pod starts successfully, the rollout succeeds.
-If the new Pod cannot start, the command fails or times out.
-  
+PDF extraction depends on recognizable table layouts and requires human review. Import saves can partially succeed; inspect the returned errors. Authentication and authorization are not implemented. The checked-in deployment targets the BHT environment and requires environment-specific configuration. See the linked guides before operating on shared data.
